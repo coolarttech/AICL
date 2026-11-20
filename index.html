@@ -121,17 +121,15 @@
           <button onclick="toggleMobileSidebar(false)" class="lg:hidden w-7 h-7 rounded-lg bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-xs shrink-0">✕</button>
         </div>
 
-        <!-- Live Light & Sheet Sync Status inside Left Black Portion -->
-        <div class="bg-slate-900/95 border border-slate-800 rounded-xl px-3 py-2 flex items-center justify-between text-[11px]">
-          <span class="flex items-center gap-2 font-medium text-slate-300">
+        <!-- Clean Option-2 Single-Button Sync Status Card inside Left Black Sidebar -->
+        <div class="bg-slate-900/95 border border-slate-800 rounded-xl px-3 py-2 flex items-center justify-between gap-2 text-[11px]">
+          <span class="flex items-center gap-2 font-medium text-slate-200 min-w-0">
             <span id="sidebarLedDot" class="w-2.5 h-2.5 rounded-full led-online inline-block shrink-0"></span>
-            <span id="sidebarConnText">Sheet Sync Ready</span>
+            <span id="sidebarConnText" class="truncate">Sheet Synced</span>
           </span>
-          <div class="flex items-center gap-2 shrink-0">
-            <button onclick="syncAllMastersNow()" title="सभी पार्टियां व आइटम Sheet में भेजें" class="text-[10px] font-semibold text-sky-400 hover:text-sky-300 underline">Sync Masters</button>
-            <button onclick="pullFromGoogleSheet()" title="Google Sheet से ताज़ा डेटा लाएं" class="text-[10px] font-semibold text-amber-400 hover:text-amber-300 underline">Pull Sheet</button>
-            <button onclick="verifySheetSync()" class="text-[10px] font-semibold text-emerald-400 hover:text-emerald-300 underline">Test</button>
-          </div>
+          <button onclick="smartSyncNow()" title="Master भेजें व Sheet से ताज़ा डेटा सिंक करें" class="px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 text-[10px] font-semibold shrink-0 transition">
+            Sync Now ↻
+          </button>
         </div>
         <p id="syncStatusNote" class="text-[10px] text-slate-400 px-1 truncate">तुरंत सेव • Sheet ऑटो-सिंक सक्रिय</p>
       </div>
@@ -249,6 +247,35 @@
           <button onclick="exportAllCSV()" class="w-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/25 text-[11px] font-semibold px-3 py-2 rounded-xl flex items-center justify-center gap-1.5 transition">
             <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
             <span>Excel / CSV डाउनलोड</span>
+          </button>
+        </div>
+
+        <!-- Legal, License & FAQ Category at the End of Sidebar Menu List -->
+        <div class="pt-2 border-t border-slate-800/90 space-y-1 px-1 pb-2">
+          <p class="px-2 mb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">सहायता व नियम (Legal & FAQ)</p>
+
+          <button onclick="openLegalModal('faq'); toggleMobileSidebar(false);" class="w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-[12px] text-slate-300 hover:bg-slate-800/70 hover:text-white font-medium transition">
+            <span class="flex items-center gap-2">
+              <svg class="w-3.5 h-3.5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span>FAQ (सहायता)</span>
+            </span>
+            <span class="text-slate-500 text-xs">›</span>
+          </button>
+
+          <button onclick="openLegalModal('terms'); toggleMobileSidebar(false);" class="w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-[12px] text-slate-300 hover:bg-slate-800/70 hover:text-white font-medium transition">
+            <span class="flex items-center gap-2">
+              <svg class="w-3.5 h-3.5 text-sky-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <span>Terms & Conditions</span>
+            </span>
+            <span class="text-slate-500 text-xs">›</span>
+          </button>
+
+          <button onclick="openLegalModal('license'); toggleMobileSidebar(false);" class="w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-[12px] text-slate-300 hover:bg-slate-800/70 hover:text-white font-medium transition">
+            <span class="flex items-center gap-2">
+              <svg class="w-3.5 h-3.5 text-amber-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              <span>License Agreement</span>
+            </span>
+            <span class="text-slate-500 text-xs">›</span>
           </button>
         </div>
       </nav>
@@ -1134,6 +1161,36 @@
   </div>
 </div>
 
+<!-- LEGAL, LICENSE & FAQ MODAL -->
+<div id="legalModal" class="hidden fixed inset-0 bg-slate-900/65 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4 no-print">
+  <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[88vh]">
+    <div class="px-4 sm:px-5 py-3.5 bg-[#0F172A] text-white flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5">
+        <img src="logo.png" alt="MunimJi by Cool Art®" class="h-7 w-auto bg-white rounded-lg px-1.5 py-0.5 object-contain">
+        <div>
+          <h3 id="legalModalTitle" class="text-sm sm:text-base font-semibold">MunimJi by Cool Art® — सहायता एवं नियम</h3>
+          <p class="text-[10px] text-slate-400">AICL Group Agri-Seed ERP Portal</p>
+        </div>
+      </div>
+      <button onclick="closeLegalModal()" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold flex items-center justify-center">✕</button>
+    </div>
+
+    <!-- Switchable Tabs -->
+    <div class="px-4 pt-3 pb-2 bg-slate-50 border-b border-slate-200 flex flex-wrap gap-2 text-xs">
+      <button id="legalTab-faq" onclick="openLegalModal('faq')" class="px-3 py-1.5 rounded-full font-semibold bg-[#132A46] text-white transition">FAQ (सहायता)</button>
+      <button id="legalTab-terms" onclick="openLegalModal('terms')" class="px-3 py-1.5 rounded-full font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition">Terms & Conditions</button>
+      <button id="legalTab-license" onclick="openLegalModal('license')" class="px-3 py-1.5 rounded-full font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition">Software License & User Agreement</button>
+    </div>
+
+    <div id="legalModalBody" class="p-4 sm:p-6 overflow-y-auto text-xs sm:text-[13px] text-slate-700 space-y-4 leading-relaxed"></div>
+
+    <div class="px-4 sm:px-5 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500">
+      <span>© 2026 <b class="text-[#132A46]">Cool Art®</b> • Helpline: +91 9458614610</span>
+      <button onclick="closeLegalModal()" class="px-4 py-1.5 rounded-lg bg-[#132A46] hover:bg-slate-800 text-white font-semibold text-xs">बंद करें</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const DEPLOYED_SHEET_URL = "https://script.google.com/macros/s/AKfycbzLNIJ7OEGB3LL2Sg3yETshovGjeNenmWKSxz82iW2J2TGmLf5Eg-JOeVLJfg_kHX0Uvw/exec";
 
@@ -1320,6 +1377,90 @@ function pullFromGoogleSheet(silent = false) {
         if (noteEl) noteEl.textContent = 'Web App → Sheet ऑटो-सिंक सक्रिय है';
       }
     });
+}
+
+function smartSyncNow() {
+  syncAllMastersNow();
+  verifySheetSync();
+  setTimeout(() => pullFromGoogleSheet(false), 700);
+}
+
+const LEGAL_CONTENT = {
+  faq: {
+    title: 'FAQ — अक्सर पूछे जाने वाले प्रश्न (User Guide)',
+    html: `
+      <div class="space-y-3">
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+          <p class="font-semibold text-[#132A46]">1. सबसे पहले पोर्टल में क्या जोड़ना चाहिए?</p>
+          <p class="text-slate-600 mt-1">सबसे पहले <b>पार्टी लेजर (Parties)</b> में अपने किसान, बीज वेंडर, मंडी और लेबर जोड़ें, तथा <b>आइटम मास्टर (Items)</b> में कच्चे व तैयार बिक्री आइटम जोड़ें। ये सभी सीधे Google Sheet के <code>Parties_Master</code> और <code>Items_Master</code> टैब में सेव होते हैं।</p>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+          <p class="font-semibold text-[#132A46]">2. खरीद बिल में 1% कद्दा और कटौती कैसे काम करती है?</p>
+          <p class="text-slate-600 mt-1">खरीद बिल में शुद्ध भर्ती वजन (Kg) डालने पर सॉफ्टवेयर अपने आप <b>1% कद्दा</b> घटाकर पेमेंट योग्य वजन (Net Kg) निकालता है और क्विंटल भाव से गुणा करके लेबर, भाड़ा व कचरा कटौती घटाकर शुद्ध देय राशि तैयार करता है।</p>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+          <p class="font-semibold text-[#132A46]">3. बिक्री बिल और बाहर मंडी सप्लाई में क्या अंतर है?</p>
+          <p class="text-slate-600 mt-1"><b>Seed Sale</b> का उपयोग पैकेट/बैग के हिसाब से बीज बेचने के लिए होता है, जबकि <b>Mandi Supply</b> का उपयोग गाड़ी लोड करके बाहर मंडी या आढ़ती को क्विंटल भाव पर माल भेजने के लिए किया जाता है।</p>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+          <p class="font-semibold text-[#132A46]">4. गलत एंट्री होने पर Edit या Delete कैसे करें?</p>
+          <p class="text-slate-600 mt-1">डैशबोर्ड की टेबल, पार्टी लेजर या साइडबार के <b>पूरी लिस्ट / Edit</b> ड्रॉवर से किसी भी बिल, वाउचर, खर्च या पार्टी को बदला या हटाया जा सकता है—यह बदलाव तुरंत आपकी Google Sheet में भी अपडेट हो जाता है।</p>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+          <p class="font-semibold text-[#132A46]">5. Google Sheet से ताज़ा डेटा कैसे सिंक करें?</p>
+          <p class="text-slate-600 mt-1">बाईं काली पट्टी में ऊपर दिए गए <b>Sync Now ↻</b> बटन पर क्लिक करने से आपके सभी मास्टर्स और शीट के ताज़ा रिकॉर्ड आपस में सिंक हो जाते हैं।</p>
+        </div>
+      </div>
+    `
+  },
+  terms: {
+    title: 'Terms & Conditions — नियम एवं शर्तें',
+    html: `
+      <div class="space-y-3">
+        <p><b>1. सेवा का दायरा:</b> यह वेब पोर्टल (<b>MunimJi by Cool Art® — AICL Group Agri-Seed ERP</b>) दैनिक व्यापारिक हिसाब-किताब, बीज खरीद-बिक्री, मंडी सप्लाई, वाउचर और खर्च प्रबंधन के लिए तैयार किया गया है।</p>
+        <p><b>2. डेटा प्रविष्टि की जिम्मेदारी:</b> पोर्टल में दर्ज किए गए वजन, दर, कद्दा प्रतिशत, कटौती, पार्टी विवरण और कर (Tax/GST) संबंधी सभी आंकड़ों की सटीकता और सत्यापन की पूरी जिम्मेदारी अधिकृत उपयोगकर्ता / क्लाइंट (AICL Group) की होगी।</p>
+        <p><b>3. क्लाउड सिंक व बैकअप:</b> लाइव Google Sheet सिंक के लिए सक्रिय इंटरनेट कनेक्शन आवश्यक है। किसी भी तृतीय-पक्ष सेवा (Google Workspace, GitHub, या इंटरनेट नेटवर्क) में अस्थायी बाधा से बचने के लिए उपयोगकर्ता को समय-समय पर <b>Excel / CSV डाउनलोड</b> द्वारा लोकल बैकअप सुरक्षित रखने की सलाह दी जाती है।</p>
+        <p><b>4. दायित्व की सीमा:</b> Cool Art® सॉफ्टवेयर की तकनीकी कार्यप्रणाली के लिए प्रतिबद्ध है, परंतु गलत डेटा प्रविष्टि, ब्राउज़र कैश साफ़ करने या बाहरी सर्वर डाउनटाइम से होने वाली किसी अप्रत्यक्ष व्यापारिक या वित्तीय हानि के लिए उत्तरदायी नहीं होगा।</p>
+        <p><b>5. तकनीकी सहायता:</b> किसी भी तकनीकी सहायता या कस्टम बदलाव के लिए आधिकारिक हेल्पलाइन <b>+91 9458614610</b> पर संपर्क किया जा सकता है।</p>
+      </div>
+    `
+  },
+  license: {
+    title: 'Software License & User Agreement — लाइसेंस एवं उपयोगकर्ता अनुबंध',
+    html: `
+      <div class="space-y-3">
+        <p><b>1. बौद्धिक संपदा स्वामित्व (Intellectual Property Rights):</b> इस वेब एप्लिकेशन का संपूर्ण सोर्स कोड, यूज़र इंटरफ़ेस (UI/UX), डेटाबेस आर्किटेक्चर, ग्राफ़िक्स और <b>MunimJi by Cool Art®</b> ट्रेडमार्क/लोगो पूरी तरह <b>Cool Art®</b> की अनन्य बौद्धिक संपत्ति है।</p>
+        <p><b>2. सीमित उपयोग लाइसेंस (Limited Non-Transferable License):</b> Cool Art® द्वारा यह सॉफ्टवेयर पोर्टल केवल अधिकृत लाइसेंसधारक संस्था (<b>AICL Group</b>) के आंतरिक व्यापारिक संचालन के लिए प्रदान किया गया है। यह लाइसेंस गैर-हस्तांतरणीय (Non-Transferable) है।</p>
+        <p><b>3. प्रतिबंधित गतिविधियाँ:</b> बिना Cool Art® की पूर्व लिखित अनुमति के इस सॉफ्टवेयर के कोड की नकल करना, रिवर्स-इंजीनियरिंग करना, किसी अन्य कंपनी या व्यक्ति को बेचना, किराए पर देना, या इसके कॉपीराइट व <b>Developed by Cool Art®</b> ब्रांडिंग चिह्नों को हटाना सख्त वर्जित है।</p>
+        <p><b>4. गोपनीयता व डेटा सुरक्षा:</b> क्लाइंट का समस्त व्यापारिक डेटा उनकी अपनी Google Sheet और लोकल ब्राउज़र स्टोरेज में सुरक्षित रहता है। Cool Art® बिना अनुमति क्लाइंट के व्यावसायिक डेटा को किसी तीसरे पक्ष के साथ साझा नहीं करता।</p>
+        <p><b>5. अनुबंध स्वीकृति:</b> इस पोर्टल का निरंतर उपयोग करने का अर्थ है कि उपयोगकर्ता उपरोक्त सभी लाइसेंस शर्तों और नियमों से सहमत है।</p>
+      </div>
+    `
+  }
+};
+
+function openLegalModal(tabKey) {
+  const data = LEGAL_CONTENT[tabKey] || LEGAL_CONTENT.faq;
+  const titleEl = document.getElementById('legalModalTitle');
+  const bodyEl = document.getElementById('legalModalBody');
+  if (titleEl) titleEl.textContent = data.title;
+  if (bodyEl) bodyEl.innerHTML = data.html;
+
+  ['faq', 'terms', 'license'].forEach(k => {
+    const btn = document.getElementById('legalTab-' + k);
+    if (!btn) return;
+    if (k === tabKey) {
+      btn.className = 'px-3 py-1.5 rounded-full font-semibold bg-[#132A46] text-white transition';
+    } else {
+      btn.className = 'px-3 py-1.5 rounded-full font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition';
+    }
+  });
+
+  document.getElementById('legalModal').classList.remove('hidden');
+}
+
+function closeLegalModal() {
+  document.getElementById('legalModal').classList.add('hidden');
 }
 
 function syncAllMastersNow() {
