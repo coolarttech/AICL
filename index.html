@@ -101,8 +101,8 @@
 <!-- Main Workspace Shell -->
 <div class="flex-1 flex flex-col lg:flex-row min-w-0">
 
-  <!-- Left Dark Sidebar -->
-  <aside id="leftSidebar" class="fixed lg:sticky top-0 left-0 z-50 lg:z-30 h-screen w-64 bg-[#0F172A] text-slate-300 flex flex-col justify-between shrink-0 transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-out border-r border-slate-800/80 no-print">
+  <!-- Permanently Fixed Left Dark Sidebar (Never Scrolls Up/Down) -->
+  <aside id="leftSidebar" class="fixed top-0 left-0 z-50 lg:z-40 h-screen w-64 bg-[#0F172A] text-slate-300 flex flex-col justify-between shrink-0 transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-out border-r border-slate-800/80 no-print">
 
     <!-- Scrollable Navigation & Controls -->
     <div class="flex flex-col flex-1 overflow-y-auto no-scrollbar">
@@ -127,7 +127,11 @@
             <span id="sidebarLedDot" class="w-2.5 h-2.5 rounded-full led-online inline-block shrink-0"></span>
             <span id="sidebarConnText">Sheet Sync Ready</span>
           </span>
-          <button onclick="verifySheetSync()" class="text-[10px] font-semibold text-emerald-400 hover:text-emerald-300 underline shrink-0">Sync Test</button>
+          <div class="flex items-center gap-2 shrink-0">
+            <button onclick="syncAllMastersNow()" title="सभी पार्टियां व आइटम Sheet में भेजें" class="text-[10px] font-semibold text-sky-400 hover:text-sky-300 underline">Sync Masters</button>
+            <button onclick="pullFromGoogleSheet()" title="Google Sheet से ताज़ा डेटा लाएं" class="text-[10px] font-semibold text-amber-400 hover:text-amber-300 underline">Pull Sheet</button>
+            <button onclick="verifySheetSync()" class="text-[10px] font-semibold text-emerald-400 hover:text-emerald-300 underline">Test</button>
+          </div>
         </div>
         <p id="syncStatusNote" class="text-[10px] text-slate-400 px-1 truncate">तुरंत सेव • Sheet ऑटो-सिंक सक्रिय</p>
       </div>
@@ -263,11 +267,11 @@
     </div>
   </aside>
 
-  <!-- Right Main Content + Aligned Footer Column -->
-  <div class="flex-1 flex flex-col min-w-0">
+  <!-- Right Main Content + Aligned Footer Column (Offset for Fixed Sidebar) -->
+  <div class="flex-1 flex flex-col min-w-0 lg:pl-64">
 
-    <!-- Clean Sticky Top Header (No Light Here) -->
-    <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/90 sticky top-0 z-30 no-print">
+    <!-- Permanently Fixed Top Header (Always Locked at Top, Aligned With Fixed Sidebar) -->
+    <header id="mainHeader" class="fixed top-0 left-0 lg:left-64 right-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-[0_2px_10px_rgba(15,23,42,0.03)] no-print">
       <div class="max-w-7xl mx-auto px-3.5 sm:px-6 py-2.5 flex items-center justify-between">
         <div class="flex items-center gap-2.5 min-w-0">
           <button onclick="toggleMobileSidebar(true)" aria-label="Menu" class="lg:hidden p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#132A46] transition shrink-0">
@@ -286,30 +290,24 @@
       </div>
     </header>
 
-    <!-- Main Workspace -->
-    <main class="max-w-7xl w-full mx-auto px-3.5 sm:px-6 py-4 sm:py-5 flex-1 no-print">
+    <!-- Main Workspace (Padded for Fixed Header & Fixed Footer) -->
+    <main class="max-w-7xl w-full mx-auto px-3.5 sm:px-6 pt-20 sm:pt-24 pb-24 sm:pb-20 flex-1 no-print">
 
       <!-- 1. DASHBOARD VIEW -->
       <section id="view-dashboard" class="space-y-5">
 
-        <!-- 3 Blank Customized Company Banner Image Slots at Top -->
+        <!-- 3 Custom Company Banners (slot1.png, slot2.png, slot3.png - Width Locked, Proportional Aspect Ratio Preserved) -->
         <div id="topCustomBannerRow" class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
-          <div id="customBannerSlot1" class="w-full aspect-[10/3] bg-white border-2 border-dashed border-slate-300 rounded-2xl flex flex-col items-center justify-center text-center px-3 overflow-hidden relative shadow-2xs">
-            <span class="text-[11px] font-semibold text-slate-600">Custom Banner Slot 1 (Blank)</span>
-            <span class="num-clean text-[11px] font-semibold text-[#1EA668] mt-0.5">Recommended: 1200 × 360 px</span>
-            <span class="text-[10px] text-slate-400 mt-0.5">अपनी कंपनी का कस्टम डिज़ाइन बैनर यहाँ लगाएं</span>
+          <div id="customBannerSlot1" class="w-full aspect-[3/1] bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-xs flex items-center justify-center">
+            <img src="slot1.png" alt="MunimJi Banner 1" class="w-full h-full object-contain block">
           </div>
 
-          <div id="customBannerSlot2" class="w-full aspect-[10/3] bg-white border-2 border-dashed border-slate-300 rounded-2xl flex flex-col items-center justify-center text-center px-3 overflow-hidden relative shadow-2xs">
-            <span class="text-[11px] font-semibold text-slate-600">Custom Banner Slot 2 (Blank)</span>
-            <span class="num-clean text-[11px] font-semibold text-[#1EA668] mt-0.5">Recommended: 1200 × 360 px</span>
-            <span class="text-[10px] text-slate-400 mt-0.5">अपनी कंपनी का कस्टम डिज़ाइन बैनर यहाँ लगाएं</span>
+          <div id="customBannerSlot2" class="w-full aspect-[3/1] bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-xs flex items-center justify-center">
+            <img src="slot2.png" alt="MunimJi Banner 2" class="w-full h-full object-contain block">
           </div>
 
-          <div id="customBannerSlot3" class="w-full aspect-[10/3] bg-white border-2 border-dashed border-slate-300 rounded-2xl flex flex-col items-center justify-center text-center px-3 overflow-hidden relative shadow-2xs">
-            <span class="text-[11px] font-semibold text-slate-600">Custom Banner Slot 3 (Blank)</span>
-            <span class="num-clean text-[11px] font-semibold text-[#1EA668] mt-0.5">Recommended: 1200 × 360 px</span>
-            <span class="text-[10px] text-slate-400 mt-0.5">अपनी कंपनी का कस्टम डिज़ाइन बैनर यहाँ लगाएं</span>
+          <div id="customBannerSlot3" class="w-full aspect-[3/1] bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-xs flex items-center justify-center">
+            <img src="slot3.png" alt="MunimJi Banner 3" class="w-full h-full object-contain block">
           </div>
         </div>
 
@@ -1072,8 +1070,8 @@
 
     </main>
 
-    <!-- Footer Visible by Default on Dashboard & All Pages, Aligned With Sidebar Clock + Contact Icon + Helpline -->
-    <footer id="mainFooter" class="w-full bg-white border-t border-slate-200/90 py-3.5 px-3.5 sm:px-6 no-print">
+    <!-- Permanently Fixed Footer (Always Visible Without Scrolling, Aligned With Sidebar Clock) -->
+    <footer id="mainFooter" class="fixed bottom-0 left-0 lg:left-64 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200/90 py-3 px-3.5 sm:px-6 shadow-[0_-2px_10px_rgba(15,23,42,0.04)] no-print">
       <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2.5 text-xs text-slate-500 text-center sm:text-left">
         <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
           <img src="cool art logo.png" alt="Cool Art®" class="h-5 w-auto object-contain">
@@ -1172,9 +1170,8 @@ const freshState = {
 };
 
 let state = JSON.parse(localStorage.getItem('aiclMunimJiERP_v6_fast')) || freshState;
-if (!state.settings || !state.settings.sheetUrl) {
-  state.settings = { kaddaPct: state.settings?.kaddaPct || 1.0, sheetUrl: DEPLOYED_SHEET_URL };
-}
+if (!state.settings) state.settings = { kaddaPct: 1.0, sheetUrl: DEPLOYED_SHEET_URL };
+state.settings.sheetUrl = DEPLOYED_SHEET_URL;
 
 function saveState() {
   localStorage.setItem('aiclMunimJiERP_v6_fast', JSON.stringify(state));
@@ -1280,6 +1277,94 @@ function syncToGoogleSheet(payload) {
       updateSidebarStatus('Retry Pending', true);
       if (noteEl) noteEl.textContent = 'सिंक पुनः प्रयास में...';
     });
+}
+
+function pullFromGoogleSheet(silent = false) {
+  const url = state.settings?.sheetUrl || DEPLOYED_SHEET_URL;
+  const noteEl = document.getElementById('syncStatusNote');
+  if (!url || !navigator.onLine) {
+    if (!silent && noteEl) noteEl.textContent = 'इंटरनेट बंद है';
+    return;
+  }
+  if (!silent) {
+    updateSidebarStatus('Reading Sheet...', true);
+    if (noteEl) noteEl.textContent = 'Google Sheet से ताज़ा डेटा लाया जा रहा है...';
+  }
+  fetch(url + '?action=GET_ALL&t=' + Date.now())
+    .then(r => r.json())
+    .then(res => {
+      if (res && res.status === 'ok') {
+        if (Array.isArray(res.parties)) state.parties = res.parties;
+        if (Array.isArray(res.rawItems)) state.rawItems = res.rawItems;
+        if (Array.isArray(res.saleItems)) state.saleItems = res.saleItems;
+        if (Array.isArray(res.transactions)) state.transactions = res.transactions;
+        if (Array.isArray(res.expenses)) state.expenses = res.expenses;
+        if (Array.isArray(res.processingBatches)) state.processingBatches = res.processingBatches;
+        saveState();
+        refreshSelectors();
+        renderDashboard();
+        renderPartyList();
+        renderMasters();
+        renderExpensesTable();
+        renderProcessingTable();
+        updateSidebarStatus('Synced ✓', true);
+        if (noteEl) noteEl.textContent = '✓ Sheet से सारा डेटा सिंक हो गया';
+      } else if (!silent) {
+        updateSidebarStatus('Sheet Sync Ready', true);
+        if (noteEl) noteEl.textContent = 'Web App → Sheet ऑटो-सिंक सक्रिय है';
+      }
+    })
+    .catch(() => {
+      if (!silent) {
+        updateSidebarStatus('Sheet Sync Ready', true);
+        if (noteEl) noteEl.textContent = 'Web App → Sheet ऑटो-सिंक सक्रिय है';
+      }
+    });
+}
+
+function syncAllMastersNow() {
+  let count = 0;
+  state.parties.forEach(p => {
+    count++;
+    syncToGoogleSheet({
+      sheetTab: 'Parties_Master',
+      actionType: 'UPSERT',
+      ...p,
+      seasonYear: getSeasonYear(p.createdDate)
+    });
+  });
+  state.rawItems.forEach(obj => {
+    count++;
+    syncToGoogleSheet({
+      sheetTab: 'Items_Master',
+      actionType: 'UPSERT',
+      id: obj.id,
+      masterType: 'Raw Purchase',
+      name: obj.name,
+      varietyOrClass: obj.variety,
+      kaddaPct: state.settings.kaddaPct,
+      status: 'Active',
+      updatedAt: obj.updatedAt
+    });
+  });
+  state.saleItems.forEach(obj => {
+    count++;
+    syncToGoogleSheet({
+      sheetTab: 'Items_Master',
+      actionType: 'UPSERT',
+      id: obj.id,
+      masterType: 'Finished Sale',
+      name: obj.name,
+      varietyOrClass: obj.category,
+      packKg: obj.packKg,
+      rate: obj.rate,
+      openingStock: obj.stockBags,
+      status: 'Active',
+      updatedAt: obj.updatedAt
+    });
+  });
+  const noteEl = document.getElementById('syncStatusNote');
+  if (noteEl) noteEl.textContent = count ? `✓ ${count} पार्टी/आइटम Sheet में भेजे गए` : 'कोई पार्टी या आइटम सेव नहीं है';
 }
 
 function verifySheetSync() {
@@ -2762,6 +2847,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   setRole(state.role);
   switchTab('dashboard');
+  pullFromGoogleSheet(true);
 });
 </script>
 </body>
