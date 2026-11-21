@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="MunimJi ERP">
 <meta name="theme-color" content="#0F172A">
-<title>MunimJi by Cool Art® — AICL Group Agri-Seed ERP</title>
+<title>MunimJi by Cool Art® — Vaidik Seeds Agri-Seed ERP</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,19 +45,19 @@
   }
 
   @keyframes ledPulseAmber {
-    0%, 100% { opacity: 0.55; box-shadow: 0 0 4px rgba(245, 158, 11, 0.55); transform: scale(0.95); }
-    50% { opacity: 1; box-shadow: 0 0 11px rgba(249, 115, 22, 0.95); transform: scale(1.1); }
+    0%, 100% { opacity: 0.5; box-shadow: 0 0 4px rgba(245, 158, 11, 0.5); transform: scale(0.95); }
+    50% { opacity: 1; box-shadow: 0 0 10px rgba(245, 158, 11, 0.9); transform: scale(1.08); }
   }
   @keyframes ledGlowLightGreen {
-    0%, 100% { opacity: 0.85; box-shadow: 0 0 6px rgba(74, 222, 128, 0.75); }
-    50% { opacity: 1; box-shadow: 0 0 12px rgba(134, 239, 172, 0.95); }
+    0%, 100% { opacity: 0.75; box-shadow: 0 0 5px rgba(134, 239, 172, 0.65); }
+    50% { opacity: 1; box-shadow: 0 0 10px rgba(74, 222, 128, 0.85); }
   }
   @keyframes ledPulseRed {
-    0%, 100% { opacity: 0.5; box-shadow: 0 0 4px rgba(225, 29, 72, 0.5); }
-    50% { opacity: 1; box-shadow: 0 0 11px rgba(225, 29, 72, 0.9); }
+    0%, 100% { opacity: 0.45; box-shadow: 0 0 4px rgba(225, 29, 72, 0.45); }
+    50% { opacity: 1; box-shadow: 0 0 10px rgba(225, 29, 72, 0.85); }
   }
-  .led-syncing { background-color: #f59e0b; animation: ledPulseAmber 1.3s ease-in-out infinite; }
-  .led-synced { background-color: #4ade80; animation: ledGlowLightGreen 2.4s ease-in-out infinite; }
+  .led-pending { background-color: #f59e0b; animation: ledPulseAmber 1.4s ease-in-out infinite; }
+  .led-synced { background-color: #86efac; animation: ledGlowLightGreen 2.4s ease-in-out infinite; }
   .led-offline { background-color: #e11d48; animation: ledPulseRed 1.2s ease-in-out infinite; }
 
   @keyframes clockColonPulse {
@@ -91,7 +91,7 @@
 <!-- Fast Startup Splash Screen -->
 <div id="splashScreen" class="fixed inset-0 bg-white z-[100] flex flex-col items-center justify-center transition-opacity duration-200 no-print">
   <div class="splash-anim flex flex-col items-center">
-    <img src="aicl logo.png" alt="AICL Group" class="h-40 md:h-48 w-auto object-contain mb-3">
+    <img src="Vaidik Seeds Logo copy.jpg" alt="वैदिक सीड्स" class="h-40 md:h-48 w-auto object-contain mb-3">
     <span class="text-xs font-semibold tracking-wider uppercase text-[#1EA668] bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200">Agri-Seed ERP</span>
   </div>
   <div class="absolute bottom-8 flex items-center gap-2.5 text-xs text-slate-400">
@@ -116,19 +116,21 @@
         <div class="flex items-center justify-between gap-2">
           <div class="flex items-center gap-3 min-w-0">
             <div class="bg-white rounded-2xl p-2 shadow-sm shrink-0">
-              <img src="aicl logo.png" alt="AICL Group" class="h-12 w-12 object-contain">
+              <img src="Vaidik Seeds Logo copy.jpg" alt="वैदिक सीड्स" class="h-12 w-12 object-contain">
             </div>
             <div class="min-w-0">
-              <p class="text-sm font-semibold text-white tracking-tight truncate">AICL Group</p>
+              <p class="text-sm font-semibold text-white tracking-tight truncate">वैदिक सीड्स</p>
               <span class="inline-block text-[10px] font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full mt-0.5">Agri-Seed ERP</span>
             </div>
           </div>
           <button onclick="toggleMobileSidebar(false)" class="lg:hidden w-7 h-7 rounded-lg bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-xs shrink-0">✕</button>
         </div>
 
-        <!-- Sheet-Only Sync LED Light (Yellow/Orange = Pending/Syncing, Light Green = Synced, Red = Offline) -->
-        <div id="sidebarLedBar" class="flex items-center justify-center py-1.5 px-3 rounded-xl bg-slate-900/80 border border-slate-800/90" title="Google Sheet Sync Status Light">
-          <span id="sidebarLedDot" class="w-3.5 h-3.5 rounded-full led-syncing inline-block shrink-0"></span>
+        <!-- Google Sheet Sync Light Only -->
+        <div class="py-1 flex items-center justify-center">
+          <span id="sidebarLedDot" title="Google Sheet Sync Status" class="w-3.5 h-3.5 rounded-full led-pending inline-block shrink-0"></span>
+          <span id="sidebarConnText" class="sr-only"></span>
+          <span id="syncStatusNote" class="sr-only"></span>
         </div>
       </div>
 
@@ -278,12 +280,18 @@
       </nav>
     </div>
 
-    <!-- Slide-Out Shortcut Drawer Trigger -->
+    <!-- Quick Keys Strip Positioned Cleanly Above Live Clock -->
     <div class="px-3 pt-2 pb-1.5 border-t border-slate-800/90 bg-slate-950/40">
-      <button type="button" onclick="openShortcutDrawer()" class="w-full py-1.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-[11px] font-semibold text-emerald-300 flex items-center justify-between transition">
-        <span>⌨ शॉर्टकट पैनल (Shortcuts)</span>
-        <span class="num-clean text-[10px] bg-slate-800 text-slate-200 px-1.5 py-0.5 rounded border border-slate-700">Alt+H</span>
-      </button>
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-[10px] font-semibold text-emerald-400 tracking-wide">त्वरित शॉर्टकट्स (Quick Keys)</span>
+        <button type="button" onclick="openShortcutHelp()" class="text-[10px] text-slate-400 hover:text-white underline">Alt+H</button>
+      </div>
+      <div class="flex flex-wrap gap-1 text-[10px] text-slate-300">
+        <span class="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800">Alt+S बिल</span>
+        <span class="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800">Alt+P खरीद</span>
+        <span class="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800">Alt+V वाउचर</span>
+        <span class="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800">Ctrl+↵ सेव</span>
+      </div>
     </div>
 
     <!-- Bottom of Dark Sidebar: iPhone-Style Live Clock & Hindi Calendar -->
@@ -311,7 +319,7 @@
           </button>
           <div class="min-w-0">
             <h1 id="headerPageTitle" class="text-xs sm:text-base font-semibold text-[#132A46] tracking-tight truncate">डैशबोर्ड (Overview)</h1>
-            <p class="hidden sm:block text-[11px] text-slate-400 truncate">AICL Group • Agri-Seed ERP Portal</p>
+            <p class="hidden sm:block text-[11px] text-slate-400 truncate">M/S VAIDIC SEEDS • GSTIN: 09AOOPA6667H1Z3 • Aligarh, UP</p>
           </div>
         </div>
 
@@ -328,47 +336,40 @@
       <!-- 1. DASHBOARD VIEW -->
       <section id="view-dashboard" class="flex flex-col space-y-4 sm:space-y-5">
 
-        <!-- Single Row of 4 Compact Cards: Blue Highlighted "+ पार्टी जोड़ें" + 3 Count-Highlighted Summary Cards -->
+        <!-- 4 Compact Single-Row Cards: Blue Highlighted "+ पार्टी जोड़ें" + 3 Live Count Cards (No "Drawer" text) -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5">
-          <!-- Card 1: Blue Highlighted "+ पार्टी जोड़ें" -->
-          <button type="button" onclick="switchTab('parties'); setTimeout(() => { document.getElementById('newPartyName')?.focus(); }, 120);" class="bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white border border-blue-700 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-sm flex items-center justify-between gap-2 text-left transition">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <span class="w-9 h-9 rounded-xl bg-white/20 text-white flex items-center justify-center shrink-0">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+          <button type="button" onclick="switchTab('parties'); setTimeout(() => { document.getElementById('newPartyName')?.focus(); }, 120);" class="bg-blue-600 hover:bg-blue-700 text-white border border-blue-700 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="w-8 h-8 rounded-lg bg-white/15 text-white flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
               </span>
-              <div class="min-w-0">
-                <p class="text-xs sm:text-sm font-bold text-white truncate">+ पार्टी जोड़ें</p>
-                <p class="text-[10px] text-blue-100 truncate">किसान / मंडी / वेंडर</p>
-              </div>
+              <span class="font-bold text-xs sm:text-sm truncate">+ पार्टी जोड़ें</span>
             </div>
-            <span class="num-clean text-xs font-extrabold bg-white text-blue-700 px-2 py-0.5 rounded-full shrink-0">+</span>
+            <span class="text-white/80 text-xs shrink-0">›</span>
           </button>
 
-          <!-- Card 2: सभी पार्टियां + Highlighted Count -->
-          <button type="button" onclick="openRecordsDrawer('PARTY')" class="bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-400 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
+          <button type="button" onclick="openRecordsDrawer('PARTY')" class="bg-white hover:bg-slate-50 border border-slate-200 hover:border-blue-400 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
             <div class="min-w-0">
-              <p class="text-xs sm:text-sm font-bold text-[#132A46] truncate">सभी पार्टियां</p>
-              <p class="text-[10px] text-slate-500 truncate mt-0.5">कुल दर्ज खाते</p>
+              <span class="text-[11px] font-semibold text-slate-600 block truncate">सभी पार्टियां</span>
+              <span id="countAllParties" class="num-clean text-base sm:text-lg font-bold text-[#132A46] mt-0.5 inline-block">0</span>
             </div>
-            <span id="badgeAllPartiesCount" class="num-clean text-xs sm:text-sm font-extrabold bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-full shrink-0">0</span>
+            <span class="text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full shrink-0">कुल</span>
           </button>
 
-          <!-- Card 3: सभी बिल व वाउचर + Highlighted Count -->
-          <button type="button" onclick="openRecordsDrawer('TX')" class="bg-white hover:bg-emerald-50/40 border border-emerald-200 hover:border-[#1EA668] p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
+          <button type="button" onclick="openRecordsDrawer('TX')" class="bg-white hover:bg-emerald-50/40 border border-slate-200 hover:border-[#1EA668] p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
             <div class="min-w-0">
-              <p class="text-xs sm:text-sm font-bold text-[#132A46] truncate">सभी बिल व वाउचर</p>
-              <p class="text-[10px] text-slate-500 truncate mt-0.5">बिक्री, खरीद व वाउचर</p>
+              <span class="text-[11px] font-semibold text-slate-600 block truncate">सभी बिल व वाउचर</span>
+              <span id="countAllBillsVouchers" class="num-clean text-base sm:text-lg font-bold text-[#1EA668] mt-0.5 inline-block">0</span>
             </div>
-            <span id="badgeAllTxCount" class="num-clean text-xs sm:text-sm font-extrabold bg-emerald-50 text-[#1EA668] border border-emerald-200 px-2.5 py-1 rounded-full shrink-0">0</span>
+            <span class="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0">कुल</span>
           </button>
 
-          <!-- Card 4: सभी खर्चे + Highlighted Count -->
-          <button type="button" onclick="openRecordsDrawer('EXPENSE')" class="bg-white hover:bg-rose-50/40 border border-rose-200 hover:border-rose-400 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
+          <button type="button" onclick="openRecordsDrawer('EXPENSE')" class="bg-white hover:bg-rose-50/40 border border-slate-200 hover:border-rose-400 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
             <div class="min-w-0">
-              <p class="text-xs sm:text-sm font-bold text-[#132A46] truncate">सभी खर्चे</p>
-              <p class="text-[10px] text-slate-500 truncate mt-0.5">कुल कंपनी खर्च एंट्री</p>
+              <span class="text-[11px] font-semibold text-slate-600 block truncate">सभी खर्चे</span>
+              <span id="countAllExpenses" class="num-clean text-base sm:text-lg font-bold text-rose-600 mt-0.5 inline-block">0</span>
             </div>
-            <span id="badgeAllExpensesCount" class="num-clean text-xs sm:text-sm font-extrabold bg-rose-50 text-rose-600 border border-rose-200 px-2.5 py-1 rounded-full shrink-0">0</span>
+            <span class="text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-full shrink-0">कुल</span>
           </button>
         </div>
 
@@ -1403,31 +1404,15 @@
   <div id="recordsDrawerBody" class="p-4 overflow-y-auto flex-1 space-y-2.5 text-xs"></div>
 </aside>
 
-<!-- SLIDE-OUT KEYBOARD SHORTCUTS DRAWER -->
-<div id="shortcutDrawerBackdrop" onclick="closeShortcutDrawer()" class="hidden fixed inset-0 bg-slate-950/45 backdrop-blur-[1px] z-50 no-print"></div>
-<aside id="shortcutDrawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl border-l border-slate-200 z-50 transform translate-x-full transition-transform duration-200 ease-out flex flex-col no-print">
-  <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between bg-[#0F172A] text-white">
-    <div>
-      <h3 class="text-sm sm:text-base font-bold">कीबोर्ड शॉर्टकट्स (Quick Keys)</h3>
-      <p class="text-[11px] text-slate-400">किसी भी शॉर्टकट पर क्लिक करें या कीबोर्ड से दबाएँ</p>
-    </div>
-    <button type="button" onclick="closeShortcutDrawer()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center">✕</button>
-  </div>
-  <div id="shortcutDrawerBody" class="p-4 overflow-y-auto flex-1 space-y-4 text-xs"></div>
-  <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500">
-    <span>बंद करने के लिए <b>Esc</b> या <b>Alt+H</b> दबाएँ</span>
-    <button type="button" onclick="closeShortcutDrawer()" class="px-3.5 py-1.5 rounded-lg bg-[#132A46] text-white font-semibold text-xs">बंद करें</button>
-  </div>
-</aside>
-
 <!-- RECEIPT / INVOICE PRINT & WHATSAPP MODAL -->
 <div id="receiptModal" class="hidden fixed inset-0 bg-slate-900/65 backdrop-blur-xs z-50 flex items-center justify-center p-2.5 sm:p-4">
   <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden flex flex-col max-h-[94vh]">
     <div class="px-3.5 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between gap-2 no-print">
-      <span class="font-semibold text-xs sm:text-sm text-[#132A46] truncate">डिजिटल बिल प्रीव्यू</span>
+      <span class="font-semibold text-xs sm:text-sm text-[#132A46] truncate">डिजिटल बिल व रसीद</span>
       <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-        <button onclick="window.print()" class="bg-[#132A46] hover:bg-slate-800 text-white text-[11px] sm:text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap">प्रिंट / PDF</button>
-        <a id="btnWhatsappShare" href="#" target="_blank" class="bg-[#1EA668] hover:bg-emerald-700 text-white text-[11px] sm:text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap">WhatsApp</a>
+        <button type="button" onclick="downloadInvoicePDF()" class="bg-[#132A46] hover:bg-slate-800 text-white text-[11px] sm:text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap">PDF डाउनलोड</button>
+        <button type="button" id="btnSharePdfWa" onclick="shareInvoicePacket()" class="bg-[#1EA668] hover:bg-emerald-700 text-white text-[11px] sm:text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap">PDF भेजें</button>
+        <a id="btnWhatsappShare" href="#" target="_blank" class="hidden">WA</a>
         <button onclick="closeReceiptModal()" class="w-7 h-7 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-semibold flex items-center justify-center">✕</button>
       </div>
     </div>
@@ -1445,7 +1430,7 @@
     <form onsubmit="saveUpiSettings(event)" class="p-4 space-y-3 text-xs">
       <div>
         <label class="block font-semibold text-slate-700 mb-1">मर्चेंट / फर्म का नाम</label>
-        <input type="text" id="cfgUpiPayeeName" placeholder="AICL GROUP" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm">
+        <input type="text" id="cfgUpiPayeeName" placeholder="M/S VAIDIC SEEDS" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm">
       </div>
       <div>
         <label class="block font-semibold text-slate-700 mb-1">UPI ID (उदा. aiclgroup@okaxis या 9458614610@upi)</label>
@@ -1471,7 +1456,7 @@
         <img src="logo.png" alt="MunimJi by Cool Art®" class="h-7 w-auto bg-white rounded-lg px-1.5 py-0.5 object-contain">
         <div>
           <h3 id="legalModalTitle" class="text-sm sm:text-base font-semibold">MunimJi by Cool Art® — सहायता एवं नियम</h3>
-          <p class="text-[10px] text-slate-400">AICL Group Agri-Seed ERP Portal</p>
+          <p class="text-[10px] text-slate-400">Vaidik Seeds Agri-Seed ERP Portal</p>
         </div>
       </div>
       <button onclick="closeLegalModal()" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold flex items-center justify-center">✕</button>
@@ -1601,10 +1586,7 @@ function updateLiveClock() {
   if (dEl) dEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
 }
 
-let sheetSyncLightState = 'pending'; // 'pending' (yellow/orange) | 'synced' (light green) | 'offline' (red)
-
-function setSheetSyncLight(mode) {
-  sheetSyncLightState = mode;
+function setSyncLedState(mode) {
   const sDot = document.getElementById('sidebarLedDot');
   if (!sDot) return;
   if (!navigator.onLine || mode === 'offline') {
@@ -1612,15 +1594,17 @@ function setSheetSyncLight(mode) {
   } else if (mode === 'synced') {
     sDot.className = 'w-3.5 h-3.5 rounded-full led-synced inline-block shrink-0';
   } else {
-    sDot.className = 'w-3.5 h-3.5 rounded-full led-syncing inline-block shrink-0';
+    sDot.className = 'w-3.5 h-3.5 rounded-full led-pending inline-block shrink-0';
   }
 }
 
-function updateSidebarStatus(_text, isOnline = navigator.onLine) {
-  if (!isOnline) {
-    setSheetSyncLight('offline');
+function updateSidebarStatus(text, isOnline = navigator.onLine) {
+  if (!isOnline || String(text || '').toLowerCase().includes('offline')) {
+    setSyncLedState('offline');
+  } else if (String(text || '').includes('✓') || String(text || '').toLowerCase().includes('synced')) {
+    setSyncLedState('synced');
   } else {
-    setSheetSyncLight(sheetSyncLightState === 'synced' ? 'synced' : 'pending');
+    setSyncLedState('pending');
   }
 }
 
@@ -1655,7 +1639,7 @@ function syncToGoogleSheet(payload) {
   const noteEl = document.getElementById('syncStatusNote');
   if (!url) return;
 
-  setSheetSyncLight('pending');
+  setSyncLedState('pending');
   if (noteEl) noteEl.textContent = `ऑटो-सिंक (${payload.sheetTab || 'Sheet'})...`;
 
   try {
@@ -1669,11 +1653,11 @@ function syncToGoogleSheet(payload) {
     })
       .then(() => {
         const tNow = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        setSheetSyncLight('synced');
+        setSyncLedState('synced');
         if (noteEl) noteEl.textContent = `✓ ऑटो-सिंक (${tNow}) — ${payload.sheetTab || 'Sheet'}`;
       })
       .catch(() => {
-        setSheetSyncLight(navigator.onLine ? 'pending' : 'offline');
+        updateSidebarStatus('Auto-Sync Ready', true);
         if (noteEl) noteEl.textContent = 'ऑटो-सिंक सक्रिय है';
       });
   } catch (err) {
@@ -1758,7 +1742,7 @@ function pullFromGoogleSheet(silent = false) {
         renderMasters();
         renderExpensesTable();
         renderProcessingTable();
-        updateSidebarStatus('Synced ✓', true);
+        setSyncLedState('synced');
         if (noteEl) noteEl.textContent = '✓ Sheet से सारा डेटा सिंक हो गया';
       } else if (!silent) {
         updateSidebarStatus('Sheet Sync Ready', true);
@@ -1915,8 +1899,7 @@ function syncFromSheetTruth(isBackground = false) {
     .then(txt => {
       let res = null;
       try { res = JSON.parse(txt); } catch (e) { res = null; }
-      if (!res || res.status !== 'ok') { setSheetSyncLight('pending'); return; }
-      setSheetSyncLight('synced');
+      if (!res || res.status !== 'ok') return;
 
       const sheetParties = Array.isArray(res.parties)
         ? res.parties.map(p => ({ ...p, createdDate: normalizeSheetDate(p.createdDate) }))
@@ -2011,8 +1994,8 @@ const LEGAL_CONTENT = {
     title: 'Terms & Conditions — नियम एवं शर्तें',
     html: `
       <div class="space-y-3">
-        <p><b>1. सेवा का दायरा:</b> यह वेब पोर्टल (<b>MunimJi by Cool Art® — AICL Group Agri-Seed ERP</b>) दैनिक व्यापारिक हिसाब-किताब, बीज खरीद-बिक्री, मंडी सप्लाई, वाउचर और खर्च प्रबंधन के लिए तैयार किया गया है।</p>
-        <p><b>2. डेटा प्रविष्टि की जिम्मेदारी:</b> पोर्टल में दर्ज किए गए वजन, दर, कद्दा प्रतिशत, कटौती, पार्टी विवरण और कर (Tax/GST) संबंधी सभी आंकड़ों की सटीकता और सत्यापन की पूरी जिम्मेदारी अधिकृत उपयोगकर्ता / क्लाइंट (AICL Group) की होगी।</p>
+        <p><b>1. सेवा का दायरा:</b> यह वेब पोर्टल (<b>MunimJi by Cool Art® — Vaidik Seeds Agri-Seed ERP</b>) दैनिक व्यापारिक हिसाब-किताब, बीज खरीद-बिक्री, मंडी सप्लाई, वाउचर और खर्च प्रबंधन के लिए तैयार किया गया है।</p>
+        <p><b>2. डेटा प्रविष्टि की जिम्मेदारी:</b> पोर्टल में दर्ज किए गए वजन, दर, कद्दा प्रतिशत, कटौती, पार्टी विवरण और कर (Tax/GST) संबंधी सभी आंकड़ों की सटीकता और सत्यापन की पूरी जिम्मेदारी अधिकृत उपयोगकर्ता / क्लाइंट (वैदिक सीड्स) की होगी।</p>
         <p><b>3. क्लाउड सिंक व बैकअप:</b> लाइव Google Sheet सिंक के लिए सक्रिय इंटरनेट कनेक्शन आवश्यक है। किसी भी तृतीय-पक्ष सेवा (Google Workspace, GitHub, या इंटरनेट नेटवर्क) में अस्थायी बाधा से बचने के लिए उपयोगकर्ता को समय-समय पर <b>Excel / CSV डाउनलोड</b> द्वारा लोकल बैकअप सुरक्षित रखने की सलाह दी जाती है।</p>
         <p><b>4. दायित्व की सीमा:</b> Cool Art® सॉफ्टवेयर की तकनीकी कार्यप्रणाली के लिए प्रतिबद्ध है, परंतु गलत डेटा प्रविष्टि, ब्राउज़र कैश साफ़ करने या बाहरी सर्वर डाउनटाइम से होने वाली किसी अप्रत्यक्ष व्यापारिक या वित्तीय हानि के लिए उत्तरदायी नहीं होगा।</p>
         <p><b>5. तकनीकी सहायता:</b> किसी भी तकनीकी सहायता या कस्टम बदलाव के लिए आधिकारिक हेल्पलाइन <b>+91 9458614610</b> पर संपर्क किया जा सकता है।</p>
@@ -2024,7 +2007,7 @@ const LEGAL_CONTENT = {
     html: `
       <div class="space-y-3">
         <p><b>1. बौद्धिक संपदा स्वामित्व (Intellectual Property Rights):</b> इस वेब एप्लिकेशन का संपूर्ण सोर्स कोड, यूज़र इंटरफ़ेस (UI/UX), डेटाबेस आर्किटेक्चर, ग्राफ़िक्स और <b>MunimJi by Cool Art®</b> ट्रेडमार्क/लोगो पूरी तरह <b>Cool Art®</b> की अनन्य बौद्धिक संपत्ति है।</p>
-        <p><b>2. सीमित उपयोग लाइसेंस (Limited Non-Transferable License):</b> Cool Art® द्वारा यह सॉफ्टवेयर पोर्टल केवल अधिकृत लाइसेंसधारक संस्था (<b>AICL Group</b>) के आंतरिक व्यापारिक संचालन के लिए प्रदान किया गया है। यह लाइसेंस गैर-हस्तांतरणीय (Non-Transferable) है।</p>
+        <p><b>2. सीमित उपयोग लाइसेंस (Limited Non-Transferable License):</b> Cool Art® द्वारा यह सॉफ्टवेयर पोर्टल केवल अधिकृत लाइसेंसधारक संस्था (<b>वैदिक सीड्स</b>) के आंतरिक व्यापारिक संचालन के लिए प्रदान किया गया है। यह लाइसेंस गैर-हस्तांतरणीय (Non-Transferable) है।</p>
         <p><b>3. प्रतिबंधित गतिविधियाँ:</b> बिना Cool Art® की पूर्व लिखित अनुमति के इस सॉफ्टवेयर के कोड की नकल करना, रिवर्स-इंजीनियरिंग करना, किसी अन्य कंपनी या व्यक्ति को बेचना, किराए पर देना, या इसके कॉपीराइट व <b>Developed by Cool Art®</b> ब्रांडिंग चिह्नों को हटाना सख्त वर्जित है।</p>
         <p><b>4. गोपनीयता व डेटा सुरक्षा:</b> क्लाइंट का समस्त व्यापारिक डेटा उनकी अपनी Google Sheet और लोकल ब्राउज़र स्टोरेज में सुरक्षित रहता है। Cool Art® बिना अनुमति क्लाइंट के व्यावसायिक डेटा को किसी तीसरे पक्ष के साथ साझा नहीं करता।</p>
         <p><b>5. अनुबंध स्वीकृति:</b> इस पोर्टल का निरंतर उपयोग करने का अर्थ है कि उपयोगकर्ता उपरोक्त सभी लाइसेंस शर्तों और नियमों से सहमत है।</p>
@@ -3545,12 +3528,12 @@ function renderDashboard() {
   if (procFEl) procFEl.textContent = `${(procStockKg / 100).toFixed(2)} Qtl`;
   if (procAlert) procAlert.classList.toggle('hidden', procPct > 15 || procStockKg === 0);
 
-  const pBadge = document.getElementById('badgeAllPartiesCount');
-  const tBadge = document.getElementById('badgeAllTxCount');
-  const eBadge = document.getElementById('badgeAllExpensesCount');
-  if (pBadge) pBadge.textContent = String(state.parties.length);
-  if (tBadge) tBadge.textContent = String(state.transactions.length);
-  if (eBadge) eBadge.textContent = String(state.expenses.length);
+  const cParties = document.getElementById('countAllParties');
+  const cBills = document.getElementById('countAllBillsVouchers');
+  const cExp = document.getElementById('countAllExpenses');
+  if (cParties) cParties.textContent = state.parties.length.toLocaleString('en-IN');
+  if (cBills) cBills.textContent = state.transactions.length.toLocaleString('en-IN');
+  if (cExp) cExp.textContent = state.expenses.length.toLocaleString('en-IN');
 
   document.getElementById('kpiSales').innerText = '₹' + totalSales.toLocaleString('en-IN');
   document.getElementById('kpiSalesSub').innerText = `बीज: ₹${seedSaleAmt.toLocaleString('en-IN')} • मंडी: ₹${mandiSaleAmt.toLocaleString('en-IN')}`;
@@ -3644,6 +3627,26 @@ function setInvoiceTheme(themeKey) {
   if (currentReceiptTxId) openReceipt(currentReceiptTxId);
 }
 
+function downloadInvoicePDF() {
+  window.print();
+}
+
+function shareInvoicePacket() {
+  const waLink = document.getElementById('btnWhatsappShare')?.href;
+  if (navigator.share) {
+    navigator.share({
+      title: 'वैदिक सीड्स — बिल / रसीद',
+      text: decodeURIComponent((waLink || '').split('text=')[1] || 'वैदिक सीड्स — डिजिटल बिल व रसीद')
+    }).catch(() => {
+      if (waLink && waLink !== '#') window.open(waLink, '_blank');
+    });
+  } else if (waLink && waLink !== '#') {
+    window.open(waLink, '_blank');
+  } else {
+    window.print();
+  }
+}
+
 function openReceipt(txId) {
   currentReceiptTxId = txId;
   const tx = state.transactions.find(x => x.id === txId);
@@ -3656,117 +3659,196 @@ function openReceipt(txId) {
     : (tx.type === 'RECEIPT' ? -Number(tx.amount || 0) : Number(tx.amount || 0)))
   );
 
-  const themes = {
-    navy: { hdrBg: 'bg-[#132A46] text-white', accentBorder: 'border-[#132A46]', thBg: 'bg-[#132A46] text-white', badge: 'bg-white/15 text-white border-white/30' },
-    emerald: { hdrBg: 'bg-[#14532D] text-white', accentBorder: 'border-[#1EA668]', thBg: 'bg-[#1EA668] text-white', badge: 'bg-white/15 text-white border-white/30' },
-    slate: { hdrBg: 'bg-slate-900 text-white', accentBorder: 'border-slate-800', thBg: 'bg-slate-800 text-white', badge: 'bg-white/15 text-white border-white/30' }
-  };
-  const thm = themes[activeInvoiceTheme] || themes.navy;
+  const isVoucher = (tx.type === 'RECEIPT' || tx.type === 'PAYMENT');
+  const isPurchase = (tx.type === 'PURCHASE');
 
-  const docTitle = tx.saleChannel === 'Mandi Supply'
-    ? 'TAX / MANDI SUPPLY INVOICE'
-    : (tx.type === 'SALE' ? 'SEED SALE INVOICE' : (tx.type === 'PURCHASE' ? 'RAW CROP PURCHASE INVOICE' : 'PAYMENT / RECEIPT VOUCHER'));
+  const companyAddr = "02, Ramghat Road, Swarn jayanti Nagar, Aligarh, Uttar Pradesh, 202001";
+  const companyGstin = "09AOOPA6667H1Z3";
 
-  document.getElementById('printArea').innerHTML = `
-    <div class="bg-white border-2 ${thm.accentBorder} rounded-lg overflow-hidden text-slate-900">
-      <!-- Theme Switcher Bar (Hidden on Print) -->
-      <div class="px-3 py-2 bg-slate-100 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 text-[11px] no-print">
-        <span class="font-semibold text-slate-700">इनवॉइस थीम चुनें:</span>
-        <div class="flex items-center gap-1.5">
-          <button type="button" onclick="setInvoiceTheme('navy')" class="px-2.5 py-1 rounded font-semibold ${activeInvoiceTheme === 'navy' ? 'bg-[#132A46] text-white' : 'bg-white text-slate-700 border border-slate-300'}">नेवी ब्लू</button>
-          <button type="button" onclick="setInvoiceTheme('emerald')" class="px-2.5 py-1 rounded font-semibold ${activeInvoiceTheme === 'emerald' ? 'bg-[#1EA668] text-white' : 'bg-white text-slate-700 border border-slate-300'}">एमरल्ड ग्रीन</button>
-          <button type="button" onclick="setInvoiceTheme('slate')" class="px-2.5 py-1 rounded font-semibold ${activeInvoiceTheme === 'slate' ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-300'}">क्लासिक स्लेट</button>
-        </div>
-      </div>
+  const upiId = (state.settings?.upiId || '').trim();
+  const payeeName = (state.settings?.upiPayeeName || 'वैदिक सीड्स').trim();
+  const bankInfo = (state.settings?.bankInfo || '').trim();
+  const amtNum = Number(tx.amount || 0);
 
-      <!-- Hardcore Commercial Invoice Header -->
-      <div class="${thm.hdrBg} px-4 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div class="flex items-center gap-3.5">
-          <div class="bg-white p-1.5 rounded-lg shrink-0">
-            <img src="aicl logo.png" alt="AICL Group" class="h-14 w-auto object-contain">
+  const paymentBoxHtml = (upiId || bankInfo || tx.bankName || tx.phoneRef || tx.upiHandle || tx.utrNo)
+    ? `<div class="mt-4 p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
+         <div class="space-y-1">
+           <p class="font-bold text-[#132A46]">भुगतान व बैंक विवरण (Payment & Bank Details)</p>
+           ${upiId ? `<p class="num-clean">UPI ID: <b>${upiId}</b> (${payeeName})</p>` : ''}
+           ${bankInfo ? `<p class="num-clean">बैंक विवरण: <b>${bankInfo}</b></p>` : ''}
+           ${tx.bankName ? `<p>बैंक / खाता: <b>${tx.bankName}</b></p>` : ''}
+           ${tx.phoneRef ? `<p class="num-clean">संपर्क / खाता नं.: <b>${tx.phoneRef}</b></p>` : ''}
+           ${tx.upiHandle ? `<p>UPI / प्राप्तकर्ता: <b>${tx.upiHandle}</b></p>` : ''}
+           ${tx.utrNo ? `<p class="num-clean">UTR / रेफ़रेंस: <b>${tx.utrNo}</b></p>` : ''}
+         </div>
+         ${upiId ? `
+           <div class="flex items-center gap-2.5 bg-white p-2 rounded-lg border border-slate-200 shrink-0">
+             <img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${encodeURIComponent(`upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amtNum > 0 ? amtNum : ''}&cu=INR`)}" alt="Payment QR" class="w-20 h-20 object-contain">
+             <div class="text-[11px] leading-snug">
+               <p class="font-bold text-[#1EA668]">Scan & Pay</p>
+               <p class="num-clean text-slate-600">₹${amtNum.toLocaleString('en-IN')}</p>
+             </div>
+           </div>
+         ` : ''}
+       </div>`
+    : '';
+
+  if (isVoucher) {
+    const vLabel = tx.type === 'RECEIPT' ? 'जमा रसीद (Receipt Voucher)' : 'भुगतान / एडवांस वाउचर (Payment Voucher)';
+    document.getElementById('printArea').innerHTML = `
+      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden text-slate-900 shadow-xs">
+        <div class="px-5 py-4 bg-[#132A46] text-white flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <img src="Vaidik Seeds Logo copy.jpg" alt="वैदिक सीड्स" class="h-12 w-12 rounded-full object-cover bg-white p-0.5 shrink-0">
+            <div>
+              <h2 class="text-base sm:text-lg font-bold tracking-tight">वैदिक सीड्स</h2>
+              <p class="num-clean text-[11px] opacity-90">GSTIN: ${companyGstin} • ${companyAddr}</p>
+            </div>
           </div>
-          <div>
-            <h2 class="text-lg sm:text-xl font-bold tracking-wide">AICL GROUP</h2>
-            <p class="text-xs opacity-90">Agri-Seed Procurement, Processing & Trading • Helpline: +91 9458614610</p>
-          </div>
-        </div>
-        <div class="sm:text-right">
-          <span class="inline-block text-[11px] font-bold tracking-wider uppercase px-3 py-1 rounded border ${thm.badge}">${docTitle}</span>
-          <p class="num-clean text-xs mt-1.5"><b>इनवॉइस नं.:</b> ${tx.id} &nbsp;|&nbsp; <b>दिनांक:</b> ${tx.date}</p>
-        </div>
-      </div>
-
-      <!-- Billed To / Farmer Details Strip -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 border-b-2 ${thm.accentBorder} text-xs sm:text-sm">
-        <div class="p-3.5 sm:p-4 border-b sm:border-b-0 sm:border-r border-slate-300">
-          <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">पार्टी / किसान विवरण (Billed To)</p>
-          <p class="text-base font-bold text-slate-900 mt-0.5">${p.name} <span class="text-xs font-semibold text-slate-600">(S/o ${p.father})</span></p>
-          <p class="text-xs sm:text-sm text-slate-700 mt-0.5">गांव / मंडी: <b>${p.village}</b> &nbsp;•&nbsp; मोबाइल: <b class="num-clean">${p.phone}</b></p>
-        </div>
-        <div class="p-3.5 sm:p-4 bg-slate-50/70 space-y-1 text-xs sm:text-sm">
-          <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">बिल / लॉट संदर्भ</p>
-          <p>लॉट नं.: <b class="num-clean">${tx.lotNo || '-'}</b> &nbsp;|&nbsp; सीज़न: <b class="num-clean">${tx.seasonYear || '-'}</b></p>
-          <p>पर्ची / गाड़ी: <b class="num-clean">${tx.kantaSlip || tx.vehicleOrSlip || '-'}</b> / <b class="num-clean">${tx.vehicle || tx.mandiOrLocation || '-'}</b></p>
-        </div>
-      </div>
-
-      <!-- Line-Item Commercial Table -->
-      <div class="overflow-x-auto">
-        <table class="w-full text-xs sm:text-sm text-left border-collapse">
-          <thead>
-            <tr class="${thm.thBg}">
-              <th class="py-2.5 px-3.5 font-semibold">विवरण / आइटम</th>
-              <th class="py-2.5 px-3 font-semibold text-right">मात्रा / वजन</th>
-              <th class="py-2.5 px-3 font-semibold text-right">दर / कटौती</th>
-              <th class="py-2.5 px-3.5 font-semibold text-right">राशि (₹)</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-200">
-            <tr>
-              <td class="py-3 px-3.5">
-                <p class="font-bold text-slate-900">${tx.itemName || tx.type}</p>
-                <p class="text-xs text-slate-600 mt-0.5">${tx.note || ''}</p>
-              </td>
-              <td class="num-clean py-3 px-3 text-right font-semibold">${tx.netKg ? `${tx.netKg} Kg (${(tx.netKg/100).toFixed(2)} Qtl)` : (tx.totalKg ? `${tx.totalKg} Kg` : '-')}</td>
-              <td class="num-clean py-3 px-3 text-right">${tx.kaddaKg ? `कद्दा: ${tx.kaddaKg}kg (${tx.kaddaPct||1}%)` : (tx.rate ? `₹${tx.rate}` : '-')}</td>
-              <td class="num-clean py-3 px-3.5 text-right font-bold text-slate-900">₹${Number(tx.amount || 0).toLocaleString('en-IN')}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Bottom Summary & Signature Block -->
-      <div class="p-4 sm:p-5 bg-slate-50 border-t-2 ${thm.accentBorder} flex flex-col sm:flex-row justify-between gap-4 text-xs sm:text-sm">
-        <div class="flex flex-col justify-between space-y-4 text-xs text-slate-600">
-          <div>
-            <p class="font-semibold text-slate-800">नोट:</p>
-            <p>कृपया बिल में दर्ज वजन, कद्दा व राशि की जांच कर लें।</p>
-          </div>
-          <div class="pt-4">
-            <p class="border-t border-slate-400 pt-1 w-44 font-semibold text-slate-800">अधिकृत हस्ताक्षर / मुनीम</p>
+          <div class="text-right shrink-0">
+            <span class="inline-block text-[11px] font-semibold bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 px-2.5 py-0.5 rounded-full">${vLabel}</span>
+            <p class="num-clean text-xs mt-1"><b>${tx.id}</b> • ${tx.date}</p>
           </div>
         </div>
 
-        <div class="bg-white border border-slate-300 rounded-lg p-3.5 space-y-1.5 min-w-[240px] text-xs sm:text-sm">
-          <div class="flex justify-between"><span>पिछला खाता शेष:</span><b class="num-clean">₹${Math.round(prevBal).toLocaleString('en-IN')}</b></div>
-          <div class="flex justify-between"><span>आज का बिल / वाउचर:</span><b class="num-clean">₹${Number(tx.amount || 0).toLocaleString('en-IN')}</b></div>
-          <div class="flex justify-between"><span>आज जमा / भुगतान:</span><b class="num-clean text-[#1EA668]">₹${Number(tx.paid || 0).toLocaleString('en-IN')}</b></div>
-          <div class="pt-2 border-t border-slate-300 flex justify-between font-bold text-sm sm:text-base">
-            <span>नया कुल खाता शेष:</span>
-            <span class="num-clean text-slate-900">₹${bal.toLocaleString('en-IN')}</span>
+        <div class="p-5 space-y-4 text-xs sm:text-sm">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
+            <div>
+              <span class="text-[11px] text-slate-500 block">पार्टी का नाम व अभिभावक</span>
+              <b class="text-sm font-bold text-[#132A46]">${p.name}</b> <span class="text-xs text-slate-600">(S/o ${p.father})</span>
+              <p class="text-xs text-slate-500 mt-0.5">${p.village} • <span class="num-clean">${p.phone}</span></p>
+            </div>
+            <div class="sm:text-right">
+              <span class="text-[11px] text-slate-500 block">माध्यम व विवरण</span>
+              <b class="font-semibold text-[#132A46]">${tx.mode || 'Cash'}</b>
+              <p class="text-xs text-slate-600 mt-0.5">${tx.note || '-'}</p>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between p-4 rounded-xl bg-emerald-50/60 border border-emerald-200">
+            <span class="font-semibold text-slate-700">वाउचर राशि (Amount)</span>
+            <span class="num-clean text-xl font-bold text-[#1EA668]">₹${amtNum.toLocaleString('en-IN')}</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-xs bg-slate-50 p-3 rounded-xl border border-slate-200">
+            <div><span class="text-slate-500 block">पिछला खाता शेष</span><b class="num-clean text-slate-800">₹${Math.round(prevBal).toLocaleString('en-IN')}</b></div>
+            <div class="text-right"><span class="text-slate-500 block">नया कुल खाता शेष</span><b class="num-clean text-[#132A46]">₹${bal.toLocaleString('en-IN')}</b></div>
+          </div>
+
+          ${paymentBoxHtml}
+
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <span>यह कंप्यूटर जनरेटेड वाउचर रसीद है।</span>
+            <span class="font-semibold text-[#132A46]">हस्ताक्षर / वैदिक सीड्स</span>
           </div>
         </div>
       </div>
-    </div>
-  `;
+    `;
+  } else {
+    const termsList = isPurchase
+      ? [
+          "1. किसान / आपूर्तिकर्ता से प्राप्त फसल का वजन, कद्दा कटौती एवं अन्य निर्धारित कटौतियाँ बिल के अनुसार मान्य होंगी।",
+          "2. कच्चे माल की गुणवत्ता/नमी/कचरा संबंधी मिलान तौल/प्राप्ति समय के आधार पर किया गया है।",
+          "3. भुगतान अथवा खाते में समायोजन आपसी सहमति व लेजर विवरण के अनुसार देय होगा।"
+        ]
+      : [
+          "1. बिक्री किए गए बीज/मंडी माल की मात्रा, लॉट संख्या एवं पैकिंग का मिलान डिलीवरी समय कर लें।",
+          "2. बीज को नमी, सीधी धूप व कीटों से सुरक्षित सूखे स्थान पर भंडारित करें; निर्धारित बिल भुगतान समय पर देय होगा।",
+          "3. किसी भी विवाद की स्थिति में न्यायक्षेत्र अलीगढ़ (उत्तर प्रदेश) रहेगा।"
+        ];
+
+    const docTitle = isPurchase
+      ? "खरीद बिल (PURCHASE INVOICE)"
+      : (tx.saleChannel === "Mandi Supply" ? "मंडी सप्लाई बिल (MANDI SUPPLY INVOICE)" : "बिक्री बिल (SEED SALE INVOICE)");
+
+    document.getElementById('printArea').innerHTML = `
+      <div class="bg-white border-2 border-[#132A46] rounded-xl overflow-hidden text-slate-900">
+        <div class="bg-[#132A46] text-white px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3.5">
+            <img src="Vaidik Seeds Logo copy.jpg" alt="वैदिक सीड्स" class="h-14 w-14 rounded-full object-cover bg-white p-0.5 shrink-0">
+            <div>
+              <h2 class="text-lg sm:text-xl font-bold tracking-wide">वैदिक सीड्स</h2>
+              <p class="num-clean text-[11px] opacity-90">GSTIN: ${companyGstin} • ${companyAddr}</p>
+            </div>
+          </div>
+          <div class="sm:text-right shrink-0">
+            <span class="inline-block text-[11px] font-bold bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 px-3 py-1 rounded">${docTitle}</span>
+            <p class="num-clean text-xs mt-1.5"><b>नं.:</b> ${tx.id} • <b>दिनांक:</b> ${tx.date}</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 border-b border-slate-200 text-xs sm:text-sm">
+          <div class="p-3.5 sm:p-4 border-b sm:border-b-0 sm:border-r border-slate-200">
+            <p class="text-[11px] font-bold text-slate-500 uppercase">पार्टी विवरण</p>
+            <p class="text-sm sm:text-base font-bold text-[#132A46] mt-0.5">${p.name} <span class="text-xs font-medium text-slate-600">(S/o ${p.father})</span></p>
+            <p class="text-xs text-slate-600 mt-0.5">${p.village} • मोबाइल: <b class="num-clean">${p.phone}</b></p>
+          </div>
+          <div class="p-3.5 sm:p-4 bg-slate-50/70 text-xs space-y-1">
+            <p class="font-bold text-slate-500 uppercase">लॉट व संदर्भ</p>
+            <p>लॉट नं.: <b class="num-clean">${tx.lotNo || '-'}</b> • सीज़न: <b class="num-clean">${tx.seasonYear || '-'}</b></p>
+            <p>पर्ची / गाड़ी: <b class="num-clean">${tx.kantaSlip || tx.vehicleOrSlip || '-'}</b> / <b class="num-clean">${tx.vehicle || tx.mandiOrLocation || '-'}</b></p>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs sm:text-sm text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-[#132A46] border-b border-slate-200">
+                <th class="py-2.5 px-3.5 font-semibold">विवरण / आइटम</th>
+                <th class="py-2.5 px-3 font-semibold text-right">मात्रा / वजन</th>
+                <th class="py-2.5 px-3 font-semibold text-right">दर / कटौती</th>
+                <th class="py-2.5 px-3.5 font-semibold text-right">राशि (₹)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              <tr>
+                <td class="py-3 px-3.5">
+                  <p class="font-bold text-[#132A46]">${tx.itemName || tx.type}</p>
+                  <p class="text-xs text-slate-600 mt-0.5">${tx.note || ''}</p>
+                </td>
+                <td class="num-clean py-3 px-3 text-right font-semibold">${tx.netKg ? `${tx.netKg} Kg (${(tx.netKg/100).toFixed(2)} Qtl)` : (tx.totalKg ? `${tx.totalKg} Kg` : '-')}</td>
+                <td class="num-clean py-3 px-3 text-right">${tx.kaddaKg ? `कद्दा: ${tx.kaddaKg}kg (${tx.kaddaPct||1}%)` : (tx.rate ? `₹${tx.rate}` : '-')}</td>
+                <td class="num-clean py-3 px-3.5 text-right font-bold text-[#132A46]">₹${amtNum.toLocaleString('en-IN')}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        ${paymentBoxHtml}
+
+        <div class="p-4 sm:p-5 bg-slate-50 border-t border-slate-200 grid grid-cols-1 md:grid-cols-12 gap-4 text-xs">
+          <div class="md:col-span-7 space-y-2">
+            <p class="font-bold text-[#132A46]">नियम एवं शर्तें (Terms & Conditions — ${isPurchase ? 'खरीद' : 'बिक्री'}):</p>
+            <ul class="space-y-1 text-slate-600">
+              ${termsList.map(line => `<li>${line}</li>`).join('')}
+            </ul>
+            <div class="pt-4">
+              <p class="border-t border-slate-400 pt-1 w-44 font-semibold text-[#132A46]">अधिकृत हस्ताक्षर • वैदिक सीड्स</p>
+            </div>
+          </div>
+
+          <div class="md:col-span-5 bg-white border border-slate-300 rounded-xl p-3.5 space-y-1.5 text-xs sm:text-sm self-start">
+            <div class="flex justify-between"><span>पिछला खाता शेष:</span><b class="num-clean">₹${Math.round(prevBal).toLocaleString('en-IN')}</b></div>
+            <div class="flex justify-between"><span>आज का बिल:</span><b class="num-clean">₹${amtNum.toLocaleString('en-IN')}</b></div>
+            <div class="flex justify-between"><span>आज जमा / भुगतान:</span><b class="num-clean text-[#1EA668]">₹${Number(tx.paid || 0).toLocaleString('en-IN')}</b></div>
+            <div class="pt-2 border-t border-slate-300 flex justify-between font-bold text-sm sm:text-base">
+              <span>नया कुल खाता शेष:</span>
+              <span class="num-clean text-[#132A46]">₹${bal.toLocaleString('en-IN')}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
 
   const waText = encodeURIComponent(
-    `*AICL GROUP — INVOICE*
-बिल नं.: ${tx.id} | दिनांक: ${tx.date}
+    `*वैदिक सीड्स (GSTIN: ${companyGstin})*
+बिल / रसीद नं.: ${tx.id} | दिनांक: ${tx.date}
 पार्टी: ${p.name} (S/o ${p.father}, ${p.village})
 विवरण: ${tx.itemName || tx.type} — ${tx.note || ''}
-आज की राशि: ₹${tx.amount} | जमा/भुगतान: ₹${tx.paid || 0}
-नया खाता शेष: ₹${bal}`
+राशि: ₹${amtNum.toLocaleString('en-IN')} | जमा/भुगतान: ₹${Number(tx.paid || 0).toLocaleString('en-IN')}
+नया खाता शेष: ₹${bal.toLocaleString('en-IN')}
+${upiId ? `UPI: ${upiId}` : ''} ${bankInfo ? `| Bank: ${bankInfo}` : ''}`
   );
   document.getElementById('btnWhatsappShare').href = `https://wa.me/91${p.phone}?text=${waText}`;
   document.getElementById('receiptModal').classList.remove('hidden');
@@ -3780,19 +3862,18 @@ function exportAllCSV() {
   let csv = "Bill_No,Date,Type,Channel,Party_Name,Lot_No,Item,Amount_Rs,Paid_Rs,Note\n";
   state.transactions.forEach(t => {
     const p = state.parties.find(x => x.id === t.partyId);
-    const cleanNote = String(t.note || '').replace(/^[=+\-@]+/, '').replace(/"/g, '""');
+    const cleanNote = String(t.note || '').replace(/^[=+-@]+/, '').replace(/"/g, '""');
     csv += `"${t.id}","${t.date}","${t.type}","${t.saleChannel || ''}","${p ? p.name : ''}","${t.lotNo || ''}","${t.itemName || ''}",${Number(t.amount) || 0},${Number(t.paid) || 0},"${cleanNote}"\n`;
   });
   const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `AICL_Group_Entries_${new Date().toISOString().slice(0, 10)}.csv`;
+  a.download = `Vaidik_Seeds_Entries_${new Date().toISOString().slice(0, 10)}.csv`;
   a.click();
 }
 
-
 function openUpiSettingsModal() {
-  document.getElementById('cfgUpiPayeeName').value = state.settings?.upiPayeeName || 'AICL GROUP';
+  document.getElementById('cfgUpiPayeeName').value = state.settings?.upiPayeeName || 'वैदिक सीड्स';
   document.getElementById('cfgUpiId').value = state.settings?.upiId || '';
   document.getElementById('cfgBankInfo').value = state.settings?.bankInfo || '';
   document.getElementById('upiSettingsModal').classList.remove('hidden');
@@ -3805,7 +3886,7 @@ function closeUpiSettingsModal() {
 function saveUpiSettings(e) {
   e.preventDefault();
   if (!state.settings) state.settings = { kaddaPct: 1.0, sheetUrl: DEPLOYED_SHEET_URL };
-  state.settings.upiPayeeName = document.getElementById('cfgUpiPayeeName').value.trim() || 'AICL GROUP';
+  state.settings.upiPayeeName = document.getElementById('cfgUpiPayeeName').value.trim() || 'वैदिक सीड्स';
   state.settings.upiId = document.getElementById('cfgUpiId').value.trim();
   state.settings.bankInfo = document.getElementById('cfgBankInfo').value.trim();
   saveState();
@@ -3819,540 +3900,42 @@ function saveUpiSettings(e) {
     updatedAt: new Date().toISOString()
   });
   closeUpiSettingsModal();
-  alert('✓ UPI / QR सेटिंग्स सेव हो गईं। अब बिल में ऑटो QR कोड दिखेगा।');
+  alert('✓ UPI QR और बैंक विवरण सेव हो गए हैं—अब हर बिल/रसीद में ऑटो जनरेट होकर साथ जाएँगे।');
 }
 
-// Enhance calcSaleTotal & saveSaleInvoice with `saleExtraKg` + auto-description + duplicate bill check
-const _origCalcSaleTotal = calcSaleTotal;
-calcSaleTotal = function() {
-  const pid = document.getElementById('salePartyId').value;
-  const editId = document.getElementById('editSaleTxId').value || null;
-  const oldBal = getPartyBalance(pid, editId);
-  const isMandi = document.getElementById('channelMandi').checked;
-  const paid = Number(document.getElementById('saleCashPaid').value) || 0;
-
-  let totalKg = 0;
-  let billAmt = 0;
-
-  if (!isMandi) {
-    const pack = Number(document.getElementById('salePackSize').value) || 0;
-    const qty = Number(document.getElementById('saleQty').value) || 0;
-    const extraKg = Number(document.getElementById('saleExtraKg')?.value) || 0;
-    const rate = Number(document.getElementById('saleRate').value) || 0;
-    totalKg = Math.max(0, (pack * qty) + extraKg);
-    billAmt = Math.round(totalKg * rate);
-    const descEl = document.getElementById('saleAutoDescShow');
-    if (descEl) {
-      descEl.textContent = `${qty} बैग (${pack} Kg) + ${extraKg} Kg अतिरिक्त = कुल ${totalKg} Kg`;
-    }
-  } else {
-    totalKg = Number(document.getElementById('mandiWeightKg').value) || 0;
-    const rateQtl = Number(document.getElementById('mandiRateQtl').value) || 0;
-    const ded = Number(document.getElementById('mandiDeductionRs').value) || 0;
-    billAmt = Math.max(0, Math.round((totalKg / 100) * rateQtl) - ded);
-  }
-
-  const newBal = oldBal + billAmt - paid;
-  document.getElementById('saleTotalKg').innerText = `${totalKg.toLocaleString('en-IN')} Kg`;
-  document.getElementById('saleBillTotal').innerText = `₹${billAmt.toLocaleString('en-IN')}`;
-  document.getElementById('saleNetLedger').innerText = newBal >= 0
-    ? `₹${newBal.toLocaleString('en-IN')} (लेना है)`
-    : `₹${Math.abs(newBal).toLocaleString('en-IN')} (देना है)`;
-};
-
-saveSaleInvoice = function(e) {
-  e.preventDefault();
-  const pid = resolvePartyIdFromField('salePartyId', 'salePartySearch');
-  const partyObj = state.parties.find(x => x.id === pid);
-  if (!pid || !partyObj) {
-    alert('⚠️ कृपया पहले वैध पार्टी चुनें! बिना पक्की पार्टी के बिल सेव नहीं होगा।');
-    return;
-  }
-
-  const editId = document.getElementById('editSaleTxId').value;
-  const isMandi = document.getElementById('channelMandi').checked;
-  const dateVal = document.getElementById('saleDate').value;
-  const lotNo = document.getElementById('saleLotNo').value.trim() || '-';
-  const paid = Number(document.getElementById('saleCashPaid').value) || 0;
-  const customNo = (document.getElementById('saleCustomNoInput')?.value || '').trim();
-  const defaultNo = isMandi
-    ? ('MND-' + (501 + state.transactions.filter(t => t.saleChannel === 'Mandi Supply').length))
-    : ('INV-' + (2001 + state.transactions.filter(t => t.type === 'SALE').length));
-  const invNo = editId || customNo || defaultNo;
-
-  if (!editId && state.transactions.some(t => String(t.id).toLowerCase() === String(invNo).toLowerCase())) {
-    alert(`⚠️ यह बिल/इनवॉइस नंबर (${invNo}) पहले से दर्ज है! कृपया नया या अलग नंबर डालें।`);
-    return;
-  }
-
-  let tx;
-  if (!isMandi) {
-    const item = state.saleItems.find(x => x.id === document.getElementById('saleItemId').value);
-    const pack = Number(document.getElementById('salePackSize').value) || 0;
-    const qty = Number(document.getElementById('saleQty').value) || 0;
-    const extraKg = Number(document.getElementById('saleExtraKg')?.value) || 0;
-    const rate = Number(document.getElementById('saleRate').value) || 0;
-    const totalKg = Math.max(0, (pack * qty) + extraKg);
-    const amount = Math.round(totalKg * rate);
-
-    tx = {
-      id: invNo, type: 'SALE', saleChannel: 'Seed Sale', date: dateVal,
-      seasonYear: getSeasonYear(dateVal), partyId: pid, lotNo,
-      itemId: item ? item.id : '',
-      itemName: item ? item.name : 'Seed Sale',
-      category: item ? item.category : '-',
-      packKg: pack, qty, extraKg, totalKg, rate, deductions: 0, amount, paid,
-      note: `${qty} बैग (${pack} Kg) + ${extraKg} Kg अतिरिक्त = कुल ${totalKg} Kg @ ₹${rate}/Kg`
-    };
-  } else {
-    const mandiLoc = document.getElementById('mandiLocation').value.trim() || '-';
-    const vehSlip = document.getElementById('mandiVehicleSlip').value.trim() || '-';
-    const comm = document.getElementById('mandiCommodity').value.trim() || 'Mandi Supply';
-    const totalKg = Number(document.getElementById('mandiWeightKg').value) || 0;
-    const rateQtl = Number(document.getElementById('mandiRateQtl').value) || 0;
-    const ded = Number(document.getElementById('mandiDeductionRs').value) || 0;
-    const amount = Math.max(0, Math.round((totalKg / 100) * rateQtl) - ded);
-
-    tx = {
-      id: invNo, type: 'SALE', saleChannel: 'Mandi Supply', date: dateVal,
-      seasonYear: getSeasonYear(dateVal), partyId: pid, lotNo,
-      mandiOrLocation: mandiLoc, vehicleOrSlip: vehSlip,
-      itemName: comm, category: 'Mandi Supply',
-      packKg: 0, qty: 0, extraKg: 0, totalKg, rate: rateQtl, deductions: ded, amount, paid,
-      note: `मंडी: ${mandiLoc} | वजन: ${totalKg} Kg @ ₹${rateQtl}/Qtl`
-    };
-  }
-
-  if (editId) {
-    const idx = state.transactions.findIndex(x => x.id === editId);
-    if (idx !== -1) state.transactions[idx] = tx;
-  } else {
-    state.transactions.unshift(tx);
-  }
-
-  const runBal = getPartyBalance(pid);
-  saveState();
-  syncToGoogleSheet({
-    sheetTab: 'Sales_Invoices',
-    actionType: 'UPSERT',
-    ...tx,
-    partyName: partyObj.name,
-    runningBalance: runBal,
-    termsNote: 'बीज/मंडी बिक्री नियम: माल की मात्रा व लॉट का मिलान डिलीवरी समय करें; बकाया भुगतान समय पर देय होगा।'
-  });
-
-  if (document.getElementById('saleCustomNoInput')) document.getElementById('saleCustomNoInput').value = '';
-  if (document.getElementById('saleExtraKg')) document.getElementById('saleExtraKg').value = 0;
-  resetSaleForm();
-  openReceipt(tx.id);
-  switchTab('dashboard');
-};
-
-// Duplicate & party validation on Purchase Bill
-const _origSavePurchaseBill = savePurchaseBill;
-savePurchaseBill = function(e) {
-  const pid = resolvePartyIdFromField('purPartyId', 'purPartySearch');
-  const partyObj = state.parties.find(x => x.id === pid);
-  if (!pid || !partyObj) {
-    e.preventDefault();
-    alert('⚠️ कृपया पहले वैध किसान / पार्टी चुनें! बिना पक्की पार्टी के खरीद बिल सेव नहीं होगा।');
-    return;
-  }
-  const editId = document.getElementById('editPurTxId').value;
-  const customNo = (document.getElementById('purCustomNoInput')?.value || '').trim();
-  const billNo = editId || customNo || ('PUR-' + (1001 + state.transactions.filter(t => t.type === 'PURCHASE').length));
-  if (!editId && state.transactions.some(t => String(t.id).toLowerCase() === String(billNo).toLowerCase())) {
-    e.preventDefault();
-    alert(`⚠️ यह खरीद बिल नंबर (${billNo}) पहले से दर्ज है! कृपया नया या अलग नंबर डालें।`);
-    return;
-  }
-  if (!editId && customNo) {
-    document.getElementById('purBillNoDisplay').textContent = customNo;
-  }
-  _origSavePurchaseBill(e);
-  if (document.getElementById('purCustomNoInput')) document.getElementById('purCustomNoInput').value = '';
-};
-
-// Processing Live Calculation + Hard Stock Guard + Lot/Date Reports + Single/Multi/Weekly Print
-let activeLotReportScope = 'all';
-
-function getAvailableRawStockKg() {
-  const purchasedKg = state.transactions.filter(t => t.type === 'PURCHASE').reduce((s, x) => s + Number(x.netKg || x.grossKg || 0), 0);
-  const processedRawKg = state.processingBatches.reduce((s, b) => s + Number(b.rawKg || 0), 0);
-  return Math.max(0, purchasedKg - processedRawKg);
-}
-
-function updateProcessingLiveCalc() {
-  const availKg = getAvailableRawStockKg();
-  const availEl = document.getElementById('prcAvailableRawInfo');
-  const guardEl = document.getElementById('prcStockGuardBanner');
-  if (availEl) {
-    availEl.textContent = `मौजूदा उपलब्ध कच्चा स्टॉक: ${availKg.toLocaleString('en-IN')} Kg (${(availKg / 100).toFixed(2)} क्विंटल)`;
-  }
-  if (guardEl) {
-    guardEl.classList.toggle('bg-rose-100', availKg <= 0);
-  }
-
-  const rawKg = Math.max(0, Number(document.getElementById('prcRawKg')?.value) || 0);
-  const underKg = Math.max(0, Number(document.getElementById('prcUnderKg')?.value) || 0);
-  const rejKg = Math.max(0, Number(document.getElementById('prcRejKg')?.value) || 0);
-  const shrinkKg = Math.max(0, Number(document.getElementById('prcShrinkKg')?.value) || 0);
-  const goodKg = Math.max(0, rawKg - underKg - rejKg - shrinkKg);
-
-  const pct = (v) => rawKg > 0 ? ((v / rawKg) * 100).toFixed(1) + '%' : '0.0%';
-
-  if (document.getElementById('prcLiveRawKg')) document.getElementById('prcLiveRawKg').textContent = `${rawKg.toLocaleString('en-IN')} Kg`;
-  if (document.getElementById('prcLiveUnderKg')) document.getElementById('prcLiveUnderKg').textContent = `${underKg.toLocaleString('en-IN')} Kg`;
-  if (document.getElementById('prcLiveUnderPct')) document.getElementById('prcLiveUnderPct').textContent = pct(underKg);
-  if (document.getElementById('prcLiveRejKg')) document.getElementById('prcLiveRejKg').textContent = `${rejKg.toLocaleString('en-IN')} Kg`;
-  if (document.getElementById('prcLiveRejPct')) document.getElementById('prcLiveRejPct').textContent = pct(rejKg);
-  if (document.getElementById('prcLiveShrinkKg')) document.getElementById('prcLiveShrinkKg').textContent = `${shrinkKg.toLocaleString('en-IN')} Kg`;
-  if (document.getElementById('prcLiveShrinkPct')) document.getElementById('prcLiveShrinkPct').textContent = pct(shrinkKg);
-  if (document.getElementById('prcLiveGoodKg')) document.getElementById('prcLiveGoodKg').textContent = `${goodKg.toLocaleString('en-IN')} Kg`;
-  if (document.getElementById('prcLiveGoodPct')) document.getElementById('prcLiveGoodPct').textContent = pct(goodKg);
-
-  const errEl = document.getElementById('prcErrorInline');
-  if (errEl) {
-    if (availKg <= 0) {
-      errEl.textContent = '⚠️ गोदाम में 0 Kg कच्चा माल है — पहले खरीद बिल दर्ज करें।';
-    } else if (rawKg > availKg) {
-      errEl.textContent = `⚠️ डाला गया कच्चा माल (${rawKg} Kg) उपलब्ध स्टॉक (${availKg} Kg) से अधिक है!`;
-    } else if ((underKg + rejKg + shrinkKg) > rawKg) {
-      errEl.textContent = '⚠️ अंडरसाइज + रिजेक्शन + श्रिंकेज का जोड़ कच्चे माल से अधिक नहीं हो सकता।';
-    } else {
-      errEl.textContent = '';
-    }
-  }
-}
-
-saveProcessingBatch = function(e) {
-  e.preventDefault();
-  const availKg = getAvailableRawStockKg();
-  const rawKg = Math.max(0, Number(document.getElementById('prcRawKg').value) || 0);
-  const underKg = Math.max(0, Number(document.getElementById('prcUnderKg').value) || 0);
-  const rejKg = Math.max(0, Number(document.getElementById('prcRejKg').value) || 0);
-  const shrinkKg = Math.max(0, Number(document.getElementById('prcShrinkKg').value) || 0);
-  const lotNo = document.getElementById('prcLot').value.trim() || '-';
-  const dateVal = document.getElementById('prcDate')?.value || new Date().toISOString().slice(0, 10);
-
-  if (availKg <= 0 || rawKg <= 0) {
-    alert('⚠️ बिना उपलब्ध कच्चे स्टॉक के प्रोसेसिंग एंट्री आगे नहीं बढ़ेगी! पहले खरीद बिल से कच्चा माल लाएं।');
-    return;
-  }
-  if (rawKg > availKg) {
-    alert(`⚠️ गोदाम में केवल ${availKg.toLocaleString('en-IN')} Kg कच्चा स्टॉक उपलब्ध है। कृपया ${availKg} Kg या उससे कम माल डालें।`);
-    return;
-  }
-  if ((underKg + rejKg + shrinkKg) > rawKg) {
-    alert('⚠️ अंडरसाइज + रिजेक्शन + श्रिंकेज का कुल वजन कच्चे माल से अधिक नहीं हो सकता।');
-    return;
-  }
-
-  const goodKg = Math.max(0, rawKg - underKg - rejKg - shrinkKg);
-  const recoveryPct = rawKg > 0 ? Number(((goodKg / rawKg) * 100).toFixed(1)) : 0;
-
-  const batch = {
-    id: 'PRC-' + (101 + state.processingBatches.length + Math.floor(Math.random() * 90)),
-    date: dateVal,
-    seasonYear: getSeasonYear(dateVal),
-    lotNo,
-    rawKg,
-    underKg,
-    rejKg,
-    shrinkKg,
-    lossKg: shrinkKg,
-    goodKg,
-    recoveryPct
-  };
-  state.processingBatches.unshift(batch);
-  saveState();
-  syncToGoogleSheet({
-    sheetTab: 'Processing_And_Expenses',
-    actionType: 'UPSERT',
-    ...batch
-  });
-  document.getElementById('processingForm').reset();
-  if (document.getElementById('prcDate')) document.getElementById('prcDate').value = new Date().toISOString().slice(0, 10);
-  document.getElementById('prcRawKg').value = 0;
-  document.getElementById('prcUnderKg').value = 0;
-  if (document.getElementById('prcRejKg')) document.getElementById('prcRejKg').value = 0;
-  if (document.getElementById('prcShrinkKg')) document.getElementById('prcShrinkKg').value = 0;
-  updateProcessingLiveCalc();
-  renderProcessingTable();
-  renderDashboard();
-  const fb = document.getElementById('prcFeedback');
-  if (fb) { fb.textContent = `✓ लॉट (${lotNo}) सेव हुआ • पक्का बीज: ${goodKg} Kg (${recoveryPct}%)`; setTimeout(() => fb.textContent = '', 3500); }
-};
-
-function setLotReportScope(scope) {
-  activeLotReportScope = scope;
-  ['today', 'week', 'month', 'all'].forEach(s => {
-    const b = document.getElementById('lscope-' + s);
-    if (!b) return;
-    b.className = (s === scope)
-      ? 'px-2.5 py-1 rounded-lg font-semibold bg-[#132A46] text-white'
-      : 'px-2.5 py-1 rounded-lg font-semibold bg-slate-100 text-slate-700 border border-slate-200';
-  });
-  renderProcessingTable();
-}
-
-function getFilteredLotsByScope(scope) {
-  return state.processingBatches.filter(b => isDateInProfitPeriod(b.date, scope));
-}
-
-renderProcessingTable = function() {
-  updateProcessingLiveCalc();
-  const tb = document.getElementById('processingTableBody');
-  const sumEl = document.getElementById('lotPlainSummaryText');
-  if (!tb) return;
-
-  const list = getFilteredLotsByScope(activeLotReportScope);
-  const totRaw = list.reduce((s, b) => s + Number(b.rawKg || 0), 0);
-  const totGood = list.reduce((s, b) => s + Number(b.goodKg || 0), 0);
-  const totLoss = list.reduce((s, b) => s + Number(b.shrinkKg ?? b.lossKg ?? 0), 0);
-  if (sumEl) {
-    sumEl.textContent = list.length
-      ? `सारांश: ${list.length} लॉट में कुल ${totRaw.toLocaleString('en-IN')} Kg कच्चे माल से ${totGood.toLocaleString('en-IN')} Kg पक्का बीज निकला व ${totLoss.toLocaleString('en-IN')} Kg श्रिंकेज रहा।`
-      : 'इस अवधि में अभी कोई प्रोसेसिंग लॉट दर्ज नहीं है।';
-  }
-
-  if (!list.length) {
-    tb.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400">अभी कोई प्रोसेसिंग लॉट दर्ज नहीं है</td></tr>`;
-    return;
-  }
-
-  tb.innerHTML = list.map(b => {
-    const raw = Number(b.rawKg || 0);
-    const under = Number(b.underKg || 0);
-    const rej = Number(b.rejKg || 0);
-    const shrink = Number(b.shrinkKg ?? b.lossKg ?? 0);
-    const good = Number(b.goodKg || 0);
-    const p = (v) => raw > 0 ? ((v / raw) * 100).toFixed(1) : '0.0';
-    return `
-      <tr>
-        <td class="px-3 py-2.5 text-center"><input type="checkbox" class="lot-print-chk w-4 h-4 accent-[#132A46]" value="${b.id}"></td>
-        <td class="num-clean px-3 py-2.5 font-semibold text-[#132A46] whitespace-nowrap">${b.lotNo} <span class="text-[11px] text-slate-500 font-normal">(${b.date})</span></td>
-        <td class="num-clean px-3 py-2.5 text-right font-semibold">${raw.toLocaleString('en-IN')} Kg</td>
-        <td class="num-clean px-3 py-2.5 text-right text-sky-800">${under.toLocaleString('en-IN')} Kg <span class="text-[10px]">(${p(under)}%)</span></td>
-        <td class="num-clean px-3 py-2.5 text-right text-rose-700">${rej.toLocaleString('en-IN')} Kg <span class="text-[10px]">(${p(rej)}%)</span></td>
-        <td class="num-clean px-3 py-2.5 text-right text-orange-800">${shrink.toLocaleString('en-IN')} Kg <span class="text-[10px]">(${p(shrink)}%)</span></td>
-        <td class="num-clean px-3 py-2.5 text-right font-bold text-[#1EA668]">${good.toLocaleString('en-IN')} Kg <span class="text-[10px]">(${p(good)}%)</span></td>
-        <td class="px-3 py-2.5 text-center whitespace-nowrap"><button type="button" onclick="printSingleLot('${b.id}')" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-[#132A46] font-semibold">प्रिंट</button></td>
-      </tr>
-    `;
-  }).join('');
-};
-
-function printLotsReport(lots, headingLabel) {
-  if (!lots || !lots.length) {
-    alert('प्रिंट करने के लिए कोई लॉट उपलब्ध नहीं है।');
-    return;
-  }
-  const totRaw = lots.reduce((s, b) => s + Number(b.rawKg || 0), 0);
-  const totUnder = lots.reduce((s, b) => s + Number(b.underKg || 0), 0);
-  const totRej = lots.reduce((s, b) => s + Number(b.rejKg || 0), 0);
-  const totShrink = lots.reduce((s, b) => s + Number(b.shrinkKg ?? b.lossKg ?? 0), 0);
-  const totGood = lots.reduce((s, b) => s + Number(b.goodKg || 0), 0);
-
-  document.getElementById('printArea').innerHTML = `
-    <div class="bg-white border-2 border-[#132A46] rounded-lg overflow-hidden text-slate-900">
-      <div class="bg-[#132A46] text-white px-5 py-4 flex items-center justify-between gap-3">
-        <div class="flex items-center gap-3">
-          <img src="aicl logo.png" alt="AICL Group" class="h-12 w-auto bg-white p-1 rounded">
-          <div>
-            <h2 class="text-lg font-bold">AICL GROUP — LOT COMPLETION REPORT</h2>
-            <p class="text-xs opacity-90">${headingLabel}</p>
-          </div>
-        </div>
-        <span class="num-clean text-xs">कुल लॉट: <b>${lots.length}</b></span>
-      </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-xs text-left border-collapse">
-          <thead>
-            <tr class="bg-slate-100 border-b border-slate-300">
-              <th class="py-2 px-3">लॉट नं.</th>
-              <th class="py-2 px-3">दिनांक</th>
-              <th class="py-2 px-3 text-right">कच्चा डाला</th>
-              <th class="py-2 px-3 text-right">अंडरसाइज</th>
-              <th class="py-2 px-3 text-right">रिजेक्शन</th>
-              <th class="py-2 px-3 text-right">श्रिंकेज</th>
-              <th class="py-2 px-3 text-right">पक्का बीज</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-200">
-            ${lots.map(b => `
-              <tr>
-                <td class="num-clean py-2 px-3 font-bold">${b.lotNo}</td>
-                <td class="num-clean py-2 px-3">${b.date}</td>
-                <td class="num-clean py-2 px-3 text-right">${Number(b.rawKg || 0).toLocaleString('en-IN')} Kg</td>
-                <td class="num-clean py-2 px-3 text-right">${Number(b.underKg || 0).toLocaleString('en-IN')} Kg</td>
-                <td class="num-clean py-2 px-3 text-right">${Number(b.rejKg || 0).toLocaleString('en-IN')} Kg</td>
-                <td class="num-clean py-2 px-3 text-right">${Number(b.shrinkKg ?? b.lossKg ?? 0).toLocaleString('en-IN')} Kg</td>
-                <td class="num-clean py-2 px-3 text-right font-bold text-[#1EA668]">${Number(b.goodKg || 0).toLocaleString('en-IN')} Kg</td>
-              </tr>
-            `).join('')}
-          </tbody>
-          <tfoot>
-            <tr class="bg-slate-100 font-bold border-t-2 border-slate-400">
-              <td colspan="2" class="py-2 px-3">कुल योग (Total)</td>
-              <td class="num-clean py-2 px-3 text-right">${totRaw.toLocaleString('en-IN')} Kg</td>
-              <td class="num-clean py-2 px-3 text-right">${totUnder.toLocaleString('en-IN')} Kg</td>
-              <td class="num-clean py-2 px-3 text-right">${totRej.toLocaleString('en-IN')} Kg</td>
-              <td class="num-clean py-2 px-3 text-right">${totShrink.toLocaleString('en-IN')} Kg</td>
-              <td class="num-clean py-2 px-3 text-right text-[#1EA668]">${totGood.toLocaleString('en-IN')} Kg</td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-    </div>
-  `;
-  document.getElementById('btnWhatsappShare').href = '#';
-  document.getElementById('receiptModal').classList.remove('hidden');
-}
-
-function printSingleLot(batchId) {
-  const b = state.processingBatches.find(x => x.id === batchId);
-  if (b) printLotsReport([b], `सिंगल लॉट रिपोर्ट • लॉट: ${b.lotNo} (${b.date})`);
-}
-
-function printSelectedLots() {
-  const ids = Array.from(document.querySelectorAll('.lot-print-chk:checked')).map(c => c.value);
-  const chosen = state.processingBatches.filter(b => ids.includes(b.id));
-  if (!chosen.length) {
-    alert('कृपया कम से कम एक लॉट का चेकबॉक्स चुनें।');
-    return;
-  }
-  printLotsReport(chosen, `चुने हुए लॉट्स की रिपोर्ट (${chosen.length} लॉट)`);
-}
-
-function printWeeklyLots() {
-  const wk = getFilteredLotsByScope('week');
-  printLotsReport(wk, 'साप्ताहिक लॉट प्रोसेसिंग रिपोर्ट (Last 7 Days)');
-}
-
-// Enhance openReceipt with auto QR code image when UPI ID is configured + Bank/Mobile/UPI/UTR details
-const _origOpenReceipt = openReceipt;
-openReceipt = function(txId) {
-  _origOpenReceipt(txId);
-  const tx = state.transactions.find(x => x.id === txId);
-  const upiId = (state.settings?.upiId || '').trim();
-  const payee = encodeURIComponent(state.settings?.upiPayeeName || 'AICL GROUP');
-  const amt = Number(tx?.amount || 0);
-  const printArea = document.getElementById('printArea');
-  if (printArea) {
-    const extras = [];
-    if (tx?.bankName) extras.push(`बैंक: <b>${tx.bankName}</b>`);
-    if (tx?.phoneRef) extras.push(`नंबर: <b class="num-clean">${tx.phoneRef}</b>`);
-    if (tx?.upiHandle) extras.push(`UPI: <b>${tx.upiHandle}</b>`);
-    if (tx?.utrNo) extras.push(`UTR: <b class="num-clean">${tx.utrNo}</b>`);
-    if (state.settings?.bankInfo) extras.push(`खाता: <b>${state.settings.bankInfo}</b>`);
-
-    const qrHtml = upiId
-      ? `<div class="mt-3 pt-3 border-t border-slate-200 flex items-center gap-3">
-           <img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${encodeURIComponent(`upi://pay?pa=${upiId}&pn=${payee}&am=${amt > 0 ? amt : ''}&cu=INR`)}" alt="UPI QR" class="w-20 h-20 border border-slate-300 rounded p-1 bg-white">
-           <div class="text-[11px] text-slate-700">
-             <p class="font-bold text-[#132A46]">स्कैन कर UPI भुगतान करें</p>
-             <p class="num-clean mt-0.5">UPI ID: <b>${upiId}</b></p>
-             ${amt > 0 ? `<p class="num-clean">राशि: <b>₹${amt.toLocaleString('en-IN')}</b></p>` : ''}
-           </div>
-         </div>`
-      : '';
-
-    const detailBlock = (extras.length || qrHtml)
-      ? `<div class="mt-3 px-4 py-3 bg-white border-t border-slate-200 text-xs text-slate-700">
-           ${extras.length ? `<p class="flex flex-wrap gap-x-4 gap-y-1">${extras.join(' • ')}</p>` : ''}
-           ${qrHtml}
-         </div>`
-      : '';
-    if (detailBlock) printArea.insertAdjacentHTML('beforeend', detailBlock);
-  }
-};
-
-// Functional Slide-Out Shortcut Drawer + Working Keyboard Shortcuts
-const SHORTCUT_ITEMS = [
-  { group: 'मुख्य मेनू व नेविगेशन', keyLabel: 'Alt + D', desc: 'डैशबोर्ड खोलें', run: () => switchTab('dashboard') },
-  { group: 'मुख्य मेनू व नेविगेशन', keyLabel: 'Alt + S', desc: 'बिक्री / मंडी बिल बनाएं', run: () => switchTab('sales') },
-  { group: 'मुख्य मेनू व नेविगेशन', keyLabel: 'Alt + P', desc: 'खरीद बिल बनाएं', run: () => switchTab('purchase') },
-  { group: 'मुख्य मेनू व नेविगेशन', keyLabel: 'Alt + V', desc: 'पैसा जमा / भुगतान वाउचर', run: () => switchTab('vouchers') },
-  { group: 'मुख्य मेनू व नेविगेशन', keyLabel: 'Alt + L', desc: 'पार्टी लेजर व नई पार्टी जोड़ें', run: () => switchTab('parties') },
-  { group: 'मुख्य मेनू व नेविगेशन', keyLabel: 'Alt + E', desc: 'कंपनी खर्चे दर्ज करें', run: () => switchTab('expenses') },
-  { group: 'मुख्य मेनू व नेविगेशन', keyLabel: 'Alt + M', desc: 'छंटाई / प्रोसेसिंग व लॉट रिपोर्ट', run: () => switchTab('processing') },
-  { group: 'त्वरित खोज व एक्शन', keyLabel: 'Ctrl + K', desc: 'सभी बिल, पार्टी व खर्चे खोजें (Drawer)', run: () => openRecordsDrawer('ALL') },
-  { group: 'त्वरित खोज व एक्शन', keyLabel: 'Ctrl + Enter', desc: 'मौजूदा फ़ॉर्म तुरंत सेव करें', run: () => {
-      const activeSec = Array.from(document.querySelectorAll('main > section')).find(s => !s.classList.contains('hidden'));
-      const form = activeSec ? activeSec.querySelector('form') : null;
-      if (form && typeof form.requestSubmit === 'function') form.requestSubmit();
-    }
-  },
-  { group: 'त्वरित खोज व एक्शन', keyLabel: 'Alt + X', desc: 'Excel / CSV रिपोर्ट डाउनलोड करें', run: () => exportAllCSV() },
-  { group: 'सहायता व विंडो', keyLabel: 'Alt + H', desc: 'शॉर्टकट पैनल खोलें / बंद करें', run: () => toggleShortcutDrawer() },
-  { group: 'सहायता व विंडो', keyLabel: 'Esc', desc: 'खुली विंडो या पैनल बंद करें', run: () => closeAllModalsAndDrawers() }
-];
-
-function renderShortcutDrawer() {
-  const body = document.getElementById('shortcutDrawerBody');
-  if (!body) return;
-  const groups = ['मुख्य मेनू व नेविगेशन', 'त्वरित खोज व एक्शन', 'सहायता व विंडो'];
-  body.innerHTML = groups.map(grp => {
-    const rows = SHORTCUT_ITEMS.filter(x => x.group === grp).map((item, idx) => `
-      <button type="button" onclick="runShortcutByIndex('${item.keyLabel}')" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 hover:bg-emerald-50/70 border border-slate-200 hover:border-emerald-300 flex items-center justify-between gap-2 text-left transition">
-        <span class="font-semibold text-xs sm:text-[13px] text-[#132A46]">${item.desc}</span>
-        <span class="num-clean text-[11px] font-bold bg-white text-[#132A46] border border-slate-300 px-2.5 py-1 rounded-lg shrink-0">${item.keyLabel}</span>
-      </button>
-    `).join('');
-    return `<div class="space-y-2"><p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-1">${grp}</p><div class="space-y-1.5">${rows}</div></div>`;
-  }).join('');
-}
-
-function runShortcutByIndex(keyLabel) {
-  const found = SHORTCUT_ITEMS.find(x => x.keyLabel === keyLabel);
-  if (found && typeof found.run === 'function') {
-    closeShortcutDrawer();
-    found.run();
-  }
-}
-
-function openShortcutDrawer() {
-  renderShortcutDrawer();
-  document.getElementById('shortcutDrawerBackdrop')?.classList.remove('hidden');
-  document.getElementById('shortcutDrawer')?.classList.remove('translate-x-full');
-}
-
-function closeShortcutDrawer() {
-  document.getElementById('shortcutDrawer')?.classList.add('translate-x-full');
-  document.getElementById('shortcutDrawerBackdrop')?.classList.add('hidden');
-}
-
-function toggleShortcutDrawer() {
-  const dr = document.getElementById('shortcutDrawer');
-  if (!dr) return;
-  if (dr.classList.contains('translate-x-full')) openShortcutDrawer();
-  else closeShortcutDrawer();
-}
-
-function closeAllModalsAndDrawers() {
-  closeReceiptModal();
-  closeLegalModal();
-  closeUpiSettingsModal();
-  closeRecordsDrawer();
-  closeShortcutDrawer();
-}
-
+// Slide-Out Shortcut Drawer & Reliable e.code Keyboard Shortcuts
 function openShortcutHelp() {
-  openShortcutDrawer();
+  document.getElementById('recordsDrawerTitle').textContent = 'कीबोर्ड शॉर्टकट्स (Quick Keys)';
+  document.getElementById('recordsDrawerBackdrop').classList.remove('hidden');
+  document.getElementById('recordsDrawer').classList.remove('translate-x-full');
+  const shortcuts = [
+    { key: 'Alt + D', label: 'डैशबोर्ड (Dashboard)', action: "closeRecordsDrawer(); switchTab('dashboard');" },
+    { key: 'Alt + S', label: 'बिक्री / मंडी बिल (Sales)', action: "closeRecordsDrawer(); switchTab('sales');" },
+    { key: 'Alt + P', label: 'खरीद बिल (Purchase)', action: "closeRecordsDrawer(); switchTab('purchase');" },
+    { key: 'Alt + V', label: 'पैसा जमा / भुगतान वाउचर', action: "closeRecordsDrawer(); switchTab('vouchers');" },
+    { key: 'Alt + L', label: 'पार्टी लेजर व पार्टी जोड़ें', action: "closeRecordsDrawer(); switchTab('parties');" },
+    { key: 'Alt + E', label: 'कंपनी खर्चे (Expenses)', action: "closeRecordsDrawer(); switchTab('expenses');" },
+    { key: 'Alt + M', label: 'प्रोसेसिंग व लॉट रिपोर्ट', action: "closeRecordsDrawer(); switchTab('processing');" },
+    { key: 'Ctrl + Enter', label: 'वर्तमान फ़ॉर्म सेव करें', action: "closeRecordsDrawer(); const f = Array.from(document.querySelectorAll('main > section')).find(s => !s.classList.contains('hidden'))?.querySelector('form'); if(f) f.requestSubmit();" },
+    { key: 'Esc', label: 'पैनल / विंडो बंद करें', action: "closeRecordsDrawer(); closeReceiptModal(); closeLegalModal(); closeUpiSettingsModal();" }
+  ];
+  document.getElementById('recordsDrawerBody').innerHTML = shortcuts.map(sc => `
+    <div onclick="${sc.action}" class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50/70 cursor-pointer flex items-center justify-between gap-3 transition">
+      <span class="font-semibold text-xs sm:text-sm text-[#132A46]">${sc.label}</span>
+      <kbd class="num-clean px-2.5 py-1 rounded-lg bg-white border border-slate-300 text-xs font-bold text-[#132A46] shadow-2xs shrink-0">${sc.key}</kbd>
+    </div>
+  `).join('');
 }
 
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    closeAllModalsAndDrawers();
+  if (e.key === 'Escape' || e.code === 'Escape') {
+    closeReceiptModal();
+    closeLegalModal();
+    closeUpiSettingsModal();
+    closeRecordsDrawer();
     return;
   }
-  if ((e.ctrlKey || e.metaKey) && !e.altKey && (e.key || '').toLowerCase() === 'k') {
-    e.preventDefault();
-    openRecordsDrawer('ALL');
-    return;
-  }
-  if (e.ctrlKey && !e.altKey && e.key === 'Enter') {
+  if ((e.ctrlKey || e.metaKey) && !e.altKey && (e.key === 'Enter' || e.code === 'Enter')) {
     const activeSec = Array.from(document.querySelectorAll('main > section')).find(s => !s.classList.contains('hidden'));
     const form = activeSec ? activeSec.querySelector('form') : null;
     if (form && typeof form.requestSubmit === 'function') {
@@ -4362,25 +3945,29 @@ document.addEventListener('keydown', function(e) {
     return;
   }
   if (e.altKey && !e.ctrlKey && !e.metaKey) {
-    const k = (e.key || '').toLowerCase();
-    const map = { d: 'dashboard', s: 'sales', p: 'purchase', v: 'vouchers', l: 'parties', e: 'expenses', m: 'processing' };
-    if (map[k]) {
+    const codeMap = {
+      KeyD: 'dashboard',
+      KeyS: 'sales',
+      KeyP: 'purchase',
+      KeyV: 'vouchers',
+      KeyL: 'parties',
+      KeyE: 'expenses',
+      KeyM: 'processing'
+    };
+    if (codeMap[e.code]) {
       e.preventDefault();
-      switchTab(map[k]);
-    } else if (k === 'h') {
+      switchTab(codeMap[e.code]);
+    } else if (e.code === 'KeyH') {
       e.preventDefault();
-      toggleShortcutDrawer();
-    } else if (k === 'x') {
-      e.preventDefault();
-      exportAllCSV();
+      openShortcutHelp();
     }
   }
-});
+}, true);
 
 window.addEventListener('DOMContentLoaded', () => {
   updateLiveClock();
   setInterval(updateLiveClock, 1000);
-  updateSidebarStatus('Sheet Sync Ready', navigator.onLine);
+  setSyncLedState(navigator.onLine ? 'pending' : 'offline');
 
   const splash = document.getElementById('splashScreen');
   if (splash) {
