@@ -587,12 +587,12 @@
       <div class="px-3.5 pt-4 pb-3 border-b border-slate-800/90 space-y-2.5">
         <div class="flex items-center justify-between gap-2">
           <div class="flex items-center gap-3 min-w-0">
-            <div class="bg-white rounded-2xl p-2 shadow-sm shrink-0">
-              <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-12 w-12 object-contain">
+            <div class="shrink-0 flex items-center justify-center">
+              <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-12 w-12 object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]">
             </div>
             <div class="min-w-0">
-              <p class="text-sm font-semibold text-white tracking-tight truncate">वैदिक सीड्स</p>
-              <span class="inline-block text-[10px] font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full mt-0.5">Agri-Seed ERP</span>
+              <p class="text-base font-bold text-white tracking-tight leading-tight">वैदिक सीड्स</p>
+              <span class="inline-block text-[10px] font-semibold text-amber-300 bg-amber-400/10 border border-amber-400/25 px-2 py-0.5 rounded-full mt-1">Agri-Seed ERP</span>
             </div>
           </div>
           <button onclick="toggleMobileSidebar(false)" class="lg:hidden w-7 h-7 rounded-lg bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-xs shrink-0">✕</button>
@@ -814,10 +814,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v13 • 13 वर्जन</span>
+          <span id="versionBadgeDisplay">v14 • 14 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 22 Nov 2026 (v13)
+          Last Updated On: 22 Nov 2026 (v14)
         </div>
       </div>
     </div>
@@ -864,10 +864,10 @@
       <!-- 1. DASHBOARD VIEW -->
       <section id="view-dashboard" class="flex flex-col space-y-4 sm:space-y-5">
 
-        <!-- 4 Compact Single-Row Cards: Blue Highlighted "+ पार्टी जोड़ें" + 3 Live Count Cards (No "Drawer" text) -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5">
+        <!-- Highlighted Action Row: + पार्टी जोड़ें, बिक्री बिल, खरीद बिल -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3.5">
           <button type="button" onclick="switchTab('parties'); setTimeout(() => { document.getElementById('newPartyName')?.focus(); }, 120);" class="bg-blue-600 hover:bg-blue-700 text-white border border-blue-700 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
-            <div class="flex items-center gap-2 min-w-0">
+            <div class="flex items-center gap-2.5 min-w-0">
               <span class="w-8 h-8 rounded-lg bg-white/15 text-white flex items-center justify-center shrink-0">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
               </span>
@@ -876,53 +876,29 @@
             <span class="text-white/80 text-xs shrink-0">›</span>
           </button>
 
-          <button type="button" onclick="openRecordsDrawer('PARTY')" class="bg-white hover:bg-slate-50 border border-slate-200 hover:border-blue-400 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
-            <div class="min-w-0">
-              <span class="text-[11px] font-semibold text-slate-600 block truncate">सभी पार्टियां</span>
-              <span id="countAllParties" class="num-clean text-base sm:text-lg font-bold text-[#132A46] mt-0.5 inline-block">0</span>
+          <button type="button" onclick="switchTab('sales'); setTimeout(() => { document.getElementById('salePartySearch')?.focus(); }, 120);" class="bg-[#1EA668] hover:bg-emerald-700 text-white border border-emerald-700 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="w-8 h-8 rounded-lg bg-white/15 text-white flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              </span>
+              <span class="font-bold text-xs sm:text-sm truncate">+ बिक्री बिल</span>
             </div>
-            <span class="text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full shrink-0">कुल</span>
+            <span class="text-white/80 text-xs shrink-0">›</span>
           </button>
 
-          <button type="button" onclick="openRecordsDrawer('TX')" class="bg-white hover:bg-emerald-50/40 border border-slate-200 hover:border-[#1EA668] p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
-            <div class="min-w-0">
-              <span class="text-[11px] font-semibold text-slate-600 block truncate">सभी बिल व वाउचर</span>
-              <span id="countAllBillsVouchers" class="num-clean text-base sm:text-lg font-bold text-[#1EA668] mt-0.5 inline-block">0</span>
+          <button type="button" onclick="switchTab('purchase'); setTimeout(() => { document.getElementById('purPartySearch')?.focus(); }, 120);" class="bg-amber-500 hover:bg-amber-600 text-slate-950 border border-amber-600 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="w-8 h-8 rounded-lg bg-slate-950/10 text-slate-950 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+              </span>
+              <span class="font-bold text-xs sm:text-sm truncate">+ खरीद बिल</span>
             </div>
-            <span class="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0">कुल</span>
-          </button>
-
-          <button type="button" onclick="openRecordsDrawer('EXPENSE')" class="bg-white hover:bg-rose-50/40 border border-slate-200 hover:border-rose-400 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
-            <div class="min-w-0">
-              <span class="text-[11px] font-semibold text-slate-600 block truncate">सभी खर्चे</span>
-              <span id="countAllExpenses" class="num-clean text-base sm:text-lg font-bold text-rose-600 mt-0.5 inline-block">0</span>
-            </div>
-            <span class="text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-full shrink-0">कुल</span>
+            <span class="text-slate-950/70 text-xs shrink-0">›</span>
           </button>
         </div>
 
         <!-- Compact Quick Action Row (Compact on Phone so less space is taken) -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3.5">
-          <button onclick="switchTab('sales')" class="bg-white hover:bg-emerald-50/50 border border-emerald-200 hover:border-[#1EA668] p-2.5 sm:p-4 rounded-xl sm:rounded-2xl shadow-xs flex items-center gap-2 sm:gap-3 text-left transition">
-            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-emerald-50 text-[#1EA668] border border-emerald-200 flex items-center justify-center shrink-0">
-              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-            </div>
-            <div class="min-w-0">
-              <div class="font-semibold text-[11px] sm:text-sm text-[#132A46] truncate">बिक्री / मंडी बिल</div>
-              <div class="hidden sm:block text-[11px] text-slate-500 truncate mt-0.5">Seed Sale या Mandi Supply</div>
-            </div>
-          </button>
-
-          <button onclick="switchTab('purchase')" class="bg-white hover:bg-sky-50/50 border border-sky-200 hover:border-sky-500 p-2.5 sm:p-4 rounded-xl sm:rounded-2xl shadow-xs flex items-center gap-2 sm:gap-3 text-left transition">
-            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-sky-50 text-sky-700 border border-sky-200 flex items-center justify-center shrink-0">
-              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
-            </div>
-            <div class="min-w-0">
-              <div class="font-semibold text-[11px] sm:text-sm text-[#132A46] truncate">खरीद बिल बनाएं</div>
-              <div class="hidden sm:block text-[11px] text-slate-500 truncate mt-0.5">कद्दा तुलाई व कटौती</div>
-            </div>
-          </button>
-
           <button onclick="switchTab('vouchers')" class="bg-white hover:bg-amber-50/50 border border-amber-200 hover:border-amber-500 p-2.5 sm:p-4 rounded-xl sm:rounded-2xl shadow-xs flex items-center gap-2 sm:gap-3 text-left transition">
             <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center shrink-0">
               <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -2744,18 +2720,25 @@ function getSortedParties(queryText) {
 function renderPartyDropdownList(prefix, queryText) {
   const dd = document.getElementById(prefix + 'PartyDropdown');
   if (!dd) return;
-  const list = getSortedParties(queryText);
-  if (!list.length) {
-    dd.innerHTML = `<div class="px-3.5 py-3 text-xs text-slate-400 text-center">${state.parties.length ? 'कोई मिलता-जुलता नाम नहीं मिला' : 'पहले पार्टी लेजर में पार्टी जोड़ें'}</div>`;
+  const trimmed = (queryText || '').trim();
+  if (!trimmed) {
+    dd.innerHTML = `<div class="px-3.5 py-3 text-xs text-slate-500 text-center">${state.parties.length ? 'नाम, गांव या मोबाइल लिखें—मिलने वाले नाम नीचे आएंगे' : 'पहले पार्टी लेजर में पार्टी जोड़ें'}</div>`;
     return;
   }
+  const list = getSortedParties(trimmed);
+  if (!list.length) {
+    dd.innerHTML = `<div class="px-3.5 py-3 text-xs text-slate-400 text-center">कोई मिलता-जुलता नाम नहीं मिला</div>`;
+    return;
+  }
+  const curSelectedId = document.getElementById(prefix + 'PartyId')?.value || '';
   dd.innerHTML = list.map(p => {
+    const isSel = curSelectedId === p.id;
     const bal = getPartyBalance(p.id);
     const tag = bal > 0
       ? `<span class="num-clean text-[11px] font-semibold text-rose-600">लेना: ₹${bal.toLocaleString('en-IN')}</span>`
       : (bal < 0 ? `<span class="num-clean text-[11px] font-semibold text-[#1EA668]">देना: ₹${Math.abs(bal).toLocaleString('en-IN')}</span>` : `<span class="num-clean text-[11px] text-slate-400">₹0</span>`);
     return `
-      <div onmousedown="selectSearchParty('${prefix}', '${p.id}')" class="px-3.5 py-2.5 hover:bg-emerald-50 cursor-pointer flex items-center justify-between gap-2 transition">
+      <div onmousedown="selectSearchParty('${prefix}', '${p.id}')" class="px-3.5 py-2.5 ${isSel ? 'bg-amber-100 border-l-4 border-amber-500' : 'hover:bg-amber-50/90'} cursor-pointer flex items-center justify-between gap-2 transition">
         <div class="min-w-0">
           <p class="text-xs sm:text-sm font-semibold text-[#132A46] truncate">${p.name} <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">${p.role}</span></p>
           <p class="text-[11px] text-slate-500 truncate">${p.village} • <span class="num-clean">${p.phone}</span></p>
@@ -2830,32 +2813,34 @@ document.addEventListener('click', function(e) {
 });
 
 function refreshSelectors() {
-  const sortedParties = getSortedParties('');
   ['sale', 'pur', 'vch'].forEach(prefix => {
     const hiddenEl = document.getElementById(prefix + 'PartyId');
     const searchEl = document.getElementById(prefix + 'PartySearch');
     if (!hiddenEl || !searchEl) return;
-    if (sortedParties.length) {
-      const existing = state.parties.find(x => x.id === hiddenEl.value) || sortedParties[0];
-      hiddenEl.value = existing.id;
-      if (!searchEl.value.trim()) searchEl.value = `${existing.name} (${existing.village}) — ${existing.role}`;
-    } else {
+    if (hiddenEl.value && !state.parties.some(x => x.id === hiddenEl.value)) {
       hiddenEl.value = '';
+      searchEl.value = '';
     }
   });
 
   const saleItemEl = document.getElementById('saleItemId');
   if (saleItemEl) {
-    saleItemEl.innerHTML = state.saleItems.length
+    const prevVal = saleItemEl.value;
+    saleItemEl.innerHTML = `<option value="">-- आइटम चुनें --</option>` + (state.saleItems.length
       ? state.saleItems.map(i => `<option value="${i.id}">${i.name} [${i.category}] — ${i.packKg}kg (स्टॉक: ${i.stockBags} बैग)</option>`).join('')
-      : `<option value="">-- पहले Item Master में बिक्री आइटम जोड़ें --</option>`;
+      : `<option value="" disabled>पहले Item Master में बिक्री आइटम जोड़ें</option>`);
+    if (prevVal && state.saleItems.some(x => x.id === prevVal)) saleItemEl.value = prevVal;
+    else saleItemEl.value = '';
   }
 
   const purItemEl = document.getElementById('purItemId');
   if (purItemEl) {
-    purItemEl.innerHTML = state.rawItems.length
+    const prevPurVal = purItemEl.value;
+    purItemEl.innerHTML = `<option value="">-- कच्चा आइटम चुनें --</option>` + (state.rawItems.length
       ? state.rawItems.map(i => `<option value="${i.id}">${i.name} (${i.variety})</option>`).join('')
-      : `<option value="">-- पहले Item Master में कच्चा आइटम जोड़ें --</option>`;
+      : `<option value="" disabled>पहले Item Master में कच्चा आइटम जोड़ें</option>`);
+    if (prevPurVal && state.rawItems.some(x => x.id === prevPurVal)) purItemEl.value = prevPurVal;
+    else purItemEl.value = '';
   }
 
   onSalePartyChange();
@@ -2865,10 +2850,11 @@ function refreshSelectors() {
 }
 
 function renderPartyInfoBanner(partyId, bannerId, excludeTxId = null) {
-  const p = state.parties.find(x => x.id === partyId);
   const box = document.getElementById(bannerId);
   if (!box) return;
-  if (!p) { box.classList.add('hidden'); return; }
+  if (!partyId) { box.classList.add('hidden'); box.innerHTML = ''; return; }
+  const p = state.parties.find(x => x.id === partyId);
+  if (!p) { box.classList.add('hidden'); box.innerHTML = ''; return; }
   const bal = getPartyBalance(p.id, excludeTxId);
   const balHtml = bal > 0
     ? `<span class="num-clean text-rose-600 font-semibold">₹${bal.toLocaleString('en-IN')} (लेना है)</span>`
@@ -4883,8 +4869,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v13",
-  totalVersionsUpdated: 13,
+  currentVersion: "v14",
+  totalVersionsUpdated: 14,
   lastUpdatedDateLabel: "22 Nov 2026"
 };
 
