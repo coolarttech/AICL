@@ -84,6 +84,67 @@
     }
     .no-print { display: none !important; }
   }
+
+  @property --border-angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  @keyframes spinBorderAngle {
+    to {
+      --border-angle: 360deg;
+    }
+  }
+
+  @keyframes emergeBehindCard {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, 14px, 0) scale(0.96);
+    }
+    100% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
+  .rotating-feature-card {
+    position: relative;
+    border-radius: 0.85rem;
+    padding: 1px;
+    background: conic-gradient(
+      from var(--border-angle, 0deg),
+      rgba(52, 211, 153, 0.85),
+      rgba(56, 189, 248, 0.25),
+      rgba(251, 191, 36, 0.75),
+      rgba(148, 163, 184, 0.14),
+      rgba(52, 211, 153, 0.85)
+    );
+    animation: spinBorderAngle 6.5s linear infinite;
+    will-change: --border-angle;
+  }
+
+  .rotating-feature-card-inner {
+    background: rgba(15, 23, 42, 0.94);
+    border-radius: calc(0.85rem - 1px);
+    padding: 0.6rem 0.7rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .emerge-from-behind {
+    z-index: 10;
+    animation: emergeBehindCard 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .hero-png-foreground {
+    position: relative;
+    z-index: 20;
+    filter: drop-shadow(0 18px 34px rgba(0, 0, 0, 0.65));
+  }
+
 </style>
 </head>
 <body class="min-h-screen flex flex-col bg-[#f6f9f7]" oncontextmenu="return false;" ondragstart="return false;">
@@ -100,58 +161,201 @@
   </div>
 </div>
 
-<!-- Split-Screen PIN Lock Overlay (Left Showcase + Right PIN Access) -->
+<!-- Split-Screen PIN Lock Overlay (Left Feature Cards + PNG Layer + Right PIN Access) -->
 <div id="pinLockScreen" class="fixed inset-0 z-[95] bg-[#0B0F17] text-white grid grid-cols-1 lg:grid-cols-12 overflow-y-auto no-print">
-  <!-- Left Dark Grid Showcase -->
-  <div class="hidden lg:flex lg:col-span-7 flex-col justify-between p-10 xl:p-12 border-r border-slate-800/80 relative overflow-hidden" style="background-image: linear-gradient(to right, rgba(148,163,184,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.06) 1px, transparent 1px); background-size: 28px 28px;">
-    <div>
-      <div class="flex items-center justify-between gap-4">
-        <span class="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-3 py-1 rounded-full">
-          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-          वैदिक सीड्स • Secure ERP Access
-        </span>
-        <div class="flex items-center gap-2.5 bg-white/95 text-slate-900 px-3 py-1.5 rounded-xl shadow-xs">
-          <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स लोगो" class="h-8 w-8 object-contain">
-          <span class="text-xs font-bold tracking-tight">वैदिक सीड्स</span>
-        </div>
-      </div>
-
-      <h2 class="mt-5 text-3xl xl:text-4xl font-bold tracking-tight leading-tight text-white">
-        व्यापारिक हिसाब, बिल व स्टॉक —<br>
-        <span class="text-emerald-400">सुरक्षित व व्यवस्थित नियंत्रण।</span>
-      </h2>
-      <p class="mt-3 text-sm text-slate-400 max-w-xl leading-relaxed">
-        बिक्री व मंडी बिल, खरीद व कद्दा मिलान, वाउचर रसीद, कंपनी खर्च, लॉट प्रोसेसिंग और लाइव Google Sheet सिंक—सब एक ही सुरक्षित पोर्टल पर।
-      </p>
-    </div>
-
-    <div class="my-6 space-y-4 max-w-xl">
-      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-lg flex items-center justify-between gap-4">
-        <div>
-          <p class="text-xs font-semibold text-emerald-400">01 • बिलिंग, वाउचर व लेजर</p>
-          <p class="text-xs text-slate-300 mt-1">खरीद, बिक्री/मंडी व जमा-भुगतान वाउचर के तुरंत साफ़ प्रिंट व PDF</p>
-        </div>
-        <span class="num-clean text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/25 shrink-0">GSTIN Ready</span>
-      </div>
-
-      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-lg flex items-center justify-between gap-4 ml-6">
-        <div>
-          <p class="text-xs font-semibold text-sky-400">02 • गोदाम स्टॉक व लॉट मिलान</p>
-          <p class="text-xs text-slate-300 mt-1">कच्चा अनाज टैंक, तैयार बीज स्टॉक और लॉट पूर्णता रिपोर्ट का स्पष्ट रिकॉर्ड</p>
-        </div>
-        <span class="num-clean text-xs font-bold px-2.5 py-1 rounded-lg bg-sky-500/15 text-sky-300 border border-sky-500/25 shrink-0">Live Yield</span>
-      </div>
-
-      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-lg flex items-center justify-between gap-4">
-        <div>
-          <p class="text-xs font-semibold text-amber-400">03 • लाइव Google Sheet सिंक</p>
-          <p class="text-xs text-slate-300 mt-1">हर एंट्री का क्लाउड बैकअप व त्वरित मिलान</p>
-        </div>
-        <span class="num-clean text-xs font-bold px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/25 shrink-0">Auto Sync</span>
+  <!-- Left Showcase: Rotating Border Feature Cards + Emerging PNG Layer -->
+  <div class="lg:col-span-7 flex flex-col justify-between p-5 sm:p-8 xl:p-10 border-b lg:border-b-0 lg:border-r border-slate-800/80 relative overflow-hidden" style="background-image: linear-gradient(to right, rgba(148,163,184,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.06) 1px, transparent 1px); background-size: 28px 28px;">
+    <div class="flex flex-wrap items-center justify-between gap-3 relative z-20">
+      <span class="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-3 py-1 rounded-full">
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        वैदिक सीड्स • संपूर्ण ERP फ़ीचर्स
+      </span>
+      <div class="flex items-center gap-2 bg-white/95 text-slate-900 px-3 py-1 rounded-xl shadow-xs">
+        <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स लोगो" class="h-7 w-7 object-contain">
+        <span class="text-xs font-bold tracking-tight">वैदिक सीड्स</span>
       </div>
     </div>
 
-    <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400 border-t border-slate-800/80 pt-4">
+    <!-- Center / Grid Stage: Feature Cards Emerging Behind Foreground PNG -->
+    <div class="relative my-5 grid grid-cols-1 xl:grid-cols-12 gap-4 items-center">
+      <div class="xl:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-2.5 relative z-10">
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 0ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-emerald-400 leading-snug">बिक्री बिल (Seed Sale)</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">बैग/पैकेट व अतिरिक्त वजन से बिल</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 45ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-amber-400 leading-snug">बाहर मंडी सप्लाई</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">मंडी, गाड़ी/पर्ची व आढ़त हिसाब</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 90ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-sky-400 leading-snug">डिजिटल रसीद व PDF</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">तुरंत प्रिंट, PDF व WhatsApp शेयर</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 135ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-sky-300 leading-snug">खरीद बिल (Purchase)</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">बोरी साइज, कट्टे व क्विंटल योग</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 180ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-amber-300 leading-snug">कद्दा कटौती (%)</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">कस्टम कद्दा व शुद्ध वजन गणना</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 225ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-rose-300 leading-snug">लेबर व भाड़ा कटौती</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">कटौतियों के बाद शुद्ध पेमेंट</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 270ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-emerald-300 leading-snug">लॉट व धर्मकांटा पर्ची</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">लॉट नं., पर्ची व गाड़ी ट्रैकिंग</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 315ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-amber-400 leading-snug">जमा व भुगतान वाउचर</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">Receipt व Payment वाउचर एंट्री</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 360ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-sky-400 leading-snug">बैंक, UPI व UTR रिकॉर्ड</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">माध्यम, बैंक व रेफ़रेंस विवरण</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 405ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-emerald-400 leading-snug">पार्टी लेजर व पासबुक</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">किसान, वेंडर, मंडी व लेबर खाता</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 450ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-sky-300 leading-snug">सभी पार्टियां व त्वरित सर्च</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">नाम, गांव या मोबाइल से खोज</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 495ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-rose-400 leading-snug">कंपनी खर्चे (Expenses)</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">मज़दूरी, बिजली, सैलरी व भाड़ा</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 540ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-amber-300 leading-snug">मदवार खर्च विश्लेषण</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">किस मद पर कितना खर्च हुआ</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 585ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-amber-400 leading-snug">कच्चा अनाज स्टॉक टैंक</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">खरीद (+) व प्रोसेसिंग (−) मीटर</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 630ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-emerald-400 leading-snug">तैयार बीज स्टॉक टैंक</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">प्रोसेसिंग (+) व बिक्री (−) मीटर</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 675ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-sky-400 leading-snug">सीड प्रोसेसिंग व % यील्ड</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">अंडरसाइज, रिजेक्शन, श्रिंकेज व पक्का बीज</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 720ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-emerald-300 leading-snug">लॉट पूर्णता रिपोर्ट प्रिंट</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">सिंगल, चुने हुए या हफ़्तेवार लॉट</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 765ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-amber-300 leading-snug">कच्चा व बिक्री आइटम मास्टर</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">वैरायटी, कैटेगरी, पैकिंग व दर</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 810ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-emerald-400 leading-snug">शुद्ध कमाई व ग्राफ़</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">आज, हफ़्ता, महीना, साल व कुल आय</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 855ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-sky-300 leading-snug">इनवॉइस थीम व प्रीव्यू</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">क्लीन पेपर, नेवी प्रो व एमरल्ड</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 900ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-amber-400 leading-snug">UPI / QR व CSV एक्सपोर्ट</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">बिल QR कोड व Excel/CSV बैकअप</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 945ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-rose-300 leading-snug">PIN लॉक व ऑटो-लॉक</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">PIN बदलाव, लॉक व निष्क्रिय ऑटो-लॉक</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 990ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-emerald-400 leading-snug">1-वर्ष प्लान ट्रैकर</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">21 Nov 2026 से बचे दिन व सुरक्षा</p>
+          </div>
+        </div>
+
+        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 1035ms;">
+          <div class="rotating-feature-card-inner">
+            <p class="text-[11px] font-bold text-sky-400 leading-snug">लाइव Google Sheet सिंक</p>
+            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">रियल-टाइम सिंक, FAQ व शॉर्टकट्स</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Foreground PNG Cutout with Cards Emerging Behind -->
+      <div class="xl:col-span-4 flex justify-center items-end relative hero-png-foreground emerge-from-behind" style="animation-delay: 180ms;">
+        <img src="krishankant.png" onerror="this.onerror=null;this.src='krishankant.jpg';" alt="Krishan Kant Bhardwaj" class="max-h-64 sm:max-h-80 xl:max-h-[420px] w-auto object-contain select-none pointer-events-none">
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400 border-t border-slate-800/80 pt-3.5 relative z-20">
       <div class="flex items-center gap-2">
         <span>Powered by</span>
         <span class="bg-white rounded-lg px-2 py-0.5 inline-flex items-center">
@@ -172,7 +376,7 @@
   </div>
 
   <!-- Right PIN Entry Panel -->
-  <div class="lg:col-span-5 flex flex-col justify-between items-center p-6 sm:p-8 bg-[#0B0F17] min-h-screen lg:min-h-0">
+  <div class="lg:col-span-5 flex flex-col justify-between items-center p-6 sm:p-8 bg-[#0B0F17] lg:min-h-0">
     <div class="w-full max-w-sm my-auto space-y-6 py-4">
       <div class="flex flex-col items-center text-center">
         <div class="bg-white rounded-2xl p-3 shadow-lg border border-slate-200/80 mb-3">
