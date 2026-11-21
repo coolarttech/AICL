@@ -675,7 +675,7 @@
           <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-100">
             <div>
               <h2 class="text-base sm:text-lg font-semibold text-[#132A46]">नया खरीद बिल बनाएं (Purchase Bill)</h2>
-              <p class="text-xs text-slate-500 mt-0.5">किसान / सप्लायर से फसल खरीद • 1% कद्दा राउंड-ऑफ व ऑप्शनल कटौती</p>
+              <p class="text-xs text-slate-500 mt-0.5">किसान / सप्लायर से फसल खरीद • कस्टम कद्दा (%) व कटौती</p>
             </div>
             <span id="purBillNoDisplay" class="num-clean px-3 py-1 bg-sky-50 text-sky-700 border border-sky-200 font-semibold rounded-lg text-xs">PUR-1001</span>
           </div>
@@ -750,7 +750,11 @@
                 </div>
               </div>
 
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-sky-200/60">
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-2 border-t border-sky-200/60">
+                <div>
+                  <label class="block text-xs font-semibold text-amber-800 mb-1">कद्दा कटौती (%)</label>
+                  <input type="number" step="0.01" id="purKaddaPct" value="1" min="0" oninput="calcPurchaseTotal()" class="num-clean w-full border border-amber-300 rounded-xl px-3 py-2 text-sm font-semibold bg-white">
+                </div>
                 <div>
                   <label class="block text-xs font-medium text-slate-600 mb-1">कटौती: लेबर चार्ज (₹)</label>
                   <input type="number" id="purLaborDed" value="0" min="0" oninput="calcPurchaseTotal()" class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white">
@@ -768,7 +772,7 @@
 
             <div class="grid grid-cols-2 md:grid-cols-5 gap-3.5 bg-slate-50 p-4 rounded-xl border border-slate-200 items-center">
               <div>
-                <span class="text-xs text-slate-500">1% कद्दा कटौती</span>
+                <span id="purKaddaLabel" class="text-xs text-slate-500">कद्दा कटौती</span>
                 <p id="purKaddaShow" class="num-clean text-sm font-semibold text-amber-700 mt-0.5">0 Kg</p>
               </div>
               <div>
@@ -931,10 +935,10 @@
           <div class="overflow-x-auto">
             <table class="w-full text-xs text-left border-t border-slate-100">
               <thead class="bg-slate-50 text-xs text-slate-500 font-medium">
-                <tr><th class="py-2 px-2">नाम</th><th class="py-2 px-2">वैरायटी</th><th class="py-2 px-2">कद्दा</th><th class="py-2 px-2 text-right">एक्शन</th></tr>
+                <tr><th class="py-2 px-2">नाम</th><th class="py-2 px-2">वैरायटी</th><th class="py-2 px-2 text-right">एक्शन</th></tr>
               </thead>
               <tbody id="rawItemsTable" class="divide-y divide-slate-100">
-                <tr><td colspan="4" class="py-6 text-center text-slate-400">कोई आइटम नहीं जुड़ा</td></tr>
+                <tr><td colspan="3" class="py-6 text-center text-slate-400">कोई आइटम नहीं जुड़ा</td></tr>
               </tbody>
             </table>
           </div>
@@ -1570,14 +1574,16 @@ function configureSheetUrl() {
 }
 
 function smartSyncNow() {
-  pushAllLocalDataToSheet();
-  setTimeout(() => syncFromSheetTruth(), 1600);
+  syncFromSheetTruth();
 }
 
-function syncFromSheetTruth() {
+let lastSyncedDataSignature = '';
+
+function syncFromSheetTruth(isBackground = false) {
   const url = (state.settings && state.settings.sheetUrl) ? state.settings.sheetUrl : DEPLOYED_SHEET_URL;
   const noteEl = document.getElementById('syncStatusNote');
   if (!url || !navigator.onLine) return;
+  if (isBackground && document.hidden) return;
 
   fetch(url + '?action=GET_ALL&t=' + Date.now(), { redirect: 'follow' })
     .then(r => r.text())
@@ -1586,41 +1592,48 @@ function syncFromSheetTruth() {
       try { res = JSON.parse(txt); } catch (e) { res = null; }
       if (!res || res.status !== 'ok') return;
 
-      const sheetTotalRows =
-        (res.parties ? res.parties.length : 0) +
-        (res.rawItems ? res.rawItems.length : 0) +
-        (res.saleItems ? res.saleItems.length : 0) +
-        (res.transactions ? res.transactions.length : 0) +
-        (res.expenses ? res.expenses.length : 0);
+      const nextParties = Array.isArray(res.parties)
+        ? res.parties.map(p => ({ ...p, createdDate: normalizeSheetDate(p.createdDate) }))
+        : state.parties;
+      const nextRawItems = Array.isArray(res.rawItems) ? res.rawItems : state.rawItems;
+      const nextSaleItems = Array.isArray(res.saleItems) ? res.saleItems : state.saleItems;
+      const nextTx = Array.isArray(res.transactions)
+        ? res.transactions.map(t => ({ ...t, date: normalizeSheetDate(t.date) }))
+        : state.transactions;
+      const nextExp = Array.isArray(res.expenses)
+        ? res.expenses.map(ex => ({ ...ex, date: normalizeSheetDate(ex.date) }))
+        : state.expenses;
+      const nextPrc = Array.isArray(res.processingBatches)
+        ? res.processingBatches.map(b => ({ ...b, date: normalizeSheetDate(b.date) }))
+        : state.processingBatches;
 
-      const localTotalRows =
-        state.parties.length + state.rawItems.length + state.saleItems.length +
-        state.transactions.length + state.expenses.length;
+      const sig = JSON.stringify({ nextParties, nextRawItems, nextSaleItems, nextTx, nextExp, nextPrc });
+      if (isBackground && sig === lastSyncedDataSignature) return;
+      lastSyncedDataSignature = sig;
 
-      // If Sheet has records (or user explicitly deleted rows in Sheet), align state cleanly with Sheet
-      if (sheetTotalRows > 0 || localTotalRows === 0) {
-        if (Array.isArray(res.parties)) {
-          state.parties = res.parties.map(p => ({ ...p, createdDate: normalizeSheetDate(p.createdDate) }));
-        }
-        if (Array.isArray(res.rawItems)) state.rawItems = res.rawItems;
-        if (Array.isArray(res.saleItems)) state.saleItems = res.saleItems;
-        if (Array.isArray(res.transactions)) {
-          state.transactions = res.transactions.map(t => ({ ...t, date: normalizeSheetDate(t.date) }));
-        }
-        if (Array.isArray(res.expenses)) {
-          state.expenses = res.expenses.map(ex => ({ ...ex, date: normalizeSheetDate(ex.date) }));
-        }
-        if (Array.isArray(res.processingBatches)) {
-          state.processingBatches = res.processingBatches.map(b => ({ ...b, date: normalizeSheetDate(b.date) }));
-        }
-        saveState();
-        refreshSelectors();
-        renderDashboard();
-        renderPartyList();
-        renderMasters();
-        renderExpensesTable();
-        renderProcessingTable();
-        if (noteEl) noteEl.textContent = '✓ सॉफ्टवेयर व Sheet दोनों का डेटा सिंक हो गया';
+      state.parties = nextParties;
+      state.rawItems = nextRawItems;
+      state.saleItems = nextSaleItems;
+      state.transactions = nextTx;
+      state.expenses = nextExp;
+      state.processingBatches = nextPrc;
+
+      saveState();
+      refreshSelectors();
+      renderDashboard();
+      renderPartyList();
+      renderMasters();
+      renderExpensesTable();
+      renderProcessingTable();
+
+      const drawer = document.getElementById('recordsDrawer');
+      if (drawer && !drawer.classList.contains('translate-x-full')) {
+        renderRecordsDrawerBody();
+      }
+
+      if (noteEl) {
+        const tNow = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        noteEl.textContent = `✓ लाइव सिंक (${tNow}) — Sheet से अपडेटेड`;
       }
     })
     .catch(() => {});
@@ -2163,9 +2176,12 @@ function calcPurchaseTotal() {
   const weed = Number(document.getElementById('purWeedDed').value) || 0;
   const paidNow = Number(document.getElementById('purPaidNow').value) || 0;
 
-  const kaddaPct = Number(state.settings.kaddaPct) || 1.0;
+  const kaddaPctInput = document.getElementById('purKaddaPct');
+  const kaddaPct = kaddaPctInput ? (Number(kaddaPctInput.value) || 0) : 0;
   const kaddaKg = Math.round((grossKg * kaddaPct) / 100);
   const netKg = Math.max(0, grossKg - kaddaKg);
+  const lblEl = document.getElementById('purKaddaLabel');
+  if (lblEl) lblEl.innerText = `कद्दा कटौती (${kaddaPct}%)`;
 
   const grossAmt = Math.round((netKg / 100) * rateQtl);
   const totalDed = labor + trans + weed;
@@ -2192,6 +2208,7 @@ function resetPurchaseForm() {
   document.getElementById('purLaborDed').value = 0;
   document.getElementById('purTransDed').value = 0;
   document.getElementById('purWeedDed').value = 0;
+  if (document.getElementById('purKaddaPct')) document.getElementById('purKaddaPct').value = 1;
   document.getElementById('purPaidNow').value = 0;
   calcPurchaseTotal();
 }
@@ -2206,9 +2223,12 @@ function savePurchaseBill(e) {
   const dateVal = document.getElementById('purDate').value;
   const grossKg = Number(document.getElementById('purGrossKg').value) || 0;
   const rateQtl = Number(document.getElementById('purRateQtl').value) || 0;
-  const kaddaPct = Number(state.settings.kaddaPct) || 1.0;
+  const kaddaPctInput = document.getElementById('purKaddaPct');
+  const kaddaPct = kaddaPctInput ? (Number(kaddaPctInput.value) || 0) : 0;
   const kaddaKg = Math.round((grossKg * kaddaPct) / 100);
   const netKg = Math.max(0, grossKg - kaddaKg);
+  const lblEl = document.getElementById('purKaddaLabel');
+  if (lblEl) lblEl.innerText = `कद्दा कटौती (${kaddaPct}%)`;
 
   const labor = Number(document.getElementById('purLaborDed').value) || 0;
   const trans = Number(document.getElementById('purTransDed').value) || 0;
@@ -2417,9 +2437,28 @@ function renderPartyList() {
       </div>
     `;
   }).join('');
+
+  if (selectedPartyLedgerId) {
+    if (state.parties.some(x => x.id === selectedPartyLedgerId)) {
+      selectPartyLedger(selectedPartyLedgerId);
+    } else {
+      selectedPartyLedgerId = null;
+      const panel = document.getElementById('partyLedgerPanel');
+      if (panel) {
+        panel.innerHTML = `
+          <div class="text-center py-12 sm:py-16 text-slate-400">
+            <p class="font-semibold text-[#132A46] text-sm">पार्टी जोड़ें या किसी पार्टी पर क्लिक करें</p>
+            <p class="text-xs mt-1">उसका संपूर्ण लेजर, बिक्री/मंडी बिल, खरीद बिल और वाउचर एक साथ दिखेंगे</p>
+          </div>
+        `;
+      }
+    }
+  }
 }
 
+let selectedPartyLedgerId = null;
 function selectPartyLedger(partyId) {
+  selectedPartyLedgerId = partyId;
   const p = state.parties.find(x => x.id === partyId);
   if (!p) return;
   const txs = state.transactions.filter(t => t.partyId === partyId);
@@ -2594,13 +2633,12 @@ function renderMasters() {
         <tr>
           <td class="py-2 px-2 font-medium">${i.name}</td>
           <td class="py-2 px-2">${i.variety}</td>
-          <td class="num-clean py-2 px-2">${state.settings.kaddaPct}%</td>
           <td class="py-2 px-2 text-right space-x-1.5">
             <button onclick="editRawItem('${i.id}')" class="text-sky-700 font-semibold underline">Edit</button>
             <button onclick="deleteRawItem('${i.id}')" class="text-rose-600 font-semibold underline">Del</button>
           </td>
         </tr>`).join('')
-      : `<tr><td colspan="4" class="py-6 text-center text-slate-400">कोई आइटम नहीं जुड़ा</td></tr>`;
+      : `<tr><td colspan="3" class="py-6 text-center text-slate-400">कोई आइटम नहीं जुड़ा</td></tr>`;
   }
 
   const st = document.getElementById('saleItemsTable');
@@ -2819,6 +2857,7 @@ function editTransaction(txId) {
     document.getElementById('purLaborDed').value = tx.labor || 0;
     document.getElementById('purTransDed').value = tx.trans || 0;
     document.getElementById('purWeedDed').value = tx.weed || 0;
+    if (document.getElementById('purKaddaPct')) document.getElementById('purKaddaPct').value = (tx.kaddaPct !== undefined ? tx.kaddaPct : 1);
     document.getElementById('purPaidNow').value = tx.paid || 0;
     onPurPartyChange();
   } else {
@@ -3229,6 +3268,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   setRole(state.role);
   switchTab('dashboard');
+  syncFromSheetTruth(false);
+  setInterval(() => syncFromSheetTruth(true), 12000);
 });
 </script>
 </body>
