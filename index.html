@@ -91,7 +91,7 @@
 <!-- Fast Startup Splash Screen -->
 <div id="splashScreen" class="fixed inset-0 bg-white z-[100] flex flex-col items-center justify-center transition-opacity duration-200 no-print">
   <div class="splash-anim flex flex-col items-center">
-    <img src="Vaidik Seeds Logo.jpg" alt="वैदिक सीड्स" class="h-40 md:h-48 w-auto object-contain mb-3">
+    <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-40 md:h-48 w-auto object-contain mb-3">
     <span class="text-xs font-semibold tracking-wider uppercase text-[#1EA668] bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200">Agri-Seed ERP</span>
   </div>
   <div class="absolute bottom-8 flex items-center gap-2.5 text-xs text-slate-400">
@@ -155,7 +155,7 @@
     <div class="w-full max-w-sm space-y-6">
       <div class="flex flex-col items-center text-center">
         <div class="bg-white rounded-2xl p-2.5 shadow-md mb-3">
-          <img src="Vaidik Seeds Logo.jpg" alt="वैदिक सीड्स" class="h-16 w-16 object-contain">
+          <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-16 w-16 object-contain">
         </div>
         <h1 class="text-xl font-bold text-white tracking-tight">वैदिक सीड्स</h1>
         <p class="text-xs text-slate-400 mt-1">पोर्टल खोलने के लिए अपना PIN दर्ज करें</p>
@@ -190,11 +190,24 @@
     <form onsubmit="saveNewLockPin(event)" class="p-4 space-y-3 text-xs">
       <div>
         <label class="block font-semibold text-slate-700 mb-1">नया PIN (कम से कम 4 अंक) *</label>
-        <input type="password" id="newLockPinInput" inputmode="numeric" minlength="4" required placeholder="नया PIN दर्ज करें" class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm font-bold tracking-widest">
+        <input type="password" id="newLockPinInput" inputmode="numeric" minlength="4" placeholder="नया PIN दर्ज करें" class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm font-bold tracking-widest">
       </div>
       <div>
         <label class="block font-semibold text-slate-700 mb-1">नया PIN दोबारा डालें *</label>
-        <input type="password" id="confirmLockPinInput" inputmode="numeric" minlength="4" required placeholder="दोबारा वही PIN डालें" class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm font-bold tracking-widest">
+        <input type="password" id="confirmLockPinInput" inputmode="numeric" minlength="4" placeholder="दोबारा वही PIN डालें" class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm font-bold tracking-widest">
+      </div>
+            <div class="pt-1 border-t border-slate-100">
+        <label class="block font-semibold text-slate-700 mb-1">ऑटो-लॉक समय (Idle Auto-Lock — मिनट में)</label>
+        <select id="autoLockMinutesSelect" class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2 text-xs sm:text-sm bg-white font-semibold text-[#132A46]">
+          <option value="1">1 मिनट (तेज़ सुरक्षा)</option>
+          <option value="2">2 मिनट</option>
+          <option value="5" selected>5 मिनट (डिफ़ॉल्ट)</option>
+          <option value="10">10 मिनट</option>
+          <option value="15">15 मिनट</option>
+          <option value="30">30 मिनट</option>
+          <option value="0">बंद रखें (Off)</option>
+        </select>
+        <p class="text-[11px] text-slate-500 mt-1">इतने समय तक कोई गतिविधि न होने पर लॉक स्क्रीन अपने आप खुल जाएगी।</p>
       </div>
       <p id="changePinMsg" class="text-xs font-semibold text-rose-600 hidden"></p>
       <div class="flex justify-end gap-2 pt-2">
@@ -221,7 +234,7 @@
         <div class="flex items-center justify-between gap-2">
           <div class="flex items-center gap-3 min-w-0">
             <div class="bg-white rounded-2xl p-2 shadow-sm shrink-0">
-              <img src="Vaidik Seeds Logo.jpg" alt="वैदिक सीड्स" class="h-12 w-12 object-contain">
+              <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-12 w-12 object-contain">
             </div>
             <div class="min-w-0">
               <p class="text-sm font-semibold text-white tracking-tight truncate">वैदिक सीड्स</p>
@@ -3798,7 +3811,7 @@ function previewSampleInvoiceTheme() {
     <div class="bg-white border border-slate-200 rounded-md p-6 sm:p-8 text-slate-800 space-y-6">
       <div class="flex items-start justify-between gap-4 border-b border-slate-200 pb-5">
         <div class="flex items-center gap-3">
-          <img src="Vaidik Seeds Logo.jpg" alt="वैदिक सीड्स" class="h-14 w-14 rounded-full object-cover border border-slate-200 shrink-0">
+          <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-14 w-14 rounded-full object-cover border border-slate-200 shrink-0">
           <div>
             <p class="text-base font-bold text-slate-900">वैदिक सीड्स</p>
             <p class="num-clean text-[11px] text-slate-500">GSTIN: ${companyGstin}</p>
@@ -3944,7 +3957,7 @@ function openReceipt(txId) {
       <div class="bg-white border ${outerBorderClass} rounded-md p-6 sm:p-8 text-slate-800 space-y-6">
         <div class="flex items-start justify-between gap-4 pb-5 border-b border-neutral-200">
           <div class="flex items-center gap-3">
-            <img src="Vaidik Seeds Logo.jpg" alt="वैदिक सीड्स" class="h-14 w-14 rounded-full object-cover border border-neutral-200 shrink-0">
+            <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-14 w-14 rounded-full object-cover border border-neutral-200 shrink-0">
             <div>
               <p class="text-base font-bold text-neutral-900">वैदिक सीड्स</p>
               <p class="num-clean text-[11px] text-neutral-500">GSTIN: ${companyGstin}</p>
@@ -4042,7 +4055,7 @@ function openReceipt(txId) {
       <div class="bg-white border ${outerBorderClass} rounded-md p-6 sm:p-8 text-slate-800 space-y-6">
         <div class="flex items-start justify-between gap-4 pb-5 border-b border-neutral-200">
           <div class="flex items-center gap-3">
-            <img src="Vaidik Seeds Logo.jpg" alt="वैदिक सीड्स" class="h-14 w-14 rounded-full object-cover border border-neutral-200 shrink-0">
+            <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-14 w-14 rounded-full object-cover border border-neutral-200 shrink-0">
             <div>
               <p class="text-base font-bold text-neutral-900">वैदिक सीड्स</p>
               <p class="num-clean text-[11px] text-neutral-500">GSTIN: ${companyGstin}</p>
@@ -4335,9 +4348,11 @@ function openChangePinModal() {
   const msg = document.getElementById('changePinMsg');
   const p1 = document.getElementById('newLockPinInput');
   const p2 = document.getElementById('confirmLockPinInput');
+  const sel = document.getElementById('autoLockMinutesSelect');
   if (msg) { msg.classList.add('hidden'); msg.textContent = ''; }
   if (p1) p1.value = '';
   if (p2) p2.value = '';
+  if (sel) sel.value = String(getAutoLockMinutes());
   document.getElementById('changePinModal').classList.remove('hidden');
   setTimeout(() => { if (p1) p1.focus(); }, 60);
 }
@@ -4346,32 +4361,55 @@ function closeChangePinModal() {
   document.getElementById('changePinModal').classList.add('hidden');
 }
 
+function getAutoLockMinutes() {
+  const raw = state && state.settings && state.settings.autoLockMinutes !== undefined
+    ? Number(state.settings.autoLockMinutes)
+    : 5;
+  return isNaN(raw) ? 5 : Math.max(0, raw);
+}
+
 function saveNewLockPin(e) {
   e.preventDefault();
   const p1 = (document.getElementById('newLockPinInput')?.value || '').trim();
   const p2 = (document.getElementById('confirmLockPinInput')?.value || '').trim();
+  const autoMin = Number(document.getElementById('autoLockMinutesSelect')?.value ?? 5);
   const msg = document.getElementById('changePinMsg');
 
-  if (p1.length < 4) {
-    if (msg) { msg.textContent = 'PIN कम से कम 4 अंकों का होना चाहिए।'; msg.classList.remove('hidden'); }
-    return;
-  }
-  if (p1 !== p2) {
-    if (msg) { msg.textContent = 'दोनों PIN मेल नहीं खा रहे हैं।'; msg.classList.remove('hidden'); }
-    return;
+  let pinChanged = false;
+  if (p1.length > 0 || p2.length > 0) {
+    if (p1.length < 4) {
+      if (msg) { msg.textContent = 'नया PIN कम से कम 4 अंकों का होना चाहिए।'; msg.classList.remove('hidden'); }
+      return;
+    }
+    if (p1 !== p2) {
+      if (msg) { msg.textContent = 'दोनों PIN मेल नहीं खा रहे हैं।'; msg.classList.remove('hidden'); }
+      return;
+    }
+    pinChanged = true;
   }
 
   if (!state.settings) state.settings = { kaddaPct: 1.0, sheetUrl: DEPLOYED_SHEET_URL };
-  state.settings.lockPin = p1;
+  if (pinChanged) {
+    state.settings.lockPin = p1;
+  }
+  state.settings.autoLockMinutes = isNaN(autoMin) ? 5 : Math.max(0, autoMin);
   saveState();
+  resetAutoLockTimer();
+
   syncToGoogleSheet({
     sheetTab: 'Settings_Log',
     actionType: 'UPSERT',
     id: 'PIN-CFG-01',
+    autoLockMinutes: state.settings.autoLockMinutes,
     pinUpdatedAt: new Date().toISOString()
   });
+
   closeChangePinModal();
-  alert('✓ नया PIN सफलतापूर्वक सेव हो गया है।');
+  if (pinChanged) {
+    alert(`✓ नया PIN और ऑटो-लॉक (${state.settings.autoLockMinutes ? state.settings.autoLockMinutes + ' मिनट' : 'बंद'}) सेव हो गए हैं।`);
+  } else {
+    alert(`✓ ऑटो-लॉक समय (${state.settings.autoLockMinutes ? state.settings.autoLockMinutes + ' मिनट' : 'बंद'}) सेव हो गया है।`);
+  }
 }
 
 (function initPinScreenState() {
@@ -4383,6 +4421,52 @@ function saveNewLockPin(e) {
     else screen.classList.remove('hidden');
   }
 })();
+
+let autoLockTimeoutId = null;
+
+function isPortalCurrentlyUnlocked() {
+  const screen = document.getElementById('pinLockScreen');
+  return Boolean(screen && screen.classList.contains('hidden'));
+}
+
+function resetAutoLockTimer() {
+  if (autoLockTimeoutId) {
+    clearTimeout(autoLockTimeoutId);
+    autoLockTimeoutId = null;
+  }
+  const mins = getAutoLockMinutes();
+  if (!mins || mins <= 0) return;
+  if (!isPortalCurrentlyUnlocked()) return;
+
+  autoLockTimeoutId = setTimeout(() => {
+    if (isPortalCurrentlyUnlocked()) {
+      lockPortalNow();
+    }
+  }, mins * 60 * 1000);
+}
+
+// Reset idle timer on user interaction or tab return
+['pointerdown', 'keydown', 'scroll', 'touchstart', 'wheel'].forEach(evName => {
+  document.addEventListener(evName, () => {
+    if (isPortalCurrentlyUnlocked()) resetAutoLockTimer();
+  }, { passive: true });
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && isPortalCurrentlyUnlocked()) {
+    resetAutoLockTimer();
+  }
+});
+
+// Start timer after unlock
+const _origUnlockPortalSuccess = unlockPortalSuccess;
+unlockPortalSuccess = function() {
+  _origUnlockPortalSuccess();
+  resetAutoLockTimer();
+};
+
+resetAutoLockTimer();
+
 
 </script>
 </body>
