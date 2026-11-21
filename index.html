@@ -85,7 +85,7 @@
     .no-print { display: none !important; }
   }
 
-  @keyframes rotateOutlineBeam {
+  @keyframes orbitRingSlow {
     0% {
       transform: translate(-50%, -50%) rotate(0deg);
     }
@@ -94,68 +94,136 @@
     }
   }
 
-  @keyframes emergeBehindSubject {
+  @keyframes counterOrbitCard {
     0% {
-      opacity: 0;
-      transform: translate3d(36px, 8px, 0) scale(0.92);
+      transform: rotate(0deg);
     }
     100% {
-      opacity: 1;
-      transform: translate3d(0, 0, 0) scale(1);
+      transform: rotate(-360deg);
     }
   }
 
-  .rotating-feature-card {
-    position: relative;
-    border-radius: 0.85rem;
-    padding: 1.5px;
-    overflow: hidden;
-    background: rgba(30, 41, 59, 0.7);
-    isolation: isolate;
+  @keyframes gentleCardFloat {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
   }
 
-  .rotating-feature-card::before {
-    content: "";
+  .left-hero-stage {
+    position: relative;
+    min-height: 490px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .behind-circle-orbit-wrap {
     position: absolute;
-    top: 50%;
     left: 50%;
-    width: 240%;
-    height: 240%;
-    background: conic-gradient(
-      transparent 0deg,
-      transparent 230deg,
-      rgba(56, 189, 248, 0.55) 275deg,
-      rgba(52, 211, 153, 1) 320deg,
-      rgba(251, 191, 36, 0.95) 350deg,
-      transparent 360deg
-    );
-    animation: rotateOutlineBeam 4.2s linear infinite;
-    z-index: -1;
+    bottom: 24px;
+    width: 390px;
+    height: 390px;
+    transform: translateX(-50%);
+    z-index: 8;
     pointer-events: none;
   }
 
-  .rotating-feature-card-inner {
-    position: relative;
-    z-index: 1;
-    background: #0f172a;
-    border-radius: calc(0.85rem - 1.5px);
-    padding: 0.58rem 0.68rem;
+  @media (min-width: 640px) {
+    .behind-circle-orbit-wrap {
+      width: 470px;
+      height: 470px;
+      bottom: 28px;
+    }
+  }
+
+  .behind-circle-ring-dashed {
+    position: absolute;
+    inset: 14px;
+    border-radius: 9999px;
+    border: 1.5px dashed rgba(148, 163, 184, 0.34);
+  }
+
+  .behind-circle-ring-soft {
+    position: absolute;
+    inset: 62px;
+    border-radius: 9999px;
+    border: 1px solid rgba(110, 231, 183, 0.25);
+    background: radial-gradient(circle, rgba(167, 243, 208, 0.08) 0%, rgba(186, 230, 253, 0.04) 60%, transparent 75%);
+  }
+
+  .orbit-spinner-track {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
     height: 100%;
+    animation: orbitRingSlow 36s linear infinite;
+  }
+
+  .orbit-node-slot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+  }
+
+  .orbit-card-counter {
+    animation: counterOrbitCard 36s linear infinite;
+  }
+
+  .pastel-mini-card {
+    width: 112px;
+    border-radius: 0.75rem;
+    padding: 0.45rem 0.55rem;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow: 0 8px 20px rgba(2, 6, 23, 0.38);
+    backdrop-filter: blur(6px);
+    animation: gentleCardFloat 3.6s ease-in-out infinite;
+    line-height: 1.15;
+  }
+
+  @media (min-width: 640px) {
+    .pastel-mini-card {
+      width: 128px;
+      padding: 0.52rem 0.65rem;
+    }
+  }
+
+  .hero-png-bottom-center {
+    position: relative;
+    z-index: 22;
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    margin-top: auto;
   }
 
-  .emerge-from-behind {
-    position: relative;
-    z-index: 10;
-    animation: emergeBehindSubject 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  .hero-png-bottom-center img {
+    max-height: 360px;
+    width: auto;
+    object-fit: contain;
+    object-position: bottom center;
+    filter: drop-shadow(0 18px 34px rgba(0, 0, 0, 0.75));
+    user-select: none;
+    pointer-events: none;
   }
 
-  .hero-png-foreground {
-    position: relative;
-    z-index: 25;
-    filter: drop-shadow(0 20px 36px rgba(0, 0, 0, 0.72));
+  @media (min-width: 640px) {
+    .hero-png-bottom-center img {
+      max-height: 440px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .hero-png-bottom-center img {
+      max-height: 480px;
+    }
   }
 
 </style>
@@ -174,14 +242,14 @@
   </div>
 </div>
 
-<!-- Split-Screen PIN Lock Overlay (Left Feature Cards + PNG Layer + Right PIN Access) -->
+<!-- Split-Screen PIN Lock Overlay (Left Centered Circle Cards Behind Bottom-Aligned Large Photo + Right PIN Access) -->
 <div id="pinLockScreen" class="fixed inset-0 z-[95] bg-[#0B0F17] text-white grid grid-cols-1 lg:grid-cols-12 overflow-y-auto no-print">
-  <!-- Left Showcase: Rotating Border Feature Cards + Emerging PNG Layer -->
+  <!-- Left Portion: Centered Circle of Soft Pastel Cards Behind Bottom-Aligned Larger Photo -->
   <div class="lg:col-span-7 flex flex-col justify-between p-5 sm:p-8 xl:p-10 border-b lg:border-b-0 lg:border-r border-slate-800/80 relative overflow-hidden" style="background-image: linear-gradient(to right, rgba(148,163,184,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.06) 1px, transparent 1px); background-size: 28px 28px;">
-    <div class="flex flex-wrap items-center justify-between gap-3 relative z-20">
+    <div class="flex flex-wrap items-center justify-between gap-3 relative z-30">
       <span class="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-3 py-1 rounded-full">
         <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-        वैदिक सीड्स • संपूर्ण ERP फ़ीचर्स
+        वैदिक सीड्स • Live ERP Features
       </span>
       <div class="flex items-center gap-2 bg-white/95 text-slate-900 px-3 py-1 rounded-xl shadow-xs">
         <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स लोगो" class="h-7 w-7 object-contain">
@@ -189,186 +257,117 @@
       </div>
     </div>
 
-    <!-- Center / Grid Stage: Feature Cards Emerging Behind Foreground PNG -->
-    <div class="relative my-4 grid grid-cols-1 xl:grid-cols-12 gap-2 items-center">
-      <div class="xl:col-span-9 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 relative z-10 xl:pr-4">
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 0ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-emerald-400 leading-snug">बिक्री बिल (Seed Sale)</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">बैग/पैकेट व अतिरिक्त वजन से बिल</p>
+    <!-- Center Stage with Circle of Distinct Soft Pastel Cards Behind Bottom-Aligned Photo -->
+    <div class="left-hero-stage my-2 flex-1 w-full">
+      <div class="behind-circle-orbit-wrap">
+        <div class="behind-circle-ring-dashed"></div>
+        <div class="behind-circle-ring-soft"></div>
+        <div class="orbit-spinner-track">
+        <div class="orbit-node-slot" style="transform: translate(0.0px, -178.0px);">
+          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
+            <div class="pastel-mini-card bg-[#DCFCE7] text-[#14532D] border-[#86EFAC]" style="animation-delay: 0.00s;">
+              <p class="text-[10px] sm:text-[11px] font-bold truncate">बिक्री बिल</p>
+              <p class="text-[9px] sm:text-[10px] text-[#166534] font-medium truncate mt-0.5">Seed Sale</p>
+            </div>
           </div>
         </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 45ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-amber-400 leading-snug">बाहर मंडी सप्लाई</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">मंडी, गाड़ी/पर्ची व आढ़त हिसाब</p>
+        <div class="orbit-node-slot" style="transform: translate(89.0px, -154.2px);">
+          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
+            <div class="pastel-mini-card bg-[#FEF3C7] text-[#78350F] border-[#FDE68A]" style="animation-delay: 0.25s;">
+              <p class="text-[10px] sm:text-[11px] font-bold truncate">मंडी सप्लाई</p>
+              <p class="text-[9px] sm:text-[10px] text-[#92400E] font-medium truncate mt-0.5">Mandi Bill</p>
+            </div>
           </div>
         </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 90ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-sky-400 leading-snug">डिजिटल रसीद व PDF</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">तुरंत प्रिंट, PDF व WhatsApp शेयर</p>
+        <div class="orbit-node-slot" style="transform: translate(154.2px, -89.0px);">
+          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
+            <div class="pastel-mini-card bg-[#E0F2FE] text-[#0C4A6E] border-[#7DD3FC]" style="animation-delay: 0.50s;">
+              <p class="text-[10px] sm:text-[11px] font-bold truncate">खरीद बिल</p>
+              <p class="text-[9px] sm:text-[10px] text-[#075985] font-medium truncate mt-0.5">Purchase</p>
+            </div>
           </div>
         </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 135ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-sky-300 leading-snug">खरीद बिल (Purchase)</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">बोरी साइज, कट्टे व क्विंटल योग</p>
+        <div class="orbit-node-slot" style="transform: translate(178.0px, 0.0px);">
+          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
+            <div class="pastel-mini-card bg-[#FCE7F3] text-[#831843] border-[#F9A8D4]" style="animation-delay: 0.75s;">
+              <p class="text-[10px] sm:text-[11px] font-bold truncate">कद्दा व कटौती</p>
+              <p class="text-[9px] sm:text-[10px] text-[#9D174D] font-medium truncate mt-0.5">1% / कस्टम</p>
+            </div>
           </div>
         </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 180ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-amber-300 leading-snug">कद्दा कटौती (%)</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">कस्टम कद्दा व शुद्ध वजन गणना</p>
+        <div class="orbit-node-slot" style="transform: translate(154.2px, 89.0px);">
+          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
+            <div class="pastel-mini-card bg-[#EDE9FE] text-[#4C1D95] border-[#C4B5FD]" style="animation-delay: 1.00s;">
+              <p class="text-[10px] sm:text-[11px] font-bold truncate">वाउचर एंट्री</p>
+              <p class="text-[9px] sm:text-[10px] text-[#5B21B6] font-medium truncate mt-0.5">जमा / भुगतान</p>
+            </div>
           </div>
         </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 225ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-rose-300 leading-snug">लेबर व भाड़ा कटौती</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">कटौतियों के बाद शुद्ध पेमेंट</p>
+        <div class="orbit-node-slot" style="transform: translate(89.0px, 154.2px);">
+          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
+            <div class="pastel-mini-card bg-[#CCFBF1] text-[#134E4A] border-[#5EEAD4]" style="animation-delay: 1.25s;">
+              <p class="text-[10px] sm:text-[11px] font-bold truncate">पार्टी लेजर</p>
+              <p class="text-[9px] sm:text-[10px] text-[#115E59] font-medium truncate mt-0.5">पूरा खाता</p>
+            </div>
           </div>
         </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 270ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-emerald-300 leading-snug">लॉट व धर्मकांटा पर्ची</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">लॉट नं., पर्ची व गाड़ी ट्रैकिंग</p>
+        <div class="orbit-node-slot" style="transform: translate(0.0px, 178.0px);">
+          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
+            <div class="pastel-mini-card bg-[#FFEDD5] text-[#7C2D12] border-[#FDBA74]" style="animation-delay: 1.50s;">
+              <p class="text-[10px] sm:text-[11px] font-bold truncate">कंपनी खर्चे</p>
+              <p class="text-[9px] sm:text-[10px] text-[#9A3412] font-medium truncate mt-0.5">मदवार खर्च</p>
+            </div>
           </div>
         </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 315ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-amber-400 leading-snug">जमा व भुगतान वाउचर</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">Receipt व Payment वाउचर एंट्री</p>
+        <div class="orbit-node-slot" style="transform: translate(-89.0px, 154.2px);">
+          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
+            <div class="pastel-mini-card bg-[#E0E7FF] text-[#312E81] border-[#A5B4FC]" style="animation-delay: 1.75s;">
+              <p class="text-[10px] sm:text-[11px] font-bold truncate">कच्चा स्टॉक</p>
+              <p class="text-[9px] sm:text-[10px] text-[#3730A3] font-medium truncate mt-0.5">गोदाम टैंक</p>
+            </div>
           </div>
         </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 360ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-sky-400 leading-snug">बैंक, UPI व UTR रिकॉर्ड</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">माध्यम, बैंक व रेफ़रेंस विवरण</p>
+        <div class="orbit-node-slot" style="transform: translate(-154.2px, 89.0px);">
+          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
+            <div class="pastel-mini-card bg-[#ECFCCB] text-[#365314] border-[#BEF264]" style="animation-delay: 2.00s;">
+              <p class="text-[10px] sm:text-[11px] font-bold truncate">बीज स्टॉक</p>
+              <p class="text-[9px] sm:text-[10px] text-[#3F6212] font-medium truncate mt-0.5">तैयार टैंक</p>
+            </div>
           </div>
         </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 405ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-emerald-400 leading-snug">पार्टी लेजर व पासबुक</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">किसान, वेंडर, मंडी व लेबर खाता</p>
+        <div class="orbit-node-slot" style="transform: translate(-178.0px, 0.0px);">
+          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
+            <div class="pastel-mini-card bg-[#F3E8FF] text-[#581C87] border-[#D8B4FE]" style="animation-delay: 2.25s;">
+              <p class="text-[10px] sm:text-[11px] font-bold truncate">लॉट प्रोसेसिंग</p>
+              <p class="text-[9px] sm:text-[10px] text-[#6B21A8] font-medium truncate mt-0.5">% मिलान</p>
+            </div>
           </div>
         </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 450ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-sky-300 leading-snug">सभी पार्टियां व त्वरित सर्च</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">नाम, गांव या मोबाइल से खोज</p>
+        <div class="orbit-node-slot" style="transform: translate(-154.2px, -89.0px);">
+          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
+            <div class="pastel-mini-card bg-[#FFE4E6] text-[#881337] border-[#FDA4AF]" style="animation-delay: 2.50s;">
+              <p class="text-[10px] sm:text-[11px] font-bold truncate">आइटम मास्टर</p>
+              <p class="text-[9px] sm:text-[10px] text-[#9F1239] font-medium truncate mt-0.5">Raw व Sale</p>
+            </div>
           </div>
         </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 495ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-rose-400 leading-snug">कंपनी खर्चे (Expenses)</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">मज़दूरी, बिजली, सैलरी व भाड़ा</p>
+        <div class="orbit-node-slot" style="transform: translate(-89.0px, -154.2px);">
+          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
+            <div class="pastel-mini-card bg-[#F1F5F9] text-[#1E293B] border-[#CBD5E1]" style="animation-delay: 2.75s;">
+              <p class="text-[10px] sm:text-[11px] font-bold truncate">शुद्ध कमाई</p>
+              <p class="text-[9px] sm:text-[10px] text-[#0F172A] font-medium truncate mt-0.5">Net Profit</p>
+            </div>
           </div>
         </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 540ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-amber-300 leading-snug">मदवार खर्च विश्लेषण</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">किस मद पर कितना खर्च हुआ</p>
-          </div>
-        </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 585ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-amber-400 leading-snug">कच्चा अनाज स्टॉक टैंक</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">खरीद (+) व प्रोसेसिंग (−) मीटर</p>
-          </div>
-        </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 630ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-emerald-400 leading-snug">तैयार बीज स्टॉक टैंक</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">प्रोसेसिंग (+) व बिक्री (−) मीटर</p>
-          </div>
-        </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 675ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-sky-400 leading-snug">सीड प्रोसेसिंग व % यील्ड</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">अंडरसाइज, रिजेक्शन, श्रिंकेज व पक्का बीज</p>
-          </div>
-        </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 720ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-emerald-300 leading-snug">लॉट पूर्णता रिपोर्ट प्रिंट</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">सिंगल, चुने हुए या हफ़्तेवार लॉट</p>
-          </div>
-        </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 765ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-amber-300 leading-snug">कच्चा व बिक्री आइटम मास्टर</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">वैरायटी, कैटेगरी, पैकिंग व दर</p>
-          </div>
-        </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 810ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-emerald-400 leading-snug">शुद्ध कमाई व ग्राफ़</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">आज, हफ़्ता, महीना, साल व कुल आय</p>
-          </div>
-        </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 855ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-sky-300 leading-snug">इनवॉइस थीम व प्रीव्यू</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">क्लीन पेपर, नेवी प्रो व एमरल्ड</p>
-          </div>
-        </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 900ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-amber-400 leading-snug">UPI / QR व CSV एक्सपोर्ट</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">बिल QR कोड व Excel/CSV बैकअप</p>
-          </div>
-        </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 945ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-rose-300 leading-snug">PIN लॉक व ऑटो-लॉक</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">PIN बदलाव, लॉक व निष्क्रिय ऑटो-लॉक</p>
-          </div>
-        </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 990ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-emerald-400 leading-snug">1-वर्ष प्लान ट्रैकर</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">21 Nov 2026 से बचे दिन व सुरक्षा</p>
-          </div>
-        </div>
-
-        <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 1035ms;">
-          <div class="rotating-feature-card-inner">
-            <p class="text-[11px] font-bold text-sky-400 leading-snug">लाइव Google Sheet सिंक</p>
-            <p class="text-[10px] text-slate-300/90 mt-0.5 leading-tight">रियल-टाइम सिंक, FAQ व शॉर्टकट्स</p>
-          </div>
         </div>
       </div>
 
-      <!-- Foreground PNG Cutout with Cards Emerging Behind -->
-      <div class="xl:col-span-3 flex justify-center items-end relative hero-png-foreground emerge-from-behind xl:-ml-8" style="animation-delay: 140ms;">
-        <img src="krishankant.png" onerror="this.onerror=null;this.src='krishankant.jpg';" alt="Krishan Kant Bhardwaj" class="max-h-64 sm:max-h-80 xl:max-h-[440px] w-auto object-contain select-none pointer-events-none">
+      <div class="hero-png-bottom-center">
+        <img src="krishankant.png" onerror="this.onerror=null;this.src='krishankant.jpg';" alt="Krishan Kant Bhardwaj">
       </div>
     </div>
 
-    <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400 border-t border-slate-800/80 pt-3.5 relative z-20">
+    <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400 border-t border-slate-800/80 pt-3.5 relative z-30">
       <div class="flex items-center gap-2">
         <span>Powered by</span>
         <span class="bg-white rounded-lg px-2 py-0.5 inline-flex items-center">
