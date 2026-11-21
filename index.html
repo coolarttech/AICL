@@ -1571,6 +1571,59 @@ function configureSheetUrl() {
 
 function smartSyncNow() {
   pushAllLocalDataToSheet();
+  setTimeout(() => syncFromSheetTruth(), 1600);
+}
+
+function syncFromSheetTruth() {
+  const url = (state.settings && state.settings.sheetUrl) ? state.settings.sheetUrl : DEPLOYED_SHEET_URL;
+  const noteEl = document.getElementById('syncStatusNote');
+  if (!url || !navigator.onLine) return;
+
+  fetch(url + '?action=GET_ALL&t=' + Date.now(), { redirect: 'follow' })
+    .then(r => r.text())
+    .then(txt => {
+      let res = null;
+      try { res = JSON.parse(txt); } catch (e) { res = null; }
+      if (!res || res.status !== 'ok') return;
+
+      const sheetTotalRows =
+        (res.parties ? res.parties.length : 0) +
+        (res.rawItems ? res.rawItems.length : 0) +
+        (res.saleItems ? res.saleItems.length : 0) +
+        (res.transactions ? res.transactions.length : 0) +
+        (res.expenses ? res.expenses.length : 0);
+
+      const localTotalRows =
+        state.parties.length + state.rawItems.length + state.saleItems.length +
+        state.transactions.length + state.expenses.length;
+
+      // If Sheet has records (or user explicitly deleted rows in Sheet), align state cleanly with Sheet
+      if (sheetTotalRows > 0 || localTotalRows === 0) {
+        if (Array.isArray(res.parties)) {
+          state.parties = res.parties.map(p => ({ ...p, createdDate: normalizeSheetDate(p.createdDate) }));
+        }
+        if (Array.isArray(res.rawItems)) state.rawItems = res.rawItems;
+        if (Array.isArray(res.saleItems)) state.saleItems = res.saleItems;
+        if (Array.isArray(res.transactions)) {
+          state.transactions = res.transactions.map(t => ({ ...t, date: normalizeSheetDate(t.date) }));
+        }
+        if (Array.isArray(res.expenses)) {
+          state.expenses = res.expenses.map(ex => ({ ...ex, date: normalizeSheetDate(ex.date) }));
+        }
+        if (Array.isArray(res.processingBatches)) {
+          state.processingBatches = res.processingBatches.map(b => ({ ...b, date: normalizeSheetDate(b.date) }));
+        }
+        saveState();
+        refreshSelectors();
+        renderDashboard();
+        renderPartyList();
+        renderMasters();
+        renderExpensesTable();
+        renderProcessingTable();
+        if (noteEl) noteEl.textContent = '✓ सॉफ्टवेयर व Sheet दोनों का डेटा सिंक हो गया';
+      }
+    })
+    .catch(() => {});
 }
 
 const LEGAL_CONTENT = {
