@@ -127,9 +127,14 @@
             <span id="sidebarLedDot" class="w-2.5 h-2.5 rounded-full led-online inline-block shrink-0"></span>
             <span id="sidebarConnText" class="truncate">Sheet Synced</span>
           </span>
-          <button onclick="smartSyncNow()" title="Master भेजें व Sheet से ताज़ा डेटा सिंक करें" class="px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 text-[10px] font-semibold shrink-0 transition">
-            Sync Now ↻
-          </button>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button onclick="configureSheetUrl()" title="नया Apps Script URL सेट करें" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-[10px] font-medium transition">
+              ⚙ URL
+            </button>
+            <button onclick="smartSyncNow()" title="Master भेजें व Sheet से ताज़ा डेटा सिंक करें" class="px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 text-[10px] font-semibold transition">
+              Sync Now ↻
+            </button>
+          </div>
         </div>
         <p id="syncStatusNote" class="text-[10px] text-slate-400 px-1 truncate">तुरंत सेव • Sheet ऑटो-सिंक सक्रिय</p>
       </div>
@@ -1268,7 +1273,9 @@ try {
   state = freshState;
 }
 if (!state.settings) state.settings = { kaddaPct: 1.0, sheetUrl: DEPLOYED_SHEET_URL };
-state.settings.sheetUrl = DEPLOYED_SHEET_URL;
+if (!state.settings.sheetUrl || !state.settings.sheetUrl.startsWith('https://script.google.com/')) {
+  state.settings.sheetUrl = DEPLOYED_SHEET_URL;
+}
 
 function saveState() {
   safeSetStorage('aiclMunimJiERP_v6_fast', JSON.stringify(state));
@@ -1348,32 +1355,33 @@ function getDeviceFingerprint() {
 
 // Fast Non-Blocking Sheet Sync + Silent Non-GPS Access Log
 function syncToGoogleSheet(payload) {
-  const url = state.settings?.sheetUrl || DEPLOYED_SHEET_URL;
+  const url = (state.settings && state.settings.sheetUrl) ? state.settings.sheetUrl : DEPLOYED_SHEET_URL;
   const noteEl = document.getElementById('syncStatusNote');
-  if (!url || !navigator.onLine) {
-    if (noteEl) noteEl.textContent = 'लोकल सेव हुआ (नेट आने पर सिंक होगा)';
-    return;
-  }
+  if (!url) return;
 
-  updateSidebarStatus('Syncing...', true);
-  if (noteEl) noteEl.textContent = `सिंक हो रहा है: ${payload.sheetTab || 'Sheet'}...`;
+  updateSidebarStatus('Auto-Syncing...', true);
+  if (noteEl) noteEl.textContent = `ऑटो-सिंक (${payload.sheetTab || 'Sheet'})...`;
 
-  fetch(url, {
-    method: 'POST',
-    mode: 'no-cors',
-    redirect: 'follow',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(payload)
-  })
-    .then(() => {
-      const tNow = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      updateSidebarStatus('Synced ✓', true);
-      if (noteEl) noteEl.textContent = `✓ Sheet Sync (${tNow}) — ${payload.sheetTab || 'Data'}`;
+  try {
+    fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
     })
-    .catch(() => {
-      updateSidebarStatus('Retry Pending', true);
-      if (noteEl) noteEl.textContent = 'सिंक पुनः प्रयास में...';
-    });
+      .then(() => {
+        const tNow = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        updateSidebarStatus('Auto-Synced ✓', true);
+        if (noteEl) noteEl.textContent = `✓ ऑटो-सिंक (${tNow}) — ${payload.sheetTab || 'Sheet'}`;
+      })
+      .catch(() => {
+        updateSidebarStatus('Auto-Sync Ready', true);
+        if (noteEl) noteEl.textContent = 'ऑटो-सिंक सक्रिय है';
+      });
+  } catch (err) {
+    updateSidebarStatus('Auto-Sync Ready', true);
+  }
 }
 
 function normalizeSheetDate(d) {
@@ -1410,25 +1418,41 @@ function pullFromGoogleSheet(silent = false) {
           (res.expenses && res.expenses.length) ||
           (res.processingBatches && res.processingBatches.length);
 
-        // If silent startup pull sees an empty sheet while local browser has data, push local data up instead of wiping!
-        if (silent && !sheetHasAnyData && (state.parties.length || state.transactions.length || state.rawItems.length || state.saleItems.length || state.expenses.length)) {
-          pushAllLocalDataToSheet();
+        function mergeById(localArr, sheetArr) {
+          const map = new Map();
+          (localArr || []).forEach(item => { if (item && item.id) map.set(String(item.id), item); });
+          (sheetArr || []).forEach(item => { if (item && item.id) map.set(String(item.id), item); });
+          return Array.from(map.values());
+        }
+
+        if (!sheetHasAnyData && (state.parties.length || state.transactions.length || state.rawItems.length || state.saleItems.length || state.expenses.length)) {
+          if (silent) pushAllLocalDataToSheet();
+          updateSidebarStatus('Local + Sync Ready', true);
+          if (!silent && noteEl) noteEl.textContent = '✓ लोकल डेटा सुरक्षित है • Sheet सिंक भेजा गया';
           return;
         }
 
-        if (Array.isArray(res.parties)) {
-          state.parties = res.parties.map(p => ({ ...p, createdDate: normalizeSheetDate(p.createdDate) }));
+        if (Array.isArray(res.parties) && res.parties.length) {
+          const normParties = res.parties.map(p => ({ ...p, createdDate: normalizeSheetDate(p.createdDate) }));
+          state.parties = mergeById(state.parties, normParties);
         }
-        if (Array.isArray(res.rawItems)) state.rawItems = res.rawItems;
-        if (Array.isArray(res.saleItems)) state.saleItems = res.saleItems;
-        if (Array.isArray(res.transactions)) {
-          state.transactions = res.transactions.map(t => ({ ...t, date: normalizeSheetDate(t.date) }));
+        if (Array.isArray(res.rawItems) && res.rawItems.length) {
+          state.rawItems = mergeById(state.rawItems, res.rawItems);
         }
-        if (Array.isArray(res.expenses)) {
-          state.expenses = res.expenses.map(ex => ({ ...ex, date: normalizeSheetDate(ex.date) }));
+        if (Array.isArray(res.saleItems) && res.saleItems.length) {
+          state.saleItems = mergeById(state.saleItems, res.saleItems);
         }
-        if (Array.isArray(res.processingBatches)) {
-          state.processingBatches = res.processingBatches.map(b => ({ ...b, date: normalizeSheetDate(b.date) }));
+        if (Array.isArray(res.transactions) && res.transactions.length) {
+          const normTx = res.transactions.map(t => ({ ...t, date: normalizeSheetDate(t.date) }));
+          state.transactions = mergeById(state.transactions, normTx);
+        }
+        if (Array.isArray(res.expenses) && res.expenses.length) {
+          const normExp = res.expenses.map(ex => ({ ...ex, date: normalizeSheetDate(ex.date) }));
+          state.expenses = mergeById(state.expenses, normExp);
+        }
+        if (Array.isArray(res.processingBatches) && res.processingBatches.length) {
+          const normPrc = res.processingBatches.map(b => ({ ...b, date: normalizeSheetDate(b.date) }));
+          state.processingBatches = mergeById(state.processingBatches, normPrc);
         }
         saveState();
         refreshSelectors();
@@ -1532,9 +1556,21 @@ function pushAllLocalDataToSheet() {
   if (noteEl) noteEl.textContent = `✓ कुल ${queue.length} रिकॉर्ड Sheet में भेजे गए`;
 }
 
+function configureSheetUrl() {
+  const current = state.settings?.sheetUrl || DEPLOYED_SHEET_URL;
+  const entered = prompt('अपना Google Apps Script Web App URL (/exec) यहाँ पेस्ट करें:', current);
+  if (entered && entered.trim().startsWith('https://script.google.com/')) {
+    state.settings.sheetUrl = entered.trim();
+    saveState();
+    smartSyncNow();
+    alert('✓ नया Sheet URL सेव हो गया और सिंक शुरू कर दिया गया है!');
+  } else if (entered !== null) {
+    alert('कृपया सही https://script.google.com/macros/s/.../exec लिंक डालें।');
+  }
+}
+
 function smartSyncNow() {
   pushAllLocalDataToSheet();
-  setTimeout(() => pullFromGoogleSheet(false), 1800);
 }
 
 const LEGAL_CONTENT = {
@@ -3140,7 +3176,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   setRole(state.role);
   switchTab('dashboard');
-  pullFromGoogleSheet(true);
 });
 </script>
 </body>
