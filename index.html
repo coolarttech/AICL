@@ -583,39 +583,24 @@
 
     <!-- Scrollable Navigation & Controls -->
     <div class="flex flex-col flex-1 overflow-y-auto no-scrollbar">
-      <!-- Top AICL Brand Block + Sidebar Status Light -->
+      <!-- Top Brand Block + Separator + Status LED & Text -->
       <div class="px-3.5 pt-4 pb-3 border-b border-slate-800/90 space-y-2.5">
-        <div class="flex items-center justify-between gap-2">
-          <div class="flex items-center gap-3 min-w-0">
-            <div class="shrink-0 flex items-center justify-center">
-              <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-12 w-12 object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]">
-            </div>
-            <div class="min-w-0">
-              <p class="text-base font-bold text-white tracking-tight leading-tight">वैदिक सीड्स</p>
-              <span class="inline-block text-[10px] font-semibold text-amber-300 bg-amber-400/10 border border-amber-400/25 px-2 py-0.5 rounded-full mt-1">Agri-Seed ERP</span>
-            </div>
-          </div>
-          <button onclick="toggleMobileSidebar(false)" class="lg:hidden w-7 h-7 rounded-lg bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-xs shrink-0">✕</button>
+        <div class="flex flex-col items-center justify-center text-center relative">
+          <button onclick="toggleMobileSidebar(false)" class="lg:hidden absolute right-0 top-0 w-7 h-7 rounded-lg bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-xs shrink-0">✕</button>
+          <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-12 w-12 object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] mb-1.5">
+          <p class="text-base font-bold text-white tracking-tight leading-snug">वैदिक सीड्स</p>
+          <span class="inline-block text-[10px] font-semibold text-amber-300 bg-amber-400/10 border border-amber-400/25 px-2.5 py-0.5 rounded-full mt-1">एग्री सीड ईआरपी</span>
         </div>
 
-        <!-- Google Sheet Sync Light Only -->
-        <div class="py-1 flex items-center justify-center">
+        <!-- Thin Separator Line -->
+        <div class="w-full h-px bg-slate-700/70"></div>
+
+        <!-- Status Light + Status Text Below -->
+        <div class="py-0.5 flex flex-col items-center justify-center gap-1">
           <span id="sidebarLedDot" title="Google Sheet Sync Status" class="w-3.5 h-3.5 rounded-full led-pending inline-block shrink-0"></span>
-          <span id="sidebarConnText" class="sr-only"></span>
+          <span id="sidebarConnText" class="text-[11px] font-semibold text-amber-300 tracking-wide">कनेक्टिंग...</span>
           <span id="syncStatusNote" class="sr-only"></span>
         </div>
-      </div>
-
-      <!-- Dual Quick Action Pills -->
-      <div class="px-3 pt-3 pb-2 grid grid-cols-2 gap-2">
-        <button onclick="switchTab('sales'); toggleMobileSidebar(false);" class="bg-white hover:bg-emerald-50 text-[#0F172A] font-semibold text-xs py-2.5 px-2.5 rounded-full shadow-xs flex items-center justify-center gap-1.5 transition truncate">
-          <span class="text-[#1EA668] font-bold text-sm leading-none">+</span>
-          <span>बिक्री बिल</span>
-        </button>
-        <button onclick="switchTab('purchase'); toggleMobileSidebar(false);" class="bg-[#1E293B] hover:bg-slate-700 text-white border border-slate-700 font-semibold text-xs py-2.5 px-2.5 rounded-full shadow-xs flex items-center justify-center gap-1.5 transition truncate">
-          <span class="text-sky-400 font-bold text-sm leading-none">+</span>
-          <span>खरीद बिल</span>
-        </button>
       </div>
 
       <!-- Navigation -->
@@ -679,6 +664,14 @@
               <span class="flex items-center gap-2.5">
                 <svg class="w-4 h-4 text-amber-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
                 <span>कंपनी खर्चे (Expenses)</span>
+              </span>
+              <span class="text-slate-500 text-xs">›</span>
+            </button>
+
+            <button onclick="switchTab('staff'); toggleMobileSidebar(false);" id="tab-staff" class="nav-tab w-full flex items-center justify-between px-3.5 py-2 rounded-full text-slate-300 hover:bg-slate-800/70 hover:text-white font-medium transition">
+              <span class="flex items-center gap-2.5">
+                <svg class="w-4 h-4 text-teal-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                <span>स्टाफ (Staff)</span>
               </span>
               <span class="text-slate-500 text-xs">›</span>
             </button>
@@ -814,10 +807,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v14 • 14 वर्जन</span>
+          <span id="versionBadgeDisplay">v15 • 15 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 22 Nov 2026 (v14)
+          Last Updated On: 22 Nov 2026 (v15)
         </div>
       </div>
     </div>
@@ -897,26 +890,49 @@
           </button>
         </div>
 
-        <!-- Compact Quick Action Row (Compact on Phone so less space is taken) -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3.5">
-          <button onclick="switchTab('vouchers')" class="bg-white hover:bg-amber-50/50 border border-amber-200 hover:border-amber-500 p-2.5 sm:p-4 rounded-xl sm:rounded-2xl shadow-xs flex items-center gap-2 sm:gap-3 text-left transition">
-            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center shrink-0">
-              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <!-- Quick Action Row: पैसा जमा, पैसा भुगतान, कंपनी खर्चा दर्ज करें, स्टाफ (0 स्टाफ) -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5">
+          <button onclick="openVoucherPreset('RECEIPT')" class="bg-white hover:bg-emerald-50/70 border border-emerald-300 hover:border-[#1EA668] p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-xs flex items-center gap-2.5 sm:gap-3 text-left transition">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-50 text-[#1EA668] border border-emerald-200 flex items-center justify-center shrink-0">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
             </div>
             <div class="min-w-0">
-              <div class="font-semibold text-[11px] sm:text-sm text-[#132A46] truncate">पैसा जमा / भुगतान</div>
-              <div class="hidden sm:block text-[11px] text-slate-500 truncate mt-0.5">Receipt & Payment Voucher</div>
+              <div class="font-bold text-xs sm:text-sm text-[#132A46] truncate">पैसा जमा</div>
+              <div class="text-[10px] sm:text-[11px] text-[#1EA668] font-medium truncate mt-0.5">Payment In (जमा रसीद)</div>
             </div>
           </button>
 
-          <button onclick="switchTab('expenses')" class="bg-white hover:bg-rose-50/40 border border-rose-200 hover:border-rose-400 p-2.5 sm:p-4 rounded-xl sm:rounded-2xl shadow-xs flex items-center gap-2 sm:gap-3 text-left transition">
-            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-rose-50 text-rose-600 border border-rose-200 flex items-center justify-center shrink-0">
+          <button onclick="openVoucherPreset('PAYMENT')" class="bg-white hover:bg-orange-50/70 border border-orange-300 hover:border-orange-500 p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-xs flex items-center gap-2.5 sm:gap-3 text-left transition">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-orange-50 text-orange-600 border border-orange-200 flex items-center justify-center shrink-0">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg>
+            </div>
+            <div class="min-w-0">
+              <div class="font-bold text-xs sm:text-sm text-[#132A46] truncate">पैसा भुगतान</div>
+              <div class="text-[10px] sm:text-[11px] text-orange-700 font-medium truncate mt-0.5">Payment Out (भुगतान/एडवांस)</div>
+            </div>
+          </button>
+
+          <button onclick="switchTab('expenses')" class="bg-white hover:bg-rose-50/60 border border-rose-300 hover:border-rose-500 p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-xs flex items-center gap-2.5 sm:gap-3 text-left transition">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-rose-50 text-rose-600 border border-rose-200 flex items-center justify-center shrink-0">
               <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
             </div>
             <div class="min-w-0">
-              <div class="font-semibold text-[11px] sm:text-sm text-[#132A46] truncate">कंपनी खर्चा दर्ज करें</div>
-              <div class="hidden sm:block text-[11px] text-slate-500 truncate mt-0.5">मज़दूरी, बिजली, भाड़ा</div>
+              <div class="font-bold text-xs sm:text-sm text-[#132A46] truncate">कंपनी खर्चा दर्ज करें</div>
+              <div class="text-[10px] sm:text-[11px] text-rose-600 font-medium truncate mt-0.5">कंपनी का अलग खर्च</div>
             </div>
+          </button>
+
+          <button onclick="switchTab('staff')" class="bg-teal-600 hover:bg-teal-700 text-white border border-teal-700 p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
+            <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+              <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/15 text-white flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+              </div>
+              <div class="min-w-0">
+                <div class="font-bold text-xs sm:text-sm text-white truncate">स्टाफ</div>
+                <div id="dashStaffCountSub" class="num-clean text-[10px] sm:text-[11px] text-teal-100 font-semibold truncate mt-0.5">0 स्टाफ</div>
+              </div>
+            </div>
+            <span class="text-white/80 text-xs shrink-0">›</span>
           </button>
         </div>
 
@@ -1722,6 +1738,74 @@
         </div>
       </section>
 
+      <!-- Staff Management View -->
+      <section id="view-staff" class="hidden space-y-5">
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-6">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-[#132A46]">स्टाफ प्रबंधन व सैलरी (Staff & Salary)</h2>
+              <p class="text-xs text-slate-500 mt-0.5">स्टाफ का हिसाब अलग रहेगा — स्टाफ जोड़ें, पद/सैलरी दर्ज करें और अटेंडेंस/सैलरी ट्रैक करें</p>
+            </div>
+            <span id="staffTotalBadge" class="num-clean text-xs font-bold text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">0 स्टाफ</span>
+          </div>
+
+          <form id="staffForm" onsubmit="saveStaffMember(event)" class="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3.5">
+            <input type="hidden" id="editStaffId" value="">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">स्टाफ का नाम *</label>
+              <input type="text" id="staffName" placeholder="पूरा नाम" required class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">पद / काम (Role) *</label>
+              <input type="text" id="staffRole" placeholder="उदा. मुनीम / ऑपरेटर / गोदाम" required class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">मासिक सैलरी (₹/महीना) *</label>
+              <input type="number" id="staffSalary" min="0" value="0" required class="num-clean border border-slate-300 rounded-xl px-3 py-2 text-sm font-semibold">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">मोबाइल नंबर *</label>
+              <input type="tel" id="staffPhone" placeholder="मोबाइल नं." required class="num-clean border border-slate-300 rounded-xl px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">जॉइनिंग तारीख</label>
+              <input type="date" id="staffJoinDate" class="num-clean border border-slate-300 rounded-xl px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">उपस्थित दिन (Present Days)</label>
+              <input type="number" id="staffPresentDays" min="0" max="31" value="0" class="num-clean border border-slate-300 rounded-xl px-3 py-2 text-sm">
+            </div>
+            <div class="sm:col-span-2 flex items-end justify-end gap-2">
+              <button type="button" onclick="resetStaffForm()" class="px-4 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-600">साफ़ करें</button>
+              <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition">+ स्टाफ सेव करें</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+          <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
+            <h3 class="font-semibold text-sm text-[#132A46]">स्टाफ सूची (अटेंडेंस व सैलरी)</h3>
+            <span id="staffFeedback" class="text-xs font-semibold text-teal-700"></span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left">
+              <thead class="bg-slate-50 text-slate-500 border-b border-slate-100">
+                <tr>
+                  <th class="px-4 py-2.5">नाम / पद</th>
+                  <th class="px-4 py-2.5">मोबाइल</th>
+                  <th class="px-4 py-2.5 text-center">उपस्थित दिन</th>
+                  <th class="px-4 py-2.5 text-right">मासिक सैलरी</th>
+                  <th class="px-4 py-2.5 text-center">एक्शन</th>
+                </tr>
+              </thead>
+              <tbody id="staffTableBody" class="divide-y divide-slate-100">
+                <tr><td colspan="5" class="p-6 text-center text-slate-400">0 स्टाफ — अभी कोई स्टाफ दर्ज नहीं है</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
       <!-- 8. PROCESSING VIEW -->
       <section id="view-processing" class="hidden space-y-5">
         <!-- Red Stock Guard Headline Banner -->
@@ -2028,6 +2112,7 @@ const freshState = {
   saleItems: [],
   transactions: [],
   expenses: [],
+  staff: [],
   processingBatches: []
 };
 
@@ -2058,6 +2143,7 @@ try {
       saleItems: Array.isArray(parsed.saleItems) ? parsed.saleItems : [],
       transactions: Array.isArray(parsed.transactions) ? parsed.transactions : [],
       expenses: Array.isArray(parsed.expenses) ? parsed.expenses : [],
+      staff: Array.isArray(parsed.staff) ? parsed.staff : [],
       processingBatches: Array.isArray(parsed.processingBatches) ? parsed.processingBatches : []
     };
   }
@@ -2106,13 +2192,17 @@ function updateLiveClock() {
 
 function setSyncLedState(mode) {
   const sDot = document.getElementById('sidebarLedDot');
+  const sTxt = document.getElementById('sidebarConnText');
   if (!sDot) return;
   if (!navigator.onLine || mode === 'offline') {
     sDot.className = 'w-3.5 h-3.5 rounded-full led-offline inline-block shrink-0';
+    if (sTxt) { sTxt.textContent = 'ऑफ़लाइन'; sTxt.className = 'text-[11px] font-semibold text-rose-400 tracking-wide'; }
   } else if (mode === 'synced') {
     sDot.className = 'w-3.5 h-3.5 rounded-full led-synced inline-block shrink-0';
+    if (sTxt) { sTxt.textContent = 'ऑनलाइन'; sTxt.className = 'text-[11px] font-semibold text-emerald-300 tracking-wide'; }
   } else {
     sDot.className = 'w-3.5 h-3.5 rounded-full led-pending inline-block shrink-0';
+    if (sTxt) { sTxt.textContent = 'कनेक्टिंग...'; sTxt.className = 'text-[11px] font-semibold text-amber-300 tracking-wide'; }
   }
 }
 
@@ -2668,6 +2758,7 @@ function setRole(role) {
 }
 
 const TAB_TITLES = {
+  staff: 'स्टाफ प्रबंधन व सैलरी (Staff)',
   dashboard: 'डैशबोर्ड (Overview)',
   sales: 'बिक्री व मंडी सप्लाई बिल',
   purchase: 'खरीद बिल (Purchase Bill)',
@@ -4858,6 +4949,151 @@ unlockPortalSuccess = function() {
 resetAutoLockTimer();
 
 
+
+function openVoucherPreset(vType) {
+  switchTab('vouchers');
+  const sel = document.getElementById('vchType');
+  if (sel) sel.value = vType;
+}
+
+function resetStaffForm() {
+  document.getElementById('editStaffId').value = '';
+  document.getElementById('staffName').value = '';
+  document.getElementById('staffRole').value = '';
+  document.getElementById('staffSalary').value = 0;
+  document.getElementById('staffPhone').value = '';
+  document.getElementById('staffPresentDays').value = 0;
+  const jd = document.getElementById('staffJoinDate');
+  if (jd) jd.value = new Date().toISOString().slice(0, 10);
+}
+
+function saveStaffMember(e) {
+  e.preventDefault();
+  if (!Array.isArray(state.staff)) state.staff = [];
+  const editId = document.getElementById('editStaffId').value;
+  const obj = {
+    id: editId || ('STF-' + (101 + state.staff.length + Math.floor(Math.random() * 900))),
+    name: document.getElementById('staffName').value.trim(),
+    role: document.getElementById('staffRole').value.trim(),
+    salary: Number(document.getElementById('staffSalary').value) || 0,
+    phone: document.getElementById('staffPhone').value.trim(),
+    joinDate: document.getElementById('staffJoinDate')?.value || new Date().toISOString().slice(0, 10),
+    presentDays: Number(document.getElementById('staffPresentDays')?.value) || 0
+  };
+  if (editId) {
+    const idx = state.staff.findIndex(x => x.id === editId);
+    if (idx !== -1) state.staff[idx] = obj;
+  } else {
+    state.staff.unshift(obj);
+  }
+  saveState();
+  syncToGoogleSheet({ sheetTab: 'Staff_Master', actionType: 'UPSERT', ...obj });
+  resetStaffForm();
+  const fb = document.getElementById('staffFeedback');
+  if (fb) { fb.textContent = `✓ "${obj.name}" सेव हो गया`; setTimeout(() => fb.textContent = '', 2500); }
+  renderStaffTable();
+  renderDashboard();
+}
+
+function editStaffMember(id) {
+  const s = (state.staff || []).find(x => x.id === id);
+  if (!s) return;
+  switchTab('staff');
+  document.getElementById('editStaffId').value = s.id;
+  document.getElementById('staffName').value = s.name;
+  document.getElementById('staffRole').value = s.role;
+  document.getElementById('staffSalary').value = s.salary || 0;
+  document.getElementById('staffPhone').value = s.phone || '';
+  if (document.getElementById('staffJoinDate')) document.getElementById('staffJoinDate').value = s.joinDate || '';
+  if (document.getElementById('staffPresentDays')) document.getElementById('staffPresentDays').value = s.presentDays || 0;
+}
+
+function deleteStaffMember(id) {
+  if (!confirm('क्या आप इस स्टाफ को हटाना चाहते हैं?')) return;
+  state.staff = (state.staff || []).filter(x => x.id !== id);
+  saveState();
+  syncToGoogleSheet({ sheetTab: 'Staff_Master', actionType: 'DELETE', id });
+  renderStaffTable();
+  renderDashboard();
+}
+
+function renderStaffTable() {
+  const list = Array.isArray(state.staff) ? state.staff : [];
+  const badge = document.getElementById('staffTotalBadge');
+  if (badge) badge.textContent = `${list.length} स्टाफ`;
+  const sub = document.getElementById('dashStaffCountSub');
+  if (sub) sub.textContent = `${list.length} स्टाफ`;
+  const tb = document.getElementById('staffTableBody');
+  if (!tb) return;
+  if (!list.length) {
+    tb.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">0 स्टाफ — अभी कोई स्टाफ दर्ज नहीं है</td></tr>`;
+    return;
+  }
+  tb.innerHTML = list.map(s => `
+    <tr>
+      <td class="px-4 py-2.5"><p class="font-semibold text-[#132A46]">${s.name}</p><p class="text-[11px] text-slate-500">${s.role}</p></td>
+      <td class="num-clean px-4 py-2.5">${s.phone || '-'}</td>
+      <td class="num-clean px-4 py-2.5 text-center font-semibold">${s.presentDays || 0} दिन</td>
+      <td class="num-clean px-4 py-2.5 text-right font-semibold text-teal-700">₹${Number(s.salary || 0).toLocaleString('en-IN')}</td>
+      <td class="px-4 py-2.5 text-center space-x-2">
+        <button onclick="editStaffMember('${s.id}')" class="text-sky-700 font-semibold underline">Edit</button>
+        <button onclick="deleteStaffMember('${s.id}')" class="text-rose-600 font-semibold underline">Del</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+const _origRenderDashboard = renderDashboard;
+renderDashboard = function() {
+  _origRenderDashboard();
+  const list = Array.isArray(state.staff) ? state.staff : [];
+  const sub = document.getElementById('dashStaffCountSub');
+  if (sub) sub.textContent = `${list.length} स्टाफ`;
+};
+
+// Keep in-app navigation history & restore last active tab on refresh
+const _origSwitchTab = switchTab;
+let _skipHistoryPush = false;
+switchTab = function(tab, fromPopState = false) {
+  _origSwitchTab(tab);
+  renderStaffTable();
+  try { sessionStorage.setItem('munimji_active_tab', tab); } catch (e) {}
+  if (!fromPopState && !_skipHistoryPush && window.history && typeof window.history.pushState === 'function') {
+    try {
+      window.history.pushState({ munimjiTab: tab }, '', '#' + tab);
+    } catch (e) {}
+  }
+};
+
+window.addEventListener('popstate', function(e) {
+  const prevTab = (e.state && e.state.munimjiTab) || (window.location.hash ? window.location.hash.replace('#', '') : 'dashboard');
+  if (TAB_TITLES[prevTab]) {
+    _skipHistoryPush = true;
+    switchTab(prevTab, true);
+    _skipHistoryPush = false;
+  }
+});
+
+// Restore saved tab on load/refresh instead of jumping to dashboard
+window.addEventListener('DOMContentLoaded', () => {
+  let savedTab = 'dashboard';
+  try {
+    const h = (window.location.hash || '').replace('#', '');
+    const s = sessionStorage.getItem('munimji_active_tab');
+    if (h && TAB_TITLES[h]) savedTab = h;
+    else if (s && TAB_TITLES[s]) savedTab = s;
+  } catch (e) {}
+  if (window.history && typeof window.history.replaceState === 'function') {
+    try { window.history.replaceState({ munimjiTab: savedTab }, '', '#' + savedTab); } catch (e) {}
+  }
+  _skipHistoryPush = true;
+  switchTab(savedTab, true);
+  _skipHistoryPush = false;
+  renderStaffTable();
+  const jd = document.getElementById('staffJoinDate');
+  if (jd && !jd.value) jd.value = new Date().toISOString().slice(0, 10);
+});
+
 </script>
 </body>
 </html>
@@ -4869,8 +5105,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v14",
-  totalVersionsUpdated: 14,
+  currentVersion: "v15",
+  totalVersionsUpdated: 15,
   lastUpdatedDateLabel: "22 Nov 2026"
 };
 
