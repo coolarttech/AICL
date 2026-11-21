@@ -44,15 +44,20 @@
     user-select: text;
   }
 
-  @keyframes ledBreatheBlue {
-    0%, 100% { opacity: 0.4; box-shadow: 0 0 3px rgba(59, 130, 246, 0.4); transform: scale(0.94); }
-    50% { opacity: 0.95; box-shadow: 0 0 9px rgba(59, 130, 246, 0.8); transform: scale(1.08); }
+  @keyframes ledPulseAmber {
+    0%, 100% { opacity: 0.55; box-shadow: 0 0 4px rgba(245, 158, 11, 0.55); transform: scale(0.95); }
+    50% { opacity: 1; box-shadow: 0 0 11px rgba(249, 115, 22, 0.95); transform: scale(1.1); }
+  }
+  @keyframes ledGlowLightGreen {
+    0%, 100% { opacity: 0.85; box-shadow: 0 0 6px rgba(74, 222, 128, 0.75); }
+    50% { opacity: 1; box-shadow: 0 0 12px rgba(134, 239, 172, 0.95); }
   }
   @keyframes ledPulseRed {
-    0%, 100% { opacity: 0.45; box-shadow: 0 0 4px rgba(225, 29, 72, 0.45); }
-    50% { opacity: 1; box-shadow: 0 0 10px rgba(225, 29, 72, 0.85); }
+    0%, 100% { opacity: 0.5; box-shadow: 0 0 4px rgba(225, 29, 72, 0.5); }
+    50% { opacity: 1; box-shadow: 0 0 11px rgba(225, 29, 72, 0.9); }
   }
-  .led-online { background-color: #3b82f6; animation: ledBreatheBlue 2.2s ease-in-out infinite; }
+  .led-syncing { background-color: #f59e0b; animation: ledPulseAmber 1.3s ease-in-out infinite; }
+  .led-synced { background-color: #4ade80; animation: ledGlowLightGreen 2.4s ease-in-out infinite; }
   .led-offline { background-color: #e11d48; animation: ledPulseRed 1.2s ease-in-out infinite; }
 
   @keyframes clockColonPulse {
@@ -121,15 +126,10 @@
           <button onclick="toggleMobileSidebar(false)" class="lg:hidden w-7 h-7 rounded-lg bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-xs shrink-0">✕</button>
         </div>
 
-        <!-- Automatic Background Google Sheet Sync Status (Clean Indicator Only) -->
-        <div class="bg-slate-900/95 border border-slate-800 rounded-xl px-3 py-2 flex items-center justify-between gap-2 text-[11px]">
-          <span class="flex items-center gap-2 font-medium text-slate-200 min-w-0">
-            <span id="sidebarLedDot" class="w-2.5 h-2.5 rounded-full led-online inline-block shrink-0"></span>
-            <span id="sidebarConnText" class="truncate">Auto-Sync Active</span>
-          </span>
-          <span class="text-[10px] font-semibold text-emerald-400 shrink-0">Live</span>
+        <!-- Sheet-Only Sync LED Light (Yellow/Orange = Pending/Syncing, Light Green = Synced, Red = Offline) -->
+        <div id="sidebarLedBar" class="flex items-center justify-center py-1.5 px-3 rounded-xl bg-slate-900/80 border border-slate-800/90" title="Google Sheet Sync Status Light">
+          <span id="sidebarLedDot" class="w-3.5 h-3.5 rounded-full led-syncing inline-block shrink-0"></span>
         </div>
-        <p id="syncStatusNote" class="text-[10px] text-slate-400 px-1 truncate">हर एंट्री अपने आप Sheet में सेव होती है</p>
       </div>
 
       <!-- Dual Quick Action Pills -->
@@ -278,18 +278,12 @@
       </nav>
     </div>
 
-    <!-- Quick Keys Strip Positioned Cleanly Above Live Clock -->
+    <!-- Slide-Out Shortcut Drawer Trigger -->
     <div class="px-3 pt-2 pb-1.5 border-t border-slate-800/90 bg-slate-950/40">
-      <div class="flex items-center justify-between mb-1">
-        <span class="text-[10px] font-semibold text-emerald-400 tracking-wide">त्वरित शॉर्टकट्स (Quick Keys)</span>
-        <button type="button" onclick="openShortcutHelp()" class="text-[10px] text-slate-400 hover:text-white underline">Alt+H</button>
-      </div>
-      <div class="flex flex-wrap gap-1 text-[10px] text-slate-300">
-        <span class="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800">Alt+S बिल</span>
-        <span class="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800">Alt+P खरीद</span>
-        <span class="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800">Alt+V वाउचर</span>
-        <span class="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800">Ctrl+↵ सेव</span>
-      </div>
+      <button type="button" onclick="openShortcutDrawer()" class="w-full py-1.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-[11px] font-semibold text-emerald-300 flex items-center justify-between transition">
+        <span>⌨ शॉर्टकट पैनल (Shortcuts)</span>
+        <span class="num-clean text-[10px] bg-slate-800 text-slate-200 px-1.5 py-0.5 rounded border border-slate-700">Alt+H</span>
+      </button>
     </div>
 
     <!-- Bottom of Dark Sidebar: iPhone-Style Live Clock & Hindi Calendar -->
@@ -334,58 +328,47 @@
       <!-- 1. DASHBOARD VIEW -->
       <section id="view-dashboard" class="flex flex-col space-y-4 sm:space-y-5">
 
-        <!-- 3 Custom Company Banners (Bottom on Mobile, Top Row on Desktop) -->
-        <div id="topCustomBannerRow" class="order-last lg:order-none grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-2 lg:pt-0">
-          <div id="customBannerSlot1" class="w-full aspect-[3/1] bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-xs flex items-center justify-center">
-            <img src="slot1.png" alt="MunimJi Banner 1" class="w-full h-full object-contain block">
-          </div>
-
-          <div id="customBannerSlot2" class="w-full aspect-[3/1] bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-xs flex items-center justify-center">
-            <img src="slot2.png" alt="MunimJi Banner 2" class="w-full h-full object-contain block">
-          </div>
-
-          <div id="customBannerSlot3" class="w-full aspect-[3/1] bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-xs flex items-center justify-center">
-            <img src="slot3.png" alt="MunimJi Banner 3" class="w-full h-full object-contain block">
-          </div>
-        </div>
-
-        <!-- Enlarged AICL Group Card with Quick Drawer Buttons -->
-        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div class="flex items-center gap-4 min-w-0">
-            <img src="aicl logo.png" alt="AICL GROUP" class="h-20 sm:h-24 w-auto object-contain shrink-0">
-            <div class="min-w-0">
-              <div class="flex flex-wrap items-center gap-2">
-                <h2 class="text-base sm:text-xl font-bold text-[#132A46] tracking-tight">AICL GROUP</h2>
-                <span class="text-[11px] font-semibold text-[#1EA668] bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">Agri-Seed ERP</span>
+        <!-- Single Row of 4 Compact Cards: Blue Highlighted "+ पार्टी जोड़ें" + 3 Count-Highlighted Summary Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5">
+          <!-- Card 1: Blue Highlighted "+ पार्टी जोड़ें" -->
+          <button type="button" onclick="switchTab('parties'); setTimeout(() => { document.getElementById('newPartyName')?.focus(); }, 120);" class="bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white border border-blue-700 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-sm flex items-center justify-between gap-2 text-left transition">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="w-9 h-9 rounded-xl bg-white/20 text-white flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+              </span>
+              <div class="min-w-0">
+                <p class="text-xs sm:text-sm font-bold text-white truncate">+ पार्टी जोड़ें</p>
+                <p class="text-[10px] text-blue-100 truncate">किसान / मंडी / वेंडर</p>
               </div>
-              <p class="text-xs text-slate-500 mt-1">बीज खरीद-बिक्री, बाहर मंडी सप्लाई, छंटाई मिलान व कंपनी खर्च प्रबंधन</p>
             </div>
-          </div>
+            <span class="num-clean text-xs font-extrabold bg-white text-blue-700 px-2 py-0.5 rounded-full shrink-0">+</span>
+          </button>
 
-          <div class="flex flex-wrap items-center gap-2.5 shrink-0">
-            <button onclick="openRecordsDrawer('PARTY')" class="px-3.5 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-[#132A46] text-xs font-semibold transition">
-              सभी पार्टियां (Drawer)
-            </button>
-            <button onclick="openRecordsDrawer('TX')" class="px-3.5 py-2 rounded-full bg-emerald-50 hover:bg-emerald-100 text-[#1EA668] border border-emerald-200 text-xs font-semibold transition">
-              सभी बिल व वाउचर (Drawer)
-            </button>
-            <button onclick="openRecordsDrawer('EXPENSE')" class="px-3.5 py-2 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 text-xs font-semibold transition">
-              सभी खर्चे (Drawer)
-            </button>
-          </div>
-        </div>
+          <!-- Card 2: सभी पार्टियां + Highlighted Count -->
+          <button type="button" onclick="openRecordsDrawer('PARTY')" class="bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-400 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
+            <div class="min-w-0">
+              <p class="text-xs sm:text-sm font-bold text-[#132A46] truncate">सभी पार्टियां</p>
+              <p class="text-[10px] text-slate-500 truncate mt-0.5">कुल दर्ज खाते</p>
+            </div>
+            <span id="badgeAllPartiesCount" class="num-clean text-xs sm:text-sm font-extrabold bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-full shrink-0">0</span>
+          </button>
 
-        <!-- Blue Highlighted "+ पार्टी जोड़ें" Quick Icon Bar -->
-        <div class="flex items-center justify-between gap-2 bg-sky-50/90 border border-sky-200 rounded-xl sm:rounded-2xl px-3 py-2 shadow-xs">
-          <div class="flex items-center gap-2 min-w-0">
-            <span class="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
-            </span>
-            <span class="text-xs font-bold text-blue-900 truncate">पार्टी जोड़ें (नया किसान / मंडी / वेंडर)</span>
-          </div>
-          <button type="button" onclick="switchTab('parties'); setTimeout(() => { document.getElementById('newPartyName')?.focus(); }, 120);" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition shrink-0">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-            <span>पार्टी जोड़ें</span>
+          <!-- Card 3: सभी बिल व वाउचर + Highlighted Count -->
+          <button type="button" onclick="openRecordsDrawer('TX')" class="bg-white hover:bg-emerald-50/40 border border-emerald-200 hover:border-[#1EA668] p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
+            <div class="min-w-0">
+              <p class="text-xs sm:text-sm font-bold text-[#132A46] truncate">सभी बिल व वाउचर</p>
+              <p class="text-[10px] text-slate-500 truncate mt-0.5">बिक्री, खरीद व वाउचर</p>
+            </div>
+            <span id="badgeAllTxCount" class="num-clean text-xs sm:text-sm font-extrabold bg-emerald-50 text-[#1EA668] border border-emerald-200 px-2.5 py-1 rounded-full shrink-0">0</span>
+          </button>
+
+          <!-- Card 4: सभी खर्चे + Highlighted Count -->
+          <button type="button" onclick="openRecordsDrawer('EXPENSE')" class="bg-white hover:bg-rose-50/40 border border-rose-200 hover:border-rose-400 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
+            <div class="min-w-0">
+              <p class="text-xs sm:text-sm font-bold text-[#132A46] truncate">सभी खर्चे</p>
+              <p class="text-[10px] text-slate-500 truncate mt-0.5">कुल कंपनी खर्च एंट्री</p>
+            </div>
+            <span id="badgeAllExpensesCount" class="num-clean text-xs sm:text-sm font-extrabold bg-rose-50 text-rose-600 border border-rose-200 px-2.5 py-1 rounded-full shrink-0">0</span>
           </button>
         </div>
 
@@ -1420,6 +1403,23 @@
   <div id="recordsDrawerBody" class="p-4 overflow-y-auto flex-1 space-y-2.5 text-xs"></div>
 </aside>
 
+<!-- SLIDE-OUT KEYBOARD SHORTCUTS DRAWER -->
+<div id="shortcutDrawerBackdrop" onclick="closeShortcutDrawer()" class="hidden fixed inset-0 bg-slate-950/45 backdrop-blur-[1px] z-50 no-print"></div>
+<aside id="shortcutDrawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl border-l border-slate-200 z-50 transform translate-x-full transition-transform duration-200 ease-out flex flex-col no-print">
+  <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between bg-[#0F172A] text-white">
+    <div>
+      <h3 class="text-sm sm:text-base font-bold">कीबोर्ड शॉर्टकट्स (Quick Keys)</h3>
+      <p class="text-[11px] text-slate-400">किसी भी शॉर्टकट पर क्लिक करें या कीबोर्ड से दबाएँ</p>
+    </div>
+    <button type="button" onclick="closeShortcutDrawer()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center">✕</button>
+  </div>
+  <div id="shortcutDrawerBody" class="p-4 overflow-y-auto flex-1 space-y-4 text-xs"></div>
+  <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500">
+    <span>बंद करने के लिए <b>Esc</b> या <b>Alt+H</b> दबाएँ</span>
+    <button type="button" onclick="closeShortcutDrawer()" class="px-3.5 py-1.5 rounded-lg bg-[#132A46] text-white font-semibold text-xs">बंद करें</button>
+  </div>
+</aside>
+
 <!-- RECEIPT / INVOICE PRINT & WHATSAPP MODAL -->
 <div id="receiptModal" class="hidden fixed inset-0 bg-slate-900/65 backdrop-blur-xs z-50 flex items-center justify-center p-2.5 sm:p-4">
   <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden flex flex-col max-h-[94vh]">
@@ -1601,19 +1601,26 @@ function updateLiveClock() {
   if (dEl) dEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
 }
 
-function updateSidebarStatus(text, isOnline = navigator.onLine) {
-  const sDot = document.getElementById('sidebarLedDot');
-  const sTxt = document.getElementById('sidebarConnText');
-  const noteEl = document.getElementById('syncStatusNote');
-  if (!sDot || !sTxt) return;
+let sheetSyncLightState = 'pending'; // 'pending' (yellow/orange) | 'synced' (light green) | 'offline' (red)
 
-  if (!isOnline) {
-    sDot.className = 'w-2.5 h-2.5 rounded-full led-offline inline-block shrink-0';
-    sTxt.textContent = 'Offline';
-    if (noteEl) noteEl.textContent = 'इंटरनेट बंद • डेटा लोकल सेव है';
+function setSheetSyncLight(mode) {
+  sheetSyncLightState = mode;
+  const sDot = document.getElementById('sidebarLedDot');
+  if (!sDot) return;
+  if (!navigator.onLine || mode === 'offline') {
+    sDot.className = 'w-3.5 h-3.5 rounded-full led-offline inline-block shrink-0';
+  } else if (mode === 'synced') {
+    sDot.className = 'w-3.5 h-3.5 rounded-full led-synced inline-block shrink-0';
   } else {
-    sDot.className = 'w-2.5 h-2.5 rounded-full led-online inline-block shrink-0';
-    sTxt.textContent = text || 'Sheet Sync Ready';
+    sDot.className = 'w-3.5 h-3.5 rounded-full led-syncing inline-block shrink-0';
+  }
+}
+
+function updateSidebarStatus(_text, isOnline = navigator.onLine) {
+  if (!isOnline) {
+    setSheetSyncLight('offline');
+  } else {
+    setSheetSyncLight(sheetSyncLightState === 'synced' ? 'synced' : 'pending');
   }
 }
 
@@ -1648,7 +1655,7 @@ function syncToGoogleSheet(payload) {
   const noteEl = document.getElementById('syncStatusNote');
   if (!url) return;
 
-  updateSidebarStatus('Auto-Syncing...', true);
+  setSheetSyncLight('pending');
   if (noteEl) noteEl.textContent = `ऑटो-सिंक (${payload.sheetTab || 'Sheet'})...`;
 
   try {
@@ -1662,11 +1669,11 @@ function syncToGoogleSheet(payload) {
     })
       .then(() => {
         const tNow = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        updateSidebarStatus('Auto-Synced ✓', true);
+        setSheetSyncLight('synced');
         if (noteEl) noteEl.textContent = `✓ ऑटो-सिंक (${tNow}) — ${payload.sheetTab || 'Sheet'}`;
       })
       .catch(() => {
-        updateSidebarStatus('Auto-Sync Ready', true);
+        setSheetSyncLight(navigator.onLine ? 'pending' : 'offline');
         if (noteEl) noteEl.textContent = 'ऑटो-सिंक सक्रिय है';
       });
   } catch (err) {
@@ -1908,7 +1915,8 @@ function syncFromSheetTruth(isBackground = false) {
     .then(txt => {
       let res = null;
       try { res = JSON.parse(txt); } catch (e) { res = null; }
-      if (!res || res.status !== 'ok') return;
+      if (!res || res.status !== 'ok') { setSheetSyncLight('pending'); return; }
+      setSheetSyncLight('synced');
 
       const sheetParties = Array.isArray(res.parties)
         ? res.parties.map(p => ({ ...p, createdDate: normalizeSheetDate(p.createdDate) }))
@@ -3537,6 +3545,13 @@ function renderDashboard() {
   if (procFEl) procFEl.textContent = `${(procStockKg / 100).toFixed(2)} Qtl`;
   if (procAlert) procAlert.classList.toggle('hidden', procPct > 15 || procStockKg === 0);
 
+  const pBadge = document.getElementById('badgeAllPartiesCount');
+  const tBadge = document.getElementById('badgeAllTxCount');
+  const eBadge = document.getElementById('badgeAllExpensesCount');
+  if (pBadge) pBadge.textContent = String(state.parties.length);
+  if (tBadge) tBadge.textContent = String(state.transactions.length);
+  if (eBadge) eBadge.textContent = String(state.expenses.length);
+
   document.getElementById('kpiSales').innerText = '₹' + totalSales.toLocaleString('en-IN');
   document.getElementById('kpiSalesSub').innerText = `बीज: ₹${seedSaleAmt.toLocaleString('en-IN')} • मंडी: ₹${mandiSaleAmt.toLocaleString('en-IN')}`;
   document.getElementById('kpiPurchase').innerText = '₹' + totalPurchase.toLocaleString('en-IN');
@@ -4253,28 +4268,88 @@ openReceipt = function(txId) {
   }
 };
 
-// Keyboard Shortcuts (Alt+... and Ctrl+Enter) while keeping copy/save/inspect lock intact
+// Functional Slide-Out Shortcut Drawer + Working Keyboard Shortcuts
+const SHORTCUT_ITEMS = [
+  { group: 'मुख्य मेनू व नेविगेशन', keyLabel: 'Alt + D', desc: 'डैशबोर्ड खोलें', run: () => switchTab('dashboard') },
+  { group: 'मुख्य मेनू व नेविगेशन', keyLabel: 'Alt + S', desc: 'बिक्री / मंडी बिल बनाएं', run: () => switchTab('sales') },
+  { group: 'मुख्य मेनू व नेविगेशन', keyLabel: 'Alt + P', desc: 'खरीद बिल बनाएं', run: () => switchTab('purchase') },
+  { group: 'मुख्य मेनू व नेविगेशन', keyLabel: 'Alt + V', desc: 'पैसा जमा / भुगतान वाउचर', run: () => switchTab('vouchers') },
+  { group: 'मुख्य मेनू व नेविगेशन', keyLabel: 'Alt + L', desc: 'पार्टी लेजर व नई पार्टी जोड़ें', run: () => switchTab('parties') },
+  { group: 'मुख्य मेनू व नेविगेशन', keyLabel: 'Alt + E', desc: 'कंपनी खर्चे दर्ज करें', run: () => switchTab('expenses') },
+  { group: 'मुख्य मेनू व नेविगेशन', keyLabel: 'Alt + M', desc: 'छंटाई / प्रोसेसिंग व लॉट रिपोर्ट', run: () => switchTab('processing') },
+  { group: 'त्वरित खोज व एक्शन', keyLabel: 'Ctrl + K', desc: 'सभी बिल, पार्टी व खर्चे खोजें (Drawer)', run: () => openRecordsDrawer('ALL') },
+  { group: 'त्वरित खोज व एक्शन', keyLabel: 'Ctrl + Enter', desc: 'मौजूदा फ़ॉर्म तुरंत सेव करें', run: () => {
+      const activeSec = Array.from(document.querySelectorAll('main > section')).find(s => !s.classList.contains('hidden'));
+      const form = activeSec ? activeSec.querySelector('form') : null;
+      if (form && typeof form.requestSubmit === 'function') form.requestSubmit();
+    }
+  },
+  { group: 'त्वरित खोज व एक्शन', keyLabel: 'Alt + X', desc: 'Excel / CSV रिपोर्ट डाउनलोड करें', run: () => exportAllCSV() },
+  { group: 'सहायता व विंडो', keyLabel: 'Alt + H', desc: 'शॉर्टकट पैनल खोलें / बंद करें', run: () => toggleShortcutDrawer() },
+  { group: 'सहायता व विंडो', keyLabel: 'Esc', desc: 'खुली विंडो या पैनल बंद करें', run: () => closeAllModalsAndDrawers() }
+];
+
+function renderShortcutDrawer() {
+  const body = document.getElementById('shortcutDrawerBody');
+  if (!body) return;
+  const groups = ['मुख्य मेनू व नेविगेशन', 'त्वरित खोज व एक्शन', 'सहायता व विंडो'];
+  body.innerHTML = groups.map(grp => {
+    const rows = SHORTCUT_ITEMS.filter(x => x.group === grp).map((item, idx) => `
+      <button type="button" onclick="runShortcutByIndex('${item.keyLabel}')" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 hover:bg-emerald-50/70 border border-slate-200 hover:border-emerald-300 flex items-center justify-between gap-2 text-left transition">
+        <span class="font-semibold text-xs sm:text-[13px] text-[#132A46]">${item.desc}</span>
+        <span class="num-clean text-[11px] font-bold bg-white text-[#132A46] border border-slate-300 px-2.5 py-1 rounded-lg shrink-0">${item.keyLabel}</span>
+      </button>
+    `).join('');
+    return `<div class="space-y-2"><p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-1">${grp}</p><div class="space-y-1.5">${rows}</div></div>`;
+  }).join('');
+}
+
+function runShortcutByIndex(keyLabel) {
+  const found = SHORTCUT_ITEMS.find(x => x.keyLabel === keyLabel);
+  if (found && typeof found.run === 'function') {
+    closeShortcutDrawer();
+    found.run();
+  }
+}
+
+function openShortcutDrawer() {
+  renderShortcutDrawer();
+  document.getElementById('shortcutDrawerBackdrop')?.classList.remove('hidden');
+  document.getElementById('shortcutDrawer')?.classList.remove('translate-x-full');
+}
+
+function closeShortcutDrawer() {
+  document.getElementById('shortcutDrawer')?.classList.add('translate-x-full');
+  document.getElementById('shortcutDrawerBackdrop')?.classList.add('hidden');
+}
+
+function toggleShortcutDrawer() {
+  const dr = document.getElementById('shortcutDrawer');
+  if (!dr) return;
+  if (dr.classList.contains('translate-x-full')) openShortcutDrawer();
+  else closeShortcutDrawer();
+}
+
+function closeAllModalsAndDrawers() {
+  closeReceiptModal();
+  closeLegalModal();
+  closeUpiSettingsModal();
+  closeRecordsDrawer();
+  closeShortcutDrawer();
+}
+
 function openShortcutHelp() {
-  alert(
-    'ऑपरेटर शॉर्टकट्स (Quick Keys):\n' +
-    '• Alt + D : डैशबोर्ड\n' +
-    '• Alt + S : बिक्री / मंडी बिल\n' +
-    '• Alt + P : खरीद बिल\n' +
-    '• Alt + V : पैसा जमा / भुगतान वाउचर\n' +
-    '• Alt + L : पार्टी लेजर\n' +
-    '• Alt + M : प्रोसेसिंग व लॉट रिपोर्ट\n' +
-    '• Alt + H : यह शॉर्टकट गाइड\n' +
-    '• Ctrl + Enter : वर्तमान फ़ॉर्म सेव करें\n' +
-    '• Esc : विंडो / ड्रॉपडाउन बंद करें'
-  );
+  openShortcutDrawer();
 }
 
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
-    closeReceiptModal();
-    closeLegalModal();
-    closeUpiSettingsModal();
-    closeRecordsDrawer();
+    closeAllModalsAndDrawers();
+    return;
+  }
+  if ((e.ctrlKey || e.metaKey) && !e.altKey && (e.key || '').toLowerCase() === 'k') {
+    e.preventDefault();
+    openRecordsDrawer('ALL');
     return;
   }
   if (e.ctrlKey && !e.altKey && e.key === 'Enter') {
@@ -4288,13 +4363,16 @@ document.addEventListener('keydown', function(e) {
   }
   if (e.altKey && !e.ctrlKey && !e.metaKey) {
     const k = (e.key || '').toLowerCase();
-    const map = { d: 'dashboard', s: 'sales', p: 'purchase', v: 'vouchers', l: 'parties', m: 'processing' };
+    const map = { d: 'dashboard', s: 'sales', p: 'purchase', v: 'vouchers', l: 'parties', e: 'expenses', m: 'processing' };
     if (map[k]) {
       e.preventDefault();
       switchTab(map[k]);
     } else if (k === 'h') {
       e.preventDefault();
-      openShortcutHelp();
+      toggleShortcutDrawer();
+    } else if (k === 'x') {
+      e.preventDefault();
+      exportAllCSV();
     }
   }
 });
