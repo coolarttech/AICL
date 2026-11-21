@@ -121,15 +121,13 @@
           <button onclick="toggleMobileSidebar(false)" class="lg:hidden w-7 h-7 rounded-lg bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-xs shrink-0">✕</button>
         </div>
 
-        <!-- Automatic Background Google Sheet Sync Status (No Manual Sync Button Needed) -->
+        <!-- Automatic Background Google Sheet Sync Status (Clean Indicator Only) -->
         <div class="bg-slate-900/95 border border-slate-800 rounded-xl px-3 py-2 flex items-center justify-between gap-2 text-[11px]">
           <span class="flex items-center gap-2 font-medium text-slate-200 min-w-0">
             <span id="sidebarLedDot" class="w-2.5 h-2.5 rounded-full led-online inline-block shrink-0"></span>
             <span id="sidebarConnText" class="truncate">Auto-Sync Active</span>
           </span>
-          <button onclick="configureSheetUrl()" title="Apps Script URL बदलें" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-[10px] font-medium transition shrink-0">
-            ⚙ URL
-          </button>
+          <span class="text-[10px] font-semibold text-emerald-400 shrink-0">Live</span>
         </div>
         <p id="syncStatusNote" class="text-[10px] text-slate-400 px-1 truncate">हर एंट्री अपने आप Sheet में सेव होती है</p>
       </div>
@@ -1496,7 +1494,7 @@
 </div>
 
 <script>
-const DEPLOYED_SHEET_URL = "https://script.google.com/macros/s/AKfycbzYgg_ZnozwBXjYbzWcvBHYSfELIlfjY1ogRdiZ5V5f1dj-5mfGDUnSsqgd299Ykqwsxw/exec";
+const DEPLOYED_SHEET_URL = "https://script.google.com/macros/s/AKfycbzAONUBXPdbUmmZixpkD0ISNNHPOLPMJK7WVBUjhlbHWsZxotgY0pZu6pPDCWUTeNFFQw/exec";
 
 // Protection Lock
 (function() {
@@ -1656,6 +1654,7 @@ function syncToGoogleSheet(payload) {
   try {
     fetch(url, {
       method: 'POST',
+      cache: 'no-store',
       mode: 'no-cors',
       redirect: 'follow',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -1695,7 +1694,7 @@ function pullFromGoogleSheet(silent = false) {
     updateSidebarStatus('Reading Sheet...', true);
     if (noteEl) noteEl.textContent = 'Google Sheet से ताज़ा डेटा लाया जा रहा है...';
   }
-  fetch(url + '?action=GET_ALL&t=' + Date.now(), { redirect: 'follow' })
+  fetch(url + '?action=GET_ALL&t=' + Date.now(), { cache: 'no-store', redirect: 'follow' })
     .then(r => r.text())
     .then(txt => {
       let res = null;
@@ -1904,7 +1903,7 @@ function syncFromSheetTruth(isBackground = false) {
   if (!url || !navigator.onLine) return;
   if (isBackground && document.hidden) return;
 
-  fetch(url + '?action=GET_ALL&t=' + Date.now(), { redirect: 'follow' })
+  fetch(url + '?action=GET_ALL&t=' + Date.now(), { cache: 'no-store', redirect: 'follow' })
     .then(r => r.text())
     .then(txt => {
       let res = null;
