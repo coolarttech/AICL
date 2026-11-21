@@ -85,22 +85,19 @@
     .no-print { display: none !important; }
   }
 
-  @property --border-angle {
-    syntax: "<angle>";
-    initial-value: 0deg;
-    inherits: false;
-  }
-
-  @keyframes spinBorderAngle {
-    to {
-      --border-angle: 360deg;
+  @keyframes rotateOutlineBeam {
+    0% {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+      transform: translate(-50%, -50%) rotate(360deg);
     }
   }
 
-  @keyframes emergeBehindCard {
+  @keyframes emergeBehindSubject {
     0% {
       opacity: 0;
-      transform: translate3d(0, 14px, 0) scale(0.96);
+      transform: translate3d(36px, 8px, 0) scale(0.92);
     }
     100% {
       opacity: 1;
@@ -111,23 +108,38 @@
   .rotating-feature-card {
     position: relative;
     border-radius: 0.85rem;
-    padding: 1px;
+    padding: 1.5px;
+    overflow: hidden;
+    background: rgba(30, 41, 59, 0.7);
+    isolation: isolate;
+  }
+
+  .rotating-feature-card::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 240%;
+    height: 240%;
     background: conic-gradient(
-      from var(--border-angle, 0deg),
-      rgba(52, 211, 153, 0.85),
-      rgba(56, 189, 248, 0.25),
-      rgba(251, 191, 36, 0.75),
-      rgba(148, 163, 184, 0.14),
-      rgba(52, 211, 153, 0.85)
+      transparent 0deg,
+      transparent 230deg,
+      rgba(56, 189, 248, 0.55) 275deg,
+      rgba(52, 211, 153, 1) 320deg,
+      rgba(251, 191, 36, 0.95) 350deg,
+      transparent 360deg
     );
-    animation: spinBorderAngle 6.5s linear infinite;
-    will-change: --border-angle;
+    animation: rotateOutlineBeam 4.2s linear infinite;
+    z-index: -1;
+    pointer-events: none;
   }
 
   .rotating-feature-card-inner {
-    background: rgba(15, 23, 42, 0.94);
-    border-radius: calc(0.85rem - 1px);
-    padding: 0.6rem 0.7rem;
+    position: relative;
+    z-index: 1;
+    background: #0f172a;
+    border-radius: calc(0.85rem - 1.5px);
+    padding: 0.58rem 0.68rem;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -135,14 +147,15 @@
   }
 
   .emerge-from-behind {
+    position: relative;
     z-index: 10;
-    animation: emergeBehindCard 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: emergeBehindSubject 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   .hero-png-foreground {
     position: relative;
-    z-index: 20;
-    filter: drop-shadow(0 18px 34px rgba(0, 0, 0, 0.65));
+    z-index: 25;
+    filter: drop-shadow(0 20px 36px rgba(0, 0, 0, 0.72));
   }
 
 </style>
@@ -177,8 +190,8 @@
     </div>
 
     <!-- Center / Grid Stage: Feature Cards Emerging Behind Foreground PNG -->
-    <div class="relative my-5 grid grid-cols-1 xl:grid-cols-12 gap-4 items-center">
-      <div class="xl:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-2.5 relative z-10">
+    <div class="relative my-4 grid grid-cols-1 xl:grid-cols-12 gap-2 items-center">
+      <div class="xl:col-span-9 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 relative z-10 xl:pr-4">
 
         <div class="rotating-feature-card emerge-from-behind" style="animation-delay: 0ms;">
           <div class="rotating-feature-card-inner">
@@ -350,8 +363,8 @@
       </div>
 
       <!-- Foreground PNG Cutout with Cards Emerging Behind -->
-      <div class="xl:col-span-4 flex justify-center items-end relative hero-png-foreground emerge-from-behind" style="animation-delay: 180ms;">
-        <img src="krishankant.png" onerror="this.onerror=null;this.src='krishankant.jpg';" alt="Krishan Kant Bhardwaj" class="max-h-64 sm:max-h-80 xl:max-h-[420px] w-auto object-contain select-none pointer-events-none">
+      <div class="xl:col-span-3 flex justify-center items-end relative hero-png-foreground emerge-from-behind xl:-ml-8" style="animation-delay: 140ms;">
+        <img src="krishankant.png" onerror="this.onerror=null;this.src='krishankant.jpg';" alt="Krishan Kant Bhardwaj" class="max-h-64 sm:max-h-80 xl:max-h-[440px] w-auto object-contain select-none pointer-events-none">
       </div>
     </div>
 
