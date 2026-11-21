@@ -121,22 +121,17 @@
           <button onclick="toggleMobileSidebar(false)" class="lg:hidden w-7 h-7 rounded-lg bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-xs shrink-0">✕</button>
         </div>
 
-        <!-- Clean Option-2 Single-Button Sync Status Card inside Left Black Sidebar -->
+        <!-- Automatic Background Google Sheet Sync Status (No Manual Sync Button Needed) -->
         <div class="bg-slate-900/95 border border-slate-800 rounded-xl px-3 py-2 flex items-center justify-between gap-2 text-[11px]">
           <span class="flex items-center gap-2 font-medium text-slate-200 min-w-0">
             <span id="sidebarLedDot" class="w-2.5 h-2.5 rounded-full led-online inline-block shrink-0"></span>
-            <span id="sidebarConnText" class="truncate">Sheet Synced</span>
+            <span id="sidebarConnText" class="truncate">Auto-Sync Active</span>
           </span>
-          <div class="flex items-center gap-1.5 shrink-0">
-            <button onclick="configureSheetUrl()" title="नया Apps Script URL सेट करें" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-[10px] font-medium transition">
-              ⚙ URL
-            </button>
-            <button onclick="smartSyncNow()" title="Master भेजें व Sheet से ताज़ा डेटा सिंक करें" class="px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 text-[10px] font-semibold transition">
-              Sync Now ↻
-            </button>
-          </div>
+          <button onclick="configureSheetUrl()" title="Apps Script URL बदलें" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-[10px] font-medium transition shrink-0">
+            ⚙ URL
+          </button>
         </div>
-        <p id="syncStatusNote" class="text-[10px] text-slate-400 px-1 truncate">तुरंत सेव • Sheet ऑटो-सिंक सक्रिय</p>
+        <p id="syncStatusNote" class="text-[10px] text-slate-400 px-1 truncate">हर एंट्री अपने आप Sheet में सेव होती है</p>
       </div>
 
       <!-- Dual Quick Action Pills -->
@@ -1487,7 +1482,7 @@
 </div>
 
 <script>
-const DEPLOYED_SHEET_URL = "https://script.google.com/macros/s/AKfycbzLNIJ7OEGB3LL2Sg3yETshovGjeNenmWKSxz82iW2J2TGmLf5Eg-JOeVLJfg_kHX0Uvw/exec";
+const DEPLOYED_SHEET_URL = "https://script.google.com/macros/s/AKfycbzYgg_ZnozwBXjYbzWcvBHYSfELIlfjY1ogRdiZ5V5f1dj-5mfGDUnSsqgd299Ykqwsxw/exec";
 
 // Protection Lock
 (function() {
@@ -1857,6 +1852,38 @@ function smartSyncNow() {
 
 let lastSyncedDataSignature = '';
 
+const recentlySavedIds = new Map();
+function markRecentLocalSave(id) {
+  if (id) recentlySavedIds.set(String(id), Date.now());
+}
+
+const _origSyncToGoogleSheet = syncToGoogleSheet;
+syncToGoogleSheet = function(payload) {
+  if (payload && payload.id && payload.actionType !== 'DELETE') {
+    markRecentLocalSave(payload.id);
+  }
+  _origSyncToGoogleSheet(payload);
+};
+
+function mergePreserveRecent(localArr, sheetArr) {
+  const now = Date.now();
+  const sheetMap = new Map();
+  (sheetArr || []).forEach(item => {
+    if (item && item.id) sheetMap.set(String(item.id), item);
+  });
+  const merged = [...(sheetArr || [])];
+  (localArr || []).forEach(localItem => {
+    if (!localItem || !localItem.id) return;
+    const sid = String(localItem.id);
+    const savedAt = recentlySavedIds.get(sid) || 0;
+    const isFresh = (now - savedAt) < 25000;
+    if (!sheetMap.has(sid) && isFresh) {
+      merged.unshift(localItem);
+    }
+  });
+  return merged;
+}
+
 function syncFromSheetTruth(isBackground = false) {
   const url = (state.settings && state.settings.sheetUrl) ? state.settings.sheetUrl : DEPLOYED_SHEET_URL;
   const noteEl = document.getElementById('syncStatusNote');
@@ -1870,20 +1897,27 @@ function syncFromSheetTruth(isBackground = false) {
       try { res = JSON.parse(txt); } catch (e) { res = null; }
       if (!res || res.status !== 'ok') return;
 
-      const nextParties = Array.isArray(res.parties)
+      const sheetParties = Array.isArray(res.parties)
         ? res.parties.map(p => ({ ...p, createdDate: normalizeSheetDate(p.createdDate) }))
-        : state.parties;
-      const nextRawItems = Array.isArray(res.rawItems) ? res.rawItems : state.rawItems;
-      const nextSaleItems = Array.isArray(res.saleItems) ? res.saleItems : state.saleItems;
-      const nextTx = Array.isArray(res.transactions)
+        : [];
+      const sheetRawItems = Array.isArray(res.rawItems) ? res.rawItems : [];
+      const sheetSaleItems = Array.isArray(res.saleItems) ? res.saleItems : [];
+      const sheetTx = Array.isArray(res.transactions)
         ? res.transactions.map(t => ({ ...t, date: normalizeSheetDate(t.date) }))
-        : state.transactions;
-      const nextExp = Array.isArray(res.expenses)
+        : [];
+      const sheetExp = Array.isArray(res.expenses)
         ? res.expenses.map(ex => ({ ...ex, date: normalizeSheetDate(ex.date) }))
-        : state.expenses;
-      const nextPrc = Array.isArray(res.processingBatches)
+        : [];
+      const sheetPrc = Array.isArray(res.processingBatches)
         ? res.processingBatches.map(b => ({ ...b, date: normalizeSheetDate(b.date) }))
-        : state.processingBatches;
+        : [];
+
+      const nextParties = sheetParties.length ? mergePreserveRecent(state.parties, sheetParties) : state.parties;
+      const nextRawItems = sheetRawItems.length ? mergePreserveRecent(state.rawItems, sheetRawItems) : state.rawItems;
+      const nextSaleItems = sheetSaleItems.length ? mergePreserveRecent(state.saleItems, sheetSaleItems) : state.saleItems;
+      const nextTx = sheetTx.length ? mergePreserveRecent(state.transactions, sheetTx) : state.transactions;
+      const nextExp = sheetExp.length ? mergePreserveRecent(state.expenses, sheetExp) : state.expenses;
+      const nextPrc = sheetPrc.length ? mergePreserveRecent(state.processingBatches, sheetPrc) : state.processingBatches;
 
       const sig = JSON.stringify({ nextParties, nextRawItems, nextSaleItems, nextTx, nextExp, nextPrc });
       if (isBackground && sig === lastSyncedDataSignature) return;
@@ -1911,11 +1945,18 @@ function syncFromSheetTruth(isBackground = false) {
 
       if (noteEl) {
         const tNow = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        noteEl.textContent = `✓ लाइव सिंक (${tNow}) — Sheet से अपडेटेड`;
+        noteEl.textContent = `✓ ऑटो-सिंक (${tNow}) — Google Sheet लाइव`;
       }
     })
     .catch(() => {});
 }
+
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) syncFromSheetTruth(true);
+});
+window.addEventListener('focus', () => {
+  syncFromSheetTruth(true);
+});
 
 const LEGAL_CONTENT = {
   faq: {
