@@ -446,10 +446,110 @@
             <p id="kpiVouchersSub" class="text-[10px] text-slate-500 mt-1">जमा व भुगतान वाउचर</p>
           </div>
 
-          <div id="cardNetProfit" class="owner-only bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200/90 border-l-4 border-l-[#132A46] shadow-xs">
-            <p class="text-[11px] font-semibold text-[#132A46]">असली शुद्ध बचत (Net Profit)</p>
-            <p id="kpiProfit" class="num-clean text-xl font-semibold text-[#1EA668] mt-1">₹0</p>
-            <p class="text-[10px] text-slate-600 mt-1">बिक्री − खरीद − कंपनी खर्च</p>
+          <div id="cardNetProfit" class="owner-only bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200/90 border-l-4 border-l-[#132A46] shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-1">
+                <p class="text-[11px] font-semibold text-[#132A46]">असली शुद्ध कमाई (Net Profit)</p>
+              </div>
+              <div class="flex flex-wrap gap-1 mt-1.5" id="profitPeriodButtons">
+                <button type="button" onclick="setProfitPeriod('today')" id="pbtn-today" class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-white text-slate-600 border border-slate-200">आज</button>
+                <button type="button" onclick="setProfitPeriod('week')" id="pbtn-week" class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-white text-slate-600 border border-slate-200">हफ़्ता</button>
+                <button type="button" onclick="setProfitPeriod('month')" id="pbtn-month" class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-white text-slate-600 border border-slate-200">महीना</button>
+                <button type="button" onclick="setProfitPeriod('year')" id="pbtn-year" class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-white text-slate-600 border border-slate-200">साल</button>
+                <button type="button" onclick="setProfitPeriod('all')" id="pbtn-all" class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#132A46] text-white">पूरी आय</button>
+              </div>
+              <p id="kpiProfit" class="num-clean text-xl font-semibold text-[#1EA668] mt-1.5">₹0</p>
+            </div>
+            <p id="kpiProfitSub" class="text-[10px] text-slate-600 mt-1">बिक्री − खरीद − कंपनी खर्च</p>
+          </div>
+        </div>
+
+        <!-- Dual Stock Tank / Glass Meters: Raw Grain Godown vs Processed Branded Seed -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <!-- Tank 1: Raw Grain Stock Glass/Godown Meter -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-5">
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-sm sm:text-base font-semibold text-[#132A46]">कच्चा अनाज स्टॉक (Raw Godown Tank)</h3>
+                  <span id="rawTankAlertBadge" class="hidden text-[10px] font-semibold px-2 py-0.5 rounded-full bg-rose-50 text-rose-600 border border-rose-200">कम स्टॉक</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-0.5">खरीद बिल से जुड़ता है (+) • प्रोसेसिंग में जाने से घटता है (−)</p>
+              </div>
+              <div class="flex items-center gap-1.5 text-[11px]">
+                <span class="text-slate-400">क्षमता (Kg):</span>
+                <input type="number" id="rawTankCapacityKg" value="50000" min="100" onchange="updateTankCapacities()" class="num-clean w-24 border border-slate-300 rounded-lg px-2 py-1 text-xs font-semibold text-[#132A46]">
+              </div>
+            </div>
+
+            <div class="mt-4 flex items-center gap-4 sm:gap-5">
+              <!-- Glass / Godown Tank Visual -->
+              <div class="w-20 sm:w-24 h-36 sm:h-40 rounded-2xl border-2 border-slate-300 bg-slate-100/80 relative overflow-hidden shrink-0 shadow-inner flex flex-col justify-end">
+                <div id="rawTankFillBar" class="w-full bg-gradient-to-t from-amber-600 via-amber-500 to-amber-400 transition-all duration-700 ease-out flex items-start justify-center pt-1.5" style="height: 0%;">
+                  <span id="rawTankPctText" class="num-clean text-[11px] font-bold text-white drop-shadow">0%</span>
+                </div>
+              </div>
+
+              <div class="flex-1 min-w-0 space-y-2">
+                <div>
+                  <span class="text-[11px] text-slate-500 block">मौजूदा कच्चा स्टॉक</span>
+                  <p id="rawStockWeightDisplay" class="num-clean text-lg sm:text-xl font-bold text-[#132A46]">0 Kg <span class="text-xs font-semibold text-slate-500">(0.00 क्विंटल)</span></p>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-xs bg-slate-50 p-2.5 rounded-xl border border-slate-200/80">
+                  <div>
+                    <span class="text-[10px] text-slate-400 block">अनुमानित बोरियाँ (50kg)</span>
+                    <b id="rawStockBagsDisplay" class="num-clean text-[#132A46]">0 बोरी</b>
+                  </div>
+                  <div>
+                    <span class="text-[10px] text-slate-400 block">खाली क्षमता</span>
+                    <b id="rawStockFreeDisplay" class="num-clean text-slate-700">50,000 Kg</b>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tank 2: Processed Branded Seed Stock Glass/Tank Meter -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-5">
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-sm sm:text-base font-semibold text-[#132A46]">तैयार ब्रांडेड बीज स्टॉक (Processed Seed Tank)</h3>
+                  <span id="procTankAlertBadge" class="hidden text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">कम स्टॉक</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-0.5">प्रोसेसिंग से जुड़ता है (+) • बीज बिक्री (Seed Sale) से घटता है (−)</p>
+              </div>
+              <div class="flex items-center gap-1.5 text-[11px]">
+                <span class="text-slate-400">क्षमता (Kg):</span>
+                <input type="number" id="procTankCapacityKg" value="40000" min="100" onchange="updateTankCapacities()" class="num-clean w-24 border border-slate-300 rounded-lg px-2 py-1 text-xs font-semibold text-[#132A46]">
+              </div>
+            </div>
+
+            <div class="mt-4 flex items-center gap-4 sm:gap-5">
+              <!-- Glass / Tank Visual -->
+              <div class="w-20 sm:w-24 h-36 sm:h-40 rounded-2xl border-2 border-emerald-300 bg-emerald-50/50 relative overflow-hidden shrink-0 shadow-inner flex flex-col justify-end">
+                <div id="procTankFillBar" class="w-full bg-gradient-to-t from-[#15803d] via-[#1EA668] to-emerald-400 transition-all duration-700 ease-out flex items-start justify-center pt-1.5" style="height: 0%;">
+                  <span id="procTankPctText" class="num-clean text-[11px] font-bold text-white drop-shadow">0%</span>
+                </div>
+              </div>
+
+              <div class="flex-1 min-w-0 space-y-2">
+                <div>
+                  <span class="text-[11px] text-slate-500 block">तैयार पक्का बीज स्टॉक</span>
+                  <p id="procStockWeightDisplay" class="num-clean text-lg sm:text-xl font-bold text-[#1EA668]">0 Kg <span class="text-xs font-semibold text-slate-500">(0.00 क्विंटल)</span></p>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-xs bg-emerald-50/50 p-2.5 rounded-xl border border-emerald-200/80">
+                  <div>
+                    <span class="text-[10px] text-slate-500 block">तैयार बैग्स (50kg समतुल्य)</span>
+                    <b id="procStockBagsDisplay" class="num-clean text-[#132A46]">0 बैग</b>
+                  </div>
+                  <div>
+                    <span class="text-[10px] text-slate-500 block">कुल बिक्री योग्य स्टॉक</span>
+                    <b id="procStockFreeDisplay" class="num-clean text-[#1EA668]">0.00 Qtl</b>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -675,7 +775,7 @@
           <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-100">
             <div>
               <h2 class="text-base sm:text-lg font-semibold text-[#132A46]">नया खरीद बिल बनाएं (Purchase Bill)</h2>
-              <p class="text-xs text-slate-500 mt-0.5">किसान / सप्लायर से फसल खरीद • कस्टम कद्दा (%) व कटौती</p>
+              <p class="text-xs text-slate-500 mt-0.5">किसान / सप्लायर से फसल खरीद • कट्टे + अतिरिक्त वजन का ऑटो क्विंटल योग व कस्टम कद्दा (%)</p>
             </div>
             <span id="purBillNoDisplay" class="num-clean px-3 py-1 bg-sky-50 text-sky-700 border border-sky-200 font-semibold rounded-lg text-xs">PUR-1001</span>
           </div>
@@ -684,7 +784,7 @@
             <input type="hidden" id="editPurTxId" value="">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div class="md:col-span-2 relative">
-                <label class="block text-xs font-semibold text-slate-700 mb-1">पार्टी चुनें *</label>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">किसान / पार्टी चुनें *</label>
                 <input type="hidden" id="purPartyId">
                 <div class="relative">
                   <input type="text" id="purPartySearch" autocomplete="off"
@@ -712,7 +812,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1">कच्चा आइटम (Items Master से) *</label>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">कच्चा आइटम / फसल (Items Master से) *</label>
                 <select id="purItemId" class="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm bg-white"></select>
               </div>
               <div>
@@ -728,8 +828,8 @@
             <div class="bg-sky-50/40 p-4 rounded-xl border border-sky-200/80 space-y-4">
               <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">भर्ती बैग साइज</label>
-                  <select id="purBagSize" class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm bg-white">
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">भर्ती बैग साइज (गोदाम बोरी)</label>
+                  <select id="purBagSize" onchange="calcPurchaseTotal()" class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm bg-white">
                     <option value="50">50 Kg बोरी</option>
                     <option value="55">55 Kg बोरी</option>
                     <option value="60">60 Kg बोरी</option>
@@ -737,17 +837,23 @@
                   </select>
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">कुल कट्टे / बैग</label>
-                  <input type="number" id="purBags" value="0" min="0" oninput="calcPurchaseTotal()" class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm bg-white">
+                  <label id="purBagsLabel" class="block text-xs font-semibold text-slate-700 mb-1">कुल कट्टे / बैग (किसान से खरीदे गए)</label>
+                  <input type="number" id="purBags" value="0" min="0" oninput="calcPurchaseTotal()" class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm font-semibold bg-white">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">शुद्ध भर्ती वजन (Kg) *</label>
-                  <input type="number" id="purGrossKg" value="0" min="0" oninput="calcPurchaseTotal()" required class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm font-semibold bg-white">
+                  <label class="block text-xs font-semibold text-sky-900 mb-1">बोरी के अतिरिक्त वजन (Kg)</label>
+                  <input type="number" step="0.01" id="purExtraKg" value="0" min="0" oninput="calcPurchaseTotal()" placeholder="उदा. 25 या 0" class="num-clean w-full border border-sky-300 rounded-xl px-3 py-2.5 text-sm font-semibold bg-white">
                 </div>
                 <div>
                   <label class="block text-xs font-semibold text-slate-700 mb-1">खरीद भाव (₹ / क्विंटल) *</label>
-                  <input type="number" id="purRateQtl" value="0" min="0" oninput="calcPurchaseTotal()" required class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm font-semibold bg-white">
+                  <input type="number" step="0.01" id="purRateQtl" value="0" min="0" oninput="calcPurchaseTotal()" required class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm font-semibold bg-white">
                 </div>
+              </div>
+
+              <!-- Auto Calculated Total Weight Banner (Bags * BagSize + Extra Kg -> Kg & Quintal) -->
+              <div class="bg-white border border-sky-200 rounded-xl px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <span class="text-slate-600 font-medium">कुल भर्ती वजन (बैग × साइज + अतिरिक्त वजन):</span>
+                <span id="purAutoGrossWeightShow" class="num-clean text-sm font-bold text-[#132A46]">0 Kg (0.00 क्विंटल)</span>
               </div>
 
               <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-2 border-t border-sky-200/60">
@@ -770,7 +876,7 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-3.5 bg-slate-50 p-4 rounded-xl border border-slate-200 items-center">
+            <div class="grid grid-cols-2 md:grid-cols-6 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200 items-center">
               <div>
                 <span id="purKaddaLabel" class="text-xs text-slate-500">कद्दा कटौती</span>
                 <p id="purKaddaShow" class="num-clean text-sm font-semibold text-amber-700 mt-0.5">0 Kg</p>
@@ -784,18 +890,22 @@
                 <p id="purNetAmtShow" class="num-clean text-base font-semibold text-sky-700 mt-0.5">₹0</p>
               </div>
               <div>
+                <span class="text-xs text-slate-500">पिछला खाता शेष</span>
+                <p id="purPrevBalShow" class="num-clean text-sm font-semibold text-slate-700 mt-0.5">₹0</p>
+              </div>
+              <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">अभी भुगतान (₹)</label>
                 <input type="number" id="purPaidNow" value="0" min="0" oninput="calcPurchaseTotal()" class="num-clean w-full border border-slate-300 rounded-xl px-3 py-1.5 text-sm bg-white">
               </div>
-              <div class="col-span-2 md:col-span-1">
-                <span class="text-xs text-slate-500">खाता शेष (नया)</span>
+              <div>
+                <span class="text-xs text-slate-500">नया खाता शेष</span>
                 <p id="purFinalLedgerShow" class="num-clean text-sm font-semibold text-[#1EA668] mt-0.5">₹0</p>
               </div>
             </div>
 
             <div class="flex flex-wrap justify-end gap-3">
               <button type="button" onclick="resetPurchaseForm()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-xs font-semibold text-slate-600 hover:bg-slate-50">फ़ॉर्म साफ़ करें</button>
-              <button type="submit" class="bg-[#132A46] hover:bg-slate-800 text-white font-semibold px-6 py-2.5 rounded-xl shadow-xs transition text-sm">खरीद बिल सेव करें व रसीद देखें</button>
+              <button type="submit" class="bg-[#132A46] hover:bg-slate-800 text-white font-semibold px-6 py-2.5 rounded-xl shadow-xs transition text-sm">खरीद बिल सेव करें व इनवॉइस देखें</button>
             </div>
           </form>
         </div>
@@ -2169,7 +2279,24 @@ function calcPurchaseTotal() {
   const pid = document.getElementById('purPartyId').value;
   const editId = document.getElementById('editPurTxId').value || null;
   const oldBal = getPartyBalance(pid, editId);
-  const grossKg = Number(document.getElementById('purGrossKg').value) || 0;
+  const bagSize = Number(document.getElementById('purBagSize').value) || 50;
+  const bags = Number(document.getElementById('purBags').value) || 0;
+  const extraKg = Number(document.getElementById('purExtraKg')?.value) || 0;
+  const grossKg = Math.max(0, (bags * bagSize) + extraKg);
+
+  const partyObj = state.parties.find(x => x.id === pid);
+  const bagsLbl = document.getElementById('purBagsLabel');
+  if (bagsLbl) {
+    bagsLbl.textContent = partyObj
+      ? `कुल कट्टे / बैग (${partyObj.name} से खरीदे गए)`
+      : 'कुल कट्टे / बैग (किसान से खरीदे गए)';
+  }
+
+  const autoGrossEl = document.getElementById('purAutoGrossWeightShow');
+  if (autoGrossEl) {
+    autoGrossEl.innerText = `${grossKg.toLocaleString('en-IN')} Kg (${(grossKg / 100).toFixed(2)} क्विंटल)`;
+  }
+
   const rateQtl = Number(document.getElementById('purRateQtl').value) || 0;
   const labor = Number(document.getElementById('purLaborDed').value) || 0;
   const trans = Number(document.getElementById('purTransDed').value) || 0;
@@ -2191,6 +2318,14 @@ function calcPurchaseTotal() {
   document.getElementById('purKaddaShow').innerText = `${kaddaKg.toLocaleString('en-IN')} Kg`;
   document.getElementById('purNetKgShow').innerText = `${netKg.toLocaleString('en-IN')} Kg (${(netKg / 100).toFixed(2)} Qtl)`;
   document.getElementById('purNetAmtShow').innerText = `₹${netPayable.toLocaleString('en-IN')}`;
+
+  const prevEl = document.getElementById('purPrevBalShow');
+  if (prevEl) {
+    prevEl.innerText = oldBal > 0
+      ? `₹${oldBal.toLocaleString('en-IN')} (लेना बाकी)`
+      : (oldBal < 0 ? `₹${Math.abs(oldBal).toLocaleString('en-IN')} (देना बाकी)` : '₹0');
+  }
+
   document.getElementById('purFinalLedgerShow').innerText = finalBal > 0
     ? `₹${finalBal.toLocaleString('en-IN')} (लेना बाकी)`
     : (finalBal < 0 ? `₹${Math.abs(finalBal).toLocaleString('en-IN')} (देना बाकी)` : '₹0');
@@ -2203,7 +2338,7 @@ function resetPurchaseForm() {
   document.getElementById('purKantaSlip').value = '';
   document.getElementById('purVehicle').value = '';
   document.getElementById('purBags').value = 0;
-  document.getElementById('purGrossKg').value = 0;
+  if (document.getElementById('purExtraKg')) document.getElementById('purExtraKg').value = 0;
   document.getElementById('purRateQtl').value = 0;
   document.getElementById('purLaborDed').value = 0;
   document.getElementById('purTransDed').value = 0;
@@ -2216,19 +2351,21 @@ function resetPurchaseForm() {
 function savePurchaseBill(e) {
   e.preventDefault();
   const pid = resolvePartyIdFromField('purPartyId', 'purPartySearch');
-  if (!pid) { alert('कृपया पहले पार्टी चुनें या पार्टी लेजर में जोड़ें।'); return; }
+  if (!pid) { alert('कृपया पहले किसान / पार्टी चुनें या पार्टी लेजर में जोड़ें।'); return; }
 
   const editId = document.getElementById('editPurTxId').value;
   const item = state.rawItems.find(x => x.id === document.getElementById('purItemId').value);
   const dateVal = document.getElementById('purDate').value;
-  const grossKg = Number(document.getElementById('purGrossKg').value) || 0;
+  const bagSize = Number(document.getElementById('purBagSize').value) || 50;
+  const bags = Number(document.getElementById('purBags').value) || 0;
+  const extraKg = Number(document.getElementById('purExtraKg')?.value) || 0;
+  const grossKg = Math.max(0, (bags * bagSize) + extraKg);
+
   const rateQtl = Number(document.getElementById('purRateQtl').value) || 0;
   const kaddaPctInput = document.getElementById('purKaddaPct');
   const kaddaPct = kaddaPctInput ? (Number(kaddaPctInput.value) || 0) : 0;
   const kaddaKg = Math.round((grossKg * kaddaPct) / 100);
   const netKg = Math.max(0, grossKg - kaddaKg);
-  const lblEl = document.getElementById('purKaddaLabel');
-  if (lblEl) lblEl.innerText = `कद्दा कटौती (${kaddaPct}%)`;
 
   const labor = Number(document.getElementById('purLaborDed').value) || 0;
   const trans = Number(document.getElementById('purTransDed').value) || 0;
@@ -2246,11 +2383,9 @@ function savePurchaseBill(e) {
     kantaSlip: document.getElementById('purKantaSlip').value.trim() || '-',
     vehicle: document.getElementById('purVehicle').value.trim() || '-',
     itemName: item ? item.name : 'Raw Crop',
-    bagSize: Number(document.getElementById('purBagSize').value) || 50,
-    bags: Number(document.getElementById('purBags').value) || 0,
-    grossKg, kaddaKg, netKg, rateQtl, labor, trans, weed, deductions,
+    bagSize, bags, extraKg, grossKg, kaddaPct, kaddaKg, netKg, rateQtl, labor, trans, weed, deductions,
     grossAmount, amount, paid,
-    note: `${(netKg / 100).toFixed(2)} Qtl खरीद (कद्दा ${kaddaKg}kg)`
+    note: `${bags} कट्टे (${bagSize}kg) + ${extraKg}kg अतिरिक्त = ${(grossKg / 100).toFixed(2)} Qtl | कद्दा ${kaddaKg}kg`
   };
 
   if (editId) {
@@ -2852,7 +2987,7 @@ function editTransaction(txId) {
     document.getElementById('purVehicle').value = tx.vehicle === '-' ? '' : tx.vehicle;
     document.getElementById('purBagSize').value = tx.bagSize || 50;
     document.getElementById('purBags').value = tx.bags || 0;
-    document.getElementById('purGrossKg').value = tx.grossKg || 0;
+    if (document.getElementById('purExtraKg')) document.getElementById('purExtraKg').value = tx.extraKg || 0;
     document.getElementById('purRateQtl').value = tx.rateQtl || 0;
     document.getElementById('purLaborDed').value = tx.labor || 0;
     document.getElementById('purTransDed').value = tx.trans || 0;
@@ -3072,6 +3207,49 @@ function renderSalesPurchaseChart() {
   });
 }
 
+let activeProfitPeriod = 'all';
+function setProfitPeriod(period) {
+  activeProfitPeriod = period;
+  ['today', 'week', 'month', 'year', 'all'].forEach(p => {
+    const b = document.getElementById('pbtn-' + p);
+    if (!b) return;
+    b.className = (p === period)
+      ? 'px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#132A46] text-white'
+      : 'px-1.5 py-0.5 rounded text-[10px] font-semibold bg-white text-slate-600 border border-slate-200';
+  });
+  renderDashboard();
+}
+
+function isDateInProfitPeriod(dateStr, period) {
+  if (period === 'all' || !dateStr) return true;
+  const now = new Date();
+  const todayStr = now.toISOString().slice(0, 10);
+  if (period === 'today') return dateStr === todayStr;
+  const target = new Date(dateStr + 'T00:00:00');
+  if (isNaN(target.getTime())) return true;
+  if (period === 'week') {
+    const diffDays = (now - target) / (1000 * 60 * 60 * 24);
+    return diffDays >= -0.5 && diffDays <= 7;
+  }
+  if (period === 'month') {
+    return target.getFullYear() === now.getFullYear() && target.getMonth() === now.getMonth();
+  }
+  if (period === 'year') {
+    return getSeasonYear(dateStr) === getSeasonYear(todayStr);
+  }
+  return true;
+}
+
+function updateTankCapacities() {
+  if (!state.settings) state.settings = { kaddaPct: 1.0, sheetUrl: DEPLOYED_SHEET_URL };
+  const rawCap = Number(document.getElementById('rawTankCapacityKg')?.value);
+  const procCap = Number(document.getElementById('procTankCapacityKg')?.value);
+  if (rawCap >= 100) state.settings.rawCapKg = rawCap;
+  if (procCap >= 100) state.settings.procCapKg = procCap;
+  saveState();
+  renderDashboard();
+}
+
 function renderDashboard() {
   const totalSales = state.transactions.filter(t => t.type === 'SALE').reduce((s, x) => s + Number(x.amount || 0), 0);
   const seedSaleAmt = state.transactions.filter(t => t.type === 'SALE' && t.saleChannel !== 'Mandi Supply').reduce((s, x) => s + Number(x.amount || 0), 0);
@@ -3079,12 +3257,63 @@ function renderDashboard() {
   const totalPurchase = state.transactions.filter(t => t.type === 'PURCHASE').reduce((s, x) => s + Number(x.amount || 0), 0);
   const totalExpenses = state.expenses.reduce((s, x) => s + Number(x.amount || 0), 0);
 
+  const periodSales = state.transactions.filter(t => t.type === 'SALE' && isDateInProfitPeriod(t.date, activeProfitPeriod)).reduce((s, x) => s + Number(x.amount || 0), 0);
+  const periodPurchase = state.transactions.filter(t => t.type === 'PURCHASE' && isDateInProfitPeriod(t.date, activeProfitPeriod)).reduce((s, x) => s + Number(x.amount || 0), 0);
+  const periodExpenses = state.expenses.filter(ex => isDateInProfitPeriod(ex.date, activeProfitPeriod)).reduce((s, x) => s + Number(x.amount || 0), 0);
+
   const vouchers = state.transactions.filter(t => t.type === 'RECEIPT' || t.type === 'PAYMENT');
   const receiptSum = vouchers.filter(t => t.type === 'RECEIPT').reduce((s, x) => s + Number(x.amount || 0), 0);
   const paymentSum = vouchers.filter(t => t.type === 'PAYMENT').reduce((s, x) => s + Number(x.amount || 0), 0);
   const totalVoucherAmt = receiptSum + paymentSum;
 
-  const netProfit = totalSales - totalPurchase - totalExpenses;
+  const netProfit = periodSales - periodPurchase - periodExpenses;
+
+  // Stock Tank Calculations:
+  // Raw Grain Stock = Purchase grossKg/netKg (+) minus Processing rawKg (-)
+  const purchasedKg = state.transactions.filter(t => t.type === 'PURCHASE').reduce((s, x) => s + Number(x.netKg || x.grossKg || 0), 0);
+  const processedRawKg = state.processingBatches.reduce((s, b) => s + Number(b.rawKg || 0), 0);
+  const rawStockKg = Math.max(0, purchasedKg - processedRawKg);
+
+  // Processed Branded Seed Stock = Processing goodKg (+) minus Seed Sale totalKg (-)
+  const producedGoodSeedKg = state.processingBatches.reduce((s, b) => s + Number(b.goodKg || 0), 0);
+  const soldSeedKg = state.transactions.filter(t => t.type === 'SALE' && t.saleChannel !== 'Mandi Supply').reduce((s, x) => s + Number(x.totalKg || 0), 0);
+  const procStockKg = Math.max(0, producedGoodSeedKg - soldSeedKg);
+
+  const rawCapKg = Number(state.settings?.rawCapKg) || 50000;
+  const procCapKg = Number(state.settings?.procCapKg) || 40000;
+  const rawCapInput = document.getElementById('rawTankCapacityKg');
+  const procCapInput = document.getElementById('procTankCapacityKg');
+  if (rawCapInput && document.activeElement !== rawCapInput) rawCapInput.value = rawCapKg;
+  if (procCapInput && document.activeElement !== procCapInput) procCapInput.value = procCapKg;
+
+  const rawPct = Math.min(100, Math.round((rawStockKg / rawCapKg) * 100));
+  const procPct = Math.min(100, Math.round((procStockKg / procCapKg) * 100));
+
+  const rawFill = document.getElementById('rawTankFillBar');
+  const rawPctEl = document.getElementById('rawTankPctText');
+  const rawWEl = document.getElementById('rawStockWeightDisplay');
+  const rawBEl = document.getElementById('rawStockBagsDisplay');
+  const rawFEl = document.getElementById('rawStockFreeDisplay');
+  const rawAlert = document.getElementById('rawTankAlertBadge');
+  if (rawFill) rawFill.style.height = rawPct + '%';
+  if (rawPctEl) rawPctEl.textContent = rawPct + '%';
+  if (rawWEl) rawWEl.innerHTML = `${rawStockKg.toLocaleString('en-IN')} Kg <span class="text-xs font-semibold text-slate-500">(${(rawStockKg / 100).toFixed(2)} क्विंटल)</span>`;
+  if (rawBEl) rawBEl.textContent = `${Math.round(rawStockKg / 50).toLocaleString('en-IN')} बोरी`;
+  if (rawFEl) rawFEl.textContent = `${Math.max(0, rawCapKg - rawStockKg).toLocaleString('en-IN')} Kg`;
+  if (rawAlert) rawAlert.classList.toggle('hidden', rawPct > 15 || rawStockKg === 0);
+
+  const procFill = document.getElementById('procTankFillBar');
+  const procPctEl = document.getElementById('procTankPctText');
+  const procWEl = document.getElementById('procStockWeightDisplay');
+  const procBEl = document.getElementById('procStockBagsDisplay');
+  const procFEl = document.getElementById('procStockFreeDisplay');
+  const procAlert = document.getElementById('procTankAlertBadge');
+  if (procFill) procFill.style.height = procPct + '%';
+  if (procPctEl) procPctEl.textContent = procPct + '%';
+  if (procWEl) procWEl.innerHTML = `${procStockKg.toLocaleString('en-IN')} Kg <span class="text-xs font-semibold text-slate-500">(${(procStockKg / 100).toFixed(2)} क्विंटल)</span>`;
+  if (procBEl) procBEl.textContent = `${Math.round(procStockKg / 50).toLocaleString('en-IN')} बैग`;
+  if (procFEl) procFEl.textContent = `${(procStockKg / 100).toFixed(2)} Qtl`;
+  if (procAlert) procAlert.classList.toggle('hidden', procPct > 15 || procStockKg === 0);
 
   document.getElementById('kpiSales').innerText = '₹' + totalSales.toLocaleString('en-IN');
   document.getElementById('kpiSalesSub').innerText = `बीज: ₹${seedSaleAmt.toLocaleString('en-IN')} • मंडी: ₹${mandiSaleAmt.toLocaleString('en-IN')}`;
@@ -3095,7 +3324,11 @@ function renderDashboard() {
 
   const profitEl = document.getElementById('kpiProfit');
   profitEl.innerText = '₹' + netProfit.toLocaleString('en-IN');
-  profitEl.className = `num-clean text-xl font-semibold mt-1 ${netProfit >= 0 ? 'text-[#1EA668]' : 'text-rose-600'}`;
+  profitEl.className = `num-clean text-xl font-semibold mt-1.5 ${netProfit >= 0 ? 'text-[#1EA668]' : 'text-rose-600'}`;
+  const profitSubEl = document.getElementById('kpiProfitSub');
+  if (profitSubEl) {
+    profitSubEl.textContent = `बिक्री ₹${periodSales.toLocaleString('en-IN')} − खरीद ₹${periodPurchase.toLocaleString('en-IN')} − खर्च ₹${periodExpenses.toLocaleString('en-IN')}`;
+  }
 
   document.getElementById('dashTotalExpSummary').innerText = '₹' + totalExpenses.toLocaleString('en-IN');
 
@@ -3166,56 +3399,124 @@ function renderDashboard() {
   renderSalesPurchaseChart();
 }
 
+let activeInvoiceTheme = 'navy';
+let currentReceiptTxId = null;
+
+function setInvoiceTheme(themeKey) {
+  activeInvoiceTheme = themeKey;
+  if (currentReceiptTxId) openReceipt(currentReceiptTxId);
+}
+
 function openReceipt(txId) {
+  currentReceiptTxId = txId;
   const tx = state.transactions.find(x => x.id === txId);
   if (!tx) return;
-  const p = state.parties.find(x => x.id === tx.partyId) || { name: '-', father: '-', village: '-', phone: '' };
+  const p = state.parties.find(x => x.id === tx.partyId) || { name: '-', father: '-', village: '-', phone: '', role: 'Farmer' };
   const bal = getPartyBalance(p.id);
-  const typeLabel = tx.saleChannel === 'Mandi Supply' ? 'MANDI SUPPLY INVOICE' : (tx.type === 'SALE' ? 'SALE INVOICE' : (tx.type === 'PURCHASE' ? 'PURCHASE VOUCHER' : 'PAYMENT RECEIPT'));
+  const prevBal = bal - (
+    tx.type === 'SALE' ? (Number(tx.amount || 0) - Number(tx.paid || 0))
+    : (tx.type === 'PURCHASE' ? -(Number(tx.amount || 0) - Number(tx.paid || 0))
+    : (tx.type === 'RECEIPT' ? -Number(tx.amount || 0) : Number(tx.amount || 0)))
+  );
+
+  const themes = {
+    navy: { hdrBg: 'bg-[#132A46] text-white', accentBorder: 'border-[#132A46]', thBg: 'bg-[#132A46] text-white', badge: 'bg-white/15 text-white border-white/30' },
+    emerald: { hdrBg: 'bg-[#14532D] text-white', accentBorder: 'border-[#1EA668]', thBg: 'bg-[#1EA668] text-white', badge: 'bg-white/15 text-white border-white/30' },
+    slate: { hdrBg: 'bg-slate-900 text-white', accentBorder: 'border-slate-800', thBg: 'bg-slate-800 text-white', badge: 'bg-white/15 text-white border-white/30' }
+  };
+  const thm = themes[activeInvoiceTheme] || themes.navy;
+
+  const docTitle = tx.saleChannel === 'Mandi Supply'
+    ? 'TAX / MANDI SUPPLY INVOICE'
+    : (tx.type === 'SALE' ? 'SEED SALE INVOICE' : (tx.type === 'PURCHASE' ? 'RAW CROP PURCHASE INVOICE' : 'PAYMENT / RECEIPT VOUCHER'));
 
   document.getElementById('printArea').innerHTML = `
-    <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden">
-      <div class="h-1.5 bg-gradient-to-r from-[#132A46] via-[#1EA668] to-amber-400"></div>
-      <div class="p-4 sm:p-6">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200">
-          <div class="flex items-center gap-3">
-            <img src="aicl logo.png" alt="AICL Group" class="h-16 w-auto object-contain shrink-0">
-            <div>
-              <h2 class="text-lg sm:text-xl font-bold text-[#132A46]">AICL GROUP</h2>
-              <p class="text-xs text-slate-500">Agri-Seed & Trading Operations • Helpline: +91 9458614610</p>
-            </div>
-          </div>
-          <span class="self-start sm:self-center text-[10px] font-semibold tracking-wider uppercase px-3 py-1 rounded-full border border-emerald-300 bg-emerald-50 text-emerald-900">${typeLabel}</span>
+    <div class="bg-white border-2 ${thm.accentBorder} rounded-lg overflow-hidden text-slate-900">
+      <!-- Theme Switcher Bar (Hidden on Print) -->
+      <div class="px-3 py-2 bg-slate-100 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 text-[11px] no-print">
+        <span class="font-semibold text-slate-700">इनवॉइस थीम चुनें:</span>
+        <div class="flex items-center gap-1.5">
+          <button type="button" onclick="setInvoiceTheme('navy')" class="px-2.5 py-1 rounded font-semibold ${activeInvoiceTheme === 'navy' ? 'bg-[#132A46] text-white' : 'bg-white text-slate-700 border border-slate-300'}">नेवी ब्लू</button>
+          <button type="button" onclick="setInvoiceTheme('emerald')" class="px-2.5 py-1 rounded font-semibold ${activeInvoiceTheme === 'emerald' ? 'bg-[#1EA668] text-white' : 'bg-white text-slate-700 border border-slate-300'}">एमरल्ड ग्रीन</button>
+          <button type="button" onclick="setInvoiceTheme('slate')" class="px-2.5 py-1 rounded font-semibold ${activeInvoiceTheme === 'slate' ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-300'}">क्लासिक स्लेट</button>
         </div>
+      </div>
 
-        <div class="mt-4 bg-slate-50 border border-slate-200 rounded-xl p-3.5 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+      <!-- Hardcore Commercial Invoice Header -->
+      <div class="${thm.hdrBg} px-4 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-3.5">
+          <div class="bg-white p-1.5 rounded-lg shrink-0">
+            <img src="aicl logo.png" alt="AICL Group" class="h-14 w-auto object-contain">
+          </div>
           <div>
-            <p class="text-sm font-semibold text-[#132A46]">${p.name} <span class="font-normal text-xs text-slate-600">(S/o ${p.father})</span></p>
-            <p class="text-slate-600">${p.village} • <span class="num-clean">${p.phone}</span></p>
+            <h2 class="text-lg sm:text-xl font-bold tracking-wide">AICL GROUP</h2>
+            <p class="text-xs opacity-90">Agri-Seed Procurement, Processing & Trading • Helpline: +91 9458614610</p>
           </div>
-          <div class="sm:text-right">
-            <p>बिल / वाउचर नं.: <b class="num-clean text-[#132A46]">${tx.id}</b></p>
-            <p>दिनांक: <b class="num-clean text-[#132A46]">${tx.date}</b></p>
+        </div>
+        <div class="sm:text-right">
+          <span class="inline-block text-[11px] font-bold tracking-wider uppercase px-3 py-1 rounded border ${thm.badge}">${docTitle}</span>
+          <p class="num-clean text-xs mt-1.5"><b>इनवॉइस नं.:</b> ${tx.id} &nbsp;|&nbsp; <b>दिनांक:</b> ${tx.date}</p>
+        </div>
+      </div>
+
+      <!-- Billed To / Farmer Details Strip -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 border-b-2 ${thm.accentBorder} text-xs sm:text-sm">
+        <div class="p-3.5 sm:p-4 border-b sm:border-b-0 sm:border-r border-slate-300">
+          <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">पार्टी / किसान विवरण (Billed To)</p>
+          <p class="text-base font-bold text-slate-900 mt-0.5">${p.name} <span class="text-xs font-semibold text-slate-600">(S/o ${p.father})</span></p>
+          <p class="text-xs sm:text-sm text-slate-700 mt-0.5">गांव / मंडी: <b>${p.village}</b> &nbsp;•&nbsp; मोबाइल: <b class="num-clean">${p.phone}</b></p>
+        </div>
+        <div class="p-3.5 sm:p-4 bg-slate-50/70 space-y-1 text-xs sm:text-sm">
+          <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">बिल / लॉट संदर्भ</p>
+          <p>लॉट नं.: <b class="num-clean">${tx.lotNo || '-'}</b> &nbsp;|&nbsp; सीज़न: <b class="num-clean">${tx.seasonYear || '-'}</b></p>
+          <p>पर्ची / गाड़ी: <b class="num-clean">${tx.kantaSlip || tx.vehicleOrSlip || '-'}</b> / <b class="num-clean">${tx.vehicle || tx.mandiOrLocation || '-'}</b></p>
+        </div>
+      </div>
+
+      <!-- Line-Item Commercial Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs sm:text-sm text-left border-collapse">
+          <thead>
+            <tr class="${thm.thBg}">
+              <th class="py-2.5 px-3.5 font-semibold">विवरण / आइटम</th>
+              <th class="py-2.5 px-3 font-semibold text-right">मात्रा / वजन</th>
+              <th class="py-2.5 px-3 font-semibold text-right">दर / कटौती</th>
+              <th class="py-2.5 px-3.5 font-semibold text-right">राशि (₹)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            <tr>
+              <td class="py-3 px-3.5">
+                <p class="font-bold text-slate-900">${tx.itemName || tx.type}</p>
+                <p class="text-xs text-slate-600 mt-0.5">${tx.note || ''}</p>
+              </td>
+              <td class="num-clean py-3 px-3 text-right font-semibold">${tx.netKg ? `${tx.netKg} Kg (${(tx.netKg/100).toFixed(2)} Qtl)` : (tx.totalKg ? `${tx.totalKg} Kg` : '-')}</td>
+              <td class="num-clean py-3 px-3 text-right">${tx.kaddaKg ? `कद्दा: ${tx.kaddaKg}kg (${tx.kaddaPct||1}%)` : (tx.rate ? `₹${tx.rate}` : '-')}</td>
+              <td class="num-clean py-3 px-3.5 text-right font-bold text-slate-900">₹${Number(tx.amount || 0).toLocaleString('en-IN')}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Bottom Summary & Signature Block -->
+      <div class="p-4 sm:p-5 bg-slate-50 border-t-2 ${thm.accentBorder} flex flex-col sm:flex-row justify-between gap-4 text-xs sm:text-sm">
+        <div class="flex flex-col justify-between space-y-4 text-xs text-slate-600">
+          <div>
+            <p class="font-semibold text-slate-800">नोट:</p>
+            <p>कृपया बिल में दर्ज वजन, कद्दा व राशि की जांच कर लें।</p>
+          </div>
+          <div class="pt-4">
+            <p class="border-t border-slate-400 pt-1 w-44 font-semibold text-slate-800">अधिकृत हस्ताक्षर / मुनीम</p>
           </div>
         </div>
 
-        <div class="my-4 p-3.5 rounded-xl border border-slate-200 text-xs space-y-1.5">
-          <p class="font-semibold text-sm text-[#132A46]">${tx.itemName || tx.type}</p>
-          <p class="text-slate-600">${tx.note || ''}</p>
-        </div>
-
-        <div class="pt-3 border-t border-slate-200 flex flex-col sm:flex-row justify-between gap-4 text-xs">
-          <div class="text-slate-500">
-            <p>* यह सिस्टम जनरेटेड रसीद है।</p>
-            <p class="mt-6 pt-1 border-t border-slate-300 w-40">हस्ताक्षर</p>
-          </div>
-          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-1.5 min-w-[220px]">
-            <div class="flex justify-between"><span>बिल / वाउचर राशि:</span><b class="num-clean">₹${Number(tx.amount || 0).toLocaleString('en-IN')}</b></div>
-            <div class="flex justify-between"><span>नकद / भुगतान:</span><b class="num-clean text-[#1EA668]">₹${Number(tx.paid || 0).toLocaleString('en-IN')}</b></div>
-            <div class="pt-1.5 border-t border-slate-200 flex justify-between font-semibold">
-              <span>कुल खाता शेष:</span>
-              <span class="num-clean text-[#132A46]">₹${bal.toLocaleString('en-IN')}</span>
-            </div>
+        <div class="bg-white border border-slate-300 rounded-lg p-3.5 space-y-1.5 min-w-[240px] text-xs sm:text-sm">
+          <div class="flex justify-between"><span>पिछला खाता शेष:</span><b class="num-clean">₹${Math.round(prevBal).toLocaleString('en-IN')}</b></div>
+          <div class="flex justify-between"><span>आज का बिल / वाउचर:</span><b class="num-clean">₹${Number(tx.amount || 0).toLocaleString('en-IN')}</b></div>
+          <div class="flex justify-between"><span>आज जमा / भुगतान:</span><b class="num-clean text-[#1EA668]">₹${Number(tx.paid || 0).toLocaleString('en-IN')}</b></div>
+          <div class="pt-2 border-t border-slate-300 flex justify-between font-bold text-sm sm:text-base">
+            <span>नया कुल खाता शेष:</span>
+            <span class="num-clean text-slate-900">₹${bal.toLocaleString('en-IN')}</span>
           </div>
         </div>
       </div>
@@ -3223,7 +3524,12 @@ function openReceipt(txId) {
   `;
 
   const waText = encodeURIComponent(
-    `*AICL GROUP*\nबिल: ${tx.id} | दिनांक: ${tx.date}\nपार्टी: ${p.name} (${p.village})\nविवरण: ${tx.itemName || tx.type} (${tx.note || ''})\nराशि: ₹${tx.amount} | जमा/भुगतान: ₹${tx.paid || 0}\nखाता शेष: ₹${bal}`
+    `*AICL GROUP — INVOICE*
+बिल नं.: ${tx.id} | दिनांक: ${tx.date}
+पार्टी: ${p.name} (S/o ${p.father}, ${p.village})
+विवरण: ${tx.itemName || tx.type} — ${tx.note || ''}
+आज की राशि: ₹${tx.amount} | जमा/भुगतान: ₹${tx.paid || 0}
+नया खाता शेष: ₹${bal}`
   );
   document.getElementById('btnWhatsappShare').href = `https://wa.me/91${p.phone}?text=${waText}`;
   document.getElementById('receiptModal').classList.remove('hidden');
