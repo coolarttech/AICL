@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="MunimJi ERP">
 <meta name="theme-color" content="#0F172A">
-<title>MunimJi by Cool Art® — Agri-Seed ERP</title>
+<title>MunimJi by Cool Art® — Vaidik Seeds Agri-Seed ERP</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -91,7 +91,7 @@
 <!-- Fast Startup Splash Screen -->
 <div id="splashScreen" class="fixed inset-0 bg-white z-[100] flex flex-col items-center justify-center transition-opacity duration-200 no-print">
   <div class="splash-anim flex flex-col items-center">
-    <img src="Vaidik Seeds Logo copy.png" alt="वैदिक सीड्स" class="h-40 md:h-48 w-auto object-contain mb-3">
+    <img src="Vaidik Seeds Logo.jpg" alt="वैदिक सीड्स" class="h-40 md:h-48 w-auto object-contain mb-3">
     <span class="text-xs font-semibold tracking-wider uppercase text-[#1EA668] bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200">Agri-Seed ERP</span>
   </div>
   <div class="absolute bottom-8 flex items-center gap-2.5 text-xs text-slate-400">
@@ -116,7 +116,7 @@
         <div class="flex items-center justify-between gap-2">
           <div class="flex items-center gap-3 min-w-0">
             <div class="bg-white rounded-2xl p-2 shadow-sm shrink-0">
-              <img src="Vaidik Seeds Logo copy.png" alt="वैदिक सीड्स" class="h-12 w-12 object-contain">
+              <img src="Vaidik Seeds Logo.jpg" alt="वैदिक सीड्स" class="h-12 w-12 object-contain">
             </div>
             <div class="min-w-0">
               <p class="text-sm font-semibold text-white tracking-tight truncate">वैदिक सीड्स</p>
@@ -226,6 +226,18 @@
         <!-- Controls Inside Left Dark Sidebar (Role Switcher & Full Edit List Removed per Request) -->
         <div class="pt-2 border-t border-slate-800/90 space-y-2 px-1">
           <p class="px-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500">रिपोर्ट व सेटिंग्स (Reports)</p>
+
+          <div class="bg-slate-900/95 border border-slate-800 rounded-xl p-2 space-y-1.5">
+            <div class="flex items-center justify-between px-1">
+              <span class="text-[10px] font-semibold text-slate-300">इनवॉइस थीम (Invoice Theme)</span>
+              <button type="button" onclick="previewSampleInvoiceTheme()" class="text-[10px] font-semibold text-emerald-400 hover:underline">प्रीव्यू देखें</button>
+            </div>
+            <div class="grid grid-cols-3 gap-1 text-[10px]">
+              <button type="button" id="sbTheme-clean" onclick="selectInvoiceThemeFromSidebar('clean')" class="py-1 px-1.5 rounded-lg font-semibold bg-white text-[#132A46] border border-slate-300 truncate">क्लीन पेपर</button>
+              <button type="button" id="sbTheme-navy" onclick="selectInvoiceThemeFromSidebar('navy')" class="py-1 px-1.5 rounded-lg font-medium bg-slate-800 text-slate-300 border border-slate-700 truncate">नेवी प्रो</button>
+              <button type="button" id="sbTheme-emerald" onclick="selectInvoiceThemeFromSidebar('emerald')" class="py-1 px-1.5 rounded-lg font-medium bg-slate-800 text-slate-300 border border-slate-700 truncate">एमरल्ड</button>
+            </div>
+          </div>
 
           <button onclick="openUpiSettingsModal()" class="w-full bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 text-[11px] font-medium px-3 py-2 rounded-xl flex items-center justify-between transition">
             <span class="flex items-center gap-1.5">
@@ -3625,12 +3637,105 @@ function renderDashboard() {
   renderSalesPurchaseChart();
 }
 
-let activeInvoiceTheme = 'navy';
+let activeInvoiceTheme = 'clean';
 let currentReceiptTxId = null;
 
+function syncSidebarThemeButtons() {
+  const cur = (state.settings && state.settings.invoiceTheme) ? state.settings.invoiceTheme : activeInvoiceTheme;
+  activeInvoiceTheme = cur;
+  ['clean', 'navy', 'emerald'].forEach(k => {
+    const b = document.getElementById('sbTheme-' + k);
+    if (!b) return;
+    if (k === cur) {
+      b.className = 'py-1 px-1.5 rounded-lg font-semibold bg-white text-[#132A46] border border-slate-300 truncate';
+    } else {
+      b.className = 'py-1 px-1.5 rounded-lg font-medium bg-slate-800 text-slate-300 border border-slate-700 truncate';
+    }
+  });
+}
+
 function setInvoiceTheme(themeKey) {
-  activeInvoiceTheme = themeKey;
+  activeInvoiceTheme = themeKey || 'clean';
+  if (!state.settings) state.settings = { kaddaPct: 1.0, sheetUrl: DEPLOYED_SHEET_URL };
+  state.settings.invoiceTheme = activeInvoiceTheme;
+  saveState();
+  syncSidebarThemeButtons();
   if (currentReceiptTxId) openReceipt(currentReceiptTxId);
+}
+
+function selectInvoiceThemeFromSidebar(themeKey) {
+  setInvoiceTheme(themeKey);
+  previewSampleInvoiceTheme();
+}
+
+function previewSampleInvoiceTheme() {
+  if (state.transactions && state.transactions.length) {
+    const firstBill = state.transactions.find(t => t.type === 'SALE' || t.type === 'PURCHASE') || state.transactions[0];
+    if (firstBill) {
+      openReceipt(firstBill.id);
+      return;
+    }
+  }
+  const companyAddr = "02, Ramghat Road, Swarn jayanti Nagar, Aligarh, Uttar Pradesh, 202001";
+  const companyGstin = "09AOOPA6667H1Z3";
+  const theme = (state.settings && state.settings.invoiceTheme) ? state.settings.invoiceTheme : activeInvoiceTheme;
+  const barBg = theme === 'navy' ? 'bg-[#132A46] text-white' : (theme === 'emerald' ? 'bg-[#1EA668] text-white' : 'bg-neutral-800 text-white');
+  document.getElementById('printArea').innerHTML = `
+    <div class="bg-white border border-slate-200 rounded-md p-6 sm:p-8 text-slate-800 space-y-6">
+      <div class="flex items-start justify-between gap-4 border-b border-slate-200 pb-5">
+        <div class="flex items-center gap-3">
+          <img src="Vaidik Seeds Logo.jpg" alt="वैदिक सीड्स" class="h-14 w-14 rounded-full object-cover border border-slate-200 shrink-0">
+          <div>
+            <p class="text-base font-bold text-slate-900">वैदिक सीड्स</p>
+            <p class="num-clean text-[11px] text-slate-500">GSTIN: ${companyGstin}</p>
+            <p class="text-[11px] text-slate-500">${companyAddr}</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <span class="inline-block bg-slate-100 text-slate-800 font-bold text-sm px-4 py-1.5 tracking-wide uppercase">INVOICE</span>
+          <p class="num-clean text-[11px] text-slate-500 mt-1.5">थीम: <b>${theme.toUpperCase()}</b> • नमूना प्रीव्यू</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 text-xs">
+        <div>
+          <p class="font-bold text-slate-800">Office Address</p>
+          <p class="text-slate-500 mt-0.5">${companyAddr}</p>
+          <p class="num-clean text-slate-500 mt-0.5">Helpline: +91 9458614610</p>
+        </div>
+        <div class="text-right">
+          <p class="font-bold text-slate-800">To:</p>
+          <p class="text-slate-600 mt-0.5">डेमो किसान / पार्टी (Aligarh, UP)</p>
+          <p class="num-clean text-slate-500 mt-0.5">दिनांक: ${new Date().toISOString().slice(0,10)}</p>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs border-collapse">
+          <thead>
+            <tr class="${barBg}">
+              <th class="py-2.5 px-3.5 text-left font-semibold">Item Description</th>
+              <th class="py-2.5 px-3 text-right font-semibold">Rate / Qt</th>
+              <th class="py-2.5 px-3 text-right font-semibold">Qty / Wt</th>
+              <th class="py-2.5 px-3.5 text-right font-semibold">Total</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            <tr>
+              <td class="py-3 px-3.5"><p class="font-semibold text-slate-800">नमूना बीज / फसल आइटम</p><p class="text-[11px] text-slate-400">बिल सेव करने पर असली एंट्री यहाँ दिखेगी</p></td>
+              <td class="num-clean py-3 px-3 text-right">₹0</td>
+              <td class="num-clean py-3 px-3 text-right">0 Kg</td>
+              <td class="num-clean py-3 px-3.5 text-right font-semibold">₹0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500">
+        <span>थीम बदलने के लिए बाएँ साइडबार या इनवॉइस में थीम चुनें।</span>
+        <span class="font-semibold text-slate-800">वैदिक सीड्स</span>
+      </div>
+    </div>
+  `;
+  document.getElementById('btnWhatsappShare').href = '#';
+  document.getElementById('receiptModal').classList.remove('hidden');
 }
 
 function downloadInvoicePDF() {
@@ -3670,83 +3775,131 @@ function openReceipt(txId) {
 
   const companyAddr = "02, Ramghat Road, Swarn jayanti Nagar, Aligarh, Uttar Pradesh, 202001";
   const companyGstin = "09AOOPA6667H1Z3";
+  const theme = (state.settings && state.settings.invoiceTheme) ? state.settings.invoiceTheme : activeInvoiceTheme;
+  syncSidebarThemeButtons();
+
+  const headerBarClass = theme === 'navy'
+    ? 'bg-[#132A46] text-white'
+    : (theme === 'emerald' ? 'bg-[#1EA668] text-white' : 'bg-neutral-800 text-white');
+  const outerBorderClass = theme === 'navy'
+    ? 'border-slate-300'
+    : (theme === 'emerald' ? 'border-emerald-200' : 'border-neutral-200');
 
   const upiId = (state.settings?.upiId || '').trim();
   const payeeName = (state.settings?.upiPayeeName || 'वैदिक सीड्स').trim();
   const bankInfo = (state.settings?.bankInfo || '').trim();
   const amtNum = Number(tx.amount || 0);
+  const paidNum = Number(tx.paid || 0);
 
-  const paymentBoxHtml = (upiId || bankInfo || tx.bankName || tx.phoneRef || tx.upiHandle || tx.utrNo)
-    ? `<div class="mt-4 p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
-         <div class="space-y-1">
-           <p class="font-bold text-[#132A46]">भुगतान व बैंक विवरण (Payment & Bank Details)</p>
-           ${upiId ? `<p class="num-clean">UPI ID: <b>${upiId}</b> (${payeeName})</p>` : ''}
-           ${bankInfo ? `<p class="num-clean">बैंक विवरण: <b>${bankInfo}</b></p>` : ''}
-           ${tx.bankName ? `<p>बैंक / खाता: <b>${tx.bankName}</b></p>` : ''}
-           ${tx.phoneRef ? `<p class="num-clean">संपर्क / खाता नं.: <b>${tx.phoneRef}</b></p>` : ''}
-           ${tx.upiHandle ? `<p>UPI / प्राप्तकर्ता: <b>${tx.upiHandle}</b></p>` : ''}
-           ${tx.utrNo ? `<p class="num-clean">UTR / रेफ़रेंस: <b>${tx.utrNo}</b></p>` : ''}
+  const paymentMethodBlock = `
+    <div class="space-y-1 text-xs">
+      <p class="font-bold text-slate-800">Payment Method</p>
+      <p class="text-slate-600">Account Name: <b class="text-slate-800">${payeeName}</b></p>
+      ${bankInfo ? `<p class="num-clean text-slate-600">Bank / A/C: <b class="text-slate-800">${bankInfo}</b></p>` : `<p class="text-slate-500">बैंक विवरण सेट करने के लिए UPI / QR सेटअप खोलें</p>`}
+      ${upiId ? `<p class="num-clean text-slate-600">UPI ID: <b class="text-slate-800">${upiId}</b></p>` : ''}
+      ${tx.bankName ? `<p class="text-slate-600">बैंक: <b>${tx.bankName}</b></p>` : ''}
+      ${tx.utrNo ? `<p class="num-clean text-slate-600">UTR: <b>${tx.utrNo}</b></p>` : ''}
+    </div>
+  `;
+
+  const qrBadgeHtml = upiId
+    ? `<div class="flex items-center gap-2.5 bg-neutral-50 p-2 rounded border border-neutral-200 shrink-0">
+         <img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${encodeURIComponent(`upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amtNum > 0 ? amtNum : ''}&cu=INR`)}" alt="Payment QR" class="w-16 h-16 object-contain">
+         <div class="text-[11px] leading-snug">
+           <p class="font-bold text-slate-800">Scan to Pay</p>
+           <p class="num-clean text-slate-600">₹${amtNum.toLocaleString('en-IN')}</p>
          </div>
-         ${upiId ? `
-           <div class="flex items-center gap-2.5 bg-white p-2 rounded-lg border border-slate-200 shrink-0">
-             <img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${encodeURIComponent(`upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amtNum > 0 ? amtNum : ''}&cu=INR`)}" alt="Payment QR" class="w-20 h-20 object-contain">
-             <div class="text-[11px] leading-snug">
-               <p class="font-bold text-[#1EA668]">Scan & Pay</p>
-               <p class="num-clean text-slate-600">₹${amtNum.toLocaleString('en-IN')}</p>
-             </div>
-           </div>
-         ` : ''}
        </div>`
     : '';
 
+  const themeSwitcherBar = `
+    <div class="mb-3 flex flex-wrap items-center justify-between gap-2 text-[11px] no-print">
+      <span class="text-slate-500 font-medium">इनवॉइस थीम:</span>
+      <div class="flex items-center gap-1.5">
+        <button type="button" onclick="setInvoiceTheme('clean')" class="px-2.5 py-1 rounded border font-semibold ${theme==='clean' ? 'bg-neutral-800 text-white border-neutral-800' : 'bg-white text-slate-700 border-slate-300'}">क्लीन पेपर</button>
+        <button type="button" onclick="setInvoiceTheme('navy')" class="px-2.5 py-1 rounded border font-semibold ${theme==='navy' ? 'bg-[#132A46] text-white border-[#132A46]' : 'bg-white text-slate-700 border-slate-300'}">नेवी प्रो</button>
+        <button type="button" onclick="setInvoiceTheme('emerald')" class="px-2.5 py-1 rounded border font-semibold ${theme==='emerald' ? 'bg-[#1EA668] text-white border-[#1EA668]' : 'bg-white text-slate-700 border-slate-300'}">एमरल्ड</button>
+      </div>
+    </div>
+  `;
+
   if (isVoucher) {
-    const vLabel = tx.type === 'RECEIPT' ? 'जमा रसीद (Receipt Voucher)' : 'भुगतान / एडवांस वाउचर (Payment Voucher)';
+    const vLabel = tx.type === 'RECEIPT' ? 'RECEIPT VOUCHER (जमा)' : 'PAYMENT VOUCHER (भुगतान)';
     document.getElementById('printArea').innerHTML = `
-      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden text-slate-900 shadow-xs">
-        <div class="px-5 py-4 bg-[#132A46] text-white flex items-center justify-between gap-3">
+      ${themeSwitcherBar}
+      <div class="bg-white border ${outerBorderClass} rounded-md p-6 sm:p-8 text-slate-800 space-y-6">
+        <div class="flex items-start justify-between gap-4 pb-5 border-b border-neutral-200">
           <div class="flex items-center gap-3">
-            <img src="Vaidik Seeds Logo copy.png" alt="वैदिक सीड्स" class="h-12 w-12 rounded-full object-cover bg-white p-0.5 shrink-0">
+            <img src="Vaidik Seeds Logo.jpg" alt="वैदिक सीड्स" class="h-14 w-14 rounded-full object-cover border border-neutral-200 shrink-0">
             <div>
-              <h2 class="text-base sm:text-lg font-bold tracking-tight">वैदिक सीड्स</h2>
-              <p class="num-clean text-[11px] opacity-90">GSTIN: ${companyGstin} • ${companyAddr}</p>
+              <p class="text-base font-bold text-neutral-900">वैदिक सीड्स</p>
+              <p class="num-clean text-[11px] text-neutral-500">GSTIN: ${companyGstin}</p>
+              <p class="text-[11px] text-neutral-500">${companyAddr}</p>
             </div>
           </div>
           <div class="text-right shrink-0">
-            <span class="inline-block text-[11px] font-semibold bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 px-2.5 py-0.5 rounded-full">${vLabel}</span>
-            <p class="num-clean text-xs mt-1"><b>${tx.id}</b> • ${tx.date}</p>
+            <span class="inline-block bg-neutral-100 text-neutral-900 font-bold text-xs sm:text-sm px-3.5 py-1.5 tracking-wide">${vLabel}</span>
+            <p class="num-clean text-[11px] text-neutral-500 mt-1.5"><b>${tx.id}</b> • ${tx.date}</p>
           </div>
         </div>
 
-        <div class="p-5 space-y-4 text-xs sm:text-sm">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
-            <div>
-              <span class="text-[11px] text-slate-500 block">पार्टी का नाम व अभिभावक</span>
-              <b class="text-sm font-bold text-[#132A46]">${p.name}</b> <span class="text-xs text-slate-600">(S/o ${p.father})</span>
-              <p class="text-xs text-slate-500 mt-0.5">${p.village} • <span class="num-clean">${p.phone}</span></p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div>
+            <p class="font-bold text-neutral-500 uppercase text-[10px]">From / Firm</p>
+            <p class="font-bold text-neutral-900 text-sm mt-0.5">वैदिक सीड्स</p>
+            <p class="text-neutral-500 mt-0.5">${companyAddr}</p>
+          </div>
+          <div class="sm:text-right">
+            <p class="font-bold text-neutral-500 uppercase text-[10px]">To / Party</p>
+            <p class="font-bold text-neutral-900 text-sm mt-0.5">${p.name} <span class="font-normal text-xs text-neutral-600">(S/o ${p.father})</span></p>
+            <p class="text-neutral-500 mt-0.5">${p.village} • <span class="num-clean">${p.phone}</span></p>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs border-collapse">
+            <thead>
+              <tr class="${headerBarClass}">
+                <th class="py-2.5 px-3.5 text-left font-semibold">विवरण (Description)</th>
+                <th class="py-2.5 px-3 text-left font-semibold">माध्यम (Mode)</th>
+                <th class="py-2.5 px-3.5 text-right font-semibold">राशि (Amount)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-neutral-200">
+              <tr>
+                <td class="py-3 px-3.5 font-medium text-neutral-800">${tx.note || vLabel}</td>
+                <td class="py-3 px-3 text-neutral-600">${tx.mode || 'Cash'}</td>
+                <td class="num-clean py-3 px-3.5 text-right font-bold text-neutral-900">₹${amtNum.toLocaleString('en-IN')}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-5 pt-2 items-start text-xs">
+          <div class="sm:col-span-7 space-y-3">
+            ${paymentMethodBlock}
+            <p class="text-[11px] text-neutral-500 pt-2">नियम व नोट: वाउचर व खाता शेष की पुष्टि प्राप्ति समय कर लें।</p>
+          </div>
+          <div class="sm:col-span-5 space-y-2">
+            <div class="flex items-center justify-between py-1.5 border-b border-neutral-200">
+              <span class="text-neutral-500">पिछला शेष:</span>
+              <span class="num-clean font-semibold">₹${Math.round(prevBal).toLocaleString('en-IN')}</span>
             </div>
-            <div class="sm:text-right">
-              <span class="text-[11px] text-slate-500 block">माध्यम व विवरण</span>
-              <b class="font-semibold text-[#132A46]">${tx.mode || 'Cash'}</b>
-              <p class="text-xs text-slate-600 mt-0.5">${tx.note || '-'}</p>
+            <div class="flex items-center justify-between py-1.5 border-b border-neutral-200">
+              <span class="text-neutral-500">वाउचर राशि:</span>
+              <span class="num-clean font-semibold">₹${amtNum.toLocaleString('en-IN')}</span>
             </div>
+            <div class="flex items-center justify-between py-2 px-3 ${headerBarClass} font-bold text-sm">
+              <span>नया कुल शेष:</span>
+              <span class="num-clean">₹${bal.toLocaleString('en-IN')}</span>
+            </div>
+            ${qrBadgeHtml ? `<div class="pt-1 flex justify-end">${qrBadgeHtml}</div>` : ''}
           </div>
+        </div>
 
-          <div class="flex items-center justify-between p-4 rounded-xl bg-emerald-50/60 border border-emerald-200">
-            <span class="font-semibold text-slate-700">वाउचर राशि (Amount)</span>
-            <span class="num-clean text-xl font-bold text-[#1EA668]">₹${amtNum.toLocaleString('en-IN')}</span>
-          </div>
-
-          <div class="grid grid-cols-2 gap-3 text-xs bg-slate-50 p-3 rounded-xl border border-slate-200">
-            <div><span class="text-slate-500 block">पिछला खाता शेष</span><b class="num-clean text-slate-800">₹${Math.round(prevBal).toLocaleString('en-IN')}</b></div>
-            <div class="text-right"><span class="text-slate-500 block">नया कुल खाता शेष</span><b class="num-clean text-[#132A46]">₹${bal.toLocaleString('en-IN')}</b></div>
-          </div>
-
-          ${paymentBoxHtml}
-
-          <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-            <span>यह कंप्यूटर जनरेटेड वाउचर रसीद है।</span>
-            <span class="font-semibold text-[#132A46]">हस्ताक्षर / वैदिक सीड्स</span>
-          </div>
+        <div class="pt-4 border-t border-neutral-200 flex items-center justify-between text-[11px] text-neutral-500">
+          <span>धन्यवाद • वैदिक सीड्स</span>
+          <span class="font-semibold text-neutral-800">हस्ताक्षर / मुनीम जी</span>
         </div>
       </div>
     `;
@@ -3763,85 +3916,110 @@ function openReceipt(txId) {
           "3. किसी भी विवाद की स्थिति में न्यायक्षेत्र अलीगढ़ (उत्तर प्रदेश) रहेगा।"
         ];
 
-    const docTitle = isPurchase
-      ? "खरीद बिल (PURCHASE INVOICE)"
-      : (tx.saleChannel === "Mandi Supply" ? "मंडी सप्लाई बिल (MANDI SUPPLY INVOICE)" : "बिक्री बिल (SEED SALE INVOICE)");
+    const docBadge = isPurchase
+      ? "PURCHASE INVOICE"
+      : (tx.saleChannel === "Mandi Supply" ? "MANDI INVOICE" : "INVOICE");
+
+    const subTaxOrDedLabel = isPurchase ? "कटौती (Deductions):" : "मंडी / अतिरिक्त कटौती:";
+    const subTaxOrDedVal = Number(tx.deductions || 0);
 
     document.getElementById('printArea').innerHTML = `
-      <div class="bg-white border-2 border-[#132A46] rounded-xl overflow-hidden text-slate-900">
-        <div class="bg-[#132A46] text-white px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div class="flex items-center gap-3.5">
-            <img src="Vaidik Seeds Logo copy.png" alt="वैदिक सीड्स" class="h-14 w-14 rounded-full object-cover bg-white p-0.5 shrink-0">
+      ${themeSwitcherBar}
+      <div class="bg-white border ${outerBorderClass} rounded-md p-6 sm:p-8 text-slate-800 space-y-6">
+        <div class="flex items-start justify-between gap-4 pb-5 border-b border-neutral-200">
+          <div class="flex items-center gap-3">
+            <img src="Vaidik Seeds Logo.jpg" alt="वैदिक सीड्स" class="h-14 w-14 rounded-full object-cover border border-neutral-200 shrink-0">
             <div>
-              <h2 class="text-lg sm:text-xl font-bold tracking-wide">वैदिक सीड्स</h2>
-              <p class="num-clean text-[11px] opacity-90">GSTIN: ${companyGstin} • ${companyAddr}</p>
+              <p class="text-base font-bold text-neutral-900">वैदिक सीड्स</p>
+              <p class="num-clean text-[11px] text-neutral-500">GSTIN: ${companyGstin}</p>
+              <p class="text-[11px] text-neutral-500">${companyAddr}</p>
             </div>
           </div>
-          <div class="sm:text-right shrink-0">
-            <span class="inline-block text-[11px] font-bold bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 px-3 py-1 rounded">${docTitle}</span>
-            <p class="num-clean text-xs mt-1.5"><b>नं.:</b> ${tx.id} • <b>दिनांक:</b> ${tx.date}</p>
+          <div class="text-right shrink-0">
+            <span class="inline-block bg-neutral-100 text-neutral-900 font-bold text-sm px-4 py-1.5 tracking-wide">${docBadge}</span>
+            <p class="num-clean text-[11px] text-neutral-500 mt-1.5"><b>${tx.id}</b> • ${tx.date}</p>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 border-b border-slate-200 text-xs sm:text-sm">
-          <div class="p-3.5 sm:p-4 border-b sm:border-b-0 sm:border-r border-slate-200">
-            <p class="text-[11px] font-bold text-slate-500 uppercase">पार्टी विवरण</p>
-            <p class="text-sm sm:text-base font-bold text-[#132A46] mt-0.5">${p.name} <span class="text-xs font-medium text-slate-600">(S/o ${p.father})</span></p>
-            <p class="text-xs text-slate-600 mt-0.5">${p.village} • मोबाइल: <b class="num-clean">${p.phone}</b></p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div>
+            <p class="font-bold text-neutral-800">Office Address</p>
+            <p class="text-neutral-500 mt-0.5">${companyAddr}</p>
+            <p class="num-clean text-neutral-500 mt-0.5">Helpline: +91 9458614610</p>
           </div>
-          <div class="p-3.5 sm:p-4 bg-slate-50/70 text-xs space-y-1">
-            <p class="font-bold text-slate-500 uppercase">लॉट व संदर्भ</p>
-            <p>लॉट नं.: <b class="num-clean">${tx.lotNo || '-'}</b> • सीज़न: <b class="num-clean">${tx.seasonYear || '-'}</b></p>
-            <p>पर्ची / गाड़ी: <b class="num-clean">${tx.kantaSlip || tx.vehicleOrSlip || '-'}</b> / <b class="num-clean">${tx.vehicle || tx.mandiOrLocation || '-'}</b></p>
+          <div class="sm:text-right">
+            <p class="font-bold text-neutral-800">To:</p>
+            <p class="font-bold text-neutral-900 text-sm mt-0.5">${p.name} <span class="font-normal text-xs text-neutral-600">(S/o ${p.father})</span></p>
+            <p class="text-neutral-500 mt-0.5">${p.village} • <span class="num-clean">${p.phone}</span></p>
+            <p class="num-clean text-[11px] text-neutral-400 mt-0.5">लॉट: <b>${tx.lotNo || '-'}</b> | पर्ची/गाड़ी: <b>${tx.kantaSlip || tx.vehicleOrSlip || '-'}</b></p>
           </div>
         </div>
 
         <div class="overflow-x-auto">
-          <table class="w-full text-xs sm:text-sm text-left border-collapse">
+          <table class="w-full text-xs border-collapse">
             <thead>
-              <tr class="bg-slate-100 text-[#132A46] border-b border-slate-200">
-                <th class="py-2.5 px-3.5 font-semibold">विवरण / आइटम</th>
-                <th class="py-2.5 px-3 font-semibold text-right">मात्रा / वजन</th>
-                <th class="py-2.5 px-3 font-semibold text-right">दर / कटौती</th>
-                <th class="py-2.5 px-3.5 font-semibold text-right">राशि (₹)</th>
+              <tr class="${headerBarClass}">
+                <th class="py-2.5 px-3.5 text-left font-semibold">Item Description</th>
+                <th class="py-2.5 px-3 text-right font-semibold">Rate</th>
+                <th class="py-2.5 px-3 text-right font-semibold">Qty / Wt</th>
+                <th class="py-2.5 px-3.5 text-right font-semibold">Total</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-200">
+            <tbody class="divide-y divide-neutral-200">
               <tr>
                 <td class="py-3 px-3.5">
-                  <p class="font-bold text-[#132A46]">${tx.itemName || tx.type}</p>
-                  <p class="text-xs text-slate-600 mt-0.5">${tx.note || ''}</p>
+                  <p class="font-semibold text-neutral-900">${tx.itemName || tx.type}</p>
+                  <p class="text-[11px] text-neutral-500 mt-0.5">${tx.note || ''}</p>
                 </td>
-                <td class="num-clean py-3 px-3 text-right font-semibold">${tx.netKg ? `${tx.netKg} Kg (${(tx.netKg/100).toFixed(2)} Qtl)` : (tx.totalKg ? `${tx.totalKg} Kg` : '-')}</td>
-                <td class="num-clean py-3 px-3 text-right">${tx.kaddaKg ? `कद्दा: ${tx.kaddaKg}kg (${tx.kaddaPct||1}%)` : (tx.rate ? `₹${tx.rate}` : '-')}</td>
-                <td class="num-clean py-3 px-3.5 text-right font-bold text-[#132A46]">₹${amtNum.toLocaleString('en-IN')}</td>
+                <td class="num-clean py-3 px-3 text-right">${tx.rateQtl ? `₹${tx.rateQtl}/Qtl` : (tx.rate ? `₹${tx.rate}` : '-')}</td>
+                <td class="num-clean py-3 px-3 text-right">${tx.netKg ? `${tx.netKg} Kg` : (tx.totalKg ? `${tx.totalKg} Kg` : '-')}</td>
+                <td class="num-clean py-3 px-3.5 text-right font-semibold text-neutral-900">₹${amtNum.toLocaleString('en-IN')}</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        ${paymentBoxHtml}
-
-        <div class="p-4 sm:p-5 bg-slate-50 border-t border-slate-200 grid grid-cols-1 md:grid-cols-12 gap-4 text-xs">
-          <div class="md:col-span-7 space-y-2">
-            <p class="font-bold text-[#132A46]">नियम एवं शर्तें (Terms & Conditions — ${isPurchase ? 'खरीद' : 'बिक्री'}):</p>
-            <ul class="space-y-1 text-slate-600">
-              ${termsList.map(line => `<li>${line}</li>`).join('')}
-            </ul>
-            <div class="pt-4">
-              <p class="border-t border-slate-400 pt-1 w-44 font-semibold text-[#132A46]">अधिकृत हस्ताक्षर • वैदिक सीड्स</p>
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-5 pt-2 items-start text-xs">
+          <div class="sm:col-span-7 space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              ${paymentMethodBlock}
+              <div class="space-y-1">
+                <p class="font-bold text-slate-800">Terms & Conditions (${isPurchase ? 'खरीद' : 'बिक्री'}):</p>
+                <ul class="space-y-1 text-[11px] text-neutral-500">
+                  ${termsList.map(line => `<li>${line}</li>`).join('')}
+                </ul>
+              </div>
             </div>
+            ${qrBadgeHtml ? `<div class="pt-1">${qrBadgeHtml}</div>` : ''}
           </div>
 
-          <div class="md:col-span-5 bg-white border border-slate-300 rounded-xl p-3.5 space-y-1.5 text-xs sm:text-sm self-start">
-            <div class="flex justify-between"><span>पिछला खाता शेष:</span><b class="num-clean">₹${Math.round(prevBal).toLocaleString('en-IN')}</b></div>
-            <div class="flex justify-between"><span>आज का बिल:</span><b class="num-clean">₹${amtNum.toLocaleString('en-IN')}</b></div>
-            <div class="flex justify-between"><span>आज जमा / भुगतान:</span><b class="num-clean text-[#1EA668]">₹${Number(tx.paid || 0).toLocaleString('en-IN')}</b></div>
-            <div class="pt-2 border-t border-slate-300 flex justify-between font-bold text-sm sm:text-base">
-              <span>नया कुल खाता शेष:</span>
-              <span class="num-clean text-[#132A46]">₹${bal.toLocaleString('en-IN')}</span>
+          <div class="sm:col-span-5 space-y-2">
+            <div class="flex items-center justify-between py-1.5 border-b border-neutral-200">
+              <span class="text-neutral-500">पिछला शेष:</span>
+              <span class="num-clean font-semibold">₹${Math.round(prevBal).toLocaleString('en-IN')}</span>
+            </div>
+            <div class="flex items-center justify-between py-1.5 border-b border-neutral-200">
+              <span class="text-neutral-500">${subTaxOrDedLabel}</span>
+              <span class="num-clean font-semibold">₹${subTaxOrDedVal.toLocaleString('en-IN')}</span>
+            </div>
+            <div class="flex items-center justify-between py-1.5 border-b border-neutral-200">
+              <span class="text-neutral-500">आज जमा / भुगतान:</span>
+              <span class="num-clean font-semibold">₹${paidNum.toLocaleString('en-IN')}</span>
+            </div>
+            <div class="flex items-center justify-between py-2 px-3 ${headerBarClass} font-bold text-sm">
+              <span>Total:</span>
+              <span class="num-clean">₹${amtNum.toLocaleString('en-IN')}</span>
+            </div>
+            <div class="flex items-center justify-between pt-1 text-[11px] text-neutral-600">
+              <span>नया खाता शेष:</span>
+              <b class="num-clean text-neutral-900">₹${bal.toLocaleString('en-IN')}</b>
             </div>
           </div>
+        </div>
+
+        <div class="pt-4 border-t border-neutral-200 flex items-center justify-between text-[11px] text-neutral-500">
+          <span>धन्यवाद • वैदिक सीड्स</span>
+          <span class="font-semibold text-neutral-800">हस्ताक्षर / वैदिक सीड्स</span>
         </div>
       </div>
     `;
@@ -3852,7 +4030,7 @@ function openReceipt(txId) {
 बिल / रसीद नं.: ${tx.id} | दिनांक: ${tx.date}
 पार्टी: ${p.name} (S/o ${p.father}, ${p.village})
 विवरण: ${tx.itemName || tx.type} — ${tx.note || ''}
-राशि: ₹${amtNum.toLocaleString('en-IN')} | जमा/भुगतान: ₹${Number(tx.paid || 0).toLocaleString('en-IN')}
+राशि: ₹${amtNum.toLocaleString('en-IN')} | जमा/भुगतान: ₹${paidNum.toLocaleString('en-IN')}
 नया खाता शेष: ₹${bal.toLocaleString('en-IN')}
 ${upiId ? `UPI: ${upiId}` : ''} ${bankInfo ? `| Bank: ${bankInfo}` : ''}`
   );
@@ -3989,7 +4167,8 @@ window.addEventListener('DOMContentLoaded', () => {
     if (el) el.value = today;
   });
 
-  setRole(state.role);
+  syncSidebarThemeButtons();
+    setRole(state.role);
   switchTab('dashboard');
   syncFromSheetTruth(false);
   setInterval(() => syncFromSheetTruth(true), 3000);
