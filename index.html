@@ -1891,7 +1891,12 @@ function mergePreserveRecent(localArr, sheetArr) {
 function syncFromSheetTruth(isBackground = false) {
   const url = (state.settings && state.settings.sheetUrl) ? state.settings.sheetUrl : DEPLOYED_SHEET_URL;
   const noteEl = document.getElementById('syncStatusNote');
-  if (!url || !navigator.onLine) return;
+  if (!url) return;
+  if (!navigator.onLine) {
+    setSyncLedState('offline');
+    return;
+  }
+  setSyncLedState('pending');
   if (isBackground && document.hidden) return;
 
   fetch(url + '?action=GET_ALL&t=' + Date.now(), { cache: 'no-store', redirect: 'follow' })
@@ -1924,7 +1929,7 @@ function syncFromSheetTruth(isBackground = false) {
       const nextPrc = sheetPrc.length ? mergePreserveRecent(state.processingBatches, sheetPrc) : state.processingBatches;
 
       const sig = JSON.stringify({ nextParties, nextRawItems, nextSaleItems, nextTx, nextExp, nextPrc });
-      if (isBackground && sig === lastSyncedDataSignature) return;
+      if (isBackground && sig === lastSyncedDataSignature) { setSyncLedState('synced'); return; }
       lastSyncedDataSignature = sig;
 
       state.parties = nextParties;
@@ -1933,6 +1938,7 @@ function syncFromSheetTruth(isBackground = false) {
       state.transactions = nextTx;
       state.expenses = nextExp;
       state.processingBatches = nextPrc;
+      setSyncLedState('synced');
 
       saveState();
       refreshSelectors();
@@ -3986,8 +3992,9 @@ window.addEventListener('DOMContentLoaded', () => {
   setRole(state.role);
   switchTab('dashboard');
   syncFromSheetTruth(false);
-  setInterval(() => syncFromSheetTruth(true), 12000);
+  setInterval(() => syncFromSheetTruth(true), 3000);
 });
+setTimeout(() => { try { if (typeof syncFromSheetTruth === 'function') syncFromSheetTruth(false); } catch (e) {} }, 50);
 </script>
 </body>
 </html>
