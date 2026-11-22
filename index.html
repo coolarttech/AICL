@@ -108,52 +108,39 @@
     position: relative;
     flex: 1;
     width: 100%;
-    min-height: 430px;
+    min-height: 410px;
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    --orbit-box: 330px;
-    --orbit-r: 142px;
-    --card-w: 84px;
-    --card-pad-y: 0.34rem;
-    --card-pad-x: 0.44rem;
-    --photo-max-h: 270px;
+    --orbit-box: 320px;
+    --orbit-r: 138px;
+    --photo-max-h: 265px;
   }
 
   @media (min-width: 640px) {
     .left-hero-stage {
-      min-height: 520px;
-      --orbit-box: 460px;
-      --orbit-r: 202px;
-      --card-w: 112px;
-      --card-pad-y: 0.44rem;
-      --card-pad-x: 0.56rem;
-      --photo-max-h: 380px;
+      min-height: 500px;
+      --orbit-box: 450px;
+      --orbit-r: 196px;
+      --photo-max-h: 375px;
     }
   }
 
   @media (min-width: 1024px) {
     .left-hero-stage {
-      min-height: 600px;
-      --orbit-box: min(560px, 56vh);
-      --orbit-r: calc(var(--orbit-box) * 0.445);
-      --card-w: clamp(114px, 10.5vw, 142px);
-      --card-pad-y: 0.5rem;
-      --card-pad-x: 0.62rem;
-      --photo-max-h: min(520px, 58vh);
+      min-height: 560px;
+      --orbit-box: min(550px, 55vh);
+      --orbit-r: calc(var(--orbit-box) * 0.44);
+      --photo-max-h: min(500px, 55vh);
     }
   }
 
-  /* MacBook Pro / Air / Retina & wider desktop screens: scale up proportionally so it doesn't look tiny */
   @media (min-width: 1366px) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 1440px) {
     .left-hero-stage {
-      min-height: 650px;
-      --orbit-box: min(640px, 64vh);
-      --orbit-r: calc(var(--orbit-box) * 0.45);
-      --card-w: clamp(128px, 10vw, 154px);
-      --card-pad-y: 0.56rem;
-      --card-pad-x: 0.7rem;
-      --photo-max-h: min(575px, 62vh);
+      min-height: 620px;
+      --orbit-box: min(620px, 62vh);
+      --orbit-r: calc(var(--orbit-box) * 0.445);
+      --photo-max-h: min(555px, 60vh);
     }
   }
 
@@ -161,7 +148,7 @@
   .behind-circle-orbit-wrap {
     position: absolute;
     left: 50%;
-    bottom: 20px;
+    bottom: 16px;
     width: var(--orbit-box);
     height: var(--orbit-box);
     transform: translateX(-50%);
@@ -173,12 +160,12 @@
     position: absolute;
     inset: 4px;
     border-radius: 9999px;
-    border: 1.5px dashed rgba(148, 163, 184, 0.42);
+    border: 1.5px dashed rgba(148, 163, 184, 0.38);
   }
 
   .behind-circle-ring-soft {
     position: absolute;
-    inset: 68px;
+    inset: 64px;
     border-radius: 9999px;
     border: 1px solid rgba(110, 231, 183, 0.22);
     background: radial-gradient(circle, rgba(167, 243, 208, 0.07) 0%, rgba(186, 230, 253, 0.03) 60%, transparent 75%);
@@ -190,7 +177,7 @@
     left: 50%;
     width: 100%;
     height: 100%;
-    animation: orbitRingSlow 36s linear infinite;
+    animation: orbitRingSlow 38s linear infinite;
   }
 
   .orbit-node-slot {
@@ -210,19 +197,38 @@
     top: 0;
     left: 0;
     transform: translate(-50%, -50%);
-    animation: counterOrbitCard 36s linear infinite;
+    animation: counterOrbitCard 38s linear infinite;
   }
 
+  /* Apple-style compact pastel card: snug width (no extra empty side space) + crisp Hindi Devanagari font */
   .pastel-mini-card {
-    width: var(--card-w);
-    max-width: var(--card-w);
-    border-radius: 0.75rem;
-    padding: var(--card-pad-y) var(--card-pad-x);
-    border: 1px solid rgba(255, 255, 255, 0.78);
-    box-shadow: 0 8px 20px rgba(2, 6, 23, 0.45);
-    backdrop-filter: blur(6px);
-    line-height: 1.15;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: max-content;
+    min-width: 68px;
+    max-width: 104px;
+    border-radius: 0.85rem;
+    padding: 0.34rem 0.56rem;
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 10px 24px -6px rgba(2, 6, 23, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font-family: 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+    line-height: 1.2;
+    white-space: nowrap;
     transform: none !important;
+  }
+
+  @media (min-width: 1024px) {
+    .pastel-mini-card {
+      min-width: 88px;
+      max-width: 132px;
+      border-radius: 0.95rem;
+      padding: 0.46rem 0.78rem;
+    }
   }
 
   .hero-png-bottom-center {
@@ -282,6 +288,17 @@
       </div>
     </div>
 
+    <!-- Hindi Initiative Headline & Custom Software Tagline in Top Empty Space -->
+    <div class="relative z-30 text-center max-w-xl mx-auto mt-2 lg:mt-1 mb-1 px-2">
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/15 border border-amber-300/35 text-amber-200 text-[10px] sm:text-xs font-semibold tracking-wide mb-1.5">
+        <span>🇮🇳</span>
+        <span>अब हिंदी में भी — सरल व स्मार्ट व्यापारिक ERP</span>
+      </div>
+      <p class="text-[11px] sm:text-xs lg:text-sm text-slate-300 font-medium leading-snug">
+        आपकी बात और आपके व्यापार को समझकर तैयार किया गया <span class="text-emerald-300 font-semibold">कस्टम सॉफ्टवेयर समाधान</span>
+      </p>
+    </div>
+
     <!-- Center Stage: Circular Pastel Cards Behind Bottom-Aligned Photo -->
     <div class="left-hero-stage my-1 flex-1 w-full">
       <div class="behind-circle-orbit-wrap">
@@ -290,97 +307,129 @@
         <div class="orbit-spinner-track">
         <div class="orbit-node-slot" style="--cos-a: 0.0; --sin-a: -1.0;">
           <div class="orbit-card-counter">
-            <div class="pastel-mini-card bg-[#DCFCE7] text-[#14532D] border-[#86EFAC]">
-              <p class="text-[9px] lg:text-xs font-bold truncate">बिक्री बिल</p>
-              <p class="text-[8px] lg:text-[11px] text-[#166534] font-medium truncate mt-0.5">Seed Sale</p>
+            <div class="pastel-mini-card bg-[#DCFCE7]/95 text-[#14532D]">
+              <p class="text-[9.5px] lg:text-[12px] font-bold tracking-tight">बिक्री बिल</p>
+              <p class="text-[8px] lg:text-[10.5px] text-[#166534] font-medium mt-0.5">बीज व मंडी</p>
             </div>
           </div>
         </div>
-        <div class="orbit-node-slot" style="--cos-a: 0.5; --sin-a: -0.866;">
+        <div class="orbit-node-slot" style="--cos-a: 0.3827; --sin-a: -0.9239;">
           <div class="orbit-card-counter">
-            <div class="pastel-mini-card bg-[#FEF3C7] text-[#78350F] border-[#FDE68A]">
-              <p class="text-[9px] lg:text-xs font-bold truncate">मंडी सप्लाई</p>
-              <p class="text-[8px] lg:text-[11px] text-[#92400E] font-medium truncate mt-0.5">Mandi Bill</p>
+            <div class="pastel-mini-card bg-[#FEF3C7]/95 text-[#78350F]">
+              <p class="text-[9.5px] lg:text-[12px] font-bold tracking-tight">मंडी सप्लाई</p>
+              <p class="text-[8px] lg:text-[10.5px] text-[#92400E] font-medium mt-0.5">गाड़ी व पर्ची</p>
             </div>
           </div>
         </div>
-        <div class="orbit-node-slot" style="--cos-a: 0.866; --sin-a: -0.5;">
+        <div class="orbit-node-slot" style="--cos-a: 0.7071; --sin-a: -0.7071;">
           <div class="orbit-card-counter">
-            <div class="pastel-mini-card bg-[#E0F2FE] text-[#0C4A6E] border-[#7DD3FC]">
-              <p class="text-[9px] lg:text-xs font-bold truncate">खरीद बिल</p>
-              <p class="text-[8px] lg:text-[11px] text-[#075985] font-medium truncate mt-0.5">Purchase</p>
+            <div class="pastel-mini-card bg-[#E0F2FE]/95 text-[#0C4A6E]">
+              <p class="text-[9.5px] lg:text-[12px] font-bold tracking-tight">खरीद बिल</p>
+              <p class="text-[8px] lg:text-[10.5px] text-[#075985] font-medium mt-0.5">ऑटो क्विंटल</p>
+            </div>
+          </div>
+        </div>
+        <div class="orbit-node-slot" style="--cos-a: 0.9239; --sin-a: -0.3827;">
+          <div class="orbit-card-counter">
+            <div class="pastel-mini-card bg-[#FCE7F3]/95 text-[#831843]">
+              <p class="text-[9.5px] lg:text-[12px] font-bold tracking-tight">कद्दा कटौती</p>
+              <p class="text-[8px] lg:text-[10.5px] text-[#9D174D] font-medium mt-0.5">कस्टम</p>
             </div>
           </div>
         </div>
         <div class="orbit-node-slot" style="--cos-a: 1.0; --sin-a: 0.0;">
           <div class="orbit-card-counter">
-            <div class="pastel-mini-card bg-[#FCE7F3] text-[#831843] border-[#F9A8D4]">
-              <p class="text-[9px] lg:text-xs font-bold truncate">कद्दा व कटौती</p>
-              <p class="text-[8px] lg:text-[11px] text-[#9D174D] font-medium truncate mt-0.5">1% / कस्टम</p>
+            <div class="pastel-mini-card bg-[#EDE9FE]/95 text-[#4C1D95]">
+              <p class="text-[9.5px] lg:text-[12px] font-bold tracking-tight">पैसा जमा</p>
+              <p class="text-[8px] lg:text-[10.5px] text-[#5B21B6] font-medium mt-0.5">Payment In</p>
             </div>
           </div>
         </div>
-        <div class="orbit-node-slot" style="--cos-a: 0.866; --sin-a: 0.5;">
+        <div class="orbit-node-slot" style="--cos-a: 0.9239; --sin-a: 0.3827;">
           <div class="orbit-card-counter">
-            <div class="pastel-mini-card bg-[#EDE9FE] text-[#4C1D95] border-[#C4B5FD]">
-              <p class="text-[9px] lg:text-xs font-bold truncate">वाउचर एंट्री</p>
-              <p class="text-[8px] lg:text-[11px] text-[#5B21B6] font-medium truncate mt-0.5">जमा / भुगतान</p>
+            <div class="pastel-mini-card bg-[#CCFBF1]/95 text-[#134E4A]">
+              <p class="text-[9.5px] lg:text-[12px] font-bold tracking-tight">पैसा भुगतान</p>
+              <p class="text-[8px] lg:text-[10.5px] text-[#115E59] font-medium mt-0.5">Payment Out</p>
             </div>
           </div>
         </div>
-        <div class="orbit-node-slot" style="--cos-a: 0.5; --sin-a: 0.866;">
+        <div class="orbit-node-slot" style="--cos-a: 0.7071; --sin-a: 0.7071;">
           <div class="orbit-card-counter">
-            <div class="pastel-mini-card bg-[#CCFBF1] text-[#134E4A] border-[#5EEAD4]">
-              <p class="text-[9px] lg:text-xs font-bold truncate">पार्टी लेजर</p>
-              <p class="text-[8px] lg:text-[11px] text-[#115E59] font-medium truncate mt-0.5">पूरा खाता</p>
+            <div class="pastel-mini-card bg-[#FFEDD5]/95 text-[#7C2D12]">
+              <p class="text-[9.5px] lg:text-[12px] font-bold tracking-tight">पार्टी लेजर</p>
+              <p class="text-[8px] lg:text-[10.5px] text-[#9A3412] font-medium mt-0.5">संपूर्ण खाता</p>
+            </div>
+          </div>
+        </div>
+        <div class="orbit-node-slot" style="--cos-a: 0.3827; --sin-a: 0.9239;">
+          <div class="orbit-card-counter">
+            <div class="pastel-mini-card bg-[#E0E7FF]/95 text-[#312E81]">
+              <p class="text-[9.5px] lg:text-[12px] font-bold tracking-tight">कंपनी खर्चे</p>
+              <p class="text-[8px] lg:text-[10.5px] text-[#3730A3] font-medium mt-0.5">मदवार खर्च</p>
             </div>
           </div>
         </div>
         <div class="orbit-node-slot" style="--cos-a: 0.0; --sin-a: 1.0;">
           <div class="orbit-card-counter">
-            <div class="pastel-mini-card bg-[#FFEDD5] text-[#7C2D12] border-[#FDBA74]">
-              <p class="text-[9px] lg:text-xs font-bold truncate">कंपनी खर्चे</p>
-              <p class="text-[8px] lg:text-[11px] text-[#9A3412] font-medium truncate mt-0.5">मदवार खर्च</p>
+            <div class="pastel-mini-card bg-[#ECFCCB]/95 text-[#365314]">
+              <p class="text-[9.5px] lg:text-[12px] font-bold tracking-tight">स्टाफ व सैलरी</p>
+              <p class="text-[8px] lg:text-[10.5px] text-[#3F6212] font-medium mt-0.5">उपस्थिति</p>
             </div>
           </div>
         </div>
-        <div class="orbit-node-slot" style="--cos-a: -0.5; --sin-a: 0.866;">
+        <div class="orbit-node-slot" style="--cos-a: -0.3827; --sin-a: 0.9239;">
           <div class="orbit-card-counter">
-            <div class="pastel-mini-card bg-[#E0E7FF] text-[#312E81] border-[#A5B4FC]">
-              <p class="text-[9px] lg:text-xs font-bold truncate">कच्चा स्टॉक</p>
-              <p class="text-[8px] lg:text-[11px] text-[#3730A3] font-medium truncate mt-0.5">गोदाम टैंक</p>
+            <div class="pastel-mini-card bg-[#F3E8FF]/95 text-[#581C87]">
+              <p class="text-[9.5px] lg:text-[12px] font-bold tracking-tight">कच्चा गोदाम</p>
+              <p class="text-[8px] lg:text-[10.5px] text-[#6B21A8] font-medium mt-0.5">खुला बीज</p>
             </div>
           </div>
         </div>
-        <div class="orbit-node-slot" style="--cos-a: -0.866; --sin-a: 0.5;">
+        <div class="orbit-node-slot" style="--cos-a: -0.7071; --sin-a: 0.7071;">
           <div class="orbit-card-counter">
-            <div class="pastel-mini-card bg-[#ECFCCB] text-[#365314] border-[#BEF264]">
-              <p class="text-[9px] lg:text-xs font-bold truncate">बीज स्टॉक</p>
-              <p class="text-[8px] lg:text-[11px] text-[#3F6212] font-medium truncate mt-0.5">तैयार टैंक</p>
+            <div class="pastel-mini-card bg-[#FFE4E6]/95 text-[#881337]">
+              <p class="text-[9.5px] lg:text-[12px] font-bold tracking-tight">ब्रांडेड गोदाम</p>
+              <p class="text-[8px] lg:text-[10.5px] text-[#9F1239] font-medium mt-0.5">पैकेट व बैग</p>
+            </div>
+          </div>
+        </div>
+        <div class="orbit-node-slot" style="--cos-a: -0.9239; --sin-a: 0.3827;">
+          <div class="orbit-card-counter">
+            <div class="pastel-mini-card bg-[#F1F5F9]/95 text-[#1E293B]">
+              <p class="text-[9.5px] lg:text-[12px] font-bold tracking-tight">लॉट प्रोसेसिंग</p>
+              <p class="text-[8px] lg:text-[10.5px] text-[#0F172A] font-medium mt-0.5">% मिलान</p>
             </div>
           </div>
         </div>
         <div class="orbit-node-slot" style="--cos-a: -1.0; --sin-a: 0.0;">
           <div class="orbit-card-counter">
-            <div class="pastel-mini-card bg-[#F3E8FF] text-[#581C87] border-[#D8B4FE]">
-              <p class="text-[9px] lg:text-xs font-bold truncate">लॉट प्रोसेसिंग</p>
-              <p class="text-[8px] lg:text-[11px] text-[#6B21A8] font-medium truncate mt-0.5">% मिलान</p>
+            <div class="pastel-mini-card bg-[#D1FAE5]/95 text-[#064E3B]">
+              <p class="text-[9.5px] lg:text-[12px] font-bold tracking-tight">आइटम मास्टर</p>
+              <p class="text-[8px] lg:text-[10.5px] text-[#065F46] font-medium mt-0.5">Raw व Sale</p>
             </div>
           </div>
         </div>
-        <div class="orbit-node-slot" style="--cos-a: -0.866; --sin-a: -0.5;">
+        <div class="orbit-node-slot" style="--cos-a: -0.9239; --sin-a: -0.3827;">
           <div class="orbit-card-counter">
-            <div class="pastel-mini-card bg-[#FFE4E6] text-[#881337] border-[#FDA4AF]">
-              <p class="text-[9px] lg:text-xs font-bold truncate">आइटम मास्टर</p>
-              <p class="text-[8px] lg:text-[11px] text-[#9F1239] font-medium truncate mt-0.5">Raw व Sale</p>
+            <div class="pastel-mini-card bg-[#FEF9C3]/95 text-[#713F12]">
+              <p class="text-[9.5px] lg:text-[12px] font-bold tracking-tight">शुद्ध कमाई</p>
+              <p class="text-[8px] lg:text-[10.5px] text-[#854D0E] font-medium mt-0.5">Net Profit</p>
             </div>
           </div>
         </div>
-        <div class="orbit-node-slot" style="--cos-a: -0.5; --sin-a: -0.866;">
+        <div class="orbit-node-slot" style="--cos-a: -0.7071; --sin-a: -0.7071;">
           <div class="orbit-card-counter">
-            <div class="pastel-mini-card bg-[#F1F5F9] text-[#1E293B] border-[#CBD5E1]">
-              <p class="text-[9px] lg:text-xs font-bold truncate">शुद्ध कमाई</p>
-              <p class="text-[8px] lg:text-[11px] text-[#0F172A] font-medium truncate mt-0.5">Net Profit</p>
+            <div class="pastel-mini-card bg-[#E0F7FA]/95 text-[#006064]">
+              <p class="text-[9.5px] lg:text-[12px] font-bold tracking-tight">डिजिटल रसीद</p>
+              <p class="text-[8px] lg:text-[10.5px] text-[#00838F] font-medium mt-0.5">PDF व QR</p>
+            </div>
+          </div>
+        </div>
+        <div class="orbit-node-slot" style="--cos-a: -0.3827; --sin-a: -0.9239;">
+          <div class="orbit-card-counter">
+            <div class="pastel-mini-card bg-[#FAE8FF]/95 text-[#701A75]">
+              <p class="text-[9.5px] lg:text-[12px] font-bold tracking-tight">Google Sheet</p>
+              <p class="text-[8px] lg:text-[10.5px] text-[#86198F] font-medium mt-0.5">लाइव सिंक</p>
             </div>
           </div>
         </div>
@@ -405,7 +454,7 @@
           <svg class="w-3.5 h-3.5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
           <span>+91 9458614610</span>
         </a>
-        <span class="text-slate-300 font-medium">Developed by <b class="text-emerald-400 font-semibold">Team CoolArt</b></span>
+        <span class="text-slate-300 font-medium">Developed by <span class="font-normal">Team</span> <b class="text-emerald-400 font-bold">CoolArt®</b></span>
       </div>
     </div>
   </div>
@@ -440,7 +489,7 @@
         <svg class="w-3.5 h-3.5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
         <span>+91 9458614610</span>
       </a>
-      <span class="text-slate-300">Developed by <b class="text-white font-semibold">Team CoolArt</b></span>
+      <span class="text-slate-300">Developed by <span class="font-normal">Team</span> <b class="text-white font-bold">CoolArt®</b></span>
     </div>
   </div>
 </div>
@@ -465,8 +514,9 @@
         <label class="block font-semibold text-slate-700 mb-1">ऑटो-लॉक समय (Idle Auto-Lock — मिनट में)</label>
         <select id="autoLockMinutesSelect" class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2 text-xs sm:text-sm bg-white font-semibold text-[#132A46]">
           <option value="1">1 मिनट (तेज़ सुरक्षा)</option>
-          <option value="2">2 मिनट</option>
-          <option value="5" selected>5 मिनट (डिफ़ॉल्ट)</option>
+          <option value="2" selected>2 मिनट (डिफ़ॉल्ट)</option>
+          <option value="3">3 मिनट</option>
+          <option value="5">5 मिनट</option>
           <option value="10">10 मिनट</option>
           <option value="15">15 मिनट</option>
           <option value="30">30 मिनट</option>
@@ -622,14 +672,10 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-1.5">
-              <button type="button" onclick="openChangePinModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[11px] font-medium px-2 py-1.5 rounded-lg flex items-center justify-center gap-1 transition truncate">
-                <span>🔑 PIN बदलें</span>
-              </button>
-              <button type="button" onclick="lockPortalNow()" class="bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 text-[11px] font-semibold px-2 py-1.5 rounded-lg flex items-center justify-center gap-1 transition truncate">
-                <span>🔒 लॉक करें</span>
-              </button>
-            </div>
+            <button type="button" onclick="openChangePinModal()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[11px] font-medium px-2.5 py-2 rounded-lg flex items-center justify-between transition">
+              <span>🔑 PIN व ऑटो-लॉक समय बदलें</span>
+              <span class="text-slate-400">›</span>
+            </button>
 
             <button onclick="openUpiSettingsModal()" class="w-full bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[11px] font-medium px-2.5 py-2 rounded-lg flex items-center justify-between transition">
               <span class="flex items-center gap-1.5">
@@ -718,10 +764,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v17 • 17 वर्जन</span>
+          <span id="versionBadgeDisplay">v18 • 18 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 22 Nov 2026 (v17)
+          Last Updated On: 22 Nov 2026 (v18)
         </div>
       </div>
     </div>
@@ -755,9 +801,13 @@
           </div>
         </div>
 
-        <div class="flex items-center gap-1.5 shrink-0">
+        <div class="flex items-center gap-2 shrink-0">
           <span class="lg:hidden text-[9px] font-semibold text-[#1EA668] bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full whitespace-nowrap">Agri ERP</span>
           <img src="logo.png" alt="MunimJi by Cool Art®" class="h-7 sm:h-10 md:h-11 w-auto object-contain">
+          <button type="button" onclick="lockPortalNow()" title="स्क्रीन लॉक करें (Lock Screen)" class="bg-white hover:bg-slate-50 active:scale-95 text-[#132A46] border border-slate-300 shadow-xs px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-semibold inline-flex items-center gap-1.5 transition shrink-0">
+            <svg class="w-3.5 h-3.5 text-amber-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <span>लॉक</span>
+          </button>
         </div>
       </div>
     </header>
@@ -1883,7 +1933,7 @@
         <div class="flex items-center justify-center sm:justify-end gap-1 sm:gap-2">
           <span>Powered by</span>
           <img src="logo.png" alt="MunimJi by Cool Art®" class="h-3.5 sm:h-6 w-auto object-contain">
-          <span>• Developed by <b class="text-[#132A46] font-semibold">Cool Art®</b></span>
+          <span>• Developed by <span class="font-normal">Team</span> <b class="text-[#132A46] font-bold">CoolArt®</b></span>
         </div>
       </div>
     </footer>
@@ -4815,13 +4865,32 @@ function saveNewLockPin(e) {
 })();
 
 let autoLockTimeoutId = null;
+let lastUserActivityTs = Date.now();
+
+function getAutoLockMinutes() {
+  const raw = state && state.settings && state.settings.autoLockMinutes !== undefined
+    ? Number(state.settings.autoLockMinutes)
+    : 2;
+  return isNaN(raw) ? 2 : Math.max(0, raw);
+}
 
 function isPortalCurrentlyUnlocked() {
   const screen = document.getElementById('pinLockScreen');
   return Boolean(screen && screen.classList.contains('hidden'));
 }
 
+function checkAutoLockNow() {
+  const mins = getAutoLockMinutes();
+  if (!mins || mins <= 0) return;
+  if (!isPortalCurrentlyUnlocked()) return;
+  const elapsedMs = Date.now() - lastUserActivityTs;
+  if (elapsedMs >= mins * 60 * 1000) {
+    lockPortalNow();
+  }
+}
+
 function resetAutoLockTimer() {
+  lastUserActivityTs = Date.now();
   if (autoLockTimeoutId) {
     clearTimeout(autoLockTimeoutId);
     autoLockTimeoutId = null;
@@ -4831,26 +4900,29 @@ function resetAutoLockTimer() {
   if (!isPortalCurrentlyUnlocked()) return;
 
   autoLockTimeoutId = setTimeout(() => {
-    if (isPortalCurrentlyUnlocked()) {
-      lockPortalNow();
-    }
-  }, mins * 60 * 1000);
+    checkAutoLockNow();
+  }, mins * 60 * 1000 + 150);
 }
 
-// Reset idle timer on user interaction or tab return
-['pointerdown', 'keydown', 'scroll', 'touchstart', 'wheel'].forEach(evName => {
+// Reset idle timer on any user activity
+['pointerdown', 'mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart', 'wheel', 'click'].forEach(evName => {
   document.addEventListener(evName, () => {
-    if (isPortalCurrentlyUnlocked()) resetAutoLockTimer();
-  }, { passive: true });
+    if (isPortalCurrentlyUnlocked()) {
+      resetAutoLockTimer();
+    }
+  }, { passive: true, capture: true });
 });
+
+// Check every 5 seconds in case setTimeout was throttled by OS/tab sleep
+setInterval(checkAutoLockNow, 5000);
 
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden && isPortalCurrentlyUnlocked()) {
-    resetAutoLockTimer();
+    checkAutoLockNow();
   }
 });
 
-// Start timer after unlock
+// Start timer right after unlock
 const _origUnlockPortalSuccess = unlockPortalSuccess;
 unlockPortalSuccess = function() {
   _origUnlockPortalSuccess();
@@ -4858,8 +4930,6 @@ unlockPortalSuccess = function() {
 };
 
 resetAutoLockTimer();
-
-
 
 function openVoucherPreset(vType) {
   switchTab('vouchers');
@@ -5016,8 +5086,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v17",
-  totalVersionsUpdated: 17,
+  currentVersion: "v18",
+  totalVersionsUpdated: 18,
   lastUpdatedDateLabel: "22 Nov 2026"
 };
 
