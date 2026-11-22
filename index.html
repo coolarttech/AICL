@@ -239,6 +239,7 @@
     justify-content: center;
     width: 100%;
     margin-top: auto;
+    margin-bottom: -1px;
   }
 
   .hero-png-bottom-center img {
@@ -275,6 +276,132 @@
     pointer-events: none;
   }
 
+
+  .godown-bay {
+    position: relative;
+    width: 112px;
+    height: 158px;
+    border-radius: 14px 14px 10px 10px;
+    border: 2px solid #d97706;
+    background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: inset 0 2px 6px rgba(180, 83, 9, 0.14);
+  }
+  .godown-bay::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 22px;
+    background: linear-gradient(180deg, #b45309 0%, #92400e 100%);
+    clip-path: polygon(0% 100%, 50% 12%, 100% 100%);
+    z-index: 6;
+    pointer-events: none;
+  }
+  .godown-bay-branded {
+    border-color: #059669;
+    background: linear-gradient(180deg, #ecfdf5 0%, #d1fae5 100%);
+    box-shadow: inset 0 2px 6px rgba(4, 120, 87, 0.14);
+  }
+  .godown-bay-branded::before {
+    background: linear-gradient(180deg, #047857 0%, #065f46 100%);
+  }
+  .godown-visual-badge {
+    position: relative;
+    z-index: 7;
+    padding: 24px 7px 4px 7px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3px;
+  }
+  .godown-shelf-line {
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    height: 1.5px;
+    background: rgba(146, 64, 14, 0.22);
+    z-index: 4;
+    pointer-events: none;
+  }
+  .godown-fill-level {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0%;
+    transition: height 0.55s ease;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 5px;
+    z-index: 3;
+  }
+  .godown-raw-fill {
+    background: linear-gradient(180deg, rgba(245, 158, 11, 0.82) 0%, rgba(180, 83, 9, 0.94) 100%);
+  }
+  .godown-branded-fill {
+    background: linear-gradient(180deg, rgba(16, 185, 129, 0.82) 0%, rgba(4, 120, 87, 0.94) 100%);
+  }
+
+  @keyframes symScrollDriftA {
+    0%   { transform: translate(-18px, 12px) scale(1); opacity: 0.14; }
+    25%  { transform: translate(18px, -14px) scale(1.03); opacity: 0.32; }
+    50%  { transform: translate(26px, 10px) scale(1); opacity: 0.12; }
+    75%  { transform: translate(-10px, -18px) scale(1.02); opacity: 0.28; }
+    100% { transform: translate(-18px, 12px) scale(1); opacity: 0.14; }
+  }
+  @keyframes symScrollDriftB {
+    0%   { transform: translate(18px, -12px) scale(1); opacity: 0.12; }
+    30%  { transform: translate(-20px, 14px) scale(1.03); opacity: 0.30; }
+    65%  { transform: translate(-14px, -16px) scale(1); opacity: 0.10; }
+    100% { transform: translate(18px, -12px) scale(1); opacity: 0.12; }
+  }
+  @keyframes symAlternatingGlow {
+    0%, 72%, 100% {
+      opacity: 0.22;
+      filter: drop-shadow(0 0 0px transparent);
+    }
+    82%, 90% {
+      opacity: 0.95;
+      filter: drop-shadow(0 0 14px currentColor);
+    }
+  }
+  .calc-bg-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .calc-sym-item {
+    position: absolute;
+    font-weight: 800;
+    line-height: 1;
+    user-select: none;
+    pointer-events: none;
+    will-change: transform, opacity, filter;
+  }
+  .calc-sym-large-low {
+    font-size: 4.5rem;
+    opacity: 0.11;
+    font-weight: 700;
+  }
+  .calc-sym-small-bold {
+    font-size: 2.35rem;
+    opacity: 0.34;
+    font-weight: 900;
+  }
+  @media (min-width: 1024px) {
+    .calc-sym-large-low { font-size: 5.5rem; }
+    .calc-sym-small-bold { font-size: 2.75rem; }
+  }
+  .calc-glow-active {
+    animation: symAlternatingGlow 12s ease-in-out infinite !important;
+  }
+
 </style>
 </head>
 <body class="min-h-screen flex flex-col bg-[#f6f9f7]" oncontextmenu="return false;" ondragstart="return false;">
@@ -295,14 +422,20 @@
 <div id="pinLockScreen" class="fixed inset-0 z-[95] bg-[#0B0F17] text-white grid grid-cols-1 lg:grid-cols-12 overflow-y-auto no-scrollbar no-print">
   <!-- Left Showcase: Mobile has small left logo + top-right Powered by MunimJi & clean bottom; Desktop has clean top, large bottom-aligned photo + scaled orbit cards, and footer with Developed by Team CoolArt -->
   <div class="lg:col-span-7 flex flex-col justify-between p-4 sm:p-7 xl:p-9 border-b lg:border-b-0 lg:border-r border-slate-800/80 relative" style="background-image: linear-gradient(to right, rgba(148,163,184,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.06) 1px, transparent 1px); background-size: 28px 28px;">
-    <!-- Subtle Slow-Drifting Slim Calculation Symbols in Blank Outer Space -->
+    <!-- Scrolling / Drifting + Fading + Non-Repeating Twinkling Glow Calculation Symbols -->
     <div class="calc-bg-layer" aria-hidden="true">
-      <span class="calc-float-sym text-4xl lg:text-5xl text-emerald-300/10" style="top: 10%; left: 7%; animation: slowSymbolDriftA 19s ease-in-out infinite;">+</span>
-      <span class="calc-float-sym text-3xl lg:text-4xl text-sky-300/10" style="top: 14%; right: 8%; animation: slowSymbolDriftB 22s ease-in-out infinite;">%</span>
-      <span class="calc-float-sym text-4xl lg:text-5xl text-amber-300/10" style="top: 42%; left: 4.5%; animation: slowSymbolDriftB 24s ease-in-out infinite;">−</span>
-      <span class="calc-float-sym text-3xl lg:text-4xl text-purple-300/10" style="top: 46%; right: 5%; animation: slowSymbolDriftA 21s ease-in-out infinite;">×</span>
-      <span class="calc-float-sym text-3xl lg:text-4xl text-teal-300/10" style="bottom: 18%; left: 6.5%; animation: slowSymbolDriftA 23s ease-in-out infinite;">÷</span>
-      <span class="calc-float-sym text-3xl lg:text-4xl text-rose-300/10" style="bottom: 22%; right: 6.5%; animation: slowSymbolDriftB 20s ease-in-out infinite;">=</span>
+      <!-- Large low-opacity symbols -->
+      <span id="calcSym-0" class="calc-sym-item calc-sym-large-low text-emerald-300" style="top: 8%; left: 5%; animation: symScrollDriftA 18s ease-in-out infinite;">+</span>
+      <span id="calcSym-1" class="calc-sym-item calc-sym-large-low text-sky-300" style="top: 10%; right: 6%; animation: symScrollDriftB 21s ease-in-out infinite;">%</span>
+      <span id="calcSym-2" class="calc-sym-item calc-sym-large-low text-amber-300" style="bottom: 14%; left: 4%; animation: symScrollDriftB 20s ease-in-out infinite;">−</span>
+      <span id="calcSym-3" class="calc-sym-item calc-sym-large-low text-purple-300" style="bottom: 16%; right: 5%; animation: symScrollDriftA 22s ease-in-out infinite;">×</span>
+
+      <!-- Smaller bold symbols -->
+      <span id="calcSym-4" class="calc-sym-item calc-sym-small-bold text-teal-300" style="top: 26%; left: 9%; animation: symScrollDriftB 15s ease-in-out infinite;">÷</span>
+      <span id="calcSym-5" class="calc-sym-item calc-sym-small-bold text-rose-300" style="top: 28%; right: 9%; animation: symScrollDriftA 16s ease-in-out infinite;">=</span>
+      <span id="calcSym-6" class="calc-sym-item calc-sym-small-bold text-yellow-200" style="top: 56%; left: 5.5%; animation: symScrollDriftA 17s ease-in-out infinite;">₹</span>
+      <span id="calcSym-7" class="calc-sym-item calc-sym-small-bold text-indigo-300" style="top: 58%; right: 5.5%; animation: symScrollDriftB 19s ease-in-out infinite;">±</span>
+      <span id="calcSym-8" class="calc-sym-item calc-sym-small-bold text-cyan-200" style="top: 40%; left: 12%; animation: symScrollDriftB 14s ease-in-out infinite;">≈</span>
     </div>
 
     <!-- Top Bar: Mobile shows small PNG logo on left + Powered by MunimJi on right; Desktop hides green pill & duplicate logo -->
@@ -475,10 +608,10 @@
       </div>
     </div>
 
-    <!-- Founder Reference Line Right Above the Thin Divider Line -->
-    <div class="hidden lg:flex items-center justify-center relative z-30 pb-1.5">
+    <!-- Founder Reference Line Right Above the Thin Divider Line (English Name + Left/Aligned Placement) -->
+    <div class="hidden lg:flex items-center justify-start relative z-30 pb-1.5">
       <p class="text-[11px] text-slate-400 tracking-wide">
-        <span class="text-slate-200 font-semibold">कृष्ण कांत भारद्वाज</span> — Founder, <b class="text-emerald-400 font-semibold">CoolArt®</b> <span class="text-slate-400">(MunimJi Platform)</span>
+        <span class="text-slate-200 font-semibold">Krishan Kant Bhardwaj</span> — Founder, <b class="text-emerald-400 font-semibold">CoolArt®</b> <span class="text-slate-400">(MunimJi Platform)</span>
       </p>
     </div>
 
@@ -815,10 +948,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v21 • 21 वर्जन</span>
+          <span id="versionBadgeDisplay">v22 • 22 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 22 Nov 2026 (v21)
+          Last Updated On: 22 Nov 2026 (v22)
         </div>
       </div>
     </div>
@@ -5620,6 +5753,68 @@ window.addEventListener('DOMContentLoaded', () => {
   renderPartyDuesSummaryTable();
 });
 
+
+function getGodownStockMetrics() {
+  const purchasedKg = state.transactions
+    .filter(t => t.type === 'PURCHASE')
+    .reduce((s, x) => s + Number(x.netKg || x.grossKg || 0), 0);
+  const processedRawKg = state.processingBatches
+    .reduce((s, b) => s + Number(b.rawKg || 0), 0);
+  const rawStockKg = Math.max(0, purchasedKg - processedRawKg);
+
+  const producedGoodSeedKg = state.processingBatches
+    .reduce((s, b) => s + Number(b.goodKg || 0), 0);
+  const soldSeedKg = state.transactions
+    .filter(t => t.type === 'SALE' && t.saleChannel !== 'Mandi Supply')
+    .reduce((s, x) => s + Number(x.totalKg || 0), 0);
+  const procStockKg = Math.max(0, producedGoodSeedKg - soldSeedKg);
+
+  return { rawStockKg, procStockKg };
+}
+
+function syncProcessingRawStockBanner() {
+  const { rawStockKg } = getGodownStockMetrics();
+  const infoEl = document.getElementById('prcAvailableRawInfo');
+  if (infoEl) {
+    infoEl.textContent = `मौजूदा उपलब्ध कच्चा स्टॉक: ${rawStockKg.toLocaleString('en-IN')} Kg (${(rawStockKg / 100).toFixed(2)} क्विंटल)`;
+  }
+}
+
+const _origRenderDashboardV22 = renderDashboard;
+renderDashboard = function() {
+  _origRenderDashboardV22();
+  syncProcessingRawStockBanner();
+};
+
+const _origRenderProcessingV22 = renderProcessingTable;
+renderProcessingTable = function() {
+  _origRenderProcessingV22();
+  syncProcessingRawStockBanner();
+};
+
+// Non-repeating alternating glow controller across calculation symbols
+(function initNonRepeatingSymbolGlow() {
+  const ids = [0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => 'calcSym-' + i);
+  let lastIdx = -1;
+
+  function triggerNextGlow() {
+    const els = ids.map(id => document.getElementById(id)).filter(Boolean);
+    if (!els.length) return;
+    els.forEach(el => el.classList.remove('calc-glow-active'));
+
+    const pool = els.map((_, idx) => idx).filter(idx => idx !== lastIdx);
+    const chosenIdx = pool[Math.floor(Math.random() * pool.length)];
+    lastIdx = chosenIdx;
+    els[chosenIdx].classList.add('calc-glow-active');
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    syncProcessingRawStockBanner();
+    triggerNextGlow();
+    setInterval(triggerNextGlow, 3600);
+  });
+})();
+
 </script>
 </body>
 </html>
@@ -5631,8 +5826,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v21",
-  totalVersionsUpdated: 21,
+  currentVersion: "v22",
+  totalVersionsUpdated: 22,
   lastUpdatedDateLabel: "22 Nov 2026"
 };
 
