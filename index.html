@@ -1037,10 +1037,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v25 • 25 वर्जन</span>
+          <span id="versionBadgeDisplay">v26 • 26 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 23 Nov 2026 (v25)
+          Last Updated On: 23 Nov 2026 (v26)
         </div>
       </div>
     </div>
@@ -2594,7 +2594,7 @@
 </div>
 
 <script>
-const DEPLOYED_SHEET_URL = "https://script.google.com/macros/s/AKfycbzAONUBXPdbUmmZixpkD0ISNNHPOLPMJK7WVBUjhlbHWsZxotgY0pZu6pPDCWUTeNFFQw/exec";
+const DEPLOYED_SHEET_URL = "https://script.google.com/macros/s/AKfycbxx1Qhg54XzRNS59Dolof7W38R3D6YgGxWQxPXe_bHtYlHu_qRVxnsLlo2quYf4AsXd9w/exec";
 
 // Protection Lock
 (function() {
@@ -6645,6 +6645,43 @@ function printFilteredPartyListReport() {
   renderPartyDuesPrintModal(rows.map(p => p.id), `पार्टी रिपोर्ट (गारंटर: ${gVal} | गांव: ${vVal} | खाता: ${bLabel})`);
 }
 
+
+function logPortalAccessEvent(actionName = "PORTAL_OPEN") {
+  const ua = navigator.userAgent || "";
+  const isMobile = /Mobi|Android|iPhone|iPad/i.test(ua);
+  syncToGoogleSheet({
+    sheetTab: "Access_Logs",
+    logType: "ACCESS_AUDIT",
+    timestamp: new Date().toISOString(),
+    localDateTime: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+    action: actionName,
+    activeRole: state.role || "owner",
+    deviceId: getDeviceFingerprint(),
+    deviceType: isMobile ? "Mobile/Tablet" : "Desktop/Laptop",
+    platform: navigator.platform || "Unknown",
+    screenResolution: `${window.screen.width}x${window.screen.height}`
+  });
+}
+
+(function wireAutoAccessLogs() {
+  let _loggedInitialOpen = false;
+  window.addEventListener("DOMContentLoaded", () => {
+    if (!_loggedInitialOpen) {
+      _loggedInitialOpen = true;
+      setTimeout(() => logPortalAccessEvent("PORTAL_OPEN"), 400);
+    }
+  });
+
+  const _origUnlockForLog = typeof unlockPortalSuccess === "function" ? unlockPortalSuccess : null;
+  if (_origUnlockForLog) {
+    unlockPortalSuccess = function() {
+      const res = _origUnlockForLog.apply(this, arguments);
+      logPortalAccessEvent("PIN_UNLOCK");
+      return res;
+    };
+  }
+})();
+
 </script>
 </body>
 </html>
@@ -6656,8 +6693,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v25",
-  totalVersionsUpdated: 25,
+  currentVersion: "v26",
+  totalVersionsUpdated: 26,
   lastUpdatedDateLabel: "22 Nov 2026"
 };
 
