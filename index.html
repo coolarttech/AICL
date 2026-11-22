@@ -103,65 +103,85 @@
     }
   }
 
-  /* Left showcase stage: bottom-aligned & 60-75% scale on desktop, clean mobile bottom alignment */
+  /* Left showcase stage: responsive across mobile, standard laptop, and MacBook / high-res displays */
   .left-hero-stage {
     position: relative;
     flex: 1;
     width: 100%;
-    min-height: 410px;
+    min-height: 430px;
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    overflow: hidden;
+    --orbit-box: 330px;
+    --orbit-r: 142px;
+    --card-w: 84px;
+    --card-pad-y: 0.34rem;
+    --card-pad-x: 0.44rem;
+    --photo-max-h: 270px;
+  }
+
+  @media (min-width: 640px) {
+    .left-hero-stage {
+      min-height: 520px;
+      --orbit-box: 460px;
+      --orbit-r: 202px;
+      --card-w: 112px;
+      --card-pad-y: 0.44rem;
+      --card-pad-x: 0.56rem;
+      --photo-max-h: 380px;
+    }
   }
 
   @media (min-width: 1024px) {
     .left-hero-stage {
-      min-height: 580px;
+      min-height: 600px;
+      --orbit-box: min(560px, 56vh);
+      --orbit-r: calc(var(--orbit-box) * 0.445);
+      --card-w: clamp(114px, 10.5vw, 142px);
+      --card-pad-y: 0.5rem;
+      --card-pad-x: 0.62rem;
+      --photo-max-h: min(520px, 58vh);
     }
   }
 
-  /* Orbit circle centered behind photo with generous margin so cards never clip at edges */
+  /* MacBook Pro / Air / Retina & wider desktop screens: scale up proportionally so it doesn't look tiny */
+  @media (min-width: 1366px) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 1440px) {
+    .left-hero-stage {
+      min-height: 650px;
+      --orbit-box: min(640px, 64vh);
+      --orbit-r: calc(var(--orbit-box) * 0.45);
+      --card-w: clamp(128px, 10vw, 154px);
+      --card-pad-y: 0.56rem;
+      --card-pad-x: 0.7rem;
+      --photo-max-h: min(575px, 62vh);
+    }
+  }
+
+  /* Outer orbit circle centered behind photo */
   .behind-circle-orbit-wrap {
     position: absolute;
     left: 50%;
-    bottom: 24px;
-    width: 280px;
-    height: 280px;
+    bottom: 20px;
+    width: var(--orbit-box);
+    height: var(--orbit-box);
     transform: translateX(-50%);
     z-index: 8;
     pointer-events: none;
   }
 
-  @media (min-width: 1024px) {
-    .behind-circle-orbit-wrap {
-      bottom: 24px;
-      width: 490px;
-      height: 490px;
-    }
-  }
-
-  @media (min-width: 1280px) {
-    .behind-circle-orbit-wrap {
-      bottom: 26px;
-      width: 530px;
-      height: 530px;
-    }
-  }
-
   .behind-circle-ring-dashed {
     position: absolute;
-    inset: 14px;
+    inset: 4px;
     border-radius: 9999px;
-    border: 1.5px dashed rgba(148, 163, 184, 0.36);
+    border: 1.5px dashed rgba(148, 163, 184, 0.42);
   }
 
   .behind-circle-ring-soft {
     position: absolute;
-    inset: 52px;
+    inset: 68px;
     border-radius: 9999px;
-    border: 1px solid rgba(110, 231, 183, 0.25);
-    background: radial-gradient(circle, rgba(167, 243, 208, 0.08) 0%, rgba(186, 230, 253, 0.04) 60%, transparent 75%);
+    border: 1px solid rgba(110, 231, 183, 0.22);
+    background: radial-gradient(circle, rgba(167, 243, 208, 0.07) 0%, rgba(186, 230, 253, 0.03) 60%, transparent 75%);
   }
 
   .orbit-spinner-track {
@@ -180,27 +200,9 @@
     width: 0;
     height: 0;
     transform: translate(
-      calc(var(--cos-a) * 102px),
-      calc(var(--sin-a) * 102px)
+      calc(var(--cos-a) * var(--orbit-r)),
+      calc(var(--sin-a) * var(--orbit-r))
     );
-  }
-
-  @media (min-width: 1024px) {
-    .orbit-node-slot {
-      transform: translate(
-        calc(var(--cos-a) * 176px),
-        calc(var(--sin-a) * 176px)
-      );
-    }
-  }
-
-  @media (min-width: 1280px) {
-    .orbit-node-slot {
-      transform: translate(
-        calc(var(--cos-a) * 192px),
-        calc(var(--sin-a) * 192px)
-      );
-    }
   }
 
   .orbit-card-counter {
@@ -212,24 +214,15 @@
   }
 
   .pastel-mini-card {
-    width: 78px;
-    max-width: 78px;
-    border-radius: 0.65rem;
-    padding: 0.32rem 0.42rem;
+    width: var(--card-w);
+    max-width: var(--card-w);
+    border-radius: 0.75rem;
+    padding: var(--card-pad-y) var(--card-pad-x);
     border: 1px solid rgba(255, 255, 255, 0.78);
-    box-shadow: 0 8px 20px rgba(2, 6, 23, 0.42);
+    box-shadow: 0 8px 20px rgba(2, 6, 23, 0.45);
     backdrop-filter: blur(6px);
     line-height: 1.15;
     transform: none !important;
-  }
-
-  @media (min-width: 1024px) {
-    .pastel-mini-card {
-      width: 118px;
-      max-width: 118px;
-      border-radius: 0.8rem;
-      padding: 0.48rem 0.62rem;
-    }
   }
 
   .hero-png-bottom-center {
@@ -243,25 +236,13 @@
   }
 
   .hero-png-bottom-center img {
-    max-height: 300px;
+    max-height: var(--photo-max-h);
     width: auto;
     object-fit: contain;
     object-position: bottom center;
     filter: drop-shadow(0 20px 36px rgba(0, 0, 0, 0.78));
     user-select: none;
     pointer-events: none;
-  }
-
-  @media (min-width: 1024px) {
-    .hero-png-bottom-center img {
-      max-height: 540px;
-    }
-  }
-
-  @media (min-width: 1280px) {
-    .hero-png-bottom-center img {
-      max-height: 585px;
-    }
   }
 
 </style>
@@ -737,10 +718,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v16 • 16 वर्जन</span>
+          <span id="versionBadgeDisplay">v17 • 17 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 22 Nov 2026 (v16)
+          Last Updated On: 22 Nov 2026 (v17)
         </div>
       </div>
     </div>
@@ -5035,8 +5016,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v16",
-  totalVersionsUpdated: 16,
+  currentVersion: "v17",
+  totalVersionsUpdated: 17,
   lastUpdatedDateLabel: "22 Nov 2026"
 };
 
