@@ -96,19 +96,10 @@
 
   @keyframes counterOrbitCard {
     0% {
-      transform: rotate(0deg);
+      transform: translate(-50%, -50%) rotate(0deg);
     }
     100% {
-      transform: rotate(-360deg);
-    }
-  }
-
-  @keyframes gentleCardFloat {
-    0%, 100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-4px);
+      transform: translate(-50%, -50%) rotate(-360deg);
     }
   }
 
@@ -130,45 +121,44 @@
     }
   }
 
-  /* Mobile orbit circle centered behind photo */
+  /* Orbit circle centered behind photo with generous margin so cards never clip at edges */
   .behind-circle-orbit-wrap {
     position: absolute;
     left: 50%;
-    bottom: 12px;
-    width: 310px;
-    height: 310px;
+    bottom: 24px;
+    width: 280px;
+    height: 280px;
     transform: translateX(-50%);
     z-index: 8;
     pointer-events: none;
   }
 
-  /* Desktop/Laptop scaled orbit circle (60-75% dominant visual presence) */
   @media (min-width: 1024px) {
     .behind-circle-orbit-wrap {
-      bottom: 18px;
-      width: 560px;
-      height: 560px;
+      bottom: 24px;
+      width: 490px;
+      height: 490px;
     }
   }
 
   @media (min-width: 1280px) {
     .behind-circle-orbit-wrap {
-      bottom: 20px;
-      width: 610px;
-      height: 610px;
+      bottom: 26px;
+      width: 530px;
+      height: 530px;
     }
   }
 
   .behind-circle-ring-dashed {
     position: absolute;
-    inset: 12px;
+    inset: 14px;
     border-radius: 9999px;
     border: 1.5px dashed rgba(148, 163, 184, 0.36);
   }
 
   .behind-circle-ring-soft {
     position: absolute;
-    inset: 58px;
+    inset: 52px;
     border-radius: 9999px;
     border: 1px solid rgba(110, 231, 183, 0.25);
     background: radial-gradient(circle, rgba(167, 243, 208, 0.08) 0%, rgba(186, 230, 253, 0.04) 60%, transparent 75%);
@@ -189,44 +179,56 @@
     left: 50%;
     width: 0;
     height: 0;
-  }
-
-  .orbit-node-slot {
     transform: translate(
-      calc(var(--cos-a) * 124px),
-      calc(var(--sin-a) * 124px)
+      calc(var(--cos-a) * 102px),
+      calc(var(--sin-a) * 102px)
     );
   }
+
   @media (min-width: 1024px) {
     .orbit-node-slot {
       transform: translate(
-        calc(var(--cos-a) * 238px),
-        calc(var(--sin-a) * 238px)
+        calc(var(--cos-a) * 176px),
+        calc(var(--sin-a) * 176px)
       );
     }
   }
 
+  @media (min-width: 1280px) {
+    .orbit-node-slot {
+      transform: translate(
+        calc(var(--cos-a) * 192px),
+        calc(var(--sin-a) * 192px)
+      );
+    }
+  }
 
   .orbit-card-counter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
     animation: counterOrbitCard 36s linear infinite;
   }
 
   .pastel-mini-card {
-    width: 92px;
-    border-radius: 0.7rem;
-    padding: 0.36rem 0.45rem;
-    border: 1px solid rgba(255, 255, 255, 0.75);
+    width: 78px;
+    max-width: 78px;
+    border-radius: 0.65rem;
+    padding: 0.32rem 0.42rem;
+    border: 1px solid rgba(255, 255, 255, 0.78);
     box-shadow: 0 8px 20px rgba(2, 6, 23, 0.42);
     backdrop-filter: blur(6px);
-    animation: gentleCardFloat 3.6s ease-in-out infinite;
     line-height: 1.15;
+    transform: none !important;
   }
 
   @media (min-width: 1024px) {
     .pastel-mini-card {
-      width: 146px;
-      border-radius: 0.85rem;
-      padding: 0.58rem 0.72rem;
+      width: 118px;
+      max-width: 118px;
+      border-radius: 0.8rem;
+      padding: 0.48rem 0.62rem;
     }
   }
 
@@ -262,78 +264,6 @@
     }
   }
 
-
-  .godown-bay {
-    position: relative;
-    width: 124px;
-    height: 156px;
-    border-radius: 1rem;
-    border: 2px solid #cbd5e1;
-    background: linear-gradient(180deg, #f8fafc 0%, #eef2f6 100%);
-    overflow: hidden;
-    flex-shrink: 0;
-    box-shadow: inset 0 2px 6px rgba(15, 23, 42, 0.08);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-  }
-
-  @media (min-width: 640px) {
-    .godown-bay {
-      width: 138px;
-      height: 164px;
-    }
-  }
-
-  .godown-bay-branded {
-    border-color: #86efac;
-    background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%);
-  }
-
-  .godown-shelf-line {
-    position: absolute;
-    left: 6px;
-    right: 6px;
-    height: 2px;
-    background: rgba(100, 116, 139, 0.25);
-    border-radius: 999px;
-    z-index: 2;
-    pointer-events: none;
-  }
-
-  .godown-fill-level {
-    position: relative;
-    width: 100%;
-    transition: height 0.65s ease-out;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    padding-top: 6px;
-    z-index: 3;
-  }
-
-  .godown-raw-fill {
-    background: linear-gradient(180deg, #f59e0b 0%, #d97706 65%, #b45309 100%);
-  }
-
-  .godown-branded-fill {
-    background: linear-gradient(180deg, #34d399 0%, #1ea668 65%, #15803d 100%);
-  }
-
-  .godown-visual-badge {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    right: 8px;
-    z-index: 5;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 4px;
-    pointer-events: none;
-  }
-
 </style>
 </head>
 <body class="min-h-screen flex flex-col bg-[#f6f9f7]" oncontextmenu="return false;" ondragstart="return false;">
@@ -353,7 +283,7 @@
 <!-- Split-Screen PIN Lock Overlay -->
 <div id="pinLockScreen" class="fixed inset-0 z-[95] bg-[#0B0F17] text-white grid grid-cols-1 lg:grid-cols-12 overflow-y-auto no-print">
   <!-- Left Showcase: Mobile has small left logo + top-right Powered by MunimJi & clean bottom; Desktop has clean top, large bottom-aligned photo + scaled orbit cards, and footer with Developed by Team CoolArt -->
-  <div class="lg:col-span-7 flex flex-col justify-between p-4 sm:p-7 xl:p-9 border-b lg:border-b-0 lg:border-r border-slate-800/80 relative overflow-hidden" style="background-image: linear-gradient(to right, rgba(148,163,184,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.06) 1px, transparent 1px); background-size: 28px 28px;">
+  <div class="lg:col-span-7 flex flex-col justify-between p-4 sm:p-7 xl:p-9 border-b lg:border-b-0 lg:border-r border-slate-800/80 relative" style="background-image: linear-gradient(to right, rgba(148,163,184,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.06) 1px, transparent 1px); background-size: 28px 28px;">
     <!-- Top Bar: Mobile shows small PNG logo on left + Powered by MunimJi on right; Desktop hides green pill & duplicate logo -->
     <div class="flex items-center justify-between gap-2 relative z-30">
       <div class="flex lg:hidden items-center gap-2 bg-white/95 text-slate-900 px-2.5 py-1 rounded-lg shadow-xs">
@@ -378,96 +308,96 @@
         <div class="behind-circle-ring-soft"></div>
         <div class="orbit-spinner-track">
         <div class="orbit-node-slot" style="--cos-a: 0.0; --sin-a: -1.0;">
-          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
-            <div class="pastel-mini-card bg-[#DCFCE7] text-[#14532D] border-[#86EFAC]" style="animation-delay: 0.00s;">
+          <div class="orbit-card-counter">
+            <div class="pastel-mini-card bg-[#DCFCE7] text-[#14532D] border-[#86EFAC]">
               <p class="text-[9px] lg:text-xs font-bold truncate">बिक्री बिल</p>
               <p class="text-[8px] lg:text-[11px] text-[#166534] font-medium truncate mt-0.5">Seed Sale</p>
             </div>
           </div>
         </div>
         <div class="orbit-node-slot" style="--cos-a: 0.5; --sin-a: -0.866;">
-          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
-            <div class="pastel-mini-card bg-[#FEF3C7] text-[#78350F] border-[#FDE68A]" style="animation-delay: 0.25s;">
+          <div class="orbit-card-counter">
+            <div class="pastel-mini-card bg-[#FEF3C7] text-[#78350F] border-[#FDE68A]">
               <p class="text-[9px] lg:text-xs font-bold truncate">मंडी सप्लाई</p>
               <p class="text-[8px] lg:text-[11px] text-[#92400E] font-medium truncate mt-0.5">Mandi Bill</p>
             </div>
           </div>
         </div>
         <div class="orbit-node-slot" style="--cos-a: 0.866; --sin-a: -0.5;">
-          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
-            <div class="pastel-mini-card bg-[#E0F2FE] text-[#0C4A6E] border-[#7DD3FC]" style="animation-delay: 0.50s;">
+          <div class="orbit-card-counter">
+            <div class="pastel-mini-card bg-[#E0F2FE] text-[#0C4A6E] border-[#7DD3FC]">
               <p class="text-[9px] lg:text-xs font-bold truncate">खरीद बिल</p>
               <p class="text-[8px] lg:text-[11px] text-[#075985] font-medium truncate mt-0.5">Purchase</p>
             </div>
           </div>
         </div>
         <div class="orbit-node-slot" style="--cos-a: 1.0; --sin-a: 0.0;">
-          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
-            <div class="pastel-mini-card bg-[#FCE7F3] text-[#831843] border-[#F9A8D4]" style="animation-delay: 0.75s;">
+          <div class="orbit-card-counter">
+            <div class="pastel-mini-card bg-[#FCE7F3] text-[#831843] border-[#F9A8D4]">
               <p class="text-[9px] lg:text-xs font-bold truncate">कद्दा व कटौती</p>
               <p class="text-[8px] lg:text-[11px] text-[#9D174D] font-medium truncate mt-0.5">1% / कस्टम</p>
             </div>
           </div>
         </div>
         <div class="orbit-node-slot" style="--cos-a: 0.866; --sin-a: 0.5;">
-          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
-            <div class="pastel-mini-card bg-[#EDE9FE] text-[#4C1D95] border-[#C4B5FD]" style="animation-delay: 1.00s;">
+          <div class="orbit-card-counter">
+            <div class="pastel-mini-card bg-[#EDE9FE] text-[#4C1D95] border-[#C4B5FD]">
               <p class="text-[9px] lg:text-xs font-bold truncate">वाउचर एंट्री</p>
               <p class="text-[8px] lg:text-[11px] text-[#5B21B6] font-medium truncate mt-0.5">जमा / भुगतान</p>
             </div>
           </div>
         </div>
         <div class="orbit-node-slot" style="--cos-a: 0.5; --sin-a: 0.866;">
-          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
-            <div class="pastel-mini-card bg-[#CCFBF1] text-[#134E4A] border-[#5EEAD4]" style="animation-delay: 1.25s;">
+          <div class="orbit-card-counter">
+            <div class="pastel-mini-card bg-[#CCFBF1] text-[#134E4A] border-[#5EEAD4]">
               <p class="text-[9px] lg:text-xs font-bold truncate">पार्टी लेजर</p>
               <p class="text-[8px] lg:text-[11px] text-[#115E59] font-medium truncate mt-0.5">पूरा खाता</p>
             </div>
           </div>
         </div>
         <div class="orbit-node-slot" style="--cos-a: 0.0; --sin-a: 1.0;">
-          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
-            <div class="pastel-mini-card bg-[#FFEDD5] text-[#7C2D12] border-[#FDBA74]" style="animation-delay: 1.50s;">
+          <div class="orbit-card-counter">
+            <div class="pastel-mini-card bg-[#FFEDD5] text-[#7C2D12] border-[#FDBA74]">
               <p class="text-[9px] lg:text-xs font-bold truncate">कंपनी खर्चे</p>
               <p class="text-[8px] lg:text-[11px] text-[#9A3412] font-medium truncate mt-0.5">मदवार खर्च</p>
             </div>
           </div>
         </div>
         <div class="orbit-node-slot" style="--cos-a: -0.5; --sin-a: 0.866;">
-          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
-            <div class="pastel-mini-card bg-[#E0E7FF] text-[#312E81] border-[#A5B4FC]" style="animation-delay: 1.75s;">
+          <div class="orbit-card-counter">
+            <div class="pastel-mini-card bg-[#E0E7FF] text-[#312E81] border-[#A5B4FC]">
               <p class="text-[9px] lg:text-xs font-bold truncate">कच्चा स्टॉक</p>
               <p class="text-[8px] lg:text-[11px] text-[#3730A3] font-medium truncate mt-0.5">गोदाम टैंक</p>
             </div>
           </div>
         </div>
         <div class="orbit-node-slot" style="--cos-a: -0.866; --sin-a: 0.5;">
-          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
-            <div class="pastel-mini-card bg-[#ECFCCB] text-[#365314] border-[#BEF264]" style="animation-delay: 2.00s;">
+          <div class="orbit-card-counter">
+            <div class="pastel-mini-card bg-[#ECFCCB] text-[#365314] border-[#BEF264]">
               <p class="text-[9px] lg:text-xs font-bold truncate">बीज स्टॉक</p>
               <p class="text-[8px] lg:text-[11px] text-[#3F6212] font-medium truncate mt-0.5">तैयार टैंक</p>
             </div>
           </div>
         </div>
         <div class="orbit-node-slot" style="--cos-a: -1.0; --sin-a: 0.0;">
-          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
-            <div class="pastel-mini-card bg-[#F3E8FF] text-[#581C87] border-[#D8B4FE]" style="animation-delay: 2.25s;">
+          <div class="orbit-card-counter">
+            <div class="pastel-mini-card bg-[#F3E8FF] text-[#581C87] border-[#D8B4FE]">
               <p class="text-[9px] lg:text-xs font-bold truncate">लॉट प्रोसेसिंग</p>
               <p class="text-[8px] lg:text-[11px] text-[#6B21A8] font-medium truncate mt-0.5">% मिलान</p>
             </div>
           </div>
         </div>
         <div class="orbit-node-slot" style="--cos-a: -0.866; --sin-a: -0.5;">
-          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
-            <div class="pastel-mini-card bg-[#FFE4E6] text-[#881337] border-[#FDA4AF]" style="animation-delay: 2.50s;">
+          <div class="orbit-card-counter">
+            <div class="pastel-mini-card bg-[#FFE4E6] text-[#881337] border-[#FDA4AF]">
               <p class="text-[9px] lg:text-xs font-bold truncate">आइटम मास्टर</p>
               <p class="text-[8px] lg:text-[11px] text-[#9F1239] font-medium truncate mt-0.5">Raw व Sale</p>
             </div>
           </div>
         </div>
         <div class="orbit-node-slot" style="--cos-a: -0.5; --sin-a: -0.866;">
-          <div class="orbit-card-counter" style="transform: translate(-50%, -50%);">
-            <div class="pastel-mini-card bg-[#F1F5F9] text-[#1E293B] border-[#CBD5E1]" style="animation-delay: 2.75s;">
+          <div class="orbit-card-counter">
+            <div class="pastel-mini-card bg-[#F1F5F9] text-[#1E293B] border-[#CBD5E1]">
               <p class="text-[9px] lg:text-xs font-bold truncate">शुद्ध कमाई</p>
               <p class="text-[8px] lg:text-[11px] text-[#0F172A] font-medium truncate mt-0.5">Net Profit</p>
             </div>
@@ -807,10 +737,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v15 • 15 वर्जन</span>
+          <span id="versionBadgeDisplay">v16 • 16 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 22 Nov 2026 (v15)
+          Last Updated On: 22 Nov 2026 (v16)
         </div>
       </div>
     </div>
@@ -5105,8 +5035,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v15",
-  totalVersionsUpdated: 15,
+  currentVersion: "v16",
+  totalVersionsUpdated: 16,
   lastUpdatedDateLabel: "22 Nov 2026"
 };
 
