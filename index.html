@@ -548,9 +548,9 @@
       <div class="px-3 pt-3.5 pb-3 border-b border-slate-800/90 flex items-center justify-between gap-2">
         <div class="flex items-center gap-2.5 min-w-0">
           <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-10 w-10 object-contain shrink-0">
-          <div class="min-w-0 text-left">
-            <p class="text-sm font-bold text-white tracking-tight leading-tight truncate">वैदिक सीड्स</p>
-            <span class="inline-block text-[9.5px] font-semibold text-amber-300 bg-amber-400/10 border border-amber-400/25 px-2 py-0.5 rounded-full mt-0.5 truncate">एग्री सीड ईआरपी</span>
+          <div class="flex flex-col items-start justify-center min-w-0 text-left">
+            <p class="text-sm font-bold text-white tracking-tight leading-tight truncate w-full">वैदिक सीड्स</p>
+            <span class="inline-block text-[9.5px] font-semibold text-amber-300 bg-amber-400/10 border border-amber-400/25 px-2 py-0.5 rounded-full mt-0.5 leading-tight truncate max-w-full">एग्री सीड ईआरपी</span>
           </div>
         </div>
 
@@ -774,10 +774,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v19 • 19 वर्जन</span>
+          <span id="versionBadgeDisplay">v20 • 20 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 22 Nov 2026 (v19)
+          Last Updated On: 22 Nov 2026 (v20)
         </div>
       </div>
     </div>
@@ -863,7 +863,7 @@
               </span>
               <div class="min-w-0">
                 <span class="font-bold text-xs sm:text-sm text-white block truncate">लॉक (Lock)</span>
-                <span class="text-[10px] text-slate-300 block truncate">क्या लॉक करें: पोर्टल/स्क्रीन</span>
+                <span class="text-[10px] text-slate-300 block truncate">सेशन / स्क्रीन लॉक</span>
               </div>
             </div>
             <span class="text-slate-400 text-xs shrink-0">›</span>
@@ -1444,22 +1444,44 @@
         </div>
       </section>
 
-      <!-- 4. VOUCHERS VIEW -->
-      <section id="view-vouchers" class="hidden space-y-6">
-        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-6 max-w-3xl mx-auto">
-          <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
-            <div>
-              <h2 class="text-base sm:text-lg font-semibold text-[#132A46]">पैसा जमा / भुगतान वाउचर (Receipt & Payment)</h2>
-              <p class="text-xs text-slate-500 mt-0.5">उधार वसूली जमा करने या किसान/वेंडर/मंडी को भुगतान/एडवांस देने के लिए (₹100 या कोई भी राशि तुरंत दर्ज व डैशबोर्ड पर दिखेगी)</p>
+      <!-- 4. VOUCHERS VIEW: Distinct Payment In (पैसा जमा) vs Payment Out (पैसा भुगतान) + History & Reports -->
+      <section id="view-vouchers" class="hidden space-y-5">
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-6 max-w-5xl mx-auto space-y-5">
+          <!-- Mode Switcher Slip / Header -->
+          <div id="vchModeHeaderCard" class="rounded-2xl p-4 border border-emerald-200 bg-emerald-50/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition">
+            <div class="flex items-start sm:items-center gap-3">
+              <div id="vchModeIconBadge" class="w-11 h-11 rounded-xl bg-[#1EA668] text-white flex items-center justify-center shrink-0 shadow-xs">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+              </div>
+              <div>
+                <h2 id="vchMainHeading" class="text-base sm:text-lg font-bold text-[#132A46]">पैसा जमा करें (Payment In — पार्टी से प्राप्त राशि)</h2>
+                <p id="vchMainSub" class="text-xs text-slate-600 mt-0.5">यहाँ पार्टी/किसान/मंडी से प्राप्त जमा राशि दर्ज करें — इससे पार्टी का बकाया घटता है</p>
+              </div>
             </div>
-            <span id="vchBannerStatus" class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg">तैयार</span>
+
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button type="button" id="btnVchModeIn" onclick="setVoucherWorkspaceMode('RECEIPT')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#1EA668] text-white shadow-xs transition">+ पैसा जमा</button>
+              <button type="button" id="btnVchModeOut" onclick="setVoucherWorkspaceMode('PAYMENT')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-orange-700 border border-orange-300 hover:bg-orange-50 transition">− पैसा भुगतान</button>
+            </div>
           </div>
 
-          <form id="voucherForm" onsubmit="saveVoucher(event)" class="mt-5 space-y-4">
+          <!-- Distinct Slip / Terms Box for Receipt vs Payment -->
+          <div id="vchTermsSlip" class="rounded-xl border border-emerald-200/90 bg-slate-50/80 p-3.5 text-xs">
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-1.5 border-b border-slate-200/80">
+              <span id="vchSlipBadge" class="font-bold text-[#1EA668]">जमा पर्ची नियम व शर्तें (Receipt Rules)</span>
+              <span id="vchBannerStatus" class="text-[11px] font-semibold text-emerald-700 bg-emerald-100/80 px-2.5 py-0.5 rounded-full">जमा मोड सक्रिय</span>
+            </div>
+            <ul id="vchRulesList" class="mt-2 space-y-1 text-[11px] text-slate-600">
+              <li>• यह एंट्री <b>पैसा जमा (Payment In)</b> के रूप में दर्ज होगी जब पार्टी/खरीदार से नकद, UPI या बैंक में पैसा प्राप्त हो।</li>
+              <li>• जमा रसीद से संबंधित पार्टी के खाते का बकाया कम होता है और जमा रिपोर्ट में जुड़ता है।</li>
+            </ul>
+          </div>
+
+          <form id="voucherForm" onsubmit="saveVoucher(event)" class="space-y-4">
             <input type="hidden" id="editVchTxId" value="">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="relative">
-                <label class="block text-xs font-semibold text-slate-700 mb-1">पार्टी चुनें *</label>
+                <label id="vchPartyLabel" class="block text-xs font-semibold text-slate-700 mb-1">किस पार्टी से पैसा जमा हुआ है *</label>
                 <input type="hidden" id="vchPartyId">
                 <div class="relative">
                   <input type="text" id="vchPartySearch" autocomplete="off"
@@ -1481,13 +1503,13 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">वाउचर प्रकार *</label>
-                <select id="vchType" class="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm bg-white">
-                  <option value="RECEIPT">जमा रसीद (पार्टी से पैसा आया)</option>
-                  <option value="PAYMENT">भुगतान / एडवांस (पार्टी को पैसा दिया)</option>
+                <select id="vchType" onchange="setVoucherWorkspaceMode(this.value)" class="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm bg-white font-semibold">
+                  <option value="RECEIPT">पैसा जमा (Payment In — आया)</option>
+                  <option value="PAYMENT">पैसा भुगतान (Payment Out — दिया)</option>
                 </select>
               </div>
               <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1">राशि (₹ Amount) *</label>
+                <label id="vchAmountLabel" class="block text-xs font-semibold text-slate-700 mb-1">जमा राशि (₹ Amount) *</label>
                 <input type="number" id="vchAmount" min="1" required class="num-clean w-full border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm font-semibold bg-white">
               </div>
               <div>
@@ -1502,15 +1524,15 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs">
               <div>
-                <label class="block font-semibold text-slate-700 mb-1">किस बैंक / खाते में गया</label>
+                <label class="block font-semibold text-slate-700 mb-1">किस बैंक / खाते में</label>
                 <input type="text" id="vchBankName" placeholder="उदा. SBI / HDFC / नकद" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white">
               </div>
               <div>
-                <label class="block font-semibold text-slate-700 mb-1">किस मोबाइल / नंबर पर लिया/दिया</label>
+                <label class="block font-semibold text-slate-700 mb-1">मोबाइल / खाता नंबर</label>
                 <input type="text" id="vchPhoneRef" placeholder="मोबाइल या खाता नं." class="num-clean w-full border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white">
               </div>
               <div>
-                <label class="block font-semibold text-slate-700 mb-1">किसकी UPI ID / किसके में गया</label>
+                <label class="block font-semibold text-slate-700 mb-1">UPI ID / विवरण</label>
                 <input type="text" id="vchUpiHandle" placeholder="उदा. name@upi या व्यक्ति" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white">
               </div>
               <div>
@@ -1526,13 +1548,54 @@
 
             <div class="flex flex-wrap justify-end gap-3 pt-2">
               <button type="button" onclick="resetVoucherForm()" class="px-4 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-600">फ़ॉर्म साफ़ करें</button>
-              <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold px-6 py-2.5 rounded-xl shadow-xs transition text-sm">वाउचर सेव करें व रसीद देखें</button>
+              <button type="submit" id="vchSubmitBtn" class="bg-[#1EA668] hover:bg-emerald-700 text-white font-semibold px-6 py-2.5 rounded-xl shadow-xs transition text-sm">जमा एंट्री सेव करें व रसीद देखें</button>
             </div>
           </form>
         </div>
+
+        <!-- All Entries List with Day / Month / Year Filters + Report Print/Export -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-6 max-w-5xl mx-auto space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+            <div>
+              <h3 id="vchHistoryTitle" class="text-sm sm:text-base font-bold text-[#132A46]">सभी जमा / भुगतान एंट्रियाँ व रिपोर्ट</h3>
+              <p class="text-xs text-slate-500 mt-0.5">दिन, महीना या साल के अनुसार सूची देखें और रिपोर्ट प्रिंट करें</p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-1.5 text-xs">
+              <button type="button" onclick="setVoucherPeriodFilter('day')" id="vfbtn-day" class="px-2.5 py-1 rounded-lg font-semibold bg-slate-100 text-slate-700 border border-slate-200">दिन (Day)</button>
+              <button type="button" onclick="setVoucherPeriodFilter('month')" id="vfbtn-month" class="px-2.5 py-1 rounded-lg font-semibold bg-slate-100 text-slate-700 border border-slate-200">महीना (Month)</button>
+              <button type="button" onclick="setVoucherPeriodFilter('year')" id="vfbtn-year" class="px-2.5 py-1 rounded-lg font-semibold bg-slate-100 text-slate-700 border border-slate-200">साल (Year)</button>
+              <button type="button" onclick="setVoucherPeriodFilter('all')" id="vfbtn-all" class="px-2.5 py-1 rounded-lg font-semibold bg-[#132A46] text-white">सभी (All)</button>
+              <button type="button" onclick="printVoucherPeriodReport()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-3 py-1 rounded-lg">📊 रिपोर्ट प्रिंट करें</button>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-50 px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs">
+            <span id="vchPeriodSummaryText" class="num-clean font-semibold text-[#132A46]">कुल जमा: ₹0 • कुल भुगतान: ₹0</span>
+            <span id="vchPeriodCountBadge" class="num-clean text-slate-600 font-medium">0 एंट्रियाँ</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left">
+              <thead class="bg-slate-50 text-slate-600 border-b border-slate-200">
+                <tr>
+                  <th class="px-3.5 py-2.5">दिनांक</th>
+                  <th class="px-3.5 py-2.5">वाउचर नं.</th>
+                  <th class="px-3.5 py-2.5">पार्टी</th>
+                  <th class="px-3.5 py-2.5">प्रकार</th>
+                  <th class="px-3.5 py-2.5 text-right">राशि</th>
+                  <th class="px-3.5 py-2.5 text-center">एक्शन</th>
+                </tr>
+              </thead>
+              <tbody id="voucherHistoryTableBody" class="divide-y divide-slate-100">
+                <tr><td colspan="6" class="p-6 text-center text-slate-400">अभी कोई वाउचर एंट्री नहीं है</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
-      <!-- 5. PARTIES & SINGLE RUNNING LEDGER VIEW (Removed "लेना है / देना है" selector) -->
+      <!-- 5. PARTIES & RUNNING LEDGER + OUTSTANDING DUES BULK PRINT VIEW -->
       <section id="view-parties" class="hidden space-y-5">
         <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-5">
           <div class="flex flex-wrap items-center justify-between gap-2">
@@ -1559,6 +1622,37 @@
               <button type="submit" id="btnSaveParty" class="bg-[#132A46] hover:bg-slate-800 text-white font-semibold px-5 py-2 rounded-xl text-sm">पार्टी सेव करें</button>
             </div>
           </form>
+        </div>
+
+        <!-- Outstanding Dues Row Table with Checkbox Selection & Print -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-5 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
+            <div>
+              <h3 class="text-sm sm:text-base font-bold text-[#132A46]">बकाया सूची व खरीद विवरण (Dues & Purchase Summary)</h3>
+              <p class="text-[11px] text-slate-500">पार्टियों को चुनकर उनकी बकाया रिपोर्ट प्रिंट करें या किसी रो पर क्लिक करके लेजर खोलें</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 text-xs">
+              <button type="button" onclick="printSelectedPartyDuesReport()" class="bg-[#132A46] hover:bg-slate-800 text-white font-semibold px-3.5 py-1.5 rounded-lg">🖨 चुनी हुई बकाया सूची प्रिंट करें</button>
+              <button type="button" onclick="printAllPartyDuesReport()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3.5 py-1.5 rounded-lg">📊 पूरी बकाया रिपोर्ट</button>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left">
+              <thead class="bg-slate-50 text-slate-600 border-b border-slate-200">
+                <tr>
+                  <th class="px-3 py-2 w-8"><input type="checkbox" id="selectAllPartiesDueChk" onchange="toggleSelectAllPartyDues(this.checked)" class="rounded"></th>
+                  <th class="px-3 py-2">पार्टी / गांव</th>
+                  <th class="px-3 py-2 text-right">कुल खरीद (Purchased)</th>
+                  <th class="px-3 py-2 text-right">बकाया राशि</th>
+                  <th class="px-3 py-2 text-center">लेजर</th>
+                </tr>
+              </thead>
+              <tbody id="partyDuesSummaryBody" class="divide-y divide-slate-100">
+                <tr><td colspan="5" class="p-5 text-center text-slate-400">अभी कोई पार्टी दर्ज नहीं है</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
@@ -1820,7 +1914,7 @@
           <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
             <div>
               <h2 class="text-base sm:text-lg font-bold text-[#132A46]">छंटाई और प्रोसेसिंग (Seed Processing & Lot Yield)</h2>
-              <p class="text-xs text-slate-500 mt-0.5">कच्चा माल → अंडरसाइज + रिजेक्शन + श्रिंकेज → <b>पक्का बीज ऑटो-कैलकुलेट</b> (वेक्टर आइकन व % सहित)</p>
+              <p class="text-xs text-slate-500 mt-0.5">कच्चा माल → अंडरसाइज + रिजेक्शन + श्रिंकेज → <b>पक्का बीज स्वतः गणना व % मिलान</b></p>
             </div>
             <span id="prcFeedback" class="text-xs font-semibold text-[#1EA668]"></span>
           </div>
@@ -5109,6 +5203,382 @@ window.addEventListener('DOMContentLoaded', () => {
   if (jd && !jd.value) jd.value = new Date().toISOString().slice(0, 10);
 });
 
+
+let activeVoucherPeriodFilter = 'all';
+
+function setVoucherWorkspaceMode(vType) {
+  const mode = (vType === 'PAYMENT') ? 'PAYMENT' : 'RECEIPT';
+  const sel = document.getElementById('vchType');
+  if (sel) sel.value = mode;
+
+  const headCard = document.getElementById('vchModeHeaderCard');
+  const iconBadge = document.getElementById('vchModeIconBadge');
+  const mainHeading = document.getElementById('vchMainHeading');
+  const mainSub = document.getElementById('vchMainSub');
+  const slipBox = document.getElementById('vchTermsSlip');
+  const slipBadge = document.getElementById('vchSlipBadge');
+  const statusPill = document.getElementById('vchBannerStatus');
+  const rulesList = document.getElementById('vchRulesList');
+  const partyLbl = document.getElementById('vchPartyLabel');
+  const amtLbl = document.getElementById('vchAmountLabel');
+  const subBtn = document.getElementById('vchSubmitBtn');
+  const btnIn = document.getElementById('btnVchModeIn');
+  const btnOut = document.getElementById('btnVchModeOut');
+  const histTitle = document.getElementById('vchHistoryTitle');
+
+  if (mode === 'PAYMENT') {
+    if (headCard) headCard.className = 'rounded-2xl p-4 border border-orange-200 bg-orange-50/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition';
+    if (iconBadge) {
+      iconBadge.className = 'w-11 h-11 rounded-xl bg-orange-600 text-white flex items-center justify-center shrink-0 shadow-xs';
+      iconBadge.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg>';
+    }
+    if (mainHeading) mainHeading.textContent = 'पैसा भुगतान करें (Payment Out — किसान / पार्टी को भुगतान)';
+    if (mainSub) mainSub.textContent = 'यहाँ किसान, वेंडर या पार्टी को दिए गए भुगतान या एडवांस की प्रविष्टि करें';
+    if (slipBox) slipBox.className = 'rounded-xl border border-orange-200/90 bg-orange-50/30 p-3.5 text-xs';
+    if (slipBadge) { slipBadge.textContent = 'भुगतान पर्ची नियम व शर्तें (Payment Out Rules)'; slipBadge.className = 'font-bold text-orange-700'; }
+    if (statusPill) { statusPill.textContent = 'भुगतान मोड सक्रिय'; statusPill.className = 'text-[11px] font-semibold text-orange-800 bg-orange-100 px-2.5 py-0.5 rounded-full'; }
+    if (rulesList) {
+      rulesList.innerHTML = `
+        <li>• यह एंट्री <b>पैसा भुगतान (Payment Out)</b> के रूप में दर्ज होगी जब वैदिक सीड्स से किसान/पार्टी को भुगतान या एडवांस दिया जाए।</li>
+        <li>• भुगतान दर्ज करने से रसीद तैयार होती है और दिन/महीना/साल की भुगतान रिपोर्ट में जुड़ती है।</li>
+      `;
+    }
+    if (partyLbl) partyLbl.textContent = 'किस किसान / पार्टी को भुगतान किया गया है *';
+    if (amtLbl) amtLbl.textContent = 'भुगतान राशि (₹ Amount) *';
+    if (subBtn) { subBtn.textContent = 'भुगतान एंट्री सेव करें व रसीद देखें'; subBtn.className = 'bg-orange-600 hover:bg-orange-700 text-white font-semibold px-6 py-2.5 rounded-xl shadow-xs transition text-sm'; }
+    if (btnIn) btnIn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-[#1EA668] border border-emerald-300 hover:bg-emerald-50 transition';
+    if (btnOut) btnOut.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-orange-600 text-white shadow-xs transition';
+    if (histTitle) histTitle.textContent = 'भुगतान व जमा एंट्रियाँ — दिन / महीना / साल रिपोर्ट';
+  } else {
+    if (headCard) headCard.className = 'rounded-2xl p-4 border border-emerald-200 bg-emerald-50/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition';
+    if (iconBadge) {
+      iconBadge.className = 'w-11 h-11 rounded-xl bg-[#1EA668] text-white flex items-center justify-center shrink-0 shadow-xs';
+      iconBadge.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>';
+    }
+    if (mainHeading) mainHeading.textContent = 'पैसा जमा करें (Payment In — पार्टी से प्राप्त राशि)';
+    if (mainSub) mainSub.textContent = 'यहाँ पार्टी/किसान/मंडी से प्राप्त जमा राशि दर्ज करें — इससे पार्टी का बकाया घटता है';
+    if (slipBox) slipBox.className = 'rounded-xl border border-emerald-200/90 bg-slate-50/80 p-3.5 text-xs';
+    if (slipBadge) { slipBadge.textContent = 'जमा पर्ची नियम व शर्तें (Receipt Rules)'; slipBadge.className = 'font-bold text-[#1EA668]'; }
+    if (statusPill) { statusPill.textContent = 'जमा मोड सक्रिय'; statusPill.className = 'text-[11px] font-semibold text-emerald-700 bg-emerald-100/80 px-2.5 py-0.5 rounded-full'; }
+    if (rulesList) {
+      rulesList.innerHTML = `
+        <li>• यह एंट्री <b>पैसा जमा (Payment In)</b> के रूप में दर्ज होगी जब पार्टी/खरीदार से नकद, UPI या बैंक में पैसा प्राप्त हो।</li>
+        <li>• जमा रसीद से संबंधित पार्टी के खाते का बकाया कम होता है और जमा रिपोर्ट में जुड़ता है।</li>
+      `;
+    }
+    if (partyLbl) partyLbl.textContent = 'किस पार्टी से पैसा जमा हुआ है *';
+    if (amtLbl) amtLbl.textContent = 'जमा राशि (₹ Amount) *';
+    if (subBtn) { subBtn.textContent = 'जमा एंट्री सेव करें व रसीद देखें'; subBtn.className = 'bg-[#1EA668] hover:bg-emerald-700 text-white font-semibold px-6 py-2.5 rounded-xl shadow-xs transition text-sm'; }
+    if (btnIn) btnIn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#1EA668] text-white shadow-xs transition';
+    if (btnOut) btnOut.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-orange-700 border border-orange-300 hover:bg-orange-50 transition';
+    if (histTitle) histTitle.textContent = 'जमा व भुगतान एंट्रियाँ — दिन / महीना / साल रिपोर्ट';
+  }
+  renderVoucherHistoryTable();
+}
+
+openVoucherPreset = function(vType) {
+  switchTab('vouchers');
+  setVoucherWorkspaceMode(vType);
+};
+
+function setVoucherPeriodFilter(period) {
+  activeVoucherPeriodFilter = period || 'all';
+  ['day', 'month', 'year', 'all'].forEach(p => {
+    const b = document.getElementById('vfbtn-' + p);
+    if (!b) return;
+    b.className = (p === activeVoucherPeriodFilter)
+      ? 'px-2.5 py-1 rounded-lg font-semibold bg-[#132A46] text-white'
+      : 'px-2.5 py-1 rounded-lg font-semibold bg-slate-100 text-slate-700 border border-slate-200';
+  });
+  renderVoucherHistoryTable();
+}
+
+function getFilteredVoucherEntries() {
+  const allV = (state.transactions || []).filter(t => t.type === 'RECEIPT' || t.type === 'PAYMENT');
+  if (activeVoucherPeriodFilter === 'all') return allV;
+  const now = new Date();
+  const todayStr = now.toISOString().slice(0, 10);
+  return allV.filter(v => {
+    if (!v.date) return true;
+    if (activeVoucherPeriodFilter === 'day') return v.date === todayStr;
+    const d = new Date(v.date + 'T00:00:00');
+    if (isNaN(d.getTime())) return true;
+    if (activeVoucherPeriodFilter === 'month') return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+    if (activeVoucherPeriodFilter === 'year') return getSeasonYear(v.date) === getSeasonYear(todayStr);
+    return true;
+  });
+}
+
+function renderVoucherHistoryTable() {
+  const tb = document.getElementById('voucherHistoryTableBody');
+  const sumEl = document.getElementById('vchPeriodSummaryText');
+  const cntEl = document.getElementById('vchPeriodCountBadge');
+  if (!tb) return;
+  const list = getFilteredVoucherEntries();
+  const recTotal = list.filter(x => x.type === 'RECEIPT').reduce((s, x) => s + Number(x.amount || 0), 0);
+  const payTotal = list.filter(x => x.type === 'PAYMENT').reduce((s, x) => s + Number(x.amount || 0), 0);
+  if (sumEl) sumEl.textContent = `कुल जमा: ₹${recTotal.toLocaleString('en-IN')} • कुल भुगतान: ₹${payTotal.toLocaleString('en-IN')}`;
+  if (cntEl) cntEl.textContent = `${list.length} एंट्रियाँ`;
+
+  if (!list.length) {
+    tb.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">इस अवधि में कोई जमा/भुगतान एंट्री नहीं है</td></tr>`;
+    return;
+  }
+
+  tb.innerHTML = list.map(v => {
+    const p = state.parties.find(x => x.id === v.partyId);
+    const isRec = v.type === 'RECEIPT';
+    return `
+      <tr>
+        <td class="num-clean px-3.5 py-2.5 whitespace-nowrap">${v.date}</td>
+        <td class="num-clean px-3.5 py-2.5 font-semibold text-[#132A46] whitespace-nowrap">${v.id}</td>
+        <td class="px-3.5 py-2.5">${p ? p.name : '-'}</td>
+        <td class="px-3.5 py-2.5 whitespace-nowrap"><span class="text-[10px] font-semibold px-2 py-0.5 rounded ${isRec ? 'bg-emerald-50 text-[#1EA668] border border-emerald-200' : 'bg-orange-50 text-orange-800 border border-orange-200'}">${isRec ? 'पैसा जमा' : 'पैसा भुगतान'}</span></td>
+        <td class="num-clean px-3.5 py-2.5 text-right font-bold whitespace-nowrap">₹${Number(v.amount || 0).toLocaleString('en-IN')}</td>
+        <td class="px-3.5 py-2.5 text-center whitespace-nowrap space-x-1.5">
+          <button onclick="openReceipt('${v.id}')" class="text-[#1EA668] font-semibold underline">रसीद</button>
+          <button onclick="editTransaction('${v.id}')" class="text-sky-700 font-semibold underline">Edit</button>
+          <button onclick="deleteTransaction('${v.id}')" class="text-rose-600 font-semibold underline">Del</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function printVoucherPeriodReport() {
+  const list = getFilteredVoucherEntries();
+  const recTotal = list.filter(x => x.type === 'RECEIPT').reduce((s, x) => s + Number(x.amount || 0), 0);
+  const payTotal = list.filter(x => x.type === 'PAYMENT').reduce((s, x) => s + Number(x.amount || 0), 0);
+  document.getElementById('printArea').innerHTML = `
+    <div class="bg-white border border-slate-300 rounded-md p-6 text-slate-800 space-y-4">
+      <div class="flex items-start justify-between border-b border-slate-200 pb-3">
+        <div>
+          <p class="text-base font-bold text-slate-900">वैदिक सीड्स — जमा व भुगतान रिपोर्ट</p>
+          <p class="text-xs text-slate-500">अवधि: ${activeVoucherPeriodFilter.toUpperCase()} • कुल एंट्रियाँ: ${list.length}</p>
+        </div>
+        <div class="text-right num-clean text-xs">
+          <p class="font-bold text-[#1EA668]">कुल जमा: ₹${recTotal.toLocaleString('en-IN')}</p>
+          <p class="font-bold text-orange-700">कुल भुगतान: ₹${payTotal.toLocaleString('en-IN')}</p>
+        </div>
+      </div>
+      <table class="w-full text-xs border-collapse border border-slate-200">
+        <thead class="bg-slate-100">
+          <tr>
+            <th class="p-2 border border-slate-200 text-left">दिनांक</th>
+            <th class="p-2 border border-slate-200 text-left">वाउचर नं.</th>
+            <th class="p-2 border border-slate-200 text-left">पार्टी</th>
+            <th class="p-2 border border-slate-200 text-left">प्रकार</th>
+            <th class="p-2 border border-slate-200 text-right">राशि</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${list.map(v => {
+            const p = state.parties.find(x => x.id === v.partyId);
+            return `<tr>
+              <td class="num-clean p-2 border border-slate-200">${v.date}</td>
+              <td class="num-clean p-2 border border-slate-200">${v.id}</td>
+              <td class="p-2 border border-slate-200">${p ? p.name : '-'}</td>
+              <td class="p-2 border border-slate-200">${v.type === 'RECEIPT' ? 'पैसा जमा' : 'पैसा भुगतान'}</td>
+              <td class="num-clean p-2 border border-slate-200 text-right font-semibold">₹${Number(v.amount || 0).toLocaleString('en-IN')}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+  document.getElementById('receiptModal').classList.remove('hidden');
+}
+
+function getPartyPurchasedAmount(partyId) {
+  return (state.transactions || [])
+    .filter(t => t.partyId === partyId && t.type === 'PURCHASE')
+    .reduce((s, x) => s + Number(x.amount || 0), 0);
+}
+
+function renderPartyDuesSummaryTable() {
+  const tb = document.getElementById('partyDuesSummaryBody');
+  if (!tb) return;
+  if (!state.parties.length) {
+    tb.innerHTML = `<tr><td colspan="5" class="p-5 text-center text-slate-400">अभी कोई पार्टी दर्ज नहीं है</td></tr>`;
+    return;
+  }
+  tb.innerHTML = state.parties.map(p => {
+    const purAmt = getPartyPurchasedAmount(p.id);
+    const bal = getPartyBalance(p.id);
+    return `
+      <tr class="hover:bg-slate-50/80">
+        <td class="px-3 py-2"><input type="checkbox" class="party-due-chk rounded" value="${p.id}"></td>
+        <td onclick="selectPartyLedger('${p.id}')" class="px-3 py-2 cursor-pointer">
+          <p class="font-semibold text-[#132A46]">${p.name}</p>
+          <p class="text-[11px] text-slate-500">${p.village} • ${p.role}</p>
+        </td>
+        <td onclick="selectPartyLedger('${p.id}')" class="num-clean px-3 py-2 text-right font-semibold text-sky-700 cursor-pointer">₹${purAmt.toLocaleString('en-IN')}</td>
+        <td onclick="selectPartyLedger('${p.id}')" class="num-clean px-3 py-2 text-right font-bold ${bal >= 0 ? 'text-rose-600' : 'text-[#1EA668]'} cursor-pointer">₹${bal.toLocaleString('en-IN')}</td>
+        <td class="px-3 py-2 text-center"><button type="button" onclick="selectPartyLedger('${p.id}')" class="text-sky-700 font-semibold underline">खोलें</button></td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function toggleSelectAllPartyDues(checked) {
+  document.querySelectorAll('.party-due-chk').forEach(c => { c.checked = Boolean(checked); });
+}
+
+function printSelectedPartyDuesReport() {
+  const ids = Array.from(document.querySelectorAll('.party-due-chk:checked')).map(c => c.value);
+  if (!ids.length) {
+    alert('कृपया कम से कम एक पार्टी का चेकबॉक्स चुनें।');
+    return;
+  }
+  renderPartyDuesPrintModal(ids, 'चुनी हुई पार्टियों की बकाया रिपोर्ट');
+}
+
+function printAllPartyDuesReport() {
+  const ids = state.parties.map(p => p.id);
+  if (!ids.length) {
+    alert('प्रिंट करने के लिए कोई पार्टी उपलब्ध नहीं है।');
+    return;
+  }
+  renderPartyDuesPrintModal(ids, 'सभी पार्टियों की बकाया व खरीद रिपोर्ट');
+}
+
+function renderPartyDuesPrintModal(ids, heading) {
+  const rows = state.parties.filter(p => ids.includes(p.id));
+  const totalDue = rows.reduce((s, p) => s + getPartyBalance(p.id), 0);
+  const totalPur = rows.reduce((s, p) => s + getPartyPurchasedAmount(p.id), 0);
+  document.getElementById('printArea').innerHTML = `
+    <div class="bg-white border border-slate-300 rounded-md p-6 text-slate-800 space-y-4">
+      <div class="flex items-start justify-between border-b border-slate-200 pb-3">
+        <div>
+          <p class="text-base font-bold text-slate-900">वैदिक सीड्स — ${heading}</p>
+          <p class="text-xs text-slate-500">दिनांक: ${new Date().toISOString().slice(0, 10)} • कुल पार्टियां: ${rows.length}</p>
+        </div>
+        <div class="text-right num-clean text-xs">
+          <p class="font-semibold text-sky-700">कुल खरीद: ₹${totalPur.toLocaleString('en-IN')}</p>
+          <p class="font-bold text-rose-600">कुल बकाया: ₹${totalDue.toLocaleString('en-IN')}</p>
+        </div>
+      </div>
+      <table class="w-full text-xs border-collapse border border-slate-200">
+        <thead class="bg-slate-100">
+          <tr>
+            <th class="p-2 border border-slate-200 text-left">पार्टी का नाम</th>
+            <th class="p-2 border border-slate-200 text-left">गांव / श्रेणी</th>
+            <th class="p-2 border border-slate-200 text-right">कुल खरीद</th>
+            <th class="p-2 border border-slate-200 text-right">बकाया राशि</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(p => `<tr>
+            <td class="p-2 border border-slate-200 font-semibold">${p.name}</td>
+            <td class="p-2 border border-slate-200">${p.village} (${p.role})</td>
+            <td class="num-clean p-2 border border-slate-200 text-right">₹${getPartyPurchasedAmount(p.id).toLocaleString('en-IN')}</td>
+            <td class="num-clean p-2 border border-slate-200 text-right font-bold">₹${getPartyBalance(p.id).toLocaleString('en-IN')}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+  document.getElementById('receiptModal').classList.remove('hidden');
+}
+
+const _origSelectPartyLedger = selectPartyLedger;
+selectPartyLedger = function(partyId) {
+  _origSelectPartyLedger(partyId);
+  const p = state.parties.find(x => x.id === partyId);
+  if (!p) return;
+  const txs = state.transactions.filter(t => t.partyId === partyId);
+  const purTotal = getPartyPurchasedAmount(partyId);
+  const saleTotal = txs.filter(t => t.type === 'SALE').reduce((s, x) => s + Number(x.amount || 0), 0);
+  const recTotal = txs.filter(t => t.type === 'RECEIPT').reduce((s, x) => s + Number(x.amount || 0), 0);
+  const payTotal = txs.filter(t => t.type === 'PAYMENT').reduce((s, x) => s + Number(x.amount || 0), 0);
+  const netBal = getPartyBalance(partyId);
+  const panel = document.getElementById('partyLedgerPanel');
+  if (!panel) return;
+
+  panel.innerHTML = `
+    <div class="border-b border-slate-100 pb-3.5 flex flex-wrap items-start justify-between gap-3">
+      <div>
+        <div class="flex items-center gap-2">
+          <h3 class="text-base sm:text-lg font-bold text-[#132A46]">${p.name} — संपूर्ण लेजर विंडो</h3>
+          <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-50 text-[#1EA668] border border-emerald-200 font-medium">${p.role}</span>
+        </div>
+        <p class="text-xs text-slate-600 mt-1"><b>S/o:</b> ${p.father} &nbsp;|&nbsp; <b>गारंटर:</b> ${p.guarantor} &nbsp;|&nbsp; <b>गांव/मंडी:</b> ${p.village} &nbsp;|&nbsp; <b>मोबाइल:</b> <span class="num-clean">${p.phone}</span></p>
+      </div>
+      <div class="bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200">
+        <span class="text-[11px] text-slate-500 block">कुल खाता शेष</span>
+        <span class="num-clean text-base font-bold text-[#132A46]">₹${netBal.toLocaleString('en-IN')}</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-3.5 text-xs">
+      <div class="p-2.5 rounded-xl bg-sky-50/70 border border-sky-200">
+        <span class="text-[10px] text-slate-500 block">कुल खरीद (Purchase)</span>
+        <b class="num-clean text-sm text-sky-800">₹${purTotal.toLocaleString('en-IN')}</b>
+      </div>
+      <div class="p-2.5 rounded-xl bg-emerald-50/70 border border-emerald-200">
+        <span class="text-[10px] text-slate-500 block">कुल बिक्री (Sales)</span>
+        <b class="num-clean text-sm text-[#1EA668]">₹${saleTotal.toLocaleString('en-IN')}</b>
+      </div>
+      <div class="p-2.5 rounded-xl bg-teal-50/70 border border-teal-200">
+        <span class="text-[10px] text-slate-500 block">जमा प्राप्त (Receipt)</span>
+        <b class="num-clean text-sm text-teal-800">₹${recTotal.toLocaleString('en-IN')}</b>
+      </div>
+      <div class="p-2.5 rounded-xl bg-orange-50/70 border border-orange-200">
+        <span class="text-[10px] text-slate-500 block">भुगतान दिया (Payment)</span>
+        <b class="num-clean text-sm text-orange-700">₹${payTotal.toLocaleString('en-IN')}</b>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto mt-4">
+      <table class="w-full text-xs text-left border border-slate-200 rounded-xl overflow-hidden">
+        <thead class="bg-slate-100 text-slate-600 font-medium">
+          <tr>
+            <th class="px-3 py-2">दिनांक</th>
+            <th class="px-3 py-2">बिल / वाउचर नं.</th>
+            <th class="px-3 py-2">विवरण</th>
+            <th class="px-3 py-2 text-right">राशि</th>
+            <th class="px-3 py-2 text-center">एक्शन</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          ${txs.length ? txs.map(t => `
+            <tr>
+              <td class="num-clean px-3 py-2 whitespace-nowrap">${t.date}</td>
+              <td class="num-clean px-3 py-2 font-semibold text-[#132A46] whitespace-nowrap">${t.id}</td>
+              <td class="px-3 py-2">${t.itemName || t.type} — ${t.note}</td>
+              <td class="num-clean px-3 py-2 text-right font-semibold whitespace-nowrap">₹${Number(t.amount || 0).toLocaleString('en-IN')}</td>
+              <td class="px-3 py-2 text-center whitespace-nowrap space-x-1.5">
+                <button onclick="openReceipt('${t.id}')" class="text-[#1EA668] font-semibold underline">पर्ची</button>
+                <button onclick="editTransaction('${t.id}')" class="text-sky-700 font-semibold underline">Edit</button>
+                <button onclick="deleteTransaction('${t.id}')" class="text-rose-600 font-semibold underline">Del</button>
+              </td>
+            </tr>
+          `).join('') : `<tr><td colspan="5" class="p-6 text-center text-slate-400">इस पार्टी का अभी कोई लेन-देन नहीं है</td></tr>`}
+        </tbody>
+      </table>
+    </div>
+  `;
+};
+
+const _origRenderPartyList = renderPartyList;
+renderPartyList = function() {
+  _origRenderPartyList();
+  renderPartyDuesSummaryTable();
+};
+
+const _origRenderDashboard2 = renderDashboard;
+renderDashboard = function() {
+  _origRenderDashboard2();
+  renderVoucherHistoryTable();
+  renderPartyDuesSummaryTable();
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  setVoucherWorkspaceMode(document.getElementById('vchType')?.value || 'RECEIPT');
+  renderVoucherHistoryTable();
+  renderPartyDuesSummaryTable();
+});
+
 </script>
 </body>
 </html>
@@ -5120,8 +5590,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v19",
-  totalVersionsUpdated: 19,
+  currentVersion: "v20",
+  totalVersionsUpdated: 20,
   lastUpdatedDateLabel: "22 Nov 2026"
 };
 
