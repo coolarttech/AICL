@@ -948,10 +948,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v23 • 23 वर्जन</span>
+          <span id="versionBadgeDisplay">v24 • 24 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 22 Nov 2026 (v23)
+          Last Updated On: 22 Nov 2026 (v24)
         </div>
       </div>
     </div>
@@ -1474,6 +1474,66 @@
             </div>
           </form>
         </div>
+
+        <!-- Sales / Mandi Info Card & Rules Slip -->
+        <div class="bg-white rounded-2xl border border-emerald-200/90 shadow-xs p-4 sm:p-5 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-emerald-100">
+            <div class="flex items-center gap-2.5">
+              <span class="w-9 h-9 rounded-xl bg-emerald-50 text-[#1EA668] border border-emerald-200 flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              </span>
+              <div>
+                <h3 class="text-sm sm:text-base font-bold text-[#132A46]">बिक्री व मंडी सप्लाई बिल — नियम व मार्गदर्शन</h3>
+                <p class="text-[11px] text-slate-500">तैयार बीज बिक्री या बाहर मंडी सप्लाई के बिल व दिन/महीना/साल रिपोर्ट</p>
+              </div>
+            </div>
+            <span class="text-[11px] font-semibold text-[#1EA668] bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">बिक्री कार्यक्षेत्र</span>
+          </div>
+          <ul class="space-y-1 text-[11px] text-slate-600">
+            <li>• <b>बीज बिक्री (Seed Sale)</b> में पैकेट/बैग साइज, बैग संख्या व अतिरिक्त वजन के आधार पर कुल वजन व बिल राशि स्वतः जुड़ती है।</li>
+            <li>• <b>बाहर मंडी सप्लाई (Mandi Supply)</b> में मंडी स्थान, गाड़ी/पर्ची, क्विंटल भाव व आढ़त/तुलाई कटौती के बाद शुद्ध बिल तैयार होता है।</li>
+          </ul>
+        </div>
+
+        <!-- Sales Entries List with Day / Month / Year / All Filters + Report Print -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+            <div>
+              <h3 class="text-sm sm:text-base font-bold text-[#132A46]">बिक्री व मंडी बिल एंट्रियाँ — दिन / महीना / साल रिपोर्ट</h3>
+              <p class="text-xs text-slate-500 mt-0.5">अवधि के अनुसार बिक्री बिल देखें और प्रिंट/PDF रिपोर्ट निकालें</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5 text-xs">
+              <button type="button" onclick="setSalePeriodFilter('day')" id="sfbtn-day" class="px-2.5 py-1 rounded-lg font-semibold bg-slate-100 text-slate-700 border border-slate-200">दिन (Day)</button>
+              <button type="button" onclick="setSalePeriodFilter('month')" id="sfbtn-month" class="px-2.5 py-1 rounded-lg font-semibold bg-slate-100 text-slate-700 border border-slate-200">महीना (Month)</button>
+              <button type="button" onclick="setSalePeriodFilter('year')" id="sfbtn-year" class="px-2.5 py-1 rounded-lg font-semibold bg-slate-100 text-slate-700 border border-slate-200">साल (Year)</button>
+              <button type="button" onclick="setSalePeriodFilter('all')" id="sfbtn-all" class="px-2.5 py-1 rounded-lg font-semibold bg-[#132A46] text-white">सभी (All)</button>
+              <button type="button" onclick="printSalePeriodReport()" class="bg-[#1EA668] hover:bg-emerald-700 text-white font-bold px-3 py-1 rounded-lg">📊 बिक्री रिपोर्ट प्रिंट करें</button>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-50 px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs">
+            <span id="salePeriodSummaryText" class="num-clean font-semibold text-[#132A46]">कुल बिक्री: ₹0 • कुल वजन: 0 Kg</span>
+            <span id="salePeriodCountBadge" class="num-clean text-slate-600 font-medium">0 बिल</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left">
+              <thead class="bg-slate-50 text-slate-600 border-b border-slate-200">
+                <tr>
+                  <th class="px-3.5 py-2.5">दिनांक</th>
+                  <th class="px-3.5 py-2.5">बिल नं.</th>
+                  <th class="px-3.5 py-2.5">पार्टी / मंडी</th>
+                  <th class="px-3.5 py-2.5">चैनल / विवरण</th>
+                  <th class="px-3.5 py-2.5 text-right">राशि</th>
+                  <th class="px-3.5 py-2.5 text-center">एक्शन</th>
+                </tr>
+              </thead>
+              <tbody id="saleHistoryTableBody" class="divide-y divide-slate-100">
+                <tr><td colspan="6" class="p-6 text-center text-slate-400">अभी कोई बिक्री बिल दर्ज नहीं है</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
       <!-- 3. PURCHASE BILL VIEW -->
@@ -1616,6 +1676,66 @@
             </div>
           </form>
         </div>
+
+        <!-- Purchase Info Card & Rules Slip -->
+        <div class="bg-white rounded-2xl border border-sky-200/90 shadow-xs p-4 sm:p-5 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-sky-100">
+            <div class="flex items-center gap-2.5">
+              <span class="w-9 h-9 rounded-xl bg-sky-50 text-sky-700 border border-sky-200 flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+              </span>
+              <div>
+                <h3 class="text-sm sm:text-base font-bold text-[#132A46]">खरीद बिल (Purchase Bill) — नियम व मार्गदर्शन</h3>
+                <p class="text-[11px] text-slate-500">किसान / सप्लायर से फसल खरीद, कद्दा कटौती व दिन/महीना/साल रिपोर्ट</p>
+              </div>
+            </div>
+            <span class="text-[11px] font-semibold text-sky-800 bg-sky-50 border border-sky-200 px-2.5 py-0.5 rounded-full">खरीद कार्यक्षेत्र</span>
+          </div>
+          <ul class="space-y-1 text-[11px] text-slate-600">
+            <li>• <b>कट्टे/बैग + अतिरिक्त वजन</b> से कुल भर्ती वजन (Kg व क्विंटल) स्वतः जुड़ता है और कस्टम <b>कद्दा कटौती (%)</b> के बाद भुगतान योग्य वजन निकलता है।</li>
+            <li>• लेबर व ट्रांसपोर्ट कटौती घटाकर शुद्ध देय राशि बनती है, और कच्चे गोदाम का स्टॉक स्वतः जुड़ता है।</li>
+          </ul>
+        </div>
+
+        <!-- Purchase Entries List with Day / Month / Year / All Filters + Report Print -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+            <div>
+              <h3 class="text-sm sm:text-base font-bold text-[#132A46]">खरीद बिल एंट्रियाँ — दिन / महीना / साल रिपोर्ट</h3>
+              <p class="text-xs text-slate-500 mt-0.5">अवधि के अनुसार खरीद बिल देखें और प्रिंट/PDF रिपोर्ट निकालें</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5 text-xs">
+              <button type="button" onclick="setPurchasePeriodFilter('day')" id="pfbtn-day" class="px-2.5 py-1 rounded-lg font-semibold bg-slate-100 text-slate-700 border border-slate-200">दिन (Day)</button>
+              <button type="button" onclick="setPurchasePeriodFilter('month')" id="pfbtn-month" class="px-2.5 py-1 rounded-lg font-semibold bg-slate-100 text-slate-700 border border-slate-200">महीना (Month)</button>
+              <button type="button" onclick="setPurchasePeriodFilter('year')" id="pfbtn-year" class="px-2.5 py-1 rounded-lg font-semibold bg-slate-100 text-slate-700 border border-slate-200">साल (Year)</button>
+              <button type="button" onclick="setPurchasePeriodFilter('all')" id="pfbtn-all" class="px-2.5 py-1 rounded-lg font-semibold bg-[#132A46] text-white">सभी (All)</button>
+              <button type="button" onclick="printPurchasePeriodReport()" class="bg-[#132A46] hover:bg-slate-800 text-white font-bold px-3 py-1 rounded-lg">📊 खरीद रिपोर्ट प्रिंट करें</button>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-50 px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs">
+            <span id="purchasePeriodSummaryText" class="num-clean font-semibold text-[#132A46]">कुल खरीद: ₹0 • शुद्ध वजन: 0 Kg</span>
+            <span id="purchasePeriodCountBadge" class="num-clean text-slate-600 font-medium">0 बिल</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left">
+              <thead class="bg-slate-50 text-slate-600 border-b border-slate-200">
+                <tr>
+                  <th class="px-3.5 py-2.5">दिनांक</th>
+                  <th class="px-3.5 py-2.5">बिल नं.</th>
+                  <th class="px-3.5 py-2.5">किसान / पार्टी</th>
+                  <th class="px-3.5 py-2.5">फसल / विवरण</th>
+                  <th class="px-3.5 py-2.5 text-right">राशि</th>
+                  <th class="px-3.5 py-2.5 text-center">एक्शन</th>
+                </tr>
+              </thead>
+              <tbody id="purchaseHistoryTableBody" class="divide-y divide-slate-100">
+                <tr><td colspan="6" class="p-6 text-center text-slate-400">अभी कोई खरीद बिल दर्ज नहीं है</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
       <!-- 4. VOUCHERS VIEW: Distinct Payment In (पैसा जमा) vs Payment Out (पैसा भुगतान) + History & Reports -->
@@ -1633,10 +1753,7 @@
               </div>
             </div>
 
-            <div class="flex items-center gap-1.5 shrink-0">
-              <button type="button" id="btnVchModeIn" onclick="setVoucherWorkspaceMode('RECEIPT')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#1EA668] text-white shadow-xs transition">+ पैसा जमा</button>
-              <button type="button" id="btnVchModeOut" onclick="setVoucherWorkspaceMode('PAYMENT')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-orange-700 border border-orange-300 hover:bg-orange-50 transition">− पैसा भुगतान</button>
-            </div>
+<span id="vchModeBadgeLabel" class="text-[11px] font-bold px-3 py-1 rounded-full bg-white/80 text-[#132A46] border border-slate-200 shrink-0">वाउचर कार्यक्षेत्र</span>
           </div>
 
           <!-- Distinct Slip / Terms Box for Receipt vs Payment -->
@@ -5815,6 +5932,225 @@ renderProcessingTable = function() {
   });
 })();
 
+
+let activeSalePeriodFilter = 'all';
+let activePurchasePeriodFilter = 'all';
+
+function filterEntriesByPeriod(entries, period) {
+  if (!Array.isArray(entries)) return [];
+  if (period === 'all') return entries;
+  const now = new Date();
+  const todayStr = now.toISOString().slice(0, 10);
+  return entries.filter(item => {
+    if (!item || !item.date) return true;
+    if (period === 'day') return item.date === todayStr;
+    const d = new Date(item.date + 'T00:00:00');
+    if (isNaN(d.getTime())) return true;
+    if (period === 'month') return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+    if (period === 'year') return getSeasonYear(item.date) === getSeasonYear(todayStr);
+    return true;
+  });
+}
+
+function setSalePeriodFilter(period) {
+  activeSalePeriodFilter = period || 'all';
+  ['day', 'month', 'year', 'all'].forEach(p => {
+    const b = document.getElementById('sfbtn-' + p);
+    if (!b) return;
+    b.className = (p === activeSalePeriodFilter)
+      ? 'px-2.5 py-1 rounded-lg font-semibold bg-[#132A46] text-white'
+      : 'px-2.5 py-1 rounded-lg font-semibold bg-slate-100 text-slate-700 border border-slate-200';
+  });
+  renderSaleHistoryTable();
+}
+
+function renderSaleHistoryTable() {
+  const tb = document.getElementById('saleHistoryTableBody');
+  const sumEl = document.getElementById('salePeriodSummaryText');
+  const cntEl = document.getElementById('salePeriodCountBadge');
+  if (!tb) return;
+  const allSales = (state.transactions || []).filter(t => t.type === 'SALE');
+  const list = filterEntriesByPeriod(allSales, activeSalePeriodFilter);
+  const totalAmt = list.reduce((s, x) => s + Number(x.amount || 0), 0);
+  const totalWt = list.reduce((s, x) => s + Number(x.totalKg || 0), 0);
+  if (sumEl) sumEl.textContent = `कुल बिक्री: ₹${totalAmt.toLocaleString('en-IN')} • कुल वजन: ${totalWt.toLocaleString('en-IN')} Kg`;
+  if (cntEl) cntEl.textContent = `${list.length} बिल`;
+
+  if (!list.length) {
+    tb.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">इस अवधि में कोई बिक्री बिल नहीं है</td></tr>`;
+    return;
+  }
+
+  tb.innerHTML = list.map(t => {
+    const p = state.parties.find(x => x.id === t.partyId);
+    const chLabel = t.saleChannel === 'Mandi Supply' ? 'मंडी सप्लाई' : 'बीज बिक्री';
+    return `
+      <tr>
+        <td class="num-clean px-3.5 py-2.5 whitespace-nowrap">${t.date}</td>
+        <td class="num-clean px-3.5 py-2.5 font-semibold text-[#132A46] whitespace-nowrap">${t.id}</td>
+        <td class="px-3.5 py-2.5">${p ? p.name : '-'}</td>
+        <td class="px-3.5 py-2.5"><span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-emerald-50 text-[#1EA668] border border-emerald-200 mr-1">${chLabel}</span> ${t.itemName || ''} — ${t.note || ''}</td>
+        <td class="num-clean px-3.5 py-2.5 text-right font-bold text-[#1EA668] whitespace-nowrap">₹${Number(t.amount || 0).toLocaleString('en-IN')}</td>
+        <td class="px-3.5 py-2.5 text-center whitespace-nowrap space-x-1.5">
+          <button onclick="openReceipt('${t.id}')" class="text-[#1EA668] font-semibold underline">बिल</button>
+          <button onclick="editTransaction('${t.id}')" class="text-sky-700 font-semibold underline">Edit</button>
+          <button onclick="deleteTransaction('${t.id}')" class="text-rose-600 font-semibold underline">Del</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function printSalePeriodReport() {
+  const allSales = (state.transactions || []).filter(t => t.type === 'SALE');
+  const list = filterEntriesByPeriod(allSales, activeSalePeriodFilter);
+  const totalAmt = list.reduce((s, x) => s + Number(x.amount || 0), 0);
+  const totalWt = list.reduce((s, x) => s + Number(x.totalKg || 0), 0);
+  document.getElementById('printArea').innerHTML = `
+    <div class="bg-white border border-slate-300 rounded-md p-6 text-slate-800 space-y-4">
+      <div class="flex items-start justify-between border-b border-slate-200 pb-3">
+        <div>
+          <p class="text-base font-bold text-slate-900">वैदिक सीड्स — बिक्री व मंडी सप्लाई रिपोर्ट</p>
+          <p class="text-xs text-slate-500">अवधि: ${activeSalePeriodFilter.toUpperCase()} • कुल बिल: ${list.length}</p>
+        </div>
+        <div class="text-right num-clean text-xs">
+          <p class="font-bold text-[#1EA668]">कुल बिक्री: ₹${totalAmt.toLocaleString('en-IN')}</p>
+          <p class="font-semibold text-slate-700">कुल वजन: ${totalWt.toLocaleString('en-IN')} Kg</p>
+        </div>
+      </div>
+      <table class="w-full text-xs border-collapse border border-slate-200">
+        <thead class="bg-slate-100">
+          <tr>
+            <th class="p-2 border border-slate-200 text-left">दिनांक</th>
+            <th class="p-2 border border-slate-200 text-left">बिल नं.</th>
+            <th class="p-2 border border-slate-200 text-left">पार्टी</th>
+            <th class="p-2 border border-slate-200 text-left">विवरण</th>
+            <th class="p-2 border border-slate-200 text-right">राशि</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${list.map(t => {
+            const p = state.parties.find(x => x.id === t.partyId);
+            return `<tr>
+              <td class="num-clean p-2 border border-slate-200">${t.date}</td>
+              <td class="num-clean p-2 border border-slate-200">${t.id}</td>
+              <td class="p-2 border border-slate-200">${p ? p.name : '-'}</td>
+              <td class="p-2 border border-slate-200">${t.itemName || ''} — ${t.note || ''}</td>
+              <td class="num-clean p-2 border border-slate-200 text-right font-semibold">₹${Number(t.amount || 0).toLocaleString('en-IN')}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+  document.getElementById('receiptModal').classList.remove('hidden');
+}
+
+function setPurchasePeriodFilter(period) {
+  activePurchasePeriodFilter = period || 'all';
+  ['day', 'month', 'year', 'all'].forEach(p => {
+    const b = document.getElementById('pfbtn-' + p);
+    if (!b) return;
+    b.className = (p === activePurchasePeriodFilter)
+      ? 'px-2.5 py-1 rounded-lg font-semibold bg-[#132A46] text-white'
+      : 'px-2.5 py-1 rounded-lg font-semibold bg-slate-100 text-slate-700 border border-slate-200';
+  });
+  renderPurchaseHistoryTable();
+}
+
+function renderPurchaseHistoryTable() {
+  const tb = document.getElementById('purchaseHistoryTableBody');
+  const sumEl = document.getElementById('purchasePeriodSummaryText');
+  const cntEl = document.getElementById('purchasePeriodCountBadge');
+  if (!tb) return;
+  const allPur = (state.transactions || []).filter(t => t.type === 'PURCHASE');
+  const list = filterEntriesByPeriod(allPur, activePurchasePeriodFilter);
+  const totalAmt = list.reduce((s, x) => s + Number(x.amount || 0), 0);
+  const totalWt = list.reduce((s, x) => s + Number(x.netKg || x.grossKg || 0), 0);
+  if (sumEl) sumEl.textContent = `कुल खरीद: ₹${totalAmt.toLocaleString('en-IN')} • शुद्ध वजन: ${totalWt.toLocaleString('en-IN')} Kg`;
+  if (cntEl) cntEl.textContent = `${list.length} बिल`;
+
+  if (!list.length) {
+    tb.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">इस अवधि में कोई खरीद बिल नहीं है</td></tr>`;
+    return;
+  }
+
+  tb.innerHTML = list.map(t => {
+    const p = state.parties.find(x => x.id === t.partyId);
+    return `
+      <tr>
+        <td class="num-clean px-3.5 py-2.5 whitespace-nowrap">${t.date}</td>
+        <td class="num-clean px-3.5 py-2.5 font-semibold text-[#132A46] whitespace-nowrap">${t.id}</td>
+        <td class="px-3.5 py-2.5">${p ? p.name : '-'}</td>
+        <td class="px-3.5 py-2.5">${t.itemName || ''} — ${t.note || ''}</td>
+        <td class="num-clean px-3.5 py-2.5 text-right font-bold text-sky-800 whitespace-nowrap">₹${Number(t.amount || 0).toLocaleString('en-IN')}</td>
+        <td class="px-3.5 py-2.5 text-center whitespace-nowrap space-x-1.5">
+          <button onclick="openReceipt('${t.id}')" class="text-[#1EA668] font-semibold underline">बिल</button>
+          <button onclick="editTransaction('${t.id}')" class="text-sky-700 font-semibold underline">Edit</button>
+          <button onclick="deleteTransaction('${t.id}')" class="text-rose-600 font-semibold underline">Del</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function printPurchasePeriodReport() {
+  const allPur = (state.transactions || []).filter(t => t.type === 'PURCHASE');
+  const list = filterEntriesByPeriod(allPur, activePurchasePeriodFilter);
+  const totalAmt = list.reduce((s, x) => s + Number(x.amount || 0), 0);
+  const totalWt = list.reduce((s, x) => s + Number(x.netKg || x.grossKg || 0), 0);
+  document.getElementById('printArea').innerHTML = `
+    <div class="bg-white border border-slate-300 rounded-md p-6 text-slate-800 space-y-4">
+      <div class="flex items-start justify-between border-b border-slate-200 pb-3">
+        <div>
+          <p class="text-base font-bold text-slate-900">वैदिक सीड्स — खरीद बिल रिपोर्ट</p>
+          <p class="text-xs text-slate-500">अवधि: ${activePurchasePeriodFilter.toUpperCase()} • कुल बिल: ${list.length}</p>
+        </div>
+        <div class="text-right num-clean text-xs">
+          <p class="font-bold text-sky-800">कुल खरीद: ₹${totalAmt.toLocaleString('en-IN')}</p>
+          <p class="font-semibold text-slate-700">शुद्ध वजन: ${totalWt.toLocaleString('en-IN')} Kg</p>
+        </div>
+      </div>
+      <table class="w-full text-xs border-collapse border border-slate-200">
+        <thead class="bg-slate-100">
+          <tr>
+            <th class="p-2 border border-slate-200 text-left">दिनांक</th>
+            <th class="p-2 border border-slate-200 text-left">बिल नं.</th>
+            <th class="p-2 border border-slate-200 text-left">किसान / पार्टी</th>
+            <th class="p-2 border border-slate-200 text-left">विवरण</th>
+            <th class="p-2 border border-slate-200 text-right">राशि</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${list.map(t => {
+            const p = state.parties.find(x => x.id === t.partyId);
+            return `<tr>
+              <td class="num-clean p-2 border border-slate-200">${t.date}</td>
+              <td class="num-clean p-2 border border-slate-200">${t.id}</td>
+              <td class="p-2 border border-slate-200">${p ? p.name : '-'}</td>
+              <td class="p-2 border border-slate-200">${t.itemName || ''} — ${t.note || ''}</td>
+              <td class="num-clean p-2 border border-slate-200 text-right font-semibold">₹${Number(t.amount || 0).toLocaleString('en-IN')}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+  document.getElementById('receiptModal').classList.remove('hidden');
+}
+
+const _origRenderDashboardV24 = renderDashboard;
+renderDashboard = function() {
+  _origRenderDashboardV24();
+  renderSaleHistoryTable();
+  renderPurchaseHistoryTable();
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  renderSaleHistoryTable();
+  renderPurchaseHistoryTable();
+});
+
 </script>
 </body>
 </html>
@@ -5826,8 +6162,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v23",
-  totalVersionsUpdated: 23,
+  currentVersion: "v24",
+  totalVersionsUpdated: 24,
   lastUpdatedDateLabel: "22 Nov 2026"
 };
 
