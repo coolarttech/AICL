@@ -268,7 +268,7 @@
 </div>
 
 <!-- Split-Screen PIN Lock Overlay -->
-<div id="pinLockScreen" class="fixed inset-0 z-[95] bg-[#0B0F17] text-white grid grid-cols-1 lg:grid-cols-12 overflow-y-auto no-print">
+<div id="pinLockScreen" class="fixed inset-0 z-[95] bg-[#0B0F17] text-white grid grid-cols-1 lg:grid-cols-12 overflow-y-auto no-scrollbar no-print">
   <!-- Left Showcase: Mobile has small left logo + top-right Powered by MunimJi & clean bottom; Desktop has clean top, large bottom-aligned photo + scaled orbit cards, and footer with Developed by Team CoolArt -->
   <div class="lg:col-span-7 flex flex-col justify-between p-4 sm:p-7 xl:p-9 border-b lg:border-b-0 lg:border-r border-slate-800/80 relative" style="background-image: linear-gradient(to right, rgba(148,163,184,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.06) 1px, transparent 1px); background-size: 28px 28px;">
     <!-- Top Bar: Mobile shows small PNG logo on left + Powered by MunimJi on right; Desktop hides green pill & duplicate logo -->
@@ -460,7 +460,7 @@
   </div>
 
   <!-- Right PIN Entry Panel -->
-  <div class="lg:col-span-5 flex flex-col justify-between items-center p-5 sm:p-8 bg-[#0B0F17] lg:min-h-0">
+  <div class="lg:col-span-5 flex flex-col justify-between items-center p-5 sm:p-8 bg-[#0B0F17] lg:min-h-0 overflow-hidden">
     <div class="w-full max-w-[240px] lg:max-w-xs my-auto space-y-4 py-2">
       <div class="flex flex-col items-center text-center">
         <!-- Show logo on Desktop PIN panel; removed on Mobile per screenshot -->
@@ -544,42 +544,44 @@
 
     <!-- Scrollable Navigation & Controls -->
     <div class="flex flex-col flex-1 overflow-y-auto no-scrollbar">
-      <!-- Top Brand Block + Separator + Status LED & Text -->
-      <div class="px-3.5 pt-4 pb-3 border-b border-slate-800/90 space-y-2.5">
-        <div class="flex flex-col items-center justify-center text-center relative">
-          <button onclick="toggleMobileSidebar(false)" class="lg:hidden absolute right-0 top-0 w-7 h-7 rounded-lg bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-xs shrink-0">✕</button>
-          <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-12 w-12 object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] mb-1.5">
-          <p class="text-base font-bold text-white tracking-tight leading-snug">वैदिक सीड्स</p>
-          <span class="inline-block text-[10px] font-semibold text-amber-300 bg-amber-400/10 border border-amber-400/25 px-2.5 py-0.5 rounded-full mt-1">एग्री सीड ईआरपी</span>
+      <!-- Top Brand Block Left + Vertical Separator + Status LED Right -->
+      <div class="px-3 pt-3.5 pb-3 border-b border-slate-800/90 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-10 w-10 object-contain shrink-0">
+          <div class="min-w-0 text-left">
+            <p class="text-sm font-bold text-white tracking-tight leading-tight truncate">वैदिक सीड्स</p>
+            <span class="inline-block text-[9.5px] font-semibold text-amber-300 bg-amber-400/10 border border-amber-400/25 px-2 py-0.5 rounded-full mt-0.5 truncate">एग्री सीड ईआरपी</span>
+          </div>
         </div>
 
-        <!-- Thin Separator Line -->
-        <div class="w-full h-px bg-slate-700/70"></div>
+        <!-- Vertical Separator Line -->
+        <div class="h-9 w-px bg-slate-700/80 shrink-0"></div>
 
-        <!-- Status Light + Status Text Below -->
-        <div class="py-0.5 flex flex-col items-center justify-center gap-1">
-          <span id="sidebarLedDot" title="Google Sheet Sync Status" class="w-3.5 h-3.5 rounded-full led-pending inline-block shrink-0"></span>
-          <span id="sidebarConnText" class="text-[11px] font-semibold text-amber-300 tracking-wide">कनेक्टिंग...</span>
+        <!-- Status Light + Status Text -->
+        <div class="flex flex-col items-center justify-center gap-0.5 shrink-0 pr-0.5">
+          <span id="sidebarLedDot" title="Google Sheet Sync Status" class="w-3 h-3 rounded-full led-pending inline-block shrink-0"></span>
+          <span id="sidebarConnText" class="text-[10.5px] font-semibold text-amber-300 tracking-tight leading-none">कनेक्टिंग...</span>
           <span id="syncStatusNote" class="sr-only"></span>
         </div>
+        <button onclick="toggleMobileSidebar(false)" class="lg:hidden w-7 h-7 rounded-lg bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-xs shrink-0">✕</button>
       </div>
 
       <!-- Navigation -->
       <nav class="px-3 py-1.5 space-y-3 text-[13px]">
         <div>
-          <p class="px-3 mb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">मुख्य मेनू (General)</p>
+          <p class="px-3 mb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">मुख्य मेनू</p>
           <div class="space-y-1">
             <button onclick="switchTab('dashboard'); toggleMobileSidebar(false);" id="tab-dashboard" class="nav-tab w-full flex items-center justify-between px-3.5 py-2 rounded-full bg-[#1E293B] text-white font-semibold transition">
               <span class="flex items-center gap-2.5">
                 <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-                <span>डैशबोर्ड</span>
+                <span>डैशबोर्ड (Dashboard)</span>
               </span>
             </button>
 
             <button onclick="switchTab('sales'); toggleMobileSidebar(false);" id="tab-sales" class="nav-tab w-full flex items-center justify-between px-3.5 py-2 rounded-full text-slate-300 hover:bg-slate-800/70 hover:text-white font-medium transition">
               <span class="flex items-center gap-2.5">
                 <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                <span>बिक्री व मंडी सप्लाई</span>
+                <span>बिक्री बिल (Sales)</span>
               </span>
               <span class="text-slate-500 text-xs">›</span>
             </button>
@@ -595,12 +597,20 @@
         </div>
 
         <div>
-          <p class="px-3 mb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">खाता व लेजर (Accounts)</p>
+          <p class="px-3 mb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">खाता व लेजर</p>
           <div class="space-y-1">
-            <button onclick="switchTab('vouchers'); toggleMobileSidebar(false);" id="tab-vouchers" class="nav-tab w-full flex items-center justify-between px-3.5 py-2 rounded-full text-slate-300 hover:bg-slate-800/70 hover:text-white font-medium transition">
+            <button onclick="openVoucherPreset('RECEIPT'); toggleMobileSidebar(false);" id="tab-vouchers-in" class="nav-tab w-full flex items-center justify-between px-3.5 py-2 rounded-full text-slate-300 hover:bg-slate-800/70 hover:text-white font-medium transition">
               <span class="flex items-center gap-2.5">
-                <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                <span>वाउचर (Vouchers)</span>
+                <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                <span>पैसा जमा (Payment In)</span>
+              </span>
+              <span class="text-slate-500 text-xs">›</span>
+            </button>
+
+            <button onclick="openVoucherPreset('PAYMENT'); toggleMobileSidebar(false);" id="tab-vouchers" class="nav-tab w-full flex items-center justify-between px-3.5 py-2 rounded-full text-slate-300 hover:bg-slate-800/70 hover:text-white font-medium transition">
+              <span class="flex items-center gap-2.5">
+                <svg class="w-4 h-4 text-amber-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>पैसा भुगतान (Payment Out)</span>
               </span>
               <span class="text-slate-500 text-xs">›</span>
             </button>
@@ -616,7 +626,7 @@
             <button onclick="switchTab('masters'); toggleMobileSidebar(false);" id="tab-masters" class="nav-tab w-full flex items-center justify-between px-3.5 py-2 rounded-full text-slate-300 hover:bg-slate-800/70 hover:text-white font-medium transition">
               <span class="flex items-center gap-2.5">
                 <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-                <span>आइटम मास्टर (Items)</span>
+                <span>उत्पाद जोड़ें (Items)</span>
               </span>
               <span class="text-slate-500 text-xs">›</span>
             </button>
@@ -624,7 +634,7 @@
             <button onclick="switchTab('expenses'); toggleMobileSidebar(false);" id="tab-expenses" class="nav-tab w-full flex items-center justify-between px-3.5 py-2 rounded-full text-slate-300 hover:bg-slate-800/70 hover:text-white font-medium transition">
               <span class="flex items-center gap-2.5">
                 <svg class="w-4 h-4 text-amber-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
-                <span>कंपनी खर्चे (Expenses)</span>
+                <span>सभी खर्चे (Expenses)</span>
               </span>
               <span class="text-slate-500 text-xs">›</span>
             </button>
@@ -640,11 +650,11 @@
         </div>
 
         <div class="owner-only">
-          <p class="px-3 mb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">एडमिन (Admin)</p>
+          <p class="px-3 mb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">एडमिन</p>
           <button onclick="switchTab('processing'); toggleMobileSidebar(false);" id="tab-processing" class="nav-tab owner-only w-full flex items-center justify-between px-3.5 py-2 rounded-full text-slate-300 hover:bg-slate-800/70 hover:text-white font-medium transition">
             <span class="flex items-center gap-2.5">
               <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-              <span>छंटाई व बचत (Profit)</span>
+              <span>छंटाई और प्रोसेसिंग</span>
             </span>
           </button>
         </div>
@@ -654,7 +664,7 @@
           <button type="button" onclick="toggleSidebarSettingsDropdown()" id="sidebarSettingsDropdownBtn" class="w-full bg-slate-900 hover:bg-slate-800 text-slate-100 border border-slate-700/80 text-xs font-semibold px-3 py-2.5 rounded-xl flex items-center justify-between transition">
             <span class="flex items-center gap-2">
               <svg class="w-3.5 h-3.5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              <span>सेटिंग्स</span>
+              <span>सेटिंग्स (Settings)</span>
             </span>
             <span id="sidebarSettingsChevron" class="text-slate-400 text-xs transition-transform">▾</span>
           </button>
@@ -663,7 +673,7 @@
             <div class="bg-slate-950/70 border border-slate-800/90 rounded-lg p-2 space-y-1.5">
               <div class="flex items-center justify-between px-0.5">
                 <span class="text-[10px] font-semibold text-slate-300">इनवॉइस थीम</span>
-                <button type="button" onclick="previewSampleInvoiceTheme()" class="text-[10px] font-semibold text-emerald-400 hover:underline">प्रीव्यू देखें</button>
+                <button type="button" onclick="previewSampleInvoiceTheme()" class="text-[10px] font-semibold text-emerald-400 hover:underline">प्रीव्यू</button>
               </div>
               <div class="grid grid-cols-3 gap-1 text-[10px]">
                 <button type="button" id="sbTheme-clean" onclick="selectInvoiceThemeFromSidebar('clean')" class="py-1 px-1 rounded font-semibold bg-white text-[#132A46] border border-slate-300 truncate">क्लीन पेपर</button>
@@ -673,7 +683,7 @@
             </div>
 
             <button type="button" onclick="openChangePinModal()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[11px] font-medium px-2.5 py-2 rounded-lg flex items-center justify-between transition">
-              <span>🔑 PIN व ऑटो-लॉक समय बदलें</span>
+              <span>🔑 PIN व ऑटो-लॉक समय</span>
               <span class="text-slate-400">›</span>
             </button>
 
@@ -692,7 +702,7 @@
 
             <div class="pt-2 border-t border-slate-800/90 space-y-1.5">
               <div class="flex items-center justify-between px-0.5">
-                <span class="text-[10px] font-semibold text-amber-300 tracking-wide">त्वरित शॉर्टकट्स (Quick Keys)</span>
+                <span class="text-[10px] font-semibold text-amber-300 tracking-wide">त्वरित शॉर्टकट्स</span>
                 <button type="button" onclick="openShortcutHelp()" class="text-[10px] text-slate-400 hover:text-white underline">Alt+H</button>
               </div>
               <div class="flex flex-wrap gap-1 text-[10px] text-slate-300">
@@ -707,7 +717,7 @@
 
         <!-- Legal, License & FAQ Category at the End of Sidebar Menu List -->
         <div class="pt-2 border-t border-slate-800/90 space-y-1 px-1 pb-2">
-          <p class="px-2 mb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">सहायता व नियम (Legal & FAQ)</p>
+          <p class="px-2 mb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">सहायता व नियम</p>
 
           <button onclick="openLegalModal('faq'); toggleMobileSidebar(false);" class="w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-[12px] text-slate-300 hover:bg-slate-800/70 hover:text-white font-medium transition">
             <span class="flex items-center gap-2">
@@ -764,10 +774,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v18 • 18 वर्जन</span>
+          <span id="versionBadgeDisplay">v19 • 19 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 22 Nov 2026 (v18)
+          Last Updated On: 22 Nov 2026 (v19)
         </div>
       </div>
     </div>
@@ -804,10 +814,6 @@
         <div class="flex items-center gap-2 shrink-0">
           <span class="lg:hidden text-[9px] font-semibold text-[#1EA668] bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full whitespace-nowrap">Agri ERP</span>
           <img src="logo.png" alt="MunimJi by Cool Art®" class="h-7 sm:h-10 md:h-11 w-auto object-contain">
-          <button type="button" onclick="lockPortalNow()" title="स्क्रीन लॉक करें (Lock Screen)" class="bg-white hover:bg-slate-50 active:scale-95 text-[#132A46] border border-slate-300 shadow-xs px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-semibold inline-flex items-center gap-1.5 transition shrink-0">
-            <svg class="w-3.5 h-3.5 text-amber-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-            <span>लॉक</span>
-          </button>
         </div>
       </div>
     </header>
@@ -818,10 +824,10 @@
       <!-- 1. DASHBOARD VIEW -->
       <section id="view-dashboard" class="flex flex-col space-y-4 sm:space-y-5">
 
-        <!-- Highlighted Action Row: + पार्टी जोड़ें, बिक्री बिल, खरीद बिल -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3.5">
+        <!-- 4 Compact Action Cards: + पार्टी जोड़ें, + बिक्री बिल, + खरीद बिल, Dark लॉक कार्ड -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5">
           <button type="button" onclick="switchTab('parties'); setTimeout(() => { document.getElementById('newPartyName')?.focus(); }, 120);" class="bg-blue-600 hover:bg-blue-700 text-white border border-blue-700 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
-            <div class="flex items-center gap-2.5 min-w-0">
+            <div class="flex items-center gap-2 min-w-0">
               <span class="w-8 h-8 rounded-lg bg-white/15 text-white flex items-center justify-center shrink-0">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
               </span>
@@ -831,7 +837,7 @@
           </button>
 
           <button type="button" onclick="switchTab('sales'); setTimeout(() => { document.getElementById('salePartySearch')?.focus(); }, 120);" class="bg-[#1EA668] hover:bg-emerald-700 text-white border border-emerald-700 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
-            <div class="flex items-center gap-2.5 min-w-0">
+            <div class="flex items-center gap-2 min-w-0">
               <span class="w-8 h-8 rounded-lg bg-white/15 text-white flex items-center justify-center shrink-0">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
               </span>
@@ -841,13 +847,26 @@
           </button>
 
           <button type="button" onclick="switchTab('purchase'); setTimeout(() => { document.getElementById('purPartySearch')?.focus(); }, 120);" class="bg-amber-500 hover:bg-amber-600 text-slate-950 border border-amber-600 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
-            <div class="flex items-center gap-2.5 min-w-0">
+            <div class="flex items-center gap-2 min-w-0">
               <span class="w-8 h-8 rounded-lg bg-slate-950/10 text-slate-950 flex items-center justify-center shrink-0">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
               </span>
               <span class="font-bold text-xs sm:text-sm truncate">+ खरीद बिल</span>
             </div>
             <span class="text-slate-950/70 text-xs shrink-0">›</span>
+          </button>
+
+          <button type="button" onclick="lockPortalNow()" class="bg-[#0F172A] hover:bg-slate-800 text-white border border-slate-700 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="w-8 h-8 rounded-lg bg-white/10 text-amber-300 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              </span>
+              <div class="min-w-0">
+                <span class="font-bold text-xs sm:text-sm text-white block truncate">लॉक (Lock)</span>
+                <span class="text-[10px] text-slate-300 block truncate">क्या लॉक करें: पोर्टल/स्क्रीन</span>
+              </div>
+            </div>
+            <span class="text-slate-400 text-xs shrink-0">›</span>
           </button>
         </div>
 
@@ -878,7 +897,7 @@
               <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
             </div>
             <div class="min-w-0">
-              <div class="font-bold text-xs sm:text-sm text-[#132A46] truncate">कंपनी खर्चा दर्ज करें</div>
+              <div class="font-bold text-xs sm:text-sm text-[#132A46] truncate">सभी खर्चे (Expenses)</div>
               <div class="text-[10px] sm:text-[11px] text-rose-600 font-medium truncate mt-0.5">कंपनी का अलग खर्च</div>
             </div>
           </button>
@@ -1562,54 +1581,69 @@
         </div>
       </section>
 
-      <!-- 6. DYNAMIC ITEM MASTERS VIEW -->
-      <section id="view-masters" class="hidden grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-5 space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-100 pb-2">
-            <h3 class="text-sm sm:text-base font-semibold text-[#132A46]">खरीद आइटम मास्टर (Raw Items)</h3>
-            <span id="rawItemFeedback" class="text-[11px] font-semibold text-[#1EA668]"></span>
-          </div>
-          <form id="rawItemForm" onsubmit="saveRawItem(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <input type="hidden" id="editRawItemId" value="">
-            <input type="text" id="rawItemName" placeholder="आइटम / फसल का नाम *" required class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
-            <input type="text" id="rawItemVar" placeholder="वैरायटी / विवरण *" required class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
-            <button type="submit" class="sm:col-span-2 bg-[#132A46] hover:bg-slate-800 text-white font-semibold py-2.5 rounded-xl text-sm transition">+ कच्चा आइटम सेव करें (Sheet Sync)</button>
-          </form>
-          <div class="overflow-x-auto">
-            <table class="w-full text-xs text-left border-t border-slate-100">
-              <thead class="bg-slate-50 text-xs text-slate-500 font-medium">
-                <tr><th class="py-2 px-2">नाम</th><th class="py-2 px-2">वैरायटी</th><th class="py-2 px-2 text-right">एक्शन</th></tr>
-              </thead>
-              <tbody id="rawItemsTable" class="divide-y divide-slate-100">
-                <tr><td colspan="3" class="py-6 text-center text-slate-400">कोई आइटम नहीं जुड़ा</td></tr>
-              </tbody>
-            </table>
+      <!-- 6. PRODUCTS / ITEMS MASTER VIEW -->
+      <section id="view-masters" class="hidden space-y-4">
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs px-4 py-3.5 flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 class="text-base sm:text-lg font-bold text-[#132A46]">उत्पाद जोड़ें (Products / Items)</h2>
+            <p class="text-xs text-slate-500 mt-0.5">किसानों से खरीदे जाने वाले उत्पाद और बिक्री के लिए तैयार उत्पादों को अलग-अलग जोड़ें</p>
           </div>
         </div>
 
-        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-5 space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-100 pb-2">
-            <h3 class="text-sm sm:text-base font-semibold text-[#1EA668]">बिक्री आइटम मास्टर (Sale Items)</h3>
-            <span id="saleItemFeedback" class="text-[11px] font-semibold text-[#1EA668]"></span>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-5 space-y-4">
+            <div class="flex items-start justify-between gap-2 border-b border-slate-100 pb-2.5">
+              <div>
+                <h3 class="text-sm sm:text-base font-bold text-[#132A46]">वैदिक सीड्स के वे उत्पाद जो किसानों से खरीदे जाते हैं</h3>
+                <p class="text-[11px] text-slate-500 mt-0.5">किसानों या सप्लायर से प्राप्त कच्चे अनाज या फसल के उत्पाद यहाँ जोड़ें।</p>
+              </div>
+              <span id="rawItemFeedback" class="text-[11px] font-semibold text-[#1EA668] shrink-0"></span>
+            </div>
+            <form id="rawItemForm" onsubmit="saveRawItem(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <input type="hidden" id="editRawItemId" value="">
+              <input type="text" id="rawItemName" placeholder="उत्पाद / फसल का नाम *" required class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
+              <input type="text" id="rawItemVar" placeholder="वैरायटी / विवरण *" required class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
+              <button type="submit" class="sm:col-span-2 bg-[#132A46] hover:bg-slate-800 text-white font-semibold py-2.5 rounded-xl text-sm transition">+ उत्पाद सेव करें</button>
+            </form>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs text-left border-t border-slate-100">
+                <thead class="bg-slate-50 text-xs text-slate-500 font-medium">
+                  <tr><th class="py-2 px-2">उत्पाद नाम</th><th class="py-2 px-2">वैरायटी</th><th class="py-2 px-2 text-right">एक्शन</th></tr>
+                </thead>
+                <tbody id="rawItemsTable" class="divide-y divide-slate-100">
+                  <tr><td colspan="3" class="py-6 text-center text-slate-400">कोई उत्पाद नहीं जुड़ा</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-          <form id="saleItemForm" onsubmit="saveSaleItem(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <input type="hidden" id="editSaleItemId" value="">
-            <input type="text" id="finItemName" placeholder="आइटम / बीज का नाम *" required class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
-            <input type="text" id="finItemCat" placeholder="कैटेगरी / क्लास (अपनी मर्जी से) *" required class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
-            <input type="number" id="finItemPack" placeholder="पैकेट Kg *" min="1" required class="num-clean border border-slate-300 rounded-xl px-3 py-2 text-sm">
-            <input type="number" step="0.01" id="finItemRate" placeholder="डिफ़ॉल्ट रेट ₹/Kg *" min="0" required class="num-clean border border-slate-300 rounded-xl px-3 py-2 text-sm">
-            <input type="number" id="finItemStock" placeholder="ओपनिंग स्टॉक बैग *" min="0" required class="num-clean border border-slate-300 rounded-xl px-3 py-2 text-sm">
-            <button type="submit" class="bg-[#1EA668] hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl text-sm transition">+ बिक्री आइटम सेव करें (Sheet Sync)</button>
-          </form>
-          <div class="overflow-x-auto">
-            <table class="w-full text-xs text-left border-t border-slate-100">
-              <thead class="bg-slate-50 text-xs text-slate-500 font-medium">
-                <tr><th class="py-2 px-2">नाम</th><th class="py-2 px-2">कैटेगरी</th><th class="py-2 px-2">पैकिंग</th><th class="py-2 px-2 text-right">स्टॉक</th><th class="py-2 px-2 text-right">एक्शन</th></tr>
-              </thead>
-              <tbody id="saleItemsTable" class="divide-y divide-slate-100">
-                <tr><td colspan="5" class="py-6 text-center text-slate-400">कोई बिक्री आइटम नहीं जुड़ा</td></tr>
-              </tbody>
-            </table>
+
+          <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-5 space-y-4">
+            <div class="flex items-start justify-between gap-2 border-b border-slate-100 pb-2.5">
+              <div>
+                <h3 class="text-sm sm:text-base font-bold text-[#1EA668]">वैदिक सीड्स के वे उत्पाद जो बिक्री के लिए हैं</h3>
+                <p class="text-[11px] text-slate-500 mt-0.5">जिन्हें हम किसान, वेंडर या अन्य किसी व्यक्ति को बेचते हैं, वे उत्पाद यहाँ जोड़ें।</p>
+              </div>
+              <span id="saleItemFeedback" class="text-[11px] font-semibold text-[#1EA668] shrink-0"></span>
+            </div>
+            <form id="saleItemForm" onsubmit="saveSaleItem(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <input type="hidden" id="editSaleItemId" value="">
+              <input type="text" id="finItemName" placeholder="उत्पाद / बीज का नाम *" required class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
+              <input type="text" id="finItemCat" placeholder="कैटेगरी / क्लास *" required class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
+              <input type="number" id="finItemPack" placeholder="पैकेट Kg *" min="1" required class="num-clean border border-slate-300 rounded-xl px-3 py-2 text-sm">
+              <input type="number" step="0.01" id="finItemRate" placeholder="डिफ़ॉल्ट रेट ₹/Kg *" min="0" required class="num-clean border border-slate-300 rounded-xl px-3 py-2 text-sm">
+              <input type="number" id="finItemStock" placeholder="ओपनिंग स्टॉक बैग *" min="0" required class="num-clean border border-slate-300 rounded-xl px-3 py-2 text-sm">
+              <button type="submit" class="bg-[#1EA668] hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl text-sm transition">+ बिक्री उत्पाद सेव करें</button>
+            </form>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs text-left border-t border-slate-100">
+                <thead class="bg-slate-50 text-xs text-slate-500 font-medium">
+                  <tr><th class="py-2 px-2">उत्पाद नाम</th><th class="py-2 px-2">कैटेगरी</th><th class="py-2 px-2">पैकिंग</th><th class="py-2 px-2 text-right">स्टॉक</th><th class="py-2 px-2 text-right">एक्शन</th></tr>
+                </thead>
+                <tbody id="saleItemsTable" class="divide-y divide-slate-100">
+                  <tr><td colspan="5" class="py-6 text-center text-slate-400">कोई बिक्री उत्पाद नहीं जुड़ा</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
@@ -1785,7 +1819,7 @@
         <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-5 space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
             <div>
-              <h2 class="text-base sm:text-lg font-bold text-[#132A46]">सीड प्रोसेसिंग मिलान व लॉट रिकॉर्ड (Processing & Lot Yield)</h2>
+              <h2 class="text-base sm:text-lg font-bold text-[#132A46]">छंटाई और प्रोसेसिंग (Seed Processing & Lot Yield)</h2>
               <p class="text-xs text-slate-500 mt-0.5">कच्चा माल → अंडरसाइज + रिजेक्शन + श्रिंकेज → <b>पक्का बीज ऑटो-कैलकुलेट</b> (वेक्टर आइकन व % सहित)</p>
             </div>
             <span id="prcFeedback" class="text-xs font-semibold text-[#1EA668]"></span>
@@ -2725,9 +2759,9 @@ const TAB_TITLES = {
   purchase: 'खरीद बिल (Purchase Bill)',
   vouchers: 'जमा व भुगतान वाउचर',
   parties: 'पार्टी खाता व पासबुक',
-  masters: 'डायनामिक आइटम मास्टर',
-  expenses: 'कंपनी के खर्चे (Expenses)',
-  processing: 'सीड प्रोसेसिंग मिलान'
+  masters: 'उत्पाद जोड़ें (Products / Items)',
+  expenses: 'सभी खर्चे (Expenses)',
+  processing: 'छंटाई और प्रोसेसिंग'
 };
 
 function switchTab(tab) {
@@ -4399,7 +4433,7 @@ function openReceipt(txId) {
       <div class="bg-white border ${outerBorderClass} rounded-md p-6 sm:p-8 text-slate-800 space-y-6">
         <div class="flex items-start justify-between gap-4 pb-5 border-b border-neutral-200">
           <div class="flex items-center gap-3">
-            <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-14 w-14 rounded-full object-cover border border-neutral-200 shrink-0">
+            <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-14 w-auto max-w-[96px] object-contain shrink-0">
             <div>
               <p class="text-base font-bold text-neutral-900">वैदिक सीड्स</p>
               <p class="num-clean text-[11px] text-neutral-500">GSTIN: ${companyGstin}</p>
@@ -4497,7 +4531,7 @@ function openReceipt(txId) {
       <div class="bg-white border ${outerBorderClass} rounded-md p-6 sm:p-8 text-slate-800 space-y-6">
         <div class="flex items-start justify-between gap-4 pb-5 border-b border-neutral-200">
           <div class="flex items-center gap-3">
-            <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-14 w-14 rounded-full object-cover border border-neutral-200 shrink-0">
+            <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-14 w-auto max-w-[96px] object-contain shrink-0">
             <div>
               <p class="text-base font-bold text-neutral-900">वैदिक सीड्स</p>
               <p class="num-clean text-[11px] text-neutral-500">GSTIN: ${companyGstin}</p>
@@ -5086,8 +5120,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v18",
-  totalVersionsUpdated: 18,
+  currentVersion: "v19",
+  totalVersionsUpdated: 19,
   lastUpdatedDateLabel: "22 Nov 2026"
 };
 
