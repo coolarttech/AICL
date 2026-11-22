@@ -402,6 +402,88 @@
     animation: symAlternatingGlow 12s ease-in-out infinite !important;
   }
 
+
+  @keyframes symRingOrbitAroundCards {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(-360deg); }
+  }
+  @keyframes symRingCounterRotate {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  @keyframes sceneryKenBurnsA {
+    0% { transform: scale(1) translate(0%, 0%); opacity: 0.72; }
+    50% { transform: scale(1.12) translate(-2%, -1.5%); opacity: 0.92; }
+    100% { transform: scale(1) translate(0%, 0%); opacity: 0.72; }
+  }
+  .outer-sym-orbit-wrap {
+    position: absolute;
+    left: 50%;
+    bottom: 16px;
+    width: calc(var(--orbit-box) + 128px);
+    height: calc(var(--orbit-box) + 128px);
+    transform: translateX(-50%);
+    z-index: 6;
+    pointer-events: none;
+  }
+  .outer-sym-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    animation: symRingOrbitAroundCards 52s linear infinite;
+  }
+  .outer-sym-slot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    transform: translate(
+      calc(var(--cos-o) * (var(--orbit-r) + 64px)),
+      calc(var(--sin-o) * (var(--orbit-r) + 64px))
+    );
+  }
+  .outer-sym-uniform {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1;
+    opacity: 0.62;
+    user-select: none;
+    pointer-events: none;
+    animation: symRingCounterRotate 52s linear infinite;
+  }
+  .desktop-scenery-clock-box {
+    position: relative;
+    width: 100%;
+    max-width: 340px;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    box-shadow: 0 14px 32px rgba(2, 6, 23, 0.55);
+    background: #0f172a;
+  }
+  .desktop-scenery-bg-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    animation: sceneryKenBurnsA 14s ease-in-out infinite;
+    transition: opacity 0.9s ease;
+  }
+  .desktop-scenery-scrim {
+    position: relative;
+    z-index: 2;
+    background: linear-gradient(180deg, rgba(2, 6, 23, 0.42) 0%, rgba(2, 6, 23, 0.66) 100%);
+    backdrop-filter: blur(2px);
+    padding: 12px 16px;
+    text-align: center;
+  }
+
 </style>
 </head>
 <body class="min-h-screen flex flex-col bg-[#f6f9f7]" oncontextmenu="return false;" ondragstart="return false;">
@@ -422,28 +504,27 @@
 <div id="pinLockScreen" class="fixed inset-0 z-[95] bg-[#0B0F17] text-white grid grid-cols-1 lg:grid-cols-12 overflow-y-auto no-scrollbar no-print">
   <!-- Left Showcase: Mobile has small left logo + top-right Powered by MunimJi & clean bottom; Desktop has clean top, large bottom-aligned photo + scaled orbit cards, and footer with Developed by Team CoolArt -->
   <div class="lg:col-span-7 flex flex-col justify-between p-4 sm:p-7 xl:p-9 border-b lg:border-b-0 lg:border-r border-slate-800/80 relative" style="background-image: linear-gradient(to right, rgba(148,163,184,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.06) 1px, transparent 1px); background-size: 28px 28px;">
-    <!-- Scrolling / Drifting + Fading + Non-Repeating Twinkling Glow Calculation Symbols -->
-    <div class="calc-bg-layer" aria-hidden="true">
-      <!-- Large low-opacity symbols -->
-      <span id="calcSym-0" class="calc-sym-item calc-sym-large-low text-emerald-300" style="top: 8%; left: 5%; animation: symScrollDriftA 18s ease-in-out infinite;">+</span>
-      <span id="calcSym-1" class="calc-sym-item calc-sym-large-low text-sky-300" style="top: 10%; right: 6%; animation: symScrollDriftB 21s ease-in-out infinite;">%</span>
-      <span id="calcSym-2" class="calc-sym-item calc-sym-large-low text-amber-300" style="bottom: 14%; left: 4%; animation: symScrollDriftB 20s ease-in-out infinite;">−</span>
-      <span id="calcSym-3" class="calc-sym-item calc-sym-large-low text-purple-300" style="bottom: 16%; right: 5%; animation: symScrollDriftA 22s ease-in-out infinite;">×</span>
-
-      <!-- Smaller bold symbols -->
-      <span id="calcSym-4" class="calc-sym-item calc-sym-small-bold text-teal-300" style="top: 26%; left: 9%; animation: symScrollDriftB 15s ease-in-out infinite;">÷</span>
-      <span id="calcSym-5" class="calc-sym-item calc-sym-small-bold text-rose-300" style="top: 28%; right: 9%; animation: symScrollDriftA 16s ease-in-out infinite;">=</span>
-      <span id="calcSym-6" class="calc-sym-item calc-sym-small-bold text-yellow-200" style="top: 56%; left: 5.5%; animation: symScrollDriftA 17s ease-in-out infinite;">₹</span>
-      <span id="calcSym-7" class="calc-sym-item calc-sym-small-bold text-indigo-300" style="top: 58%; right: 5.5%; animation: symScrollDriftB 19s ease-in-out infinite;">±</span>
-      <span id="calcSym-8" class="calc-sym-item calc-sym-small-bold text-cyan-200" style="top: 40%; left: 12%; animation: symScrollDriftB 14s ease-in-out infinite;">≈</span>
+    <!-- Uniform Small Calculation Symbols Orbiting Around the Card Circle -->
+    <div class="outer-sym-orbit-wrap" aria-hidden="true">
+      <div class="outer-sym-spinner">
+        <div class="outer-sym-slot" style="--cos-o: 0.0; --sin-o: -1.0;"><span class="outer-sym-uniform text-emerald-300">+</span></div>
+        <div class="outer-sym-slot" style="--cos-o: 0.5; --sin-o: -0.866;"><span class="outer-sym-uniform text-sky-300">−</span></div>
+        <div class="outer-sym-slot" style="--cos-o: 0.866; --sin-o: -0.5;"><span class="outer-sym-uniform text-amber-300">×</span></div>
+        <div class="outer-sym-slot" style="--cos-o: 1.0; --sin-o: 0.0;"><span class="outer-sym-uniform text-purple-300">÷</span></div>
+        <div class="outer-sym-slot" style="--cos-o: 0.866; --sin-o: 0.5;"><span class="outer-sym-uniform text-teal-300">%</span></div>
+        <div class="outer-sym-slot" style="--cos-o: 0.5; --sin-o: 0.866;"><span class="outer-sym-uniform text-rose-300">=</span></div>
+        <div class="outer-sym-slot" style="--cos-o: 0.0; --sin-o: 1.0;"><span class="outer-sym-uniform text-yellow-200">₹</span></div>
+        <div class="outer-sym-slot" style="--cos-o: -0.5; --sin-o: 0.866;"><span class="outer-sym-uniform text-cyan-200">±</span></div>
+        <div class="outer-sym-slot" style="--cos-o: -0.866; --sin-o: 0.5;"><span class="outer-sym-uniform text-indigo-300">≈</span></div>
+        <div class="outer-sym-slot" style="--cos-o: -1.0; --sin-o: 0.0;"><span class="outer-sym-uniform text-emerald-200">+</span></div>
+        <div class="outer-sym-slot" style="--cos-o: -0.866; --sin-o: -0.5;"><span class="outer-sym-uniform text-amber-200">−</span></div>
+        <div class="outer-sym-slot" style="--cos-o: -0.5; --sin-o: -0.866;"><span class="outer-sym-uniform text-sky-200">÷</span></div>
+      </div>
     </div>
 
     <!-- Top Bar: Mobile shows small PNG logo on left + Powered by MunimJi on right; Desktop hides green pill & duplicate logo -->
     <div class="flex items-center justify-between gap-2 relative z-30">
-      <div class="flex lg:hidden items-center gap-2 bg-white/95 text-slate-900 px-2.5 py-1 rounded-lg shadow-xs">
-        <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-5 w-5 object-contain">
-        <span class="text-[11px] font-bold tracking-tight">वैदिक सीड्स</span>
-      </div>
+<div class="lg:hidden"></div>
       <div class="hidden lg:block"></div>
 
       <!-- Mobile Top-Right Powered by MunimJi -->
@@ -634,30 +715,38 @@
   </div>
 
   <!-- Right PIN Entry Panel -->
-  <div class="lg:col-span-5 flex flex-col justify-between items-center p-5 sm:p-8 bg-[#0B0F17] lg:min-h-0 overflow-hidden">
-    <div class="w-full max-w-[240px] lg:max-w-xs my-auto space-y-4 py-2">
-      <div class="flex flex-col items-center text-center">
-        <!-- Show logo on Desktop PIN panel; removed on Mobile per screenshot -->
-        <div class="hidden lg:flex bg-white rounded-2xl p-3 shadow-lg border border-slate-200/80 mb-3">
-          <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स लोगो" class="h-20 w-20 object-contain">
+  <div class="lg:col-span-5 flex flex-col justify-between items-center p-4 sm:p-7 bg-[#0B0F17] lg:min-h-0 overflow-hidden">
+    <!-- Desktop-Only Top Clock Box With Flowing Natural Scenery + Today's Day + Bold White Apple-Style Time & Seconds -->
+    <div class="hidden lg:block w-full max-w-[340px] desktop-scenery-clock-box">
+      <div id="desktopSceneryBg" class="desktop-scenery-bg-slide" style="background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=900&q=75');"></div>
+      <div class="desktop-scenery-scrim">
+        <p id="lockScreenDayLine" class="text-xs font-semibold text-white/95 tracking-wide">सोमवार, 23 नवंबर 2026</p>
+        <div class="num-clean text-4xl font-bold text-white tracking-tight leading-tight mt-1 flex items-baseline justify-center">
+          <span id="lockClockHour">12</span><span class="clock-colon mx-0.5 text-white">:</span><span id="lockClockMin">05</span><span id="lockClockSec" class="text-xl font-semibold text-white/90 ml-1">00</span><span id="lockClockAmPm" class="text-xs font-semibold uppercase text-white/85 ml-1.5">AM</span>
         </div>
+      </div>
+    </div>
+
+    <div class="w-full max-w-[290px] lg:max-w-xs my-auto space-y-3.5 py-2">
+      <div class="flex flex-col items-center text-center">
+        <!-- Unboxed Vaidik Seeds Logo on Desktop PIN panel -->
+        <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स लोगो" class="hidden lg:block h-20 w-20 object-contain mb-2.5">
         <h1 class="text-lg lg:text-xl font-bold text-white tracking-tight">वैदिक सीड्स</h1>
         <p class="text-[11px] lg:text-xs text-slate-400 mt-0.5">पोर्टल खोलने के लिए PIN दर्ज करें</p>
       </div>
 
-      <form id="pinUnlockForm" onsubmit="verifyPinUnlock(event)" class="space-y-3">
-        <div>
-          <label for="unlockPinInput" class="block text-[11px] font-semibold text-slate-300 mb-1 text-center">एक्सेस PIN</label>
-          <input type="password" id="unlockPinInput" inputmode="numeric" autocomplete="off" required placeholder="••••" class="num-clean w-28 mx-auto block bg-slate-900/95 border border-slate-700 focus:border-emerald-400 rounded-xl px-3 py-2 text-center text-base font-bold tracking-[0.3em] text-white outline-none transition">
+      <form id="pinUnlockForm" onsubmit="verifyPinUnlock(event)" class="space-y-2.5">
+        <div class="flex items-center justify-center gap-2">
+          <input type="password" id="unlockPinInput" inputmode="numeric" autocomplete="off" required placeholder="••••" class="num-clean w-32 bg-slate-900/95 border border-slate-700 focus:border-emerald-400 rounded-xl px-3 py-2 text-center text-sm font-bold tracking-[0.28em] text-white outline-none transition">
+          <button type="submit" class="bg-[#1EA668] hover:bg-emerald-600 text-white font-semibold px-3.5 py-2 rounded-xl text-xs shadow-sm transition shrink-0">
+            कंटिन्यू
+          </button>
         </div>
         <p id="pinUnlockError" class="hidden text-xs font-semibold text-rose-400 text-center">गलत PIN! कृपया सही PIN दर्ज करें।</p>
-        <button type="submit" class="w-full bg-[#1EA668] hover:bg-emerald-600 text-white font-semibold py-2.5 rounded-xl text-xs lg:text-sm shadow-sm transition">
-          अनलॉक करें (Continue)
-        </button>
       </form>
     </div>
 
-    <!-- Desktop Right Panel Footer: Phone Icon + Developed by Team CoolArt (Mobile bottom kept clean) -->
+    <!-- Desktop Right Panel Footer: Phone Icon + Developed by Team CoolArt -->
     <div class="hidden lg:flex w-full max-w-md pt-4 border-t border-slate-800/90 items-center justify-between gap-3 text-[11px] text-slate-400">
       <a href="tel:+919458614610" class="num-clean inline-flex items-center gap-1.5 text-slate-300 hover:text-emerald-400 transition">
         <svg class="w-3.5 h-3.5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
@@ -948,10 +1037,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v24 • 24 वर्जन</span>
+          <span id="versionBadgeDisplay">v25 • 25 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 22 Nov 2026 (v24)
+          Last Updated On: 23 Nov 2026 (v25)
         </div>
       </div>
     </div>
@@ -1328,11 +1417,31 @@
 
       <!-- 2. SALES & OUTSIDE MANDI SUPPLY VIEW -->
       <section id="view-sales" class="hidden space-y-6">
+        <!-- Top Info & Rules Card for Sales / Mandi Supply -->
+        <div class="bg-white rounded-2xl border border-emerald-200/90 shadow-xs p-4 sm:p-5 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-emerald-100">
+            <div class="flex items-center gap-2.5">
+              <span class="w-9 h-9 rounded-xl bg-emerald-50 text-[#1EA668] border border-emerald-200 flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              </span>
+              <div>
+                <h2 class="text-base sm:text-lg font-bold text-[#132A46]">बिक्री व मंडी सप्लाई बिल (Sales & Mandi Supply)</h2>
+                <p class="text-xs text-slate-500 mt-0.5">तैयार बीज बिक्री या गाड़ी से बाहर मंडी/आढ़ती सप्लाई का बिल बनाएं व दिन/महीना/साल रिपोर्ट देखें</p>
+              </div>
+            </div>
+            <span class="text-[11px] font-semibold text-[#1EA668] bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">बिक्री कार्यक्षेत्र</span>
+          </div>
+          <ul class="space-y-1 text-[11px] text-slate-600">
+            <li>• <b>बीज बिक्री (Seed Sale)</b> में पैकेट/बैग साइज, बैग संख्या व अतिरिक्त वजन के आधार पर कुल वजन व बिल राशि स्वतः जुड़ती है।</li>
+            <li>• <b>बाहर मंडी सप्लाई (Mandi Supply)</b> में मंडी स्थान, गाड़ी/पर्ची, क्विंटल भाव व आढ़त/तुलाई कटौती के बाद शुद्ध बिल तैयार होता है।</li>
+          </ul>
+        </div>
+
         <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-6">
           <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-100">
             <div>
-              <h2 class="text-base sm:text-lg font-semibold text-[#132A46]">नया बिक्री / मंडी सप्लाई बिल बनाएं</h2>
-              <p class="text-xs text-slate-500 mt-0.5">तैयार बीज बिक्री या गाड़ी से बाहर मंडी/आढ़ती सप्लाई — दोनों चुनें</p>
+              <h3 class="text-sm sm:text-base font-bold text-[#132A46]">नया बिक्री / मंडी बिल दर्ज करें</h3>
+              <p class="text-xs text-slate-500 mt-0.5">पार्टी, दिनांक, लॉट व आइटम विवरण भरें</p>
             </div>
             <div class="flex items-center gap-2">
               <input type="text" id="saleCustomNoInput" placeholder="कस्टम इनवॉइस नं. (वैकल्पिक)" class="num-clean w-44 border border-slate-300 rounded-lg px-2.5 py-1 text-xs bg-white">
@@ -1475,26 +1584,6 @@
           </form>
         </div>
 
-        <!-- Sales / Mandi Info Card & Rules Slip -->
-        <div class="bg-white rounded-2xl border border-emerald-200/90 shadow-xs p-4 sm:p-5 space-y-2.5">
-          <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-emerald-100">
-            <div class="flex items-center gap-2.5">
-              <span class="w-9 h-9 rounded-xl bg-emerald-50 text-[#1EA668] border border-emerald-200 flex items-center justify-center shrink-0">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-              </span>
-              <div>
-                <h3 class="text-sm sm:text-base font-bold text-[#132A46]">बिक्री व मंडी सप्लाई बिल — नियम व मार्गदर्शन</h3>
-                <p class="text-[11px] text-slate-500">तैयार बीज बिक्री या बाहर मंडी सप्लाई के बिल व दिन/महीना/साल रिपोर्ट</p>
-              </div>
-            </div>
-            <span class="text-[11px] font-semibold text-[#1EA668] bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">बिक्री कार्यक्षेत्र</span>
-          </div>
-          <ul class="space-y-1 text-[11px] text-slate-600">
-            <li>• <b>बीज बिक्री (Seed Sale)</b> में पैकेट/बैग साइज, बैग संख्या व अतिरिक्त वजन के आधार पर कुल वजन व बिल राशि स्वतः जुड़ती है।</li>
-            <li>• <b>बाहर मंडी सप्लाई (Mandi Supply)</b> में मंडी स्थान, गाड़ी/पर्ची, क्विंटल भाव व आढ़त/तुलाई कटौती के बाद शुद्ध बिल तैयार होता है।</li>
-          </ul>
-        </div>
-
         <!-- Sales Entries List with Day / Month / Year / All Filters + Report Print -->
         <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-6 space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
@@ -1538,11 +1627,31 @@
 
       <!-- 3. PURCHASE BILL VIEW -->
       <section id="view-purchase" class="hidden space-y-6">
+        <!-- Top Info & Rules Card for Purchase Bill -->
+        <div class="bg-white rounded-2xl border border-sky-200/90 shadow-xs p-4 sm:p-5 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-sky-100">
+            <div class="flex items-center gap-2.5">
+              <span class="w-9 h-9 rounded-xl bg-sky-50 text-sky-700 border border-sky-200 flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+              </span>
+              <div>
+                <h2 class="text-base sm:text-lg font-bold text-[#132A46]">खरीद बिल (Purchase Bill) — नियम व मार्गदर्शन</h2>
+                <p class="text-xs text-slate-500 mt-0.5">किसान / सप्लायर से फसल खरीद, कट्टे + अतिरिक्त वजन, कद्दा कटौती व दिन/महीना/साल रिपोर्ट</p>
+              </div>
+            </div>
+            <span class="text-[11px] font-semibold text-sky-800 bg-sky-50 border border-sky-200 px-2.5 py-0.5 rounded-full">खरीद कार्यक्षेत्र</span>
+          </div>
+          <ul class="space-y-1 text-[11px] text-slate-600">
+            <li>• <b>कट्टे/बैग + अतिरिक्त वजन</b> से कुल भर्ती वजन (Kg व क्विंटल) स्वतः जुड़ता है और कस्टम <b>कद्दा कटौती (%)</b> के बाद भुगतान योग्य वजन निकलता है।</li>
+            <li>• लेबर व ट्रांसपोर्ट कटौती घटाकर शुद्ध देय राशि बनती है, और कच्चे गोदाम का स्टॉक स्वतः जुड़ता है।</li>
+          </ul>
+        </div>
+
         <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-6">
           <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-100">
             <div>
-              <h2 class="text-base sm:text-lg font-semibold text-[#132A46]">नया खरीद बिल बनाएं (Purchase Bill)</h2>
-              <p class="text-xs text-slate-500 mt-0.5">किसान / सप्लायर से फसल खरीद • कट्टे + अतिरिक्त वजन का ऑटो क्विंटल योग व कस्टम कद्दा (%)</p>
+              <h3 class="text-sm sm:text-base font-bold text-[#132A46]">नया खरीद बिल दर्ज करें</h3>
+              <p class="text-xs text-slate-500 mt-0.5">किसान/पार्टी, लॉट, कट्टे/वजन व कटौती विवरण भरें</p>
             </div>
             <div class="flex items-center gap-2">
               <input type="text" id="purCustomNoInput" placeholder="कस्टम बिल नं. (वैकल्पिक)" class="num-clean w-40 border border-slate-300 rounded-lg px-2.5 py-1 text-xs bg-white">
@@ -1677,26 +1786,6 @@
           </form>
         </div>
 
-        <!-- Purchase Info Card & Rules Slip -->
-        <div class="bg-white rounded-2xl border border-sky-200/90 shadow-xs p-4 sm:p-5 space-y-2.5">
-          <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-sky-100">
-            <div class="flex items-center gap-2.5">
-              <span class="w-9 h-9 rounded-xl bg-sky-50 text-sky-700 border border-sky-200 flex items-center justify-center shrink-0">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-              </span>
-              <div>
-                <h3 class="text-sm sm:text-base font-bold text-[#132A46]">खरीद बिल (Purchase Bill) — नियम व मार्गदर्शन</h3>
-                <p class="text-[11px] text-slate-500">किसान / सप्लायर से फसल खरीद, कद्दा कटौती व दिन/महीना/साल रिपोर्ट</p>
-              </div>
-            </div>
-            <span class="text-[11px] font-semibold text-sky-800 bg-sky-50 border border-sky-200 px-2.5 py-0.5 rounded-full">खरीद कार्यक्षेत्र</span>
-          </div>
-          <ul class="space-y-1 text-[11px] text-slate-600">
-            <li>• <b>कट्टे/बैग + अतिरिक्त वजन</b> से कुल भर्ती वजन (Kg व क्विंटल) स्वतः जुड़ता है और कस्टम <b>कद्दा कटौती (%)</b> के बाद भुगतान योग्य वजन निकलता है।</li>
-            <li>• लेबर व ट्रांसपोर्ट कटौती घटाकर शुद्ध देय राशि बनती है, और कच्चे गोदाम का स्टॉक स्वतः जुड़ता है।</li>
-          </ul>
-        </div>
-
         <!-- Purchase Entries List with Day / Month / Year / All Filters + Report Print -->
         <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-6 space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
@@ -1738,10 +1827,10 @@
         </div>
       </section>
 
-      <!-- 4. VOUCHERS VIEW: Distinct Payment In (पैसा जमा) vs Payment Out (पैसा भुगतान) + History & Reports -->
+      <!-- 4. VOUCHERS VIEW: Strictly Separate Payment In (पैसा जमा) vs Payment Out (पैसा भुगतान) -->
       <section id="view-vouchers" class="hidden space-y-5">
         <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-6 max-w-5xl mx-auto space-y-5">
-          <!-- Mode Switcher Slip / Header -->
+          <!-- Mode Header Card -->
           <div id="vchModeHeaderCard" class="rounded-2xl p-4 border border-emerald-200 bg-emerald-50/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition">
             <div class="flex items-start sm:items-center gap-3">
               <div id="vchModeIconBadge" class="w-11 h-11 rounded-xl bg-[#1EA668] text-white flex items-center justify-center shrink-0 shadow-xs">
@@ -1752,19 +1841,18 @@
                 <p id="vchMainSub" class="text-xs text-slate-600 mt-0.5">यहाँ पार्टी/किसान/मंडी से प्राप्त जमा राशि दर्ज करें — इससे पार्टी का बकाया घटता है</p>
               </div>
             </div>
-
-<span id="vchModeBadgeLabel" class="text-[11px] font-bold px-3 py-1 rounded-full bg-white/80 text-[#132A46] border border-slate-200 shrink-0">वाउचर कार्यक्षेत्र</span>
+            <span id="vchModeBadgeLabel" class="text-[11px] font-bold px-3 py-1 rounded-full bg-white/90 text-[#132A46] border border-slate-200 shrink-0">जमा रसीद कार्यक्षेत्र</span>
           </div>
 
-          <!-- Distinct Slip / Terms Box for Receipt vs Payment -->
+          <!-- Rules & Terms Box -->
           <div id="vchTermsSlip" class="rounded-xl border border-emerald-200/90 bg-slate-50/80 p-3.5 text-xs">
             <div class="flex flex-wrap items-center justify-between gap-2 pb-1.5 border-b border-slate-200/80">
               <span id="vchSlipBadge" class="font-bold text-[#1EA668]">जमा पर्ची नियम व शर्तें (Receipt Rules)</span>
               <span id="vchBannerStatus" class="text-[11px] font-semibold text-emerald-700 bg-emerald-100/80 px-2.5 py-0.5 rounded-full">जमा मोड सक्रिय</span>
             </div>
             <ul id="vchRulesList" class="mt-2 space-y-1 text-[11px] text-slate-600">
-              <li>• यह एंट्री <b>पैसा जमा (Payment In)</b> के रूप में दर्ज होगी जब पार्टी/खरीदार से नकद, UPI या बैंक में पैसा प्राप्त हो।</li>
-              <li>• जमा रसीद से संबंधित पार्टी के खाते का बकाया कम होता है और जमा रिपोर्ट में जुड़ता है।</li>
+              <li>• यह रसीद <b>पैसा जमा (Payment In)</b> के लिए है जब पार्टी/खरीदार से नकद, UPI या बैंक में राशि प्राप्त हो।</li>
+              <li>• जमा रसीद से संबंधित पार्टी के खाते का बकाया घटता है और जमा रिपोर्ट में जुड़ता है।</li>
             </ul>
           </div>
 
@@ -1793,10 +1881,10 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1">वाउचर प्रकार *</label>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">रसीद श्रेणी *</label>
                 <select id="vchType" onchange="setVoucherWorkspaceMode(this.value)" class="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm bg-white font-semibold">
-                  <option value="RECEIPT">पैसा जमा (Payment In — आया)</option>
-                  <option value="PAYMENT">पैसा भुगतान (Payment Out — दिया)</option>
+                  <option value="RECEIPT">पैसा जमा (Payment In)</option>
+                  <option value="PAYMENT">पैसा भुगतान (Payment Out)</option>
                 </select>
               </div>
               <div>
@@ -1839,17 +1927,17 @@
 
             <div class="flex flex-wrap justify-end gap-3 pt-2">
               <button type="button" onclick="resetVoucherForm()" class="px-4 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-600">फ़ॉर्म साफ़ करें</button>
-              <button type="submit" id="vchSubmitBtn" class="bg-[#1EA668] hover:bg-emerald-700 text-white font-semibold px-6 py-2.5 rounded-xl shadow-xs transition text-sm">जमा एंट्री सेव करें व रसीद देखें</button>
+              <button type="submit" id="vchSubmitBtn" class="bg-[#1EA668] hover:bg-emerald-700 text-white font-semibold px-6 py-2.5 rounded-xl shadow-xs transition text-sm">जमा रसीद सेव करें</button>
             </div>
           </form>
         </div>
 
-        <!-- All Entries List with Day / Month / Year Filters + Report Print/Export -->
+        <!-- Mode-Isolated List & Report Card (Only Receipt in Payment In, Only Payment in Payment Out) -->
         <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-6 max-w-5xl mx-auto space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
             <div>
-              <h3 id="vchHistoryTitle" class="text-sm sm:text-base font-bold text-[#132A46]">सभी जमा / भुगतान एंट्रियाँ व रिपोर्ट</h3>
-              <p class="text-xs text-slate-500 mt-0.5">दिन, महीना या साल के अनुसार सूची देखें और रिपोर्ट प्रिंट करें</p>
+              <h3 id="vchHistoryTitle" class="text-sm sm:text-base font-bold text-[#132A46]">सभी जमा रसीदें — दिन / महीना / साल रिपोर्ट</h3>
+              <p id="vchHistorySub" class="text-xs text-slate-500 mt-0.5">अवधि के अनुसार जमा रसीदें देखें और रिपोर्ट प्रिंट करें</p>
             </div>
 
             <div class="flex flex-wrap items-center gap-1.5 text-xs">
@@ -1857,13 +1945,13 @@
               <button type="button" onclick="setVoucherPeriodFilter('month')" id="vfbtn-month" class="px-2.5 py-1 rounded-lg font-semibold bg-slate-100 text-slate-700 border border-slate-200">महीना (Month)</button>
               <button type="button" onclick="setVoucherPeriodFilter('year')" id="vfbtn-year" class="px-2.5 py-1 rounded-lg font-semibold bg-slate-100 text-slate-700 border border-slate-200">साल (Year)</button>
               <button type="button" onclick="setVoucherPeriodFilter('all')" id="vfbtn-all" class="px-2.5 py-1 rounded-lg font-semibold bg-[#132A46] text-white">सभी (All)</button>
-              <button type="button" onclick="printVoucherPeriodReport()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-3 py-1 rounded-lg">📊 रिपोर्ट प्रिंट करें</button>
+              <button type="button" id="vchPrintReportBtn" onclick="printVoucherPeriodReport()" class="bg-[#1EA668] hover:bg-emerald-700 text-white font-bold px-3 py-1 rounded-lg">📊 जमा रिपोर्ट प्रिंट करें</button>
             </div>
           </div>
 
           <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-50 px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs">
-            <span id="vchPeriodSummaryText" class="num-clean font-semibold text-[#132A46]">कुल जमा: ₹0 • कुल भुगतान: ₹0</span>
-            <span id="vchPeriodCountBadge" class="num-clean text-slate-600 font-medium">0 एंट्रियाँ</span>
+            <span id="vchPeriodSummaryText" class="num-clean font-semibold text-[#132A46]">कुल जमा: ₹0</span>
+            <span id="vchPeriodCountBadge" class="num-clean text-slate-600 font-medium">0 रसीदें</span>
           </div>
 
           <div class="overflow-x-auto">
@@ -1871,33 +1959,54 @@
               <thead class="bg-slate-50 text-slate-600 border-b border-slate-200">
                 <tr>
                   <th class="px-3.5 py-2.5">दिनांक</th>
-                  <th class="px-3.5 py-2.5">वाउचर नं.</th>
+                  <th class="px-3.5 py-2.5">रसीद नं.</th>
                   <th class="px-3.5 py-2.5">पार्टी</th>
-                  <th class="px-3.5 py-2.5">प्रकार</th>
+                  <th class="px-3.5 py-2.5">विवरण</th>
                   <th class="px-3.5 py-2.5 text-right">राशि</th>
                   <th class="px-3.5 py-2.5 text-center">एक्शन</th>
                 </tr>
               </thead>
               <tbody id="voucherHistoryTableBody" class="divide-y divide-slate-100">
-                <tr><td colspan="6" class="p-6 text-center text-slate-400">अभी कोई वाउचर एंट्री नहीं है</td></tr>
+                <tr><td colspan="6" class="p-6 text-center text-slate-400">इस अवधि में कोई रसीद नहीं है</td></tr>
               </tbody>
             </table>
           </div>
         </div>
       </section>
 
-      <!-- 5. PARTIES & RUNNING LEDGER + OUTSTANDING DUES BULK PRINT VIEW -->
+      <!-- 5. PARTIES & RUNNING LEDGER + GUARANTOR / VILLAGE / BALANCE FILTERS & REPORTS -->
       <section id="view-parties" class="hidden space-y-5">
+        <!-- Top Info & Rules Card for Party Ledger -->
+        <div class="bg-white rounded-2xl border border-indigo-200/90 shadow-xs p-4 sm:p-5 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-indigo-100">
+            <div class="flex items-center gap-2.5">
+              <span class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-200 flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              </span>
+              <div>
+                <h2 class="text-base sm:text-lg font-bold text-[#132A46]">पार्टी लेजर व किसान/पार्टी सूची (Party Ledger & Reports)</h2>
+                <p class="text-xs text-slate-500 mt-0.5">पार्टी जोड़ने के नियम, गारंटर नाम/मोबाइल, गारंटर-वाइज़, गांव-वाइज़ व बकाया ('लेना है' / 'देना है') रिपोर्ट</p>
+              </div>
+            </div>
+            <span class="text-[11px] font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 rounded-full">पार्टी खाता कार्यक्षेत्र</span>
+          </div>
+          <ul class="space-y-1 text-[11px] text-slate-600">
+            <li>• नई पार्टी जोड़ते समय <b>गारंटर का नाम</b> और <b>गारंटर का मोबाइल नंबर</b> अलग-अलग दर्ज करें ताकि एक ही गारंटर से जुड़े सभी किसानों की सूची तुरंत निकल सके।</li>
+            <li>• किसी भी फ़िल्टर (<b>गारंटर</b>, <b>गांव</b> या <b>लेना है / देना है</b>) के साथ <b>रिपोर्ट प्रिंट करें</b> दबाकर सूची प्रिंट करें, और किसी पार्टी पर क्लिक करके उसका पूरा लेजर देखें।</li>
+          </ul>
+        </div>
+
         <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-5">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <h3 class="font-semibold text-sm text-[#132A46]" id="partyFormHeading">+ नई पार्टी जोड़ें (किसान, वेंडर, लेबर, मंडी)</h3>
             <span id="partySavedNotice" class="text-xs font-semibold text-[#1EA668] hidden">✓ सेव हो गया</span>
           </div>
-          <form id="addPartyBox" onsubmit="savePartyRecord(event)" class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+          <form id="addPartyBox" onsubmit="savePartyRecord(event)" class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
             <input type="hidden" id="editPartyId" value="">
-            <input type="text" id="newPartyName" placeholder="पार्टी / मंडी का नाम *" required class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
+            <input type="text" id="newPartyName" placeholder="पार्टी / किसान का नाम *" required class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
             <input type="text" id="newPartyFather" placeholder="पिता का नाम / प्रोपराइटर *" required class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
-            <input type="text" id="newPartyGuarantor" placeholder="गारंटर / संपर्क व्यक्ति" class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
+            <input type="text" id="newPartyGuarantor" placeholder="गारंटर का नाम" class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
+            <input type="tel" id="newPartyGuarantorPhone" placeholder="गारंटर का मोबाइल नं." class="num-clean border border-slate-300 rounded-xl px-3 py-2 text-sm">
             <select id="newPartyRole" class="border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white">
               <option value="Farmer">किसान (Farmer)</option>
               <option value="Vendor">बीज वेंडर / दुकानदार (Vendor)</option>
@@ -1907,24 +2016,47 @@
             </select>
             <input type="text" id="newPartyVillage" placeholder="गांव / शहर / मंडी *" required class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
             <input type="tel" id="newPartyPhone" placeholder="मोबाइल / WhatsApp नं. *" required class="num-clean border border-slate-300 rounded-xl px-3 py-2 text-sm">
-            <input type="number" id="newPartyOpenBal" placeholder="ओपनिंग बैलेंस (₹)" value="0" class="num-clean border border-slate-300 rounded-xl px-3 py-2 text-sm md:col-span-2">
-            <div class="flex items-center justify-end gap-2">
+            <input type="number" id="newPartyOpenBal" placeholder="ओपनिंग बैलेंस (₹)" value="0" class="num-clean border border-slate-300 rounded-xl px-3 py-2 text-sm">
+            <div class="sm:col-span-2 md:col-span-4 flex items-center justify-end gap-2">
               <button type="button" onclick="resetPartyForm()" class="px-4 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-600">रीसेट</button>
               <button type="submit" id="btnSaveParty" class="bg-[#132A46] hover:bg-slate-800 text-white font-semibold px-5 py-2 rounded-xl text-sm">पार्टी सेव करें</button>
             </div>
           </form>
         </div>
 
-        <!-- Outstanding Dues Row Table with Checkbox Selection & Print -->
-        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-5 space-y-3">
+        <!-- Filtered Party & Dues Table (Guarantor-wise, Village-wise, Receivable/Payable + Print on Every View) -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-5 space-y-3.5">
           <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
             <div>
-              <h3 class="text-sm sm:text-base font-bold text-[#132A46]">बकाया सूची व खरीद विवरण (Dues & Purchase Summary)</h3>
-              <p class="text-[11px] text-slate-500">पार्टियों को चुनकर उनकी बकाया रिपोर्ट प्रिंट करें या किसी रो पर क्लिक करके लेजर खोलें</p>
+              <h3 class="text-sm sm:text-base font-bold text-[#132A46]">पार्टी / किसान सूची व बकाया रिपोर्ट</h3>
+              <p class="text-[11px] text-slate-500">गारंटर, गांव या बकाया ('लेना है' / 'देना है') चुनें और उसी सूची की रिपोर्ट प्रिंट करें</p>
             </div>
             <div class="flex flex-wrap items-center gap-2 text-xs">
-              <button type="button" onclick="printSelectedPartyDuesReport()" class="bg-[#132A46] hover:bg-slate-800 text-white font-semibold px-3.5 py-1.5 rounded-lg">🖨 चुनी हुई बकाया सूची प्रिंट करें</button>
-              <button type="button" onclick="printAllPartyDuesReport()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3.5 py-1.5 rounded-lg">📊 पूरी बकाया रिपोर्ट</button>
+              <button type="button" onclick="printFilteredPartyListReport()" class="bg-[#132A46] hover:bg-slate-800 text-white font-semibold px-3.5 py-1.5 rounded-lg">🖨 वर्तमान सूची की रिपोर्ट प्रिंट करें</button>
+              <button type="button" onclick="printSelectedPartyDuesReport()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3.5 py-1.5 rounded-lg">☑ चुनी हुई पार्टियों की रिपोर्ट</button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">गारंटर के अनुसार (Guarantor-wise)</label>
+              <select id="filterGuarantorSelect" onchange="renderPartyDuesSummaryTable()" class="w-full border border-slate-300 rounded-xl px-3 py-2 bg-white">
+                <option value="ALL">सभी गारंटर</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">गांव के अनुसार (Village-wise)</label>
+              <select id="filterVillageSelect" onchange="renderPartyDuesSummaryTable()" class="w-full border border-slate-300 rounded-xl px-3 py-2 bg-white">
+                <option value="ALL">सभी गांव</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">पैसे के हिसाब से (Balance-wise)</label>
+              <select id="filterBalanceModeSelect" onchange="renderPartyDuesSummaryTable()" class="w-full border border-slate-300 rounded-xl px-3 py-2 bg-white font-semibold">
+                <option value="ALL">सभी (All)</option>
+                <option value="RECEIVABLE">पैसा लेना है (Receivable +)</option>
+                <option value="PAYABLE">पैसा देना है (Payable −)</option>
+              </select>
             </div>
           </div>
 
@@ -1934,13 +2066,14 @@
                 <tr>
                   <th class="px-3 py-2 w-8"><input type="checkbox" id="selectAllPartiesDueChk" onchange="toggleSelectAllPartyDues(this.checked)" class="rounded"></th>
                   <th class="px-3 py-2">पार्टी / गांव</th>
-                  <th class="px-3 py-2 text-right">कुल खरीद (Purchased)</th>
-                  <th class="px-3 py-2 text-right">बकाया राशि</th>
+                  <th class="px-3 py-2">गारंटर व मोबाइल</th>
+                  <th class="px-3 py-2 text-right">कुल खरीद</th>
+                  <th class="px-3 py-2 text-right">खाता शेष</th>
                   <th class="px-3 py-2 text-center">लेजर</th>
                 </tr>
               </thead>
               <tbody id="partyDuesSummaryBody" class="divide-y divide-slate-100">
-                <tr><td colspan="5" class="p-5 text-center text-slate-400">अभी कोई पार्टी दर्ज नहीं है</td></tr>
+                <tr><td colspan="6" class="p-5 text-center text-slate-400">अभी कोई पार्टी दर्ज नहीं है</td></tr>
               </tbody>
             </table>
           </div>
@@ -6151,6 +6284,367 @@ window.addEventListener('DOMContentLoaded', () => {
   renderPurchaseHistoryTable();
 });
 
+
+const LOCK_SCENERY_IMAGES = [
+  "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=900&q=75",
+  "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=75",
+  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=75",
+  "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=900&q=75"
+];
+let _lockSceneryIdx = 0;
+
+function updateLockScreenClockAndScenery() {
+  const now = new Date();
+  const days = ['रविवार', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार'];
+  const months = ['जनवरी', 'फ़रवरी', 'मार्च', 'अप्रैल', 'मई', 'जून', 'जुलाई', 'अगस्त', 'सितंबर', 'अक्टूबर', 'नवंबर', 'दिसंबर'];
+  let hrs = now.getHours();
+  const ampm = hrs >= 12 ? 'PM' : 'AM';
+  hrs = hrs % 12 || 12;
+
+  const hEl = document.getElementById('lockClockHour');
+  const mEl = document.getElementById('lockClockMin');
+  const sEl = document.getElementById('lockClockSec');
+  const aEl = document.getElementById('lockClockAmPm');
+  const dEl = document.getElementById('lockScreenDayLine');
+
+  if (hEl) hEl.textContent = String(hrs).padStart(2, '0');
+  if (mEl) mEl.textContent = String(now.getMinutes()).padStart(2, '0');
+  if (sEl) sEl.textContent = String(now.getSeconds()).padStart(2, '0');
+  if (aEl) aEl.textContent = ampm;
+  if (dEl) dEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+}
+
+function rotateLockScenerySlide() {
+  const bgEl = document.getElementById('desktopSceneryBg');
+  if (!bgEl) return;
+  _lockSceneryIdx = (_lockSceneryIdx + 1) % LOCK_SCENERY_IMAGES.length;
+  bgEl.style.backgroundImage = `url('${LOCK_SCENERY_IMAGES[_lockSceneryIdx]}')`;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  updateLockScreenClockAndScenery();
+  setInterval(updateLockScreenClockAndScenery, 1000);
+  setInterval(rotateLockScenerySlide, 7000);
+});
+
+// Strict separation between Payment In (RECEIPT) and Payment Out (PAYMENT)
+setVoucherWorkspaceMode = function(vType) {
+  const mode = (vType === 'PAYMENT') ? 'PAYMENT' : 'RECEIPT';
+  const sel = document.getElementById('vchType');
+  if (sel) sel.value = mode;
+
+  const headCard = document.getElementById('vchModeHeaderCard');
+  const iconBadge = document.getElementById('vchModeIconBadge');
+  const mainHeading = document.getElementById('vchMainHeading');
+  const mainSub = document.getElementById('vchMainSub');
+  const modePill = document.getElementById('vchModeBadgeLabel');
+  const slipBox = document.getElementById('vchTermsSlip');
+  const slipBadge = document.getElementById('vchSlipBadge');
+  const statusPill = document.getElementById('vchBannerStatus');
+  const rulesList = document.getElementById('vchRulesList');
+  const partyLbl = document.getElementById('vchPartyLabel');
+  const amtLbl = document.getElementById('vchAmountLabel');
+  const subBtn = document.getElementById('vchSubmitBtn');
+  const histTitle = document.getElementById('vchHistoryTitle');
+  const histSub = document.getElementById('vchHistorySub');
+  const printBtn = document.getElementById('vchPrintReportBtn');
+
+  if (mode === 'PAYMENT') {
+    if (headCard) headCard.className = 'rounded-2xl p-4 border border-orange-200 bg-orange-50/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition';
+    if (iconBadge) {
+      iconBadge.className = 'w-11 h-11 rounded-xl bg-orange-600 text-white flex items-center justify-center shrink-0 shadow-xs';
+      iconBadge.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg>';
+    }
+    if (mainHeading) mainHeading.textContent = 'पैसा भुगतान करें (Payment Out — किसान / पार्टी को भुगतान)';
+    if (mainSub) mainSub.textContent = 'यहाँ किसान या पार्टी को दी गई भुगतान राशि दर्ज करें';
+    if (modePill) modePill.textContent = 'भुगतान रसीद कार्यक्षेत्र';
+    if (slipBox) slipBox.className = 'rounded-xl border border-orange-200/90 bg-orange-50/30 p-3.5 text-xs';
+    if (slipBadge) { slipBadge.textContent = 'भुगतान रसीद नियम व शर्तें'; slipBadge.className = 'font-bold text-orange-700'; }
+    if (statusPill) { statusPill.textContent = 'भुगतान मोड सक्रिय'; statusPill.className = 'text-[11px] font-semibold text-orange-800 bg-orange-100 px-2.5 py-0.5 rounded-full'; }
+    if (rulesList) {
+      rulesList.innerHTML = `
+        <li>• यह रसीद केवल <b>पैसा भुगतान (Payment Out)</b> के लिए है जब वैदिक सीड्स से किसान या पार्टी को भुगतान दिया जाए।</li>
+        <li>• यहाँ केवल भुगतान रसीदों की सूची और भुगतान रिपोर्ट दिखेगी।</li>
+      `;
+    }
+    if (partyLbl) partyLbl.textContent = 'किस किसान / पार्टी को भुगतान किया गया है *';
+    if (amtLbl) amtLbl.textContent = 'भुगतान राशि (₹ Amount) *';
+    if (subBtn) { subBtn.textContent = 'भुगतान रसीद सेव करें'; subBtn.className = 'bg-orange-600 hover:bg-orange-700 text-white font-semibold px-6 py-2.5 rounded-xl shadow-xs transition text-sm'; }
+    if (histTitle) histTitle.textContent = 'सभी भुगतान रसीदें — दिन / महीना / साल रिपोर्ट';
+    if (histSub) histSub.textContent = 'अवधि के अनुसार भुगतान रसीदें देखें और भुगतान रिपोर्ट प्रिंट करें';
+    if (printBtn) { printBtn.textContent = '📊 भुगतान रिपोर्ट प्रिंट करें'; printBtn.className = 'bg-orange-600 hover:bg-orange-700 text-white font-bold px-3 py-1 rounded-lg'; }
+  } else {
+    if (headCard) headCard.className = 'rounded-2xl p-4 border border-emerald-200 bg-emerald-50/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition';
+    if (iconBadge) {
+      iconBadge.className = 'w-11 h-11 rounded-xl bg-[#1EA668] text-white flex items-center justify-center shrink-0 shadow-xs';
+      iconBadge.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>';
+    }
+    if (mainHeading) mainHeading.textContent = 'पैसा जमा करें (Payment In — पार्टी से प्राप्त राशि)';
+    if (mainSub) mainSub.textContent = 'यहाँ पार्टी/किसान/मंडी से प्राप्त जमा राशि दर्ज करें — इससे पार्टी का बकाया घटता है';
+    if (modePill) modePill.textContent = 'जमा रसीद कार्यक्षेत्र';
+    if (slipBox) slipBox.className = 'rounded-xl border border-emerald-200/90 bg-slate-50/80 p-3.5 text-xs';
+    if (slipBadge) { slipBadge.textContent = 'जमा रसीद नियम व शर्तें'; slipBadge.className = 'font-bold text-[#1EA668]'; }
+    if (statusPill) { statusPill.textContent = 'जमा मोड सक्रिय'; statusPill.className = 'text-[11px] font-semibold text-emerald-700 bg-emerald-100/80 px-2.5 py-0.5 rounded-full'; }
+    if (rulesList) {
+      rulesList.innerHTML = `
+        <li>• यह रसीद केवल <b>पैसा जमा (Payment In)</b> के लिए है जब पार्टी/खरीदार से नकद, UPI या बैंक में राशि प्राप्त हो।</li>
+        <li>• यहाँ केवल जमा रसीदों की सूची और जमा रिपोर्ट दिखेगी।</li>
+      `;
+    }
+    if (partyLbl) partyLbl.textContent = 'किस पार्टी से पैसा जमा हुआ है *';
+    if (amtLbl) amtLbl.textContent = 'जमा राशि (₹ Amount) *';
+    if (subBtn) { subBtn.textContent = 'जमा रसीद सेव करें'; subBtn.className = 'bg-[#1EA668] hover:bg-emerald-700 text-white font-semibold px-6 py-2.5 rounded-xl shadow-xs transition text-sm'; }
+    if (histTitle) histTitle.textContent = 'सभी जमा रसीदें — दिन / महीना / साल रिपोर्ट';
+    if (histSub) histSub.textContent = 'अवधि के अनुसार जमा रसीदें देखें और जमा रिपोर्ट प्रिंट करें';
+    if (printBtn) { printBtn.textContent = '📊 जमा रिपोर्ट प्रिंट करें'; printBtn.className = 'bg-[#1EA668] hover:bg-emerald-700 text-white font-bold px-3 py-1 rounded-lg'; }
+  }
+  renderVoucherHistoryTable();
+};
+
+getFilteredVoucherEntries = function() {
+  const mode = (document.getElementById('vchType')?.value === 'PAYMENT') ? 'PAYMENT' : 'RECEIPT';
+  const modeEntries = (state.transactions || []).filter(t => t.type === mode);
+  return filterEntriesByPeriod(modeEntries, activeVoucherPeriodFilter);
+};
+
+renderVoucherHistoryTable = function() {
+  const mode = (document.getElementById('vchType')?.value === 'PAYMENT') ? 'PAYMENT' : 'RECEIPT';
+  const tb = document.getElementById('voucherHistoryTableBody');
+  const sumEl = document.getElementById('vchPeriodSummaryText');
+  const cntEl = document.getElementById('vchPeriodCountBadge');
+  if (!tb) return;
+  const list = getFilteredVoucherEntries();
+  const totalAmt = list.reduce((s, x) => s + Number(x.amount || 0), 0);
+  if (sumEl) {
+    sumEl.textContent = mode === 'PAYMENT'
+      ? `कुल भुगतान: ₹${totalAmt.toLocaleString('en-IN')}`
+      : `कुल जमा: ₹${totalAmt.toLocaleString('en-IN')}`;
+  }
+  if (cntEl) cntEl.textContent = `${list.length} रसीदें`;
+
+  if (!list.length) {
+    tb.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">इस अवधि में कोई ${mode === 'PAYMENT' ? 'भुगतान' : 'जमा'} रसीद नहीं है</td></tr>`;
+    return;
+  }
+
+  tb.innerHTML = list.map(v => {
+    const p = state.parties.find(x => x.id === v.partyId);
+    const isRec = v.type === 'RECEIPT';
+    return `
+      <tr>
+        <td class="num-clean px-3.5 py-2.5 whitespace-nowrap">${v.date}</td>
+        <td class="num-clean px-3.5 py-2.5 font-semibold text-[#132A46] whitespace-nowrap">${v.id}</td>
+        <td class="px-3.5 py-2.5">${p ? p.name : '-'}</td>
+        <td class="px-3.5 py-2.5">${v.note || (isRec ? 'जमा रसीद' : 'भुगतान रसीद')}</td>
+        <td class="num-clean px-3.5 py-2.5 text-right font-bold ${isRec ? 'text-[#1EA668]' : 'text-orange-700'} whitespace-nowrap">₹${Number(v.amount || 0).toLocaleString('en-IN')}</td>
+        <td class="px-3.5 py-2.5 text-center whitespace-nowrap space-x-1.5">
+          <button onclick="openReceipt('${v.id}')" class="text-[#1EA668] font-semibold underline">रसीद</button>
+          <button onclick="editTransaction('${v.id}')" class="text-sky-700 font-semibold underline">Edit</button>
+          <button onclick="deleteTransaction('${v.id}')" class="text-rose-600 font-semibold underline">Del</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+};
+
+printVoucherPeriodReport = function() {
+  const mode = (document.getElementById('vchType')?.value === 'PAYMENT') ? 'PAYMENT' : 'RECEIPT';
+  const label = mode === 'PAYMENT' ? 'भुगतान रिपोर्ट' : 'जमा रिपोर्ट';
+  const list = getFilteredVoucherEntries();
+  const totalAmt = list.reduce((s, x) => s + Number(x.amount || 0), 0);
+  document.getElementById('printArea').innerHTML = `
+    <div class="bg-white border border-slate-300 rounded-md p-6 text-slate-800 space-y-4">
+      <div class="flex items-start justify-between border-b border-slate-200 pb-3">
+        <div>
+          <p class="text-base font-bold text-slate-900">वैदिक सीड्स — ${label}</p>
+          <p class="text-xs text-slate-500">अवधि: ${activeVoucherPeriodFilter.toUpperCase()} • कुल रसीदें: ${list.length}</p>
+        </div>
+        <div class="text-right num-clean text-xs">
+          <p class="font-bold ${mode === 'PAYMENT' ? 'text-orange-700' : 'text-[#1EA668]'}">कुल ${mode === 'PAYMENT' ? 'भुगतान' : 'जमा'}: ₹${totalAmt.toLocaleString('en-IN')}</p>
+        </div>
+      </div>
+      <table class="w-full text-xs border-collapse border border-slate-200">
+        <thead class="bg-slate-100">
+          <tr>
+            <th class="p-2 border border-slate-200 text-left">दिनांक</th>
+            <th class="p-2 border border-slate-200 text-left">रसीद नं.</th>
+            <th class="p-2 border border-slate-200 text-left">पार्टी</th>
+            <th class="p-2 border border-slate-200 text-left">विवरण</th>
+            <th class="p-2 border border-slate-200 text-right">राशि</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${list.map(v => {
+            const p = state.parties.find(x => x.id === v.partyId);
+            return `<tr>
+              <td class="num-clean p-2 border border-slate-200">${v.date}</td>
+              <td class="num-clean p-2 border border-slate-200">${v.id}</td>
+              <td class="p-2 border border-slate-200">${p ? p.name : '-'}</td>
+              <td class="p-2 border border-slate-200">${v.note || ''}</td>
+              <td class="num-clean p-2 border border-slate-200 text-right font-semibold">₹${Number(v.amount || 0).toLocaleString('en-IN')}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+  document.getElementById('receiptModal').classList.remove('hidden');
+};
+
+// Party Guarantor Name + Guarantor Phone + Guarantor/Village/Balance Filters & Reports
+savePartyRecord = function(e) {
+  e.preventDefault();
+  const editId = document.getElementById('editPartyId').value;
+  const openBal = Number(document.getElementById('newPartyOpenBal').value) || 0;
+  const gName = (document.getElementById('newPartyGuarantor')?.value || '').trim() || '-';
+  const gPhone = (document.getElementById('newPartyGuarantorPhone')?.value || '').trim() || '-';
+
+  const partyObj = {
+    id: editId || ('P-' + (101 + state.parties.length + Math.floor(Math.random() * 900))),
+    name: document.getElementById('newPartyName').value.trim(),
+    father: document.getElementById('newPartyFather').value.trim(),
+    guarantor: gName,
+    guarantorPhone: gPhone,
+    role: document.getElementById('newPartyRole').value,
+    village: document.getElementById('newPartyVillage').value.trim(),
+    phone: document.getElementById('newPartyPhone').value.trim(),
+    openingBal: openBal,
+    createdDate: new Date().toISOString().slice(0, 10)
+  };
+
+  if (editId) {
+    const idx = state.parties.findIndex(x => x.id === editId);
+    if (idx !== -1) state.parties[idx] = partyObj;
+  } else {
+    state.parties.push(partyObj);
+  }
+
+  saveState();
+  syncToGoogleSheet({
+    sheetTab: 'Parties_Master',
+    actionType: 'UPSERT',
+    ...partyObj,
+    seasonYear: getSeasonYear(partyObj.createdDate)
+  });
+
+  const notice = document.getElementById('partySavedNotice');
+  if (notice) {
+    notice.textContent = `✓ "${partyObj.name}" सेव हो गई`;
+    notice.classList.remove('hidden');
+    setTimeout(() => notice.classList.add('hidden'), 2500);
+  }
+
+  resetPartyForm();
+  renderPartyList();
+  selectPartyLedger(partyObj.id);
+  renderDashboard();
+};
+
+editParty = function(partyId) {
+  const p = state.parties.find(x => x.id === partyId);
+  if (!p) return;
+  closeRecordsDrawer();
+  switchTab('parties');
+  document.getElementById('editPartyId').value = p.id;
+  document.getElementById('partyFormHeading').textContent = `पार्टी संपादित करें (${p.id})`;
+  document.getElementById('btnSaveParty').textContent = 'अपडेट सेव करें';
+  document.getElementById('newPartyName').value = p.name;
+  document.getElementById('newPartyFather').value = p.father;
+  document.getElementById('newPartyGuarantor').value = p.guarantor === '-' ? '' : p.guarantor;
+  if (document.getElementById('newPartyGuarantorPhone')) {
+    document.getElementById('newPartyGuarantorPhone').value = (!p.guarantorPhone || p.guarantorPhone === '-') ? '' : p.guarantorPhone;
+  }
+  document.getElementById('newPartyRole').value = p.role;
+  document.getElementById('newPartyVillage').value = p.village;
+  document.getElementById('newPartyPhone').value = p.phone;
+  document.getElementById('newPartyOpenBal').value = Number(p.openingBal) || 0;
+};
+
+function populatePartyFilterDropdowns() {
+  const gSel = document.getElementById('filterGuarantorSelect');
+  const vSel = document.getElementById('filterVillageSelect');
+  if (gSel) {
+    const prevG = gSel.value;
+    const guarantors = Array.from(new Set(
+      state.parties.map(p => (p.guarantor || '').trim()).filter(g => g && g !== '-')
+    )).sort((a, b) => a.localeCompare(b, 'hi'));
+    gSel.innerHTML = `<option value="ALL">सभी गारंटर</option>` + guarantors.map(g => `<option value="${g}">${g}</option>`).join('');
+    if (prevG && (prevG === 'ALL' || guarantors.includes(prevG))) gSel.value = prevG;
+  }
+  if (vSel) {
+    const prevV = vSel.value;
+    const villages = Array.from(new Set(
+      state.parties.map(p => (p.village || '').trim()).filter(Boolean)
+    )).sort((a, b) => a.localeCompare(b, 'hi'));
+    vSel.innerHTML = `<option value="ALL">सभी गांव</option>` + villages.map(v => `<option value="${v}">${v}</option>`).join('');
+    if (prevV && (prevV === 'ALL' || villages.includes(prevV))) vSel.value = prevV;
+  }
+}
+
+function getFilteredPartiesForReport() {
+  populatePartyFilterDropdowns();
+  const gVal = document.getElementById('filterGuarantorSelect')?.value || 'ALL';
+  const vVal = document.getElementById('filterVillageSelect')?.value || 'ALL';
+  const bMode = document.getElementById('filterBalanceModeSelect')?.value || 'ALL';
+
+  return state.parties.filter(p => {
+    if (gVal !== 'ALL' && (p.guarantor || '').trim() !== gVal) return false;
+    if (vVal !== 'ALL' && (p.village || '').trim() !== vVal) return false;
+    const bal = getPartyBalance(p.id);
+    if (bMode === 'RECEIVABLE' && bal <= 0) return false;
+    if (bMode === 'PAYABLE' && bal >= 0) return false;
+    return true;
+  });
+}
+
+renderPartyDuesSummaryTable = function() {
+  const tb = document.getElementById('partyDuesSummaryBody');
+  if (!tb) return;
+  const rows = getFilteredPartiesForReport();
+  if (!rows.length) {
+    tb.innerHTML = `<tr><td colspan="6" class="p-5 text-center text-slate-400">इस फ़िल्टर के अनुसार कोई पार्टी नहीं मिली</td></tr>`;
+    return;
+  }
+  tb.innerHTML = rows.map(p => {
+    const purAmt = getPartyPurchasedAmount(p.id);
+    const bal = getPartyBalance(p.id);
+    const gPhone = (p.guarantorPhone && p.guarantorPhone !== '-') ? p.guarantorPhone : '';
+    const balLabel = bal > 0
+      ? `<span class="num-clean font-bold text-rose-600">₹${bal.toLocaleString('en-IN')} (लेना है)</span>`
+      : (bal < 0 ? `<span class="num-clean font-bold text-[#1EA668]">₹${Math.abs(bal).toLocaleString('en-IN')} (देना है)</span>` : `<span class="num-clean text-slate-600">₹0</span>`);
+
+    return `
+      <tr class="hover:bg-slate-50/80">
+        <td class="px-3 py-2"><input type="checkbox" class="party-due-chk rounded" value="${p.id}"></td>
+        <td onclick="selectPartyLedger('${p.id}')" class="px-3 py-2 cursor-pointer">
+          <p class="font-semibold text-[#132A46]">${p.name}</p>
+          <p class="text-[11px] text-slate-500">${p.village} • ${p.role}</p>
+        </td>
+        <td onclick="selectPartyLedger('${p.id}')" class="px-3 py-2 cursor-pointer">
+          <p class="font-medium text-slate-700">${p.guarantor || '-'}</p>
+          ${gPhone ? `<p class="num-clean text-[11px] text-slate-500">${gPhone}</p>` : ''}
+        </td>
+        <td onclick="selectPartyLedger('${p.id}')" class="num-clean px-3 py-2 text-right font-semibold text-sky-700 cursor-pointer">₹${purAmt.toLocaleString('en-IN')}</td>
+        <td onclick="selectPartyLedger('${p.id}')" class="num-clean px-3 py-2 text-right cursor-pointer">${balLabel}</td>
+        <td class="px-3 py-2 text-center"><button type="button" onclick="selectPartyLedger('${p.id}')" class="text-sky-700 font-semibold underline">खोलें</button></td>
+      </tr>
+    `;
+  }).join('');
+};
+
+function printFilteredPartyListReport() {
+  const rows = getFilteredPartiesForReport();
+  if (!rows.length) {
+    alert('प्रिंट करने के लिए कोई पार्टी उपलब्ध नहीं है।');
+    return;
+  }
+  const gVal = document.getElementById('filterGuarantorSelect')?.value || 'ALL';
+  const vVal = document.getElementById('filterVillageSelect')?.value || 'ALL';
+  const bMode = document.getElementById('filterBalanceModeSelect')?.value || 'ALL';
+  const bLabel = bMode === 'RECEIVABLE' ? 'पैसा लेना है' : (bMode === 'PAYABLE' ? 'पैसा देना है' : 'सभी');
+  renderPartyDuesPrintModal(rows.map(p => p.id), `पार्टी रिपोर्ट (गारंटर: ${gVal} | गांव: ${vVal} | खाता: ${bLabel})`);
+}
+
 </script>
 </body>
 </html>
@@ -6162,8 +6656,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v24",
-  totalVersionsUpdated: 24,
+  currentVersion: "v25",
+  totalVersionsUpdated: 25,
   lastUpdatedDateLabel: "22 Nov 2026"
 };
 
