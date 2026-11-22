@@ -251,6 +251,30 @@
     pointer-events: none;
   }
 
+
+  @keyframes slowSymbolDriftA {
+    0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+    50% { transform: translate(12px, -16px) rotate(8deg); }
+  }
+  @keyframes slowSymbolDriftB {
+    0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+    50% { transform: translate(-14px, 14px) rotate(-7deg); }
+  }
+  .calc-bg-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .calc-float-sym {
+    position: absolute;
+    font-weight: 300;
+    line-height: 1;
+    user-select: none;
+    pointer-events: none;
+  }
+
 </style>
 </head>
 <body class="min-h-screen flex flex-col bg-[#f6f9f7]" oncontextmenu="return false;" ondragstart="return false;">
@@ -271,6 +295,16 @@
 <div id="pinLockScreen" class="fixed inset-0 z-[95] bg-[#0B0F17] text-white grid grid-cols-1 lg:grid-cols-12 overflow-y-auto no-scrollbar no-print">
   <!-- Left Showcase: Mobile has small left logo + top-right Powered by MunimJi & clean bottom; Desktop has clean top, large bottom-aligned photo + scaled orbit cards, and footer with Developed by Team CoolArt -->
   <div class="lg:col-span-7 flex flex-col justify-between p-4 sm:p-7 xl:p-9 border-b lg:border-b-0 lg:border-r border-slate-800/80 relative" style="background-image: linear-gradient(to right, rgba(148,163,184,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.06) 1px, transparent 1px); background-size: 28px 28px;">
+    <!-- Subtle Slow-Drifting Slim Calculation Symbols in Blank Outer Space -->
+    <div class="calc-bg-layer" aria-hidden="true">
+      <span class="calc-float-sym text-4xl lg:text-5xl text-emerald-300/10" style="top: 10%; left: 7%; animation: slowSymbolDriftA 19s ease-in-out infinite;">+</span>
+      <span class="calc-float-sym text-3xl lg:text-4xl text-sky-300/10" style="top: 14%; right: 8%; animation: slowSymbolDriftB 22s ease-in-out infinite;">%</span>
+      <span class="calc-float-sym text-4xl lg:text-5xl text-amber-300/10" style="top: 42%; left: 4.5%; animation: slowSymbolDriftB 24s ease-in-out infinite;">−</span>
+      <span class="calc-float-sym text-3xl lg:text-4xl text-purple-300/10" style="top: 46%; right: 5%; animation: slowSymbolDriftA 21s ease-in-out infinite;">×</span>
+      <span class="calc-float-sym text-3xl lg:text-4xl text-teal-300/10" style="bottom: 18%; left: 6.5%; animation: slowSymbolDriftA 23s ease-in-out infinite;">÷</span>
+      <span class="calc-float-sym text-3xl lg:text-4xl text-rose-300/10" style="bottom: 22%; right: 6.5%; animation: slowSymbolDriftB 20s ease-in-out infinite;">=</span>
+    </div>
+
     <!-- Top Bar: Mobile shows small PNG logo on left + Powered by MunimJi on right; Desktop hides green pill & duplicate logo -->
     <div class="flex items-center justify-between gap-2 relative z-30">
       <div class="flex lg:hidden items-center gap-2 bg-white/95 text-slate-900 px-2.5 py-1 rounded-lg shadow-xs">
@@ -441,6 +475,13 @@
       </div>
     </div>
 
+    <!-- Founder Reference Line Right Above the Thin Divider Line -->
+    <div class="hidden lg:flex items-center justify-center relative z-30 pb-1.5">
+      <p class="text-[11px] text-slate-400 tracking-wide">
+        <span class="text-slate-200 font-semibold">कृष्ण कांत भारद्वाज</span> — Founder, <b class="text-emerald-400 font-semibold">CoolArt®</b> <span class="text-slate-400">(MunimJi Platform)</span>
+      </p>
+    </div>
+
     <!-- Desktop Footer Only (Mobile keeps bottom clean during login) -->
     <div class="hidden lg:flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400 border-t border-slate-800/80 pt-3 relative z-30">
       <div class="flex items-center gap-2">
@@ -548,8 +589,8 @@
       <div class="px-3 pt-3.5 pb-3 border-b border-slate-800/90 flex items-center justify-between gap-2">
         <div class="flex items-center gap-2.5 min-w-0">
           <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-10 w-10 object-contain shrink-0">
-          <div class="flex flex-col items-start justify-center min-w-0 text-left">
-            <p class="text-sm font-bold text-white tracking-tight leading-tight truncate w-full">वैदिक सीड्स</p>
+          <div class="flex flex-col items-center justify-center min-w-0 text-center">
+            <p class="text-sm font-bold text-white tracking-tight leading-tight truncate w-full text-center">वैदिक सीड्स</p>
             <span class="inline-block text-[9.5px] font-semibold text-amber-300 bg-amber-400/10 border border-amber-400/25 px-2 py-0.5 rounded-full mt-0.5 leading-tight truncate max-w-full">एग्री सीड ईआरपी</span>
           </div>
         </div>
@@ -774,10 +815,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v20 • 20 वर्जन</span>
+          <span id="versionBadgeDisplay">v21 • 21 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 22 Nov 2026 (v20)
+          Last Updated On: 22 Nov 2026 (v21)
         </div>
       </div>
     </div>
@@ -2667,53 +2708,53 @@ window.addEventListener('focus', () => {
 
 const LEGAL_CONTENT = {
   faq: {
-    title: 'FAQ — अक्सर पूछे जाने वाले प्रश्न (User Guide)',
+    title: 'FAQ — अक्सर पूछे जाने वाले प्रश्न (Updated ERP Guide)',
     html: `
       <div class="space-y-3">
         <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-          <p class="font-semibold text-[#132A46]">1. सबसे पहले पोर्टल में क्या जोड़ना चाहिए?</p>
-          <p class="text-slate-600 mt-1">सबसे पहले <b>पार्टी लेजर (Parties)</b> में अपने किसान, बीज वेंडर, मंडी और लेबर जोड़ें, तथा <b>आइटम मास्टर (Items)</b> में कच्चे व तैयार बिक्री आइटम जोड़ें। ये सभी सीधे Google Sheet के <code>Parties_Master</code> और <code>Items_Master</code> टैब में सेव होते हैं।</p>
+          <p class="font-semibold text-[#132A46]">1. नए पोर्टल में काम शुरू करने का सही क्रम क्या है?</p>
+          <p class="text-slate-600 mt-1">सबसे पहले <b>पार्टी लेजर (Parties)</b> में किसान, वेंडर, मंडी या लेबर जोड़ें और <b>उत्पाद जोड़ें (Items)</b> में किसानों से खरीदे जाने वाले व बिक्री के लिए तैयार उत्पादों को अलग-अलग जोड़ें। सभी मास्टर व लेन-देन आपके Google Sheet और लोकल स्टोरेज में सुरक्षित रहते हैं।</p>
         </div>
         <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-          <p class="font-semibold text-[#132A46]">2. खरीद बिल में 1% कद्दा और कटौती कैसे काम करती है?</p>
-          <p class="text-slate-600 mt-1">खरीद बिल में शुद्ध भर्ती वजन (Kg) डालने पर सॉफ्टवेयर अपने आप <b>1% कद्दा</b> घटाकर पेमेंट योग्य वजन (Net Kg) निकालता है और क्विंटल भाव से गुणा करके लेबर, भाड़ा व कचरा कटौती घटाकर शुद्ध देय राशि तैयार करता है।</p>
+          <p class="font-semibold text-[#132A46]">2. खरीद बिल और बिक्री बिल कैसे काम करते हैं?</p>
+          <p class="text-slate-600 mt-1"><b>खरीद बिल</b> में कट्टे/बैग व अतिरिक्त वजन से कुल भर्ती वजन व क्विंटल योग स्वतः बनता है और कस्टम <b>कद्दा कटौती (%)</b>, लेबर व भाड़ा कटौती के बाद शुद्ध देय राशि निकलती है। <b>बिक्री बिल</b> में <b>Seed Sale</b> (पैकेट/बैग) और <b>बाहर मंडी सप्लाई</b> दोनों विकल्प उपलब्ध हैं।</p>
         </div>
         <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-          <p class="font-semibold text-[#132A46]">3. बिक्री बिल और बाहर मंडी सप्लाई में क्या अंतर है?</p>
-          <p class="text-slate-600 mt-1"><b>Seed Sale</b> का उपयोग पैकेट/बैग के हिसाब से बीज बेचने के लिए होता है, जबकि <b>Mandi Supply</b> का उपयोग गाड़ी लोड करके बाहर मंडी या आढ़ती को क्विंटल भाव पर माल भेजने के लिए किया जाता है।</p>
+          <p class="font-semibold text-[#132A46]">3. पैसा जमा (Payment In) व पैसा भुगतान (Payment Out) और उनकी रिपोर्ट कैसे देखें?</p>
+          <p class="text-slate-600 mt-1">डैशबोर्ड या साइडबार से <b>पैसा जमा</b> व <b>पैसा भुगतान</b> के अलग-अलग कार्यक्षेत्र खुलते हैं। इनमें <b>दिन, महीना, साल व सभी</b> फ़िल्टर के साथ एंट्री सूची दिखती है और वहीं से <b>रिपोर्ट प्रिंट</b> की जा सकती है।</p>
         </div>
         <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-          <p class="font-semibold text-[#132A46]">4. गलत एंट्री होने पर Edit या Delete कैसे करें?</p>
-          <p class="text-slate-600 mt-1">डैशबोर्ड की टेबल, पार्टी लेजर या साइडबार के <b>पूरी लिस्ट / Edit</b> ड्रॉवर से किसी भी बिल, वाउचर, खर्च या पार्टी को बदला या हटाया जा सकता है—यह बदलाव तुरंत आपकी Google Sheet में भी अपडेट हो जाता है।</p>
+          <p class="font-semibold text-[#132A46]">4. छंटाई और प्रोसेसिंग व गोदाम स्टॉक कैसे जुड़ते हैं?</p>
+          <p class="text-slate-600 mt-1">खरीद से कच्चा स्टॉक जुड़ता है और <b>छंटाई और प्रोसेसिंग</b> में लॉट दर्ज होने पर कच्चा माल घटता है तथा अंडरसाइज, रिजेक्शन व श्रिंकेज के बाद पक्का बीज व लॉट रिपोर्ट तैयार होती है।</p>
         </div>
         <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-          <p class="font-semibold text-[#132A46]">5. Google Sheet से ताज़ा डेटा कैसे सिंक करें?</p>
-          <p class="text-slate-600 mt-1">बाईं काली पट्टी में ऊपर दिए गए <b>Sync Now ↻</b> बटन पर क्लिक करने से आपके सभी मास्टर्स और शीट के ताज़ा रिकॉर्ड आपस में सिंक हो जाते हैं।</p>
+          <p class="font-semibold text-[#132A46]">5. लॉक, ऑटो-लॉक, स्टाफ व बैकअप कैसे प्रबंधित करें?</p>
+          <p class="text-slate-600 mt-1">डैशबोर्ड के <b>लॉक</b> कार्ड से तुरंत स्क्रीन/सेशन लॉक किया जा सकता है, और सेटिंग्स से <b>PIN व ऑटो-लॉक समय</b> बदला जा सकता है। <b>स्टाफ</b> सेक्शन में स्टाफ रिकॉर्ड अलग सुरक्षित रहता है और समय-समय पर <b>Excel / CSV डाउनलोड</b> से बैकअप लिया जा सकता है।</p>
         </div>
       </div>
     `
   },
   terms: {
-    title: 'Terms & Conditions — नियम एवं शर्तें',
+    title: 'Terms & Conditions — नियम एवं शर्तें (Commercial ERP)',
     html: `
       <div class="space-y-3">
-        <p><b>1. सेवा का दायरा:</b> यह वेब पोर्टल (<b>MunimJi by Cool Art® — Vaidik Seeds Agri-Seed ERP</b>) दैनिक व्यापारिक हिसाब-किताब, बीज खरीद-बिक्री, मंडी सप्लाई, वाउचर और खर्च प्रबंधन के लिए तैयार किया गया है।</p>
-        <p><b>2. डेटा प्रविष्टि की जिम्मेदारी:</b> पोर्टल में दर्ज किए गए वजन, दर, कद्दा प्रतिशत, कटौती, पार्टी विवरण और कर (Tax/GST) संबंधी सभी आंकड़ों की सटीकता और सत्यापन की पूरी जिम्मेदारी अधिकृत उपयोगकर्ता / क्लाइंट (वैदिक सीड्स) की होगी।</p>
-        <p><b>3. क्लाउड सिंक व बैकअप:</b> लाइव Google Sheet सिंक के लिए सक्रिय इंटरनेट कनेक्शन आवश्यक है। किसी भी तृतीय-पक्ष सेवा (Google Workspace, GitHub, या इंटरनेट नेटवर्क) में अस्थायी बाधा से बचने के लिए उपयोगकर्ता को समय-समय पर <b>Excel / CSV डाउनलोड</b> द्वारा लोकल बैकअप सुरक्षित रखने की सलाह दी जाती है।</p>
-        <p><b>4. दायित्व की सीमा:</b> Cool Art® सॉफ्टवेयर की तकनीकी कार्यप्रणाली के लिए प्रतिबद्ध है, परंतु गलत डेटा प्रविष्टि, ब्राउज़र कैश साफ़ करने या बाहरी सर्वर डाउनटाइम से होने वाली किसी अप्रत्यक्ष व्यापारिक या वित्तीय हानि के लिए उत्तरदायी नहीं होगा।</p>
-        <p><b>5. तकनीकी सहायता:</b> किसी भी तकनीकी सहायता या कस्टम बदलाव के लिए आधिकारिक हेल्पलाइन <b>+91 9458614610</b> पर संपर्क किया जा सकता है।</p>
+        <p><b>1. सेवा का दायरा:</b> यह पोर्टल (<b>MunimJi by CoolArt® — वैदिक सीड्स एग्री सीड ईआरपी</b>) बीज खरीद-बिक्री, बाहर मंडी सप्लाई, जमा/भुगतान वाउचर, पार्टी लेजर, खर्च, स्टाफ और छंटाई/प्रोसेसिंग प्रबंधन के लिए प्रदान किया गया है।</p>
+        <p><b>2. 1-वर्षीय प्लान व डेटा सुरक्षा:</b> कमर्शियल प्लान की निर्धारित अवधि (<b>21 Nov 2026 से 21 Nov 2027</b>) के दौरान सभी फीचर्स सक्रिय रहते हैं। अवधि समाप्त होने पर भी आपका पहले से दर्ज समस्त व्यापारिक डेटा सुरक्षित रहेगा; केवल नई एंट्री व नए डाउनलोड नवीनीकरण (Renewal) तक अस्थायी रूप से रुकेंगे।</p>
+        <p><b>3. प्रविष्टि व लेखा सत्यापन:</b> बिल, वजन, कद्दा %, कटौती, वाउचर राशि, पार्टी बकाया और कर/वैधानिक विवरण की शुद्धता की जिम्मेदारी अधिकृत उपयोगकर्ता (<b>वैदिक सीड्स</b>) की रहेगी।</p>
+        <p><b>4. एक्सेस सुरक्षा व बैकअप:</b> लॉगिन PIN व ऑपरेटर एक्सेस की सुरक्षा बनाए रखें तथा नियमित रूप से <b>Excel / CSV</b> बैकअप सहेजें। बाहरी नेटवर्क/सर्वर या ब्राउज़र डेटा साफ़ होने से होने वाली अप्रत्यक्ष हानि के लिए <b>CoolArt®</b> उत्तरदायी नहीं होगा।</p>
+        <p><b>5. हेल्पलाइन व सपोर्ट:</b> सहायता या अपग्रेड के लिए संपर्क करें: <b class="num-clean">+91 9458614610</b>।</p>
       </div>
     `
   },
   license: {
-    title: 'Software License & User Agreement — लाइसेंस एवं उपयोगकर्ता अनुबंध',
+    title: 'Software License & User Agreement — CoolArt® लाइसेंस अनुबंध',
     html: `
       <div class="space-y-3">
-        <p><b>1. बौद्धिक संपदा स्वामित्व (Intellectual Property Rights):</b> इस वेब एप्लिकेशन का संपूर्ण सोर्स कोड, यूज़र इंटरफ़ेस (UI/UX), डेटाबेस आर्किटेक्चर, ग्राफ़िक्स और <b>MunimJi by Cool Art®</b> ट्रेडमार्क/लोगो पूरी तरह <b>Cool Art®</b> की अनन्य बौद्धिक संपत्ति है।</p>
-        <p><b>2. सीमित उपयोग लाइसेंस (Limited Non-Transferable License):</b> Cool Art® द्वारा यह सॉफ्टवेयर पोर्टल केवल अधिकृत लाइसेंसधारक संस्था (<b>वैदिक सीड्स</b>) के आंतरिक व्यापारिक संचालन के लिए प्रदान किया गया है। यह लाइसेंस गैर-हस्तांतरणीय (Non-Transferable) है।</p>
-        <p><b>3. प्रतिबंधित गतिविधियाँ:</b> बिना Cool Art® की पूर्व लिखित अनुमति के इस सॉफ्टवेयर के कोड की नकल करना, रिवर्स-इंजीनियरिंग करना, किसी अन्य कंपनी या व्यक्ति को बेचना, किराए पर देना, या इसके कॉपीराइट व <b>Developed by Cool Art®</b> ब्रांडिंग चिह्नों को हटाना सख्त वर्जित है।</p>
-        <p><b>4. गोपनीयता व डेटा सुरक्षा:</b> क्लाइंट का समस्त व्यापारिक डेटा उनकी अपनी Google Sheet और लोकल ब्राउज़र स्टोरेज में सुरक्षित रहता है। Cool Art® बिना अनुमति क्लाइंट के व्यावसायिक डेटा को किसी तीसरे पक्ष के साथ साझा नहीं करता।</p>
-        <p><b>5. अनुबंध स्वीकृति:</b> इस पोर्टल का निरंतर उपयोग करने का अर्थ है कि उपयोगकर्ता उपरोक्त सभी लाइसेंस शर्तों और नियमों से सहमत है।</p>
+        <p><b>1. बौद्धिक संपदा स्वामित्व:</b> इस एप्लिकेशन का संपूर्ण सोर्स कोड, डिज़ाइन, डेटा संरचना, वर्कफ़्लो और <b>MunimJi by CoolArt®</b> ब्रांड/लोगो पर <b>CoolArt®</b> (Founder: <b>कृष्ण कांत भारद्वाज</b>) के पूर्ण बौद्धिक संपदा अधिकार सुरक्षित हैं।</p>
+        <p><b>2. सीमित व गैर-हस्तांतरणीय लाइसेंस:</b> यह लाइसेंस केवल <b>वैदिक सीड्स (M/S Vaidic Seeds)</b> के आंतरिक व्यापारिक उपयोग के लिए सीमित है। इसे किसी अन्य फर्म, व्यक्ति या संस्था को बेचना, किराए पर देना, पुनः वितरित करना या सब-लाइसेंस देना सख्त वर्जित है।</p>
+        <p><b>3. कोड व ब्रांडिंग संरक्षण:</b> बिना पूर्व लिखित अनुमति के कोड की नकल, रिवर्स-इंजीनियरिंग, अनधिकृत रूपांतरण या <b>CoolArt® / MunimJi</b> कॉपीराइट/क्रेडिट हटाना अनुबंध का उल्लंघन माना जाएगा।</p>
+        <p><b>4. डेटा गोपनीयता:</b> व्यापारिक रिकॉर्ड आपकी अपनी Google Sheet और डिवाइस स्टोरेज में रहते हैं; <b>CoolArt®</b> बिना अनुमति आपका व्यावसायिक डेटा किसी तीसरे पक्ष को नहीं देता।</p>
+        <p><b>5. अनुबंध की मान्यता:</b> इस सिस्टम का उपयोग जारी रखने से उपरोक्त सभी नियम व लाइसेंस शर्तें लागू मानी जाती हैं।</p>
       </div>
     `
   }
@@ -5590,8 +5631,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v20",
-  totalVersionsUpdated: 20,
+  currentVersion: "v21",
+  totalVersionsUpdated: 21,
   lastUpdatedDateLabel: "22 Nov 2026"
 };
 
@@ -5610,11 +5651,11 @@ function getPlanStatusInfo() {
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const msPerDay = 1000 * 60 * 60 * 24;
 
-  const rawElapsed = Math.floor((todayStart - start) / msPerDay);
-  const elapsedDays = Math.max(0, rawElapsed);
+  const rawDiff = Math.floor((todayStart - start) / msPerDay);
+  const elapsedDays = rawDiff < 0 ? 0 : (rawDiff + 1);
   const totalDays = PLAN_CONFIG.durationDays;
   const remainingDays = Math.max(0, totalDays - elapsedDays);
-  const isExpired = rawElapsed >= totalDays;
+  const isExpired = elapsedDays > totalDays;
   const pctRemaining = Math.max(0, Math.min(100, Math.round((remainingDays / totalDays) * 100)));
 
   return {
