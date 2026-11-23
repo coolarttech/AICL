@@ -1090,33 +1090,42 @@
         <!-- 4 Compact Action Cards: + पार्टी जोड़ें, + बिक्री बिल, + खरीद बिल, Dark लॉक कार्ड -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5">
           <button type="button" onclick="switchTab('parties'); setTimeout(() => { document.getElementById('newPartyName')?.focus(); }, 120);" class="bg-blue-600 hover:bg-blue-700 text-white border border-blue-700 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
-            <div class="flex items-center gap-2 min-w-0">
+            <div class="flex items-center gap-2.5 min-w-0">
               <span class="w-8 h-8 rounded-lg bg-white/15 text-white flex items-center justify-center shrink-0">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
               </span>
-              <span class="font-bold text-xs sm:text-sm truncate">+ पार्टी जोड़ें</span>
+              <div class="min-w-0">
+                <span class="font-bold text-xs sm:text-sm block truncate">+ पार्टी जोड़ें</span>
+                <span class="text-[10px] text-blue-100 block truncate">कुल पार्टियाँ</span>
+              </div>
             </div>
-            <span class="text-white/80 text-xs shrink-0">›</span>
+            <span id="dashCountParties" class="num-clean text-xl sm:text-2xl font-extrabold text-white tracking-tight shrink-0">0</span>
           </button>
 
           <button type="button" onclick="switchTab('sales'); setTimeout(() => { document.getElementById('salePartySearch')?.focus(); }, 120);" class="bg-[#1EA668] hover:bg-emerald-700 text-white border border-emerald-700 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
-            <div class="flex items-center gap-2 min-w-0">
+            <div class="flex items-center gap-2.5 min-w-0">
               <span class="w-8 h-8 rounded-lg bg-white/15 text-white flex items-center justify-center shrink-0">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
               </span>
-              <span class="font-bold text-xs sm:text-sm truncate">+ बिक्री बिल</span>
+              <div class="min-w-0">
+                <span class="font-bold text-xs sm:text-sm block truncate">+ बिक्री बिल</span>
+                <span class="text-[10px] text-emerald-100 block truncate">कुल बिक्री बिल</span>
+              </div>
             </div>
-            <span class="text-white/80 text-xs shrink-0">›</span>
+            <span id="dashCountSales" class="num-clean text-xl sm:text-2xl font-extrabold text-white tracking-tight shrink-0">0</span>
           </button>
 
           <button type="button" onclick="switchTab('purchase'); setTimeout(() => { document.getElementById('purPartySearch')?.focus(); }, 120);" class="bg-amber-500 hover:bg-amber-600 text-slate-950 border border-amber-600 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
-            <div class="flex items-center gap-2 min-w-0">
+            <div class="flex items-center gap-2.5 min-w-0">
               <span class="w-8 h-8 rounded-lg bg-slate-950/10 text-slate-950 flex items-center justify-center shrink-0">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
               </span>
-              <span class="font-bold text-xs sm:text-sm truncate">+ खरीद बिल</span>
+              <div class="min-w-0">
+                <span class="font-bold text-xs sm:text-sm block truncate">+ खरीद बिल</span>
+                <span class="text-[10px] text-slate-900/80 font-medium block truncate">कुल खरीद बिल</span>
+              </div>
             </div>
-            <span class="text-slate-950/70 text-xs shrink-0">›</span>
+            <span id="dashCountPurchases" class="num-clean text-xl sm:text-2xl font-extrabold text-slate-950 tracking-tight shrink-0">0</span>
           </button>
 
           <button type="button" onclick="lockPortalNow()" class="bg-[#0F172A] hover:bg-slate-800 text-white border border-slate-700 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-xs flex items-center justify-between gap-2 text-left transition">
@@ -1172,10 +1181,10 @@
               </div>
               <div class="min-w-0">
                 <div class="font-bold text-xs sm:text-sm text-white truncate">स्टाफ</div>
-                <div id="dashStaffCountSub" class="num-clean text-[10px] sm:text-[11px] text-teal-100 font-semibold truncate mt-0.5">0 स्टाफ</div>
+                <div id="dashStaffCountSub" class="num-clean text-[10px] sm:text-[11px] text-teal-100 font-semibold truncate mt-0.5">कुल स्टाफ</div>
               </div>
             </div>
-            <span class="text-white/80 text-xs shrink-0">›</span>
+            <span id="dashCountStaffBig" class="num-clean text-xl sm:text-2xl font-extrabold text-white tracking-tight shrink-0">0</span>
           </button>
         </div>
 
@@ -2095,15 +2104,16 @@
               <thead class="bg-slate-50 text-slate-600 border-b border-slate-200">
                 <tr>
                   <th class="px-3 py-2 w-8"><input type="checkbox" id="selectAllPartiesDueChk" onchange="toggleSelectAllPartyDues(this.checked)" class="rounded"></th>
-                  <th class="px-3 py-2">पार्टी / गांव</th>
+                  <th class="px-3 py-2">पार्टी / गांव व मोबाइल</th>
                   <th class="px-3 py-2">गारंटर व मोबाइल</th>
                   <th class="px-3 py-2 text-right">कुल खरीद</th>
                   <th class="px-3 py-2 text-right">खाता शेष</th>
-                  <th class="px-3 py-2 text-center">लेजर</th>
+                  <th class="px-3 py-2 text-center">लेजर (खाता)</th>
+                  <th class="px-3 py-2 text-center">पार्टी सुधार</th>
                 </tr>
               </thead>
               <tbody id="partyDuesSummaryBody" class="divide-y divide-slate-100">
-                <tr><td colspan="6" class="p-5 text-center text-slate-400">अभी कोई पार्टी दर्ज नहीं है</td></tr>
+                <tr><td colspan="7" class="p-5 text-center text-slate-400">अभी कोई पार्टी दर्ज नहीं है</td></tr>
               </tbody>
             </table>
           </div>
@@ -2499,7 +2509,7 @@
         </div>
       </section>
 
-    </main></main>
+    </main>
 
     <!-- Permanently Fixed Footer (Slim ~50% Compact on Mobile, Full Branding on Desktop) -->
     <footer id="mainFooter" class="fixed bottom-0 left-0 lg:left-64 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200/90 py-1.5 sm:py-3 px-2.5 sm:px-6 shadow-[0_-2px_10px_rgba(15,23,42,0.04)] no-print">
@@ -6966,10 +6976,8 @@ function logPortalAccessEvent(actionName = "PORTAL_OPEN") {
 })();
 
 </script>
-</body>
-</html>
-
 <script>
+
 
 const PLAN_CONFIG = {
   planName: "1-Year Commercial Plan",
@@ -7086,4 +7094,496 @@ if (_origDownloadInvoicePDF) {
 renderPlanTrackerCard();
 setInterval(renderPlanTrackerCard, 60000);
 
+
+
+(function applyConsolidatedCleanFixes() {
+  // 1. Strict & high-contrast Party Search Dropdown
+  window.renderPartyDropdownList = function(prefix, queryText) {
+    const dd = document.getElementById(prefix + "PartyDropdown");
+    if (!dd) return;
+    const trimmed = (queryText || "").trim();
+    if (!trimmed) {
+      dd.innerHTML = `<div class="px-3.5 py-3 text-xs text-slate-600 bg-white text-center">${state.parties.length ? "नाम, गांव या मोबाइल टाइप करें — नीचे स्पष्ट सूची आएगी" : "पहले पार्टी लेजर में पार्टी जोड़ें"}</div>`;
+      return;
+    }
+    const list = getSortedParties(trimmed);
+    if (!list.length) {
+      dd.innerHTML = `<div class="px-3.5 py-3 text-xs text-rose-600 bg-white font-medium text-center">कोई मिलता-जुलता नाम नहीं मिला</div>`;
+      return;
+    }
+    const curSelectedId = document.getElementById(prefix + "PartyId")?.value || "";
+    dd.innerHTML = list.map(p => {
+      const isSel = curSelectedId === p.id;
+      const bal = getPartyBalance(p.id);
+      const tag = bal > 0
+        ? `<span class="num-clean text-[11px] font-bold ${isSel ? 'text-emerald-200' : 'text-rose-600'}">लेना: ₹${bal.toLocaleString("en-IN")}</span>`
+        : (bal < 0
+            ? `<span class="num-clean text-[11px] font-bold ${isSel ? 'text-emerald-200' : 'text-[#1EA668]'}">देना: ₹${Math.abs(bal).toLocaleString("en-IN")}</span>`
+            : `<span class="num-clean text-[11px] ${isSel ? 'text-slate-300' : 'text-slate-500'}">₹0</span>`);
+      const rowCls = isSel
+        ? "bg-[#132A46] text-white border-l-4 border-emerald-400"
+        : "bg-white text-[#132A46] hover:bg-sky-50 border-l-4 border-transparent";
+      const subCls = isSel ? "text-slate-200" : "text-slate-500";
+      const badgeCls = isSel ? "bg-emerald-500 text-white" : "bg-slate-100 text-slate-700";
+      return `
+        <div role="option" aria-selected="${isSel}"
+          onpointerdown="event.preventDefault(); selectSearchParty('${prefix}', '${p.id}')"
+          onclick="selectSearchParty('${prefix}', '${p.id}')"
+          class="px-3.5 py-2.5 ${rowCls} cursor-pointer flex items-center justify-between gap-2 transition select-none">
+          <div class="min-w-0">
+            <p class="text-xs sm:text-sm font-bold truncate">
+              ${isSel ? "✓ " : ""}${p.name}
+              <span class="text-[10px] font-semibold px-1.5 py-0.5 rounded ml-1 ${badgeCls}">${p.role}</span>
+            </p>
+            <p class="text-[11px] ${subCls} truncate mt-0.5">${p.village} • <span class="num-clean">${p.phone || "-"}</span></p>
+          </div>
+          <div class="shrink-0">${tag}</div>
+        </div>
+      `;
+    }).join("");
+  };
+
+  window.openPartyDropdown = function(prefix) {
+    const input = document.getElementById(prefix + "PartySearch");
+    const dd = document.getElementById(prefix + "PartyDropdown");
+    if (!dd) return;
+    renderPartyDropdownList(prefix, input ? input.value : "");
+    dd.classList.remove("hidden");
+  };
+
+  window.filterPartyDropdown = function(prefix) {
+    const input = document.getElementById(prefix + "PartySearch");
+    const hiddenEl = document.getElementById(prefix + "PartyId");
+    const dd = document.getElementById(prefix + "PartyDropdown");
+    if (hiddenEl) hiddenEl.value = "";
+    if (!dd) return;
+    renderPartyDropdownList(prefix, input ? input.value : "");
+    dd.classList.remove("hidden");
+  };
+
+  window.selectSearchParty = function(prefix, partyId) {
+    const p = state.parties.find(x => x.id === partyId);
+    const hiddenEl = document.getElementById(prefix + "PartyId");
+    const searchEl = document.getElementById(prefix + "PartySearch");
+    const dd = document.getElementById(prefix + "PartyDropdown");
+    if (p && hiddenEl && searchEl) {
+      hiddenEl.value = p.id;
+      searchEl.value = `${p.name} (${p.village}) — ${p.role}`;
+    }
+    if (dd) dd.classList.add("hidden");
+    if (prefix === "sale") onSalePartyChange();
+    if (prefix === "pur") onPurPartyChange();
+  };
+
+  window.resolvePartyIdFromField = function(hiddenId, searchId) {
+    const hEl = document.getElementById(hiddenId);
+    const sEl = document.getElementById(searchId);
+    if (hEl && hEl.value && state.parties.some(x => x.id === hEl.value)) {
+      return hEl.value;
+    }
+    const typed = (sEl?.value || "").trim().toLowerCase();
+    if (typed && state.parties.length) {
+      const exact = state.parties.find(p =>
+        (`${p.name} (${p.village}) — ${p.role}`).toLowerCase() === typed ||
+        p.name.trim().toLowerCase() === typed
+      );
+      if (exact) {
+        if (hEl) hEl.value = exact.id;
+        return exact.id;
+      }
+    }
+    return "";
+  };
+
+  // 2. Voucher category isolation + mode-based fields (Cash vs UPI/Bank vs Cheque)
+  window.updateVoucherPaymentModeFields = function() {
+    const modeVal = document.getElementById("vchMode")?.value || "Cash";
+    const upiBox = document.getElementById("vchUpiBankFields");
+    const chqBox = document.getElementById("vchChequeFields");
+
+    if (upiBox) {
+      if (modeVal === "UPI / Bank") {
+        upiBox.classList.remove("hidden");
+        upiBox.classList.add("grid");
+      } else {
+        upiBox.classList.add("hidden");
+        upiBox.classList.remove("grid");
+      }
+    }
+    if (chqBox) {
+      if (modeVal === "Cheque") {
+        chqBox.classList.remove("hidden");
+        chqBox.classList.add("grid");
+      } else {
+        chqBox.classList.add("hidden");
+        chqBox.classList.remove("grid");
+      }
+    }
+  };
+
+  const _origSetVchMode = typeof setVoucherWorkspaceMode === "function" ? setVoucherWorkspaceMode : null;
+  setVoucherWorkspaceMode = function(vType) {
+    const mode = (vType === "PAYMENT") ? "PAYMENT" : "RECEIPT";
+    const sel = document.getElementById("vchType");
+    if (sel) {
+      sel.innerHTML = mode === "PAYMENT"
+        ? '<option value="PAYMENT" selected>पैसा भुगतान (Payment Out)</option>'
+        : '<option value="RECEIPT" selected>पैसा जमा (Payment In)</option>';
+      sel.value = mode;
+    }
+    if (_origSetVchMode) _origSetVchMode(mode);
+    updateVoucherPaymentModeFields();
+  };
+
+  openVoucherPreset = function(vType) {
+    switchTab("vouchers");
+    setVoucherWorkspaceMode(vType);
+  };
+
+  const _origSaveVoucher = typeof saveVoucher === "function" ? saveVoucher : null;
+  if (_origSaveVoucher) {
+    saveVoucher = function(e) {
+      const modeVal = document.getElementById("vchMode")?.value || "Cash";
+      const remEl = document.getElementById("vchRemarks");
+      let extraParts = [];
+      if (modeVal === "UPI / Bank") {
+        const b = (document.getElementById("vchBankName")?.value || "").trim();
+        const ph = (document.getElementById("vchPhoneRef")?.value || "").trim();
+        const upi = (document.getElementById("vchUpiHandle")?.value || "").trim();
+        const utr = (document.getElementById("vchUtrNo")?.value || "").trim();
+        if (b) extraParts.push("बैंक: " + b);
+        if (ph) extraParts.push("खाता/मो.: " + ph);
+        if (upi) extraParts.push("UPI: " + upi);
+        if (utr) extraParts.push("UTR: " + utr);
+      } else if (modeVal === "Cheque") {
+        const cb = (document.getElementById("vchChequeBank")?.value || "").trim();
+        const cn = (document.getElementById("vchChequeNo")?.value || "").trim();
+        const cd = (document.getElementById("vchChequeDate")?.value || "").trim();
+        const ce = (document.getElementById("vchChequeExpiry")?.value || "").trim();
+        if (cb) extraParts.push("चेक बैंक: " + cb);
+        if (cn) extraParts.push("चेक नं.: " + cn);
+        if (cd) extraParts.push("चेक दि.: " + cd);
+        if (ce) extraParts.push("अंतिम तिथि: " + ce);
+      }
+      if (extraParts.length && remEl) {
+        const baseNote = (remEl.value || "").trim();
+        const detailStr = extraParts.join(" | ");
+        if (!baseNote.includes(detailStr)) {
+          remEl.value = baseNote ? (baseNote + " (" + detailStr + ")") : detailStr;
+        }
+      }
+      return _origSaveVoucher.call(this, e);
+    };
+  }
+
+  // 3. Raw item Class + Purchase Crop -> Variety -> Class cascade
+  saveRawItem = function(e) {
+    e.preventDefault();
+    const editId = document.getElementById("editRawItemId")?.value || "";
+    const cropName = (document.getElementById("rawItemName")?.value || "").trim();
+    const varietyName = (document.getElementById("rawItemVar")?.value || "").trim();
+    const className = (document.getElementById("rawItemClass")?.value || "").trim() || "-";
+
+    const obj = {
+      id: editId || ("RAW-" + (100 + state.rawItems.length + Math.floor(Math.random() * 900))),
+      masterType: "RAW",
+      name: cropName,
+      variety: varietyName,
+      className: className,
+      updatedAt: new Date().toISOString().slice(0, 10)
+    };
+
+    if (editId) {
+      const idx = state.rawItems.findIndex(x => x.id === editId);
+      if (idx !== -1) state.rawItems[idx] = obj;
+      document.getElementById("editRawItemId").value = "";
+    } else {
+      state.rawItems.unshift(obj);
+    }
+
+    saveState();
+    syncToGoogleSheet({
+      sheetTab: "Items_Master",
+      actionType: "UPSERT",
+      id: obj.id,
+      masterType: "Raw Purchase",
+      name: obj.name,
+      varietyOrClass: `${obj.variety} | वर्ग: ${obj.className}`,
+      kaddaPct: state.settings.kaddaPct,
+      status: "Active",
+      updatedAt: obj.updatedAt
+    });
+
+    document.getElementById("rawItemForm")?.reset();
+    const fb = document.getElementById("rawItemFeedback");
+    if (fb) { fb.textContent = `✓ "${obj.name}" जुड़ गया`; setTimeout(() => fb.textContent = "", 2500); }
+    renderMasters();
+    refreshSelectors();
+  };
+
+  editRawItem = function(id) {
+    const it = state.rawItems.find(x => x.id === id);
+    if (!it) return;
+    document.getElementById("editRawItemId").value = it.id;
+    document.getElementById("rawItemName").value = it.name || "";
+    document.getElementById("rawItemVar").value = it.variety || "";
+    const clsEl = document.getElementById("rawItemClass");
+    if (clsEl) clsEl.value = (!it.className || it.className === "-") ? "" : it.className;
+  };
+
+  renderMasters = function() {
+    const rt = document.getElementById("rawItemsTable");
+    if (rt) {
+      rt.innerHTML = state.rawItems.length
+        ? state.rawItems.map(i => `
+          <tr>
+            <td class="py-2 px-2 font-medium">${i.name}</td>
+            <td class="py-2 px-2">${i.variety} <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 ml-1">वर्ग: ${i.className || "-"}</span></td>
+            <td class="py-2 px-2 text-right space-x-1.5">
+              <button onclick="editRawItem('${i.id}')" class="text-sky-700 font-semibold underline">Edit</button>
+              <button onclick="deleteRawItem('${i.id}')" class="text-rose-600 font-semibold underline">Del</button>
+            </td>
+          </tr>`).join("")
+        : `<tr><td colspan="3" class="py-6 text-center text-slate-400">कोई आइटम नहीं जुड़ा</td></tr>`;
+    }
+
+    const st = document.getElementById("saleItemsTable");
+    if (st) {
+      st.innerHTML = state.saleItems.length
+        ? state.saleItems.map(i => `
+          <tr>
+            <td class="py-2 px-2 font-medium">${i.name}</td>
+            <td class="py-2 px-2"><span class="px-2 py-0.5 bg-emerald-50 text-[#1EA668] border border-emerald-200 rounded text-xs font-semibold">${i.category}</span></td>
+            <td class="num-clean py-2 px-2">${i.packKg} Kg</td>
+            <td class="num-clean py-2 px-2 text-right font-semibold">${i.stockBags} बैग</td>
+            <td class="py-2 px-2 text-right space-x-1.5">
+              <button onclick="editSaleItem('${i.id}')" class="text-sky-700 font-semibold underline">Edit</button>
+              <button onclick="deleteSaleItem('${i.id}')" class="text-rose-600 font-semibold underline">Del</button>
+            </td>
+          </tr>`).join("")
+        : `<tr><td colspan="5" class="py-6 text-center text-slate-400">कोई बिक्री आइटम नहीं जुड़ा</td></tr>`;
+    }
+  };
+
+  window.populatePurchaseCropCascade = function() {
+    const cropSel = document.getElementById("purCropSelect");
+    const varSel = document.getElementById("purVarietySelect");
+    const clsInput = document.getElementById("purClassDisplay");
+    const hiddenItemSel = document.getElementById("purItemId");
+    if (!cropSel || !varSel || !clsInput) return;
+
+    const crops = Array.from(new Set(
+      (state.rawItems || []).map(x => (x.name || "").trim()).filter(Boolean)
+    ));
+    const prevCrop = cropSel.value;
+    cropSel.innerHTML = `<option value="">-- फसल चुनें --</option>` +
+      crops.map(c => `<option value="${c}">${c}</option>`).join("");
+
+    if (prevCrop && crops.includes(prevCrop)) {
+      cropSel.value = prevCrop;
+    }
+    onPurCropChange();
+  };
+
+  window.onPurCropChange = function() {
+    const cropVal = document.getElementById("purCropSelect")?.value || "";
+    const varSel = document.getElementById("purVarietySelect");
+    const clsInput = document.getElementById("purClassDisplay");
+    const hiddenItemSel = document.getElementById("purItemId");
+    if (!varSel || !clsInput) return;
+
+    const matching = (state.rawItems || []).filter(x => (x.name || "").trim() === cropVal);
+    varSel.innerHTML = `<option value="">-- वैरायटी चुनें --</option>` +
+      matching.map(m => `<option value="${m.id}">${m.variety || "-"}</option>`).join("");
+    if (clsInput) clsInput.value = "";
+    if (hiddenItemSel) hiddenItemSel.value = "";
+  };
+
+  window.onPurVarietyChange = function() {
+    const varSel = document.getElementById("purVarietySelect");
+    const clsInput = document.getElementById("purClassDisplay");
+    const hiddenItemSel = document.getElementById("purItemId");
+    const chosenId = varSel?.value || "";
+    if (hiddenItemSel) hiddenItemSel.value = chosenId;
+    const itemObj = (state.rawItems || []).find(x => x.id === chosenId);
+    if (clsInput) {
+      clsInput.value = itemObj ? (itemObj.className || "-") : "";
+    }
+  };
+
+  const _origRefreshSelectors = typeof refreshSelectors === "function" ? refreshSelectors : null;
+  if (_origRefreshSelectors) {
+    refreshSelectors = function() {
+      _origRefreshSelectors.apply(this, arguments);
+      populatePurchaseCropCascade();
+    };
+  }
+
+  const _origSavePurBill = typeof savePurchaseBill === "function" ? savePurchaseBill : null;
+  if (_origSavePurBill) {
+    savePurchaseBill = function(e) {
+      const chosenId = document.getElementById("purVarietySelect")?.value || document.getElementById("purItemId")?.value || "";
+      const hSel = document.getElementById("purItemId");
+      if (hSel && chosenId) hSel.value = chosenId;
+      const itemObj = (state.rawItems || []).find(x => x.id === chosenId);
+      const res = _origSavePurBill.call(this, e);
+      if (itemObj && state.transactions && state.transactions.length) {
+        const latest = state.transactions[0];
+        if (latest && latest.type === "PURCHASE") {
+          const vStr = itemObj.variety || "-";
+          const cStr = itemObj.className || "-";
+          latest.itemName = `${itemObj.name} (${vStr} • वर्ग: ${cStr})`;
+          latest.note = `वैरायटी: ${vStr} | वर्ग: ${cStr} | ` + (latest.note || "");
+          saveState();
+        }
+      }
+      return res;
+    };
+  }
+
+  // 4. Dashboard 4 Live Digital Counters
+  window.updateDashboardLiveCounters = function() {
+    const pCnt = Array.isArray(state.parties) ? state.parties.length : 0;
+    const sCnt = Array.isArray(state.transactions) ? state.transactions.filter(t => t.type === "SALE").length : 0;
+    const purCnt = Array.isArray(state.transactions) ? state.transactions.filter(t => t.type === "PURCHASE").length : 0;
+    const stfCnt = Array.isArray(state.staff) ? state.staff.length : 0;
+
+    const elP = document.getElementById("dashCountParties");
+    const elS = document.getElementById("dashCountSales");
+    const elPur = document.getElementById("dashCountPurchases");
+    const elStf = document.getElementById("dashCountStaffBig");
+    const elStfSub = document.getElementById("dashStaffCountSub");
+
+    if (elP) elP.textContent = pCnt.toLocaleString("en-IN");
+    if (elS) elS.textContent = sCnt.toLocaleString("en-IN");
+    if (elPur) elPur.textContent = purCnt.toLocaleString("en-IN");
+    if (elStf) elStf.textContent = stfCnt.toLocaleString("en-IN");
+    if (elStfSub) elStfSub.textContent = `${stfCnt} स्टाफ`;
+  };
+
+  const _prevRenderDashboard = typeof renderDashboard === "function" ? renderDashboard : null;
+  renderDashboard = function() {
+    if (_prevRenderDashboard) _prevRenderDashboard.apply(this, arguments);
+    updateDashboardLiveCounters();
+  };
+
+  const _prevRenderStaff = typeof renderStaffTable === "function" ? renderStaffTable : null;
+  renderStaffTable = function() {
+    if (_prevRenderStaff) _prevRenderStaff.apply(this, arguments);
+    updateDashboardLiveCounters();
+  };
+
+  // 5. Party List & Dues Summary Table: Show Mobile + Separate Ledger & Party Edit
+  renderPartyList = function() {
+    const q = document.getElementById("searchPartyInput")?.value || "";
+    const container = document.getElementById("partyListContainer");
+    if (!container) return;
+    const filtered = getSortedParties(q);
+    if (!filtered.length) {
+      container.innerHTML = `<p class="p-8 text-center text-xs text-slate-400">कोई पार्टी नहीं मिली</p>`;
+      return;
+    }
+    container.innerHTML = filtered.map(p => {
+      const bal = getPartyBalance(p.id);
+      return `
+        <div class="p-3.5 hover:bg-emerald-50/70 transition flex items-center justify-between gap-2">
+          <div onclick="selectPartyLedger('${p.id}')" class="min-w-0 flex-1 cursor-pointer">
+            <p class="font-semibold text-sm text-[#132A46] truncate">${p.name} <span class="text-[10px] font-normal px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">${p.role}</span></p>
+            <p class="text-xs text-slate-500 truncate mt-0.5">S/o ${p.father} • ${p.village}</p>
+            <p class="num-clean text-[11px] font-semibold text-slate-700 mt-0.5">📞 ${p.phone || "-"}</p>
+          </div>
+          <div class="text-right shrink-0 space-y-1.5">
+            <div class="num-clean text-xs font-bold text-[#132A46]">₹${bal.toLocaleString("en-IN")}</div>
+            <div class="flex items-center justify-end gap-1.5 text-[11px]">
+              <button type="button" onclick="editParty('${p.id}')" class="px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 font-semibold hover:bg-sky-100">✏️ पार्टी एडिट</button>
+              <button type="button" onclick="deleteParty('${p.id}')" class="text-rose-600 font-semibold hover:underline">Del</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    renderPartyDuesSummaryTable();
+  };
+
+  renderPartyDuesSummaryTable = function() {
+    const tb = document.getElementById("partyDuesSummaryBody");
+    if (!tb) return;
+    const rows = getFilteredPartiesForReport();
+    if (!rows.length) {
+      tb.innerHTML = `<tr><td colspan="7" class="p-5 text-center text-slate-400">इस फ़िल्टर के अनुसार कोई पार्टी नहीं मिली</td></tr>`;
+      return;
+    }
+    tb.innerHTML = rows.map(p => {
+      const purAmt = getPartyPurchasedAmount(p.id);
+      const bal = getPartyBalance(p.id);
+      const gPhone = (p.guarantorPhone && p.guarantorPhone !== "-") ? p.guarantorPhone : "";
+      const balLabel = bal > 0
+        ? `<span class="num-clean font-bold text-rose-600">₹${bal.toLocaleString("en-IN")} (लेना है)</span>`
+        : (bal < 0 ? `<span class="num-clean font-bold text-[#1EA668]">₹${Math.abs(bal).toLocaleString("en-IN")} (देना है)</span>` : `<span class="num-clean text-slate-600">₹0</span>`);
+
+      return `
+        <tr class="hover:bg-slate-50/80">
+          <td class="px-3 py-2.5"><input type="checkbox" class="party-due-chk rounded" value="${p.id}"></td>
+          <td onclick="selectPartyLedger('${p.id}')" class="px-3 py-2.5 cursor-pointer">
+            <p class="font-bold text-[#132A46]">${p.name}</p>
+            <p class="text-[11px] text-slate-500">${p.village} • ${p.role}</p>
+            <p class="num-clean text-[11px] font-semibold text-slate-700 mt-0.5">📞 ${p.phone || "-"}</p>
+          </td>
+          <td onclick="selectPartyLedger('${p.id}')" class="px-3 py-2.5 cursor-pointer">
+            <p class="font-medium text-slate-700">${p.guarantor || "-"}</p>
+            ${gPhone ? `<p class="num-clean text-[11px] text-slate-500">📞 ${gPhone}</p>` : ""}
+          </td>
+          <td onclick="selectPartyLedger('${p.id}')" class="num-clean px-3 py-2.5 text-right font-semibold text-sky-700 cursor-pointer">₹${purAmt.toLocaleString("en-IN")}</td>
+          <td onclick="selectPartyLedger('${p.id}')" class="num-clean px-3 py-2.5 text-right cursor-pointer">${balLabel}</td>
+          <td class="px-3 py-2.5 text-center whitespace-nowrap">
+            <button type="button" onclick="selectPartyLedger('${p.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-50 text-[#1EA668] border border-emerald-200 font-semibold hover:bg-emerald-100">लेजर देखें</button>
+          </td>
+          <td class="px-3 py-2.5 text-center whitespace-nowrap">
+            <button type="button" onclick="editParty('${p.id}')" class="px-2.5 py-1 rounded-lg bg-sky-50 text-sky-800 border border-sky-200 font-semibold hover:bg-sky-100">✏️ पार्टी एडिट करें</button>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  };
+
+  const _prevSelectPartyLedger = typeof selectPartyLedger === "function" ? selectPartyLedger : null;
+  selectPartyLedger = function(partyId) {
+    if (_prevSelectPartyLedger) _prevSelectPartyLedger.apply(this, arguments);
+    const panel = document.getElementById("partyLedgerPanel");
+    const p = state.parties.find(x => x.id === partyId);
+    if (!panel || !p) return;
+    const headerRow = panel.firstElementChild;
+    if (headerRow && !headerRow.querySelector(".btn-edit-party-profile")) {
+      const btnWrap = document.createElement("div");
+      btnWrap.className = "flex items-center gap-2";
+      btnWrap.innerHTML = `<button type="button" onclick="editParty('${p.id}')" class="btn-edit-party-profile px-3 py-1.5 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200 text-xs font-bold transition">✏️ पार्टी विवरण एडिट करें</button>`;
+      headerRow.appendChild(btnWrap);
+    }
+  };
+
+  const _prevEditParty = typeof editParty === "function" ? editParty : null;
+  editParty = function(partyId) {
+    if (_prevEditParty) _prevEditParty.apply(this, arguments);
+    const formBox = document.getElementById("addPartyBox");
+    if (formBox) {
+      formBox.scrollIntoView({ behavior: "smooth", block: "center" });
+      setTimeout(() => document.getElementById("newPartyName")?.focus(), 200);
+    }
+  };
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const modeSel = document.getElementById("vchMode");
+    if (modeSel) modeSel.addEventListener("change", updateVoucherPaymentModeFields);
+    updateVoucherPaymentModeFields();
+    populatePurchaseCropCascade();
+    updateDashboardLiveCounters();
+    renderPartyDuesSummaryTable();
+  });
+})();
+
 </script>
+</body>
+</html>
+
+</html>
