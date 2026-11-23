@@ -1037,10 +1037,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v32 • 32 वर्जन</span>
+          <span id="versionBadgeDisplay">v33 • 33 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 23 Nov 2026 (v32)
+          Last Updated On: 23 Nov 2026 (v33)
         </div>
       </div>
     </div>
@@ -1074,8 +1074,12 @@
           </div>
         </div>
 
-        <div class="flex items-center gap-2 shrink-0">
-          <span class="lg:hidden text-[9px] font-semibold text-[#1EA668] bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full whitespace-nowrap">Agri ERP</span>
+        <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
+          <button type="button" id="topResetCacheSyncBtn" onclick="resetLocalCacheAndPullSheet()" title="पुराना कैश/लोकल डेटा रीसेट करके Google Sheet से ताज़ा डेटा लाएं" class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-950 border border-amber-300 font-bold text-[10.5px] sm:text-xs shadow-2xs transition cursor-pointer whitespace-nowrap">
+            <svg id="topResetCacheIcon" class="w-3.5 h-3.5 text-amber-700 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <span id="topResetCacheLabel">डेटा रीफ़्रेश / कैश रीसेट</span>
+          </button>
+          <span class="hidden md:inline-block text-[9px] font-semibold text-[#1EA668] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full whitespace-nowrap">Agri ERP</span>
           <img src="logo.png" alt="MunimJi by Cool Art®" class="h-7 sm:h-10 md:h-11 w-auto object-contain">
         </div>
       </div>
@@ -6984,8 +6988,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v32",
-  totalVersionsUpdated: 32,
+  currentVersion: "v33",
+  totalVersionsUpdated: 33,
   lastUpdatedDateLabel: "23 Nov 2026"
 };
 
@@ -8373,8 +8377,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncPlanVersionDom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v32 • 32 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v32)";
+    if (verEl) verEl.textContent = "v33 • 33 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v33)";
     if (typeof renderPlanTrackerCard === "function") {
       try { renderPlanTrackerCard(); } catch (e) {}
     }
@@ -8551,6 +8555,118 @@ setInterval(renderPlanTrackerCard, 60000);
   });
   syncPlanVersionDom();
   ["sale", "pur", "vch"].forEach(bindKeysV32);
+})();
+
+
+(function applyV33CacheResetButton() {
+  if (typeof PLAN_CONFIG === "object" && PLAN_CONFIG) {
+    PLAN_CONFIG.currentVersion = "v33";
+    PLAN_CONFIG.totalVersionsUpdated = 33;
+    PLAN_CONFIG.lastUpdatedDateLabel = "23 Nov 2026";
+  }
+
+  function setResetBtnBusy(isBusy, labelText) {
+    const btn = document.getElementById("topResetCacheSyncBtn");
+    const lbl = document.getElementById("topResetCacheLabel");
+    const ico = document.getElementById("topResetCacheIcon");
+    if (btn) btn.disabled = Boolean(isBusy);
+    if (lbl && labelText) lbl.textContent = labelText;
+    if (ico) {
+      if (isBusy) ico.classList.add("animate-spin");
+      else ico.classList.remove("animate-spin");
+    }
+  }
+
+  window.resetLocalCacheAndPullSheet = function() {
+    const url = (state && state.settings && state.settings.sheetUrl) ? state.settings.sheetUrl : DEPLOYED_SHEET_URL;
+    setResetBtnBusy(true, "रीसेट व सिंक...");
+    setSyncLedState(navigator.onLine ? "pending" : "offline");
+
+    // Clear stale local storage & signature so Google Sheet becomes fresh truth
+    try {
+      lastSyncedDataSignature = "";
+      if (typeof recentlySavedIds !== "undefined" && recentlySavedIds && typeof recentlySavedIds.clear === "function") {
+        recentlySavedIds.clear();
+      }
+      memoryFallbackStore = {};
+      try { localStorage.removeItem("aiclMunimJiERP_v6_fast"); } catch (e) {}
+    } catch (e) {}
+
+    // Reset in-memory arrays while keeping sheetUrl & settings
+    const keepSettings = {
+      ...(state.settings || {}),
+      sheetUrl: url || DEPLOYED_SHEET_URL
+    };
+    state = {
+      ...freshState,
+      settings: keepSettings,
+      parties: [],
+      rawItems: [],
+      saleItems: [],
+      transactions: [],
+      expenses: [],
+      staff: [],
+      processingBatches: []
+    };
+    saveState();
+
+    if (!navigator.onLine || !url) {
+      setResetBtnBusy(false, "डेटा रीफ़्रेश / कैश रीसेट");
+      setSyncLedState("offline");
+      alert("ऑफ़लाइन मोड: लोकल कैश साफ़ कर दिया गया है। इंटरनेट चालू होते ही Sheet से ताज़ा डेटा आ जाएगा।");
+      return;
+    }
+
+    fetch(url + "?action=GET_ALL&cacheBust=" + Date.now(), { cache: "no-store", redirect: "follow" })
+      .then(r => r.text())
+      .then(txt => {
+        let res = null;
+        try { res = JSON.parse(txt); } catch (e) { res = null; }
+        if (res && res.status === "ok") {
+          state.parties = Array.isArray(res.parties)
+            ? res.parties.map(p => ({ ...p, createdDate: normalizeSheetDate(p.createdDate) }))
+            : [];
+          state.rawItems = Array.isArray(res.rawItems) ? res.rawItems : [];
+          state.saleItems = Array.isArray(res.saleItems) ? res.saleItems : [];
+          state.transactions = Array.isArray(res.transactions)
+            ? res.transactions.map(t => ({ ...t, date: normalizeSheetDate(t.date) }))
+            : [];
+          state.expenses = Array.isArray(res.expenses)
+            ? res.expenses.map(ex => ({ ...ex, date: normalizeSheetDate(ex.date) }))
+            : [];
+          state.processingBatches = Array.isArray(res.processingBatches)
+            ? res.processingBatches.map(b => ({ ...b, date: normalizeSheetDate(b.date) }))
+            : [];
+          if (Array.isArray(res.staff)) state.staff = res.staff;
+
+          lastSyncedDataSignature = JSON.stringify({
+            p: state.parties, r: state.rawItems, s: state.saleItems,
+            t: state.transactions, e: state.expenses, b: state.processingBatches
+          });
+          saveState();
+          if (typeof refreshSelectors === "function") refreshSelectors();
+          if (typeof renderDashboard === "function") renderDashboard();
+          if (typeof renderPartyList === "function") renderPartyList();
+          if (typeof renderMasters === "function") renderMasters();
+          if (typeof renderExpensesTable === "function") renderExpensesTable();
+          if (typeof renderProcessingTable === "function") renderProcessingTable();
+          if (typeof renderStaffTable === "function") renderStaffTable();
+          setSyncLedState("synced");
+        }
+        setResetBtnBusy(false, "डेटा रीफ़्रेश / कैश रीसेट");
+      })
+      .catch(() => {
+        setResetBtnBusy(false, "डेटा रीफ़्रेश / कैश रीसेट");
+        setSyncLedState(navigator.onLine ? "pending" : "offline");
+      });
+  };
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const verEl = document.getElementById("versionBadgeDisplay");
+    const updEl = document.getElementById("lastUpdatedOnDisplay");
+    if (verEl) verEl.textContent = "v33 • 33 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v33)";
+  });
 })();
 
 </script>
