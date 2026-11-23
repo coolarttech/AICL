@@ -1037,10 +1037,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v26 • 26 वर्जन</span>
+          <span id="versionBadgeDisplay">v27 • 27 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 23 Nov 2026 (v26)
+          Last Updated On: 23 Nov 2026 (v27)
         </div>
       </div>
     </div>
@@ -1691,9 +1691,20 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1">कच्चा आइटम / फसल (Items Master से) *</label>
-                <select id="purItemId" class="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm bg-white"></select>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">1. फसल का नाम चुनें (Crop) *</label>
+                <select id="purCropSelect" onchange="onPurCropChange()" class="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm bg-white font-semibold"></select>
+                <select id="purItemId" class="hidden"></select>
               </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">2. वैरायटी चुनें (Variety) *</label>
+                <select id="purVarietySelect" onchange="onPurVarietyChange()" class="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm bg-white"></select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">3. वर्ग (Class / Varg)</label>
+                <input type="text" id="purClassDisplay" readonly placeholder="वैरायटी चुनते ही वर्ग आएगा" class="w-full border border-slate-200 bg-slate-50 rounded-xl px-3 py-2.5 text-sm font-semibold text-[#132A46]">
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">धर्मकांटा पर्ची नं.</label>
                 <input type="text" id="purKantaSlip" placeholder="उदा. KS-101" class="num-clean w-full border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm bg-white">
@@ -1901,10 +1912,10 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs">
+            <div id="vchUpiBankFields" class="hidden grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-sky-50/60 p-3.5 rounded-xl border border-sky-200 text-xs">
               <div>
                 <label class="block font-semibold text-slate-700 mb-1">किस बैंक / खाते में</label>
-                <input type="text" id="vchBankName" placeholder="उदा. SBI / HDFC / नकद" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white">
+                <input type="text" id="vchBankName" placeholder="उदा. SBI / HDFC" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white">
               </div>
               <div>
                 <label class="block font-semibold text-slate-700 mb-1">मोबाइल / खाता नंबर</label>
@@ -1912,11 +1923,30 @@
               </div>
               <div>
                 <label class="block font-semibold text-slate-700 mb-1">UPI ID / विवरण</label>
-                <input type="text" id="vchUpiHandle" placeholder="उदा. name@upi या व्यक्ति" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white">
+                <input type="text" id="vchUpiHandle" placeholder="उदा. name@upi" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white">
               </div>
               <div>
                 <label class="block font-semibold text-slate-700 mb-1">UTR / रेफ़रेंस नंबर</label>
                 <input type="text" id="vchUtrNo" placeholder="उदा. UTR123456789" class="num-clean w-full border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white">
+              </div>
+            </div>
+
+            <div id="vchChequeFields" class="hidden grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-amber-50/70 p-3.5 rounded-xl border border-amber-300 text-xs">
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">किस बैंक का चेक *</label>
+                <input type="text" id="vchChequeBank" placeholder="उदा. SBI / PNB / HDFC" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white">
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">चेक नंबर *</label>
+                <input type="text" id="vchChequeNo" placeholder="उदा. 000123" class="num-clean w-full border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white">
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">चेक की तारीख *</label>
+                <input type="date" id="vchChequeDate" class="num-clean w-full border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white">
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">अंतिम / वैधता तारीख (Last Date)</label>
+                <input type="date" id="vchChequeExpiry" class="num-clean w-full border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white">
               </div>
             </div>
 
@@ -2117,11 +2147,12 @@
               </div>
               <span id="rawItemFeedback" class="text-[11px] font-semibold text-[#1EA668] shrink-0"></span>
             </div>
-            <form id="rawItemForm" onsubmit="saveRawItem(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <form id="rawItemForm" onsubmit="saveRawItem(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
               <input type="hidden" id="editRawItemId" value="">
               <input type="text" id="rawItemName" placeholder="उत्पाद / फसल का नाम *" required class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
               <input type="text" id="rawItemVar" placeholder="वैरायटी / विवरण *" required class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
-              <button type="submit" class="sm:col-span-2 bg-[#132A46] hover:bg-slate-800 text-white font-semibold py-2.5 rounded-xl text-sm transition">+ उत्पाद सेव करें</button>
+              <input type="text" id="rawItemClass" placeholder="वर्ग (उदा. Foundation / Certified)" class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
+              <button type="submit" class="sm:col-span-3 bg-[#132A46] hover:bg-slate-800 text-white font-semibold py-2.5 rounded-xl text-sm transition">+ उत्पाद सेव करें</button>
             </form>
             <div class="overflow-x-auto">
               <table class="w-full text-xs text-left border-t border-slate-100">
@@ -6682,6 +6713,258 @@ function logPortalAccessEvent(actionName = "PORTAL_OPEN") {
   }
 })();
 
+
+(function applyV27Enhancements() {
+  const _origSetVchMode = typeof setVoucherWorkspaceMode === "function" ? setVoucherWorkspaceMode : null;
+  setVoucherWorkspaceMode = function(vType) {
+    const mode = (vType === "PAYMENT") ? "PAYMENT" : "RECEIPT";
+    const sel = document.getElementById("vchType");
+    if (sel) {
+      sel.innerHTML = mode === "PAYMENT"
+        ? '<option value="PAYMENT" selected>पैसा भुगतान (Payment Out)</option>'
+        : '<option value="RECEIPT" selected>पैसा जमा (Payment In)</option>';
+      sel.value = mode;
+    }
+    if (_origSetVchMode) _origSetVchMode(mode);
+    updateVoucherPaymentModeFields();
+  };
+
+  window.updateVoucherPaymentModeFields = function() {
+    const modeVal = document.getElementById("vchMode")?.value || "Cash";
+    const upiBox = document.getElementById("vchUpiBankFields");
+    const chqBox = document.getElementById("vchChequeFields");
+
+    if (upiBox) {
+      if (modeVal === "UPI / Bank") {
+        upiBox.classList.remove("hidden");
+        upiBox.classList.add("grid");
+      } else {
+        upiBox.classList.add("hidden");
+        upiBox.classList.remove("grid");
+      }
+    }
+
+    if (chqBox) {
+      if (modeVal === "Cheque") {
+        chqBox.classList.remove("hidden");
+        chqBox.classList.add("grid");
+      } else {
+        chqBox.classList.add("hidden");
+        chqBox.classList.remove("grid");
+      }
+    }
+  };
+
+  const _origSaveVoucher = typeof saveVoucher === "function" ? saveVoucher : null;
+  if (_origSaveVoucher) {
+    saveVoucher = function(e) {
+      const modeVal = document.getElementById("vchMode")?.value || "Cash";
+      const remEl = document.getElementById("vchRemarks");
+      let extraParts = [];
+      if (modeVal === "UPI / Bank") {
+        const b = (document.getElementById("vchBankName")?.value || "").trim();
+        const ph = (document.getElementById("vchPhoneRef")?.value || "").trim();
+        const upi = (document.getElementById("vchUpiHandle")?.value || "").trim();
+        const utr = (document.getElementById("vchUtrNo")?.value || "").trim();
+        if (b) extraParts.push("बैंक: " + b);
+        if (ph) extraParts.push("खाता/मो.: " + ph);
+        if (upi) extraParts.push("UPI: " + upi);
+        if (utr) extraParts.push("UTR: " + utr);
+      } else if (modeVal === "Cheque") {
+        const cb = (document.getElementById("vchChequeBank")?.value || "").trim();
+        const cn = (document.getElementById("vchChequeNo")?.value || "").trim();
+        const cd = (document.getElementById("vchChequeDate")?.value || "").trim();
+        const ce = (document.getElementById("vchChequeExpiry")?.value || "").trim();
+        if (cb) extraParts.push("चेक बैंक: " + cb);
+        if (cn) extraParts.push("चेक नं.: " + cn);
+        if (cd) extraParts.push("चेक दि.: " + cd);
+        if (ce) extraParts.push("अंतिम तिथि: " + ce);
+      }
+      if (extraParts.length && remEl) {
+        const baseNote = (remEl.value || "").trim();
+        const detailStr = extraParts.join(" | ");
+        if (!baseNote.includes(detailStr)) {
+          remEl.value = baseNote ? (baseNote + " (" + detailStr + ")") : detailStr;
+        }
+      }
+      return _origSaveVoucher.call(this, e);
+    };
+  }
+
+  saveRawItem = function(e) {
+    e.preventDefault();
+    const editId = document.getElementById("editRawItemId")?.value || "";
+    const cropName = (document.getElementById("rawItemName")?.value || "").trim();
+    const varietyName = (document.getElementById("rawItemVar")?.value || "").trim();
+    const className = (document.getElementById("rawItemClass")?.value || "").trim() || "-";
+
+    const obj = {
+      id: editId || ("RAW-" + (100 + state.rawItems.length + Math.floor(Math.random() * 900))),
+      masterType: "RAW",
+      name: cropName,
+      variety: varietyName,
+      className: className,
+      updatedAt: new Date().toISOString().slice(0, 10)
+    };
+
+    if (editId) {
+      const idx = state.rawItems.findIndex(x => x.id === editId);
+      if (idx !== -1) state.rawItems[idx] = obj;
+      document.getElementById("editRawItemId").value = "";
+    } else {
+      state.rawItems.unshift(obj);
+    }
+
+    saveState();
+    syncToGoogleSheet({
+      sheetTab: "Items_Master",
+      actionType: "UPSERT",
+      id: obj.id,
+      masterType: "Raw Purchase",
+      name: obj.name,
+      varietyOrClass: `${obj.variety} | वर्ग: ${obj.className}`,
+      kaddaPct: state.settings.kaddaPct,
+      status: "Active",
+      updatedAt: obj.updatedAt
+    });
+
+    document.getElementById("rawItemForm")?.reset();
+    const fb = document.getElementById("rawItemFeedback");
+    if (fb) { fb.textContent = `✓ "${obj.name}" जुड़ गया`; setTimeout(() => fb.textContent = "", 2500); }
+    renderMasters();
+    refreshSelectors();
+  };
+
+  editRawItem = function(id) {
+    const it = state.rawItems.find(x => x.id === id);
+    if (!it) return;
+    document.getElementById("editRawItemId").value = it.id;
+    document.getElementById("rawItemName").value = it.name || "";
+    document.getElementById("rawItemVar").value = it.variety || "";
+    const clsEl = document.getElementById("rawItemClass");
+    if (clsEl) clsEl.value = (!it.className || it.className === "-") ? "" : it.className;
+  };
+
+  renderMasters = function() {
+    const rt = document.getElementById("rawItemsTable");
+    if (rt) {
+      rt.innerHTML = state.rawItems.length
+        ? state.rawItems.map(i => `
+          <tr>
+            <td class="py-2 px-2 font-medium">${i.name}</td>
+            <td class="py-2 px-2">${i.variety} <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 ml-1">वर्ग: ${i.className || "-"}</span></td>
+            <td class="py-2 px-2 text-right space-x-1.5">
+              <button onclick="editRawItem('${i.id}')" class="text-sky-700 font-semibold underline">Edit</button>
+              <button onclick="deleteRawItem('${i.id}')" class="text-rose-600 font-semibold underline">Del</button>
+            </td>
+          </tr>`).join("")
+        : `<tr><td colspan="3" class="py-6 text-center text-slate-400">कोई आइटम नहीं जुड़ा</td></tr>`;
+    }
+
+    const st = document.getElementById("saleItemsTable");
+    if (st) {
+      st.innerHTML = state.saleItems.length
+        ? state.saleItems.map(i => `
+          <tr>
+            <td class="py-2 px-2 font-medium">${i.name}</td>
+            <td class="py-2 px-2"><span class="px-2 py-0.5 bg-emerald-50 text-[#1EA668] border border-emerald-200 rounded text-xs font-semibold">${i.category}</span></td>
+            <td class="num-clean py-2 px-2">${i.packKg} Kg</td>
+            <td class="num-clean py-2 px-2 text-right font-semibold">${i.stockBags} बैग</td>
+            <td class="py-2 px-2 text-right space-x-1.5">
+              <button onclick="editSaleItem('${i.id}')" class="text-sky-700 font-semibold underline">Edit</button>
+              <button onclick="deleteSaleItem('${i.id}')" class="text-rose-600 font-semibold underline">Del</button>
+            </td>
+          </tr>`).join("")
+        : `<tr><td colspan="5" class="py-6 text-center text-slate-400">कोई बिक्री आइटम नहीं जुड़ा</td></tr>`;
+    }
+  };
+
+  window.populatePurchaseCropCascade = function() {
+    const cropSel = document.getElementById("purCropSelect");
+    const varSel = document.getElementById("purVarietySelect");
+    const clsInput = document.getElementById("purClassDisplay");
+    const hiddenItemSel = document.getElementById("purItemId");
+    if (!cropSel || !varSel || !clsInput) return;
+
+    const crops = Array.from(new Set(
+      (state.rawItems || []).map(x => (x.name || "").trim()).filter(Boolean)
+    ));
+    const prevCrop = cropSel.value;
+    cropSel.innerHTML = `<option value="">-- फसल चुनें --</option>` +
+      crops.map(c => `<option value="${c}">${c}</option>`).join("");
+
+    if (prevCrop && crops.includes(prevCrop)) {
+      cropSel.value = prevCrop;
+    }
+    onPurCropChange();
+  };
+
+  window.onPurCropChange = function() {
+    const cropVal = document.getElementById("purCropSelect")?.value || "";
+    const varSel = document.getElementById("purVarietySelect");
+    const clsInput = document.getElementById("purClassDisplay");
+    const hiddenItemSel = document.getElementById("purItemId");
+    if (!varSel || !clsInput) return;
+
+    const matching = (state.rawItems || []).filter(x => (x.name || "").trim() === cropVal);
+    varSel.innerHTML = `<option value="">-- वैरायटी चुनें --</option>` +
+      matching.map(m => `<option value="${m.id}">${m.variety || "-"}</option>`).join("");
+    if (clsInput) clsInput.value = "";
+    if (hiddenItemSel) hiddenItemSel.value = "";
+  };
+
+  window.onPurVarietyChange = function() {
+    const varSel = document.getElementById("purVarietySelect");
+    const clsInput = document.getElementById("purClassDisplay");
+    const hiddenItemSel = document.getElementById("purItemId");
+    const chosenId = varSel?.value || "";
+    if (hiddenItemSel) hiddenItemSel.value = chosenId;
+    const itemObj = (state.rawItems || []).find(x => x.id === chosenId);
+    if (clsInput) {
+      clsInput.value = itemObj ? (itemObj.className || "-") : "";
+    }
+  };
+
+  const _origRefreshSelectors = typeof refreshSelectors === "function" ? refreshSelectors : null;
+  if (_origRefreshSelectors) {
+    refreshSelectors = function() {
+      _origRefreshSelectors.apply(this, arguments);
+      populatePurchaseCropCascade();
+    };
+  }
+
+  const _origSavePurBill = typeof savePurchaseBill === "function" ? savePurchaseBill : null;
+  if (_origSavePurBill) {
+    savePurchaseBill = function(e) {
+      const chosenId = document.getElementById("purVarietySelect")?.value || document.getElementById("purItemId")?.value || "";
+      const hSel = document.getElementById("purItemId");
+      if (hSel && chosenId) hSel.value = chosenId;
+      const itemObj = (state.rawItems || []).find(x => x.id === chosenId);
+      const res = _origSavePurBill.call(this, e);
+      if (itemObj && state.transactions && state.transactions.length) {
+        const latest = state.transactions[0];
+        if (latest && latest.type === "PURCHASE") {
+          const vStr = itemObj.variety || "-";
+          const cStr = itemObj.className || "-";
+          latest.itemName = `${itemObj.name} (${vStr} • वर्ग: ${cStr})`;
+          latest.note = `वैरायटी: ${vStr} | वर्ग: ${cStr} | ` + (latest.note || "");
+          saveState();
+        }
+      }
+      return res;
+    };
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const modeSel = document.getElementById("vchMode");
+    if (modeSel) {
+      modeSel.addEventListener("change", updateVoucherPaymentModeFields);
+    }
+    updateVoucherPaymentModeFields();
+    populatePurchaseCropCascade();
+  });
+})();
+
 </script>
 </body>
 </html>
@@ -6693,8 +6976,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v26",
-  totalVersionsUpdated: 26,
+  currentVersion: "v27",
+  totalVersionsUpdated: 27,
   lastUpdatedDateLabel: "22 Nov 2026"
 };
 
