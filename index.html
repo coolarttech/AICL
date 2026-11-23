@@ -7345,6 +7345,25 @@ setInterval(renderPlanTrackerCard, 60000);
 
 
 </script>
+
+<script>
+(function ensureAppAlwaysOpensCleanly() {
+  function dismissSplash() {
+    const sp = document.getElementById("splashScreen");
+    if (sp) {
+      sp.style.opacity = "0";
+      setTimeout(() => { try { sp.remove(); } catch (e) {} }, 180);
+    }
+  }
+  if (document.readyState === "complete" || document.readyState === "interactive") {
+    setTimeout(dismissSplash, 250);
+  } else {
+    window.addEventListener("DOMContentLoaded", () => setTimeout(dismissSplash, 250));
+  }
+  setTimeout(dismissSplash, 1200);
+})();
+</script>
+
 </body>
 </html>
 
