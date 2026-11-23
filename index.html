@@ -103,7 +103,7 @@
     }
   }
 
-  /* Left showcase stage: responsive across mobile, standard laptop, and MacBook / high-res displays */
+  
   .left-hero-stage {
     position: relative;
     flex: 1;
@@ -253,238 +253,34 @@
   }
 
 
-  @keyframes slowSymbolDriftA {
-    0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
-    50% { transform: translate(12px, -16px) rotate(8deg); }
+  50% { transform: translate(12px, -16px) rotate(8deg); }
   }
-  @keyframes slowSymbolDriftB {
-    0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
-    50% { transform: translate(-14px, 14px) rotate(-7deg); }
+  50% { transform: translate(-14px, 14px) rotate(-7deg); }
   }
-  .calc-bg-layer {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
-    overflow: hidden;
-  }
-  .calc-float-sym {
-    position: absolute;
-    font-weight: 300;
-    line-height: 1;
-    user-select: none;
-    pointer-events: none;
-  }
-
-
-  .godown-bay {
-    position: relative;
-    width: 112px;
-    height: 158px;
-    border-radius: 14px 14px 10px 10px;
-    border: 2px solid #d97706;
-    background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
-    overflow: hidden;
-    flex-shrink: 0;
-    box-shadow: inset 0 2px 6px rgba(180, 83, 9, 0.14);
-  }
-  .godown-bay::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 22px;
-    background: linear-gradient(180deg, #b45309 0%, #92400e 100%);
-    clip-path: polygon(0% 100%, 50% 12%, 100% 100%);
-    z-index: 6;
-    pointer-events: none;
-  }
-  .godown-bay-branded {
-    border-color: #059669;
-    background: linear-gradient(180deg, #ecfdf5 0%, #d1fae5 100%);
-    box-shadow: inset 0 2px 6px rgba(4, 120, 87, 0.14);
-  }
-  .godown-bay-branded::before {
-    background: linear-gradient(180deg, #047857 0%, #065f46 100%);
-  }
-  .godown-visual-badge {
-    position: relative;
-    z-index: 7;
-    padding: 24px 7px 4px 7px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 3px;
-  }
-  .godown-shelf-line {
-    position: absolute;
-    left: 6px;
-    right: 6px;
-    height: 1.5px;
-    background: rgba(146, 64, 14, 0.22);
-    z-index: 4;
-    pointer-events: none;
-  }
-  .godown-fill-level {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 0%;
-    transition: height 0.55s ease;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding-top: 5px;
-    z-index: 3;
-  }
-  .godown-raw-fill {
-    background: linear-gradient(180deg, rgba(245, 158, 11, 0.82) 0%, rgba(180, 83, 9, 0.94) 100%);
-  }
-  .godown-branded-fill {
-    background: linear-gradient(180deg, rgba(16, 185, 129, 0.82) 0%, rgba(4, 120, 87, 0.94) 100%);
-  }
-
-  @keyframes symScrollDriftA {
-    0%   { transform: translate(-18px, 12px) scale(1); opacity: 0.14; }
-    25%  { transform: translate(18px, -14px) scale(1.03); opacity: 0.32; }
+  25%  { transform: translate(18px, -14px) scale(1.03); opacity: 0.32; }
     50%  { transform: translate(26px, 10px) scale(1); opacity: 0.12; }
     75%  { transform: translate(-10px, -18px) scale(1.02); opacity: 0.28; }
     100% { transform: translate(-18px, 12px) scale(1); opacity: 0.14; }
   }
-  @keyframes symScrollDriftB {
-    0%   { transform: translate(18px, -12px) scale(1); opacity: 0.12; }
-    30%  { transform: translate(-20px, 14px) scale(1.03); opacity: 0.30; }
+  30%  { transform: translate(-20px, 14px) scale(1.03); opacity: 0.30; }
     65%  { transform: translate(-14px, -16px) scale(1); opacity: 0.10; }
     100% { transform: translate(18px, -12px) scale(1); opacity: 0.12; }
   }
-  @keyframes symAlternatingGlow {
-    0%, 72%, 100% {
-      opacity: 0.22;
-      filter: drop-shadow(0 0 0px transparent);
-    }
-    82%, 90% {
+  82%, 90% {
       opacity: 0.95;
       filter: drop-shadow(0 0 14px currentColor);
     }
   }
-  .calc-bg-layer {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
-    overflow: hidden;
-  }
-  .calc-sym-item {
-    position: absolute;
-    font-weight: 800;
-    line-height: 1;
-    user-select: none;
-    pointer-events: none;
-    will-change: transform, opacity, filter;
-  }
-  .calc-sym-large-low {
-    font-size: 4.5rem;
-    opacity: 0.11;
-    font-weight: 700;
-  }
-  .calc-sym-small-bold {
-    font-size: 2.35rem;
-    opacity: 0.34;
-    font-weight: 900;
-  }
   @media (min-width: 1024px) {
-    .calc-sym-large-low { font-size: 5.5rem; }
-    .calc-sym-small-bold { font-size: 2.75rem; }
+    }
+  100% { transform: translate(-50%, -50%) rotate(-360deg); }
   }
-  .calc-glow-active {
-    animation: symAlternatingGlow 12s ease-in-out infinite !important;
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
   }
-
-
-  @keyframes symRingOrbitAroundCards {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(-360deg); }
-  }
-  @keyframes symRingCounterRotate {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
-  }
-  @keyframes sceneryKenBurnsA {
-    0% { transform: scale(1) translate(0%, 0%); opacity: 0.72; }
-    50% { transform: scale(1.12) translate(-2%, -1.5%); opacity: 0.92; }
+  50% { transform: scale(1.12) translate(-2%, -1.5%); opacity: 0.92; }
     100% { transform: scale(1) translate(0%, 0%); opacity: 0.72; }
   }
-  .outer-sym-orbit-wrap {
-    position: absolute;
-    left: 50%;
-    bottom: 16px;
-    width: calc(var(--orbit-box) + 128px);
-    height: calc(var(--orbit-box) + 128px);
-    transform: translateX(-50%);
-    z-index: 6;
-    pointer-events: none;
-  }
-  .outer-sym-spinner {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    animation: symRingOrbitAroundCards 52s linear infinite;
-  }
-  .outer-sym-slot {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    transform: translate(
-      calc(var(--cos-o) * (var(--orbit-r) + 64px)),
-      calc(var(--sin-o) * (var(--orbit-r) + 64px))
-    );
-  }
-  .outer-sym-uniform {
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-size: 15px;
-    font-weight: 800;
-    line-height: 1;
-    opacity: 0.62;
-    user-select: none;
-    pointer-events: none;
-    animation: symRingCounterRotate 52s linear infinite;
-  }
-  .desktop-scenery-clock-box {
-    position: relative;
-    width: 100%;
-    max-width: 340px;
-    border-radius: 18px;
-    overflow: hidden;
-    border: 1px solid rgba(148, 163, 184, 0.28);
-    box-shadow: 0 14px 32px rgba(2, 6, 23, 0.55);
-    background: #0f172a;
-  }
-  .desktop-scenery-bg-slide {
-    position: absolute;
-    inset: 0;
-    background-size: cover;
-    background-position: center;
-    animation: sceneryKenBurnsA 14s ease-in-out infinite;
-    transition: opacity 0.9s ease;
-  }
-  .desktop-scenery-scrim {
-    position: relative;
-    z-index: 2;
-    background: linear-gradient(180deg, rgba(2, 6, 23, 0.42) 0%, rgba(2, 6, 23, 0.66) 100%);
-    backdrop-filter: blur(2px);
-    padding: 12px 16px;
-    text-align: center;
-  }
-
-</style>
+  </style>
 </head>
 <body class="min-h-screen flex flex-col bg-[#f6f9f7]" oncontextmenu="return false;" ondragstart="return false;">
 
@@ -531,23 +327,6 @@
 <div id="pinLockScreen" class="fixed inset-0 z-[95] bg-[#0B0F17] text-white grid grid-cols-1 lg:grid-cols-12 overflow-y-auto no-scrollbar no-print">
   <!-- Left Showcase: Mobile has small left logo + top-right Powered by MunimJi & clean bottom; Desktop has clean top, large bottom-aligned photo + scaled orbit cards, and footer with Developed by Team CoolArt -->
   <div class="lg:col-span-7 flex flex-col justify-between p-4 sm:p-7 xl:p-9 border-b lg:border-b-0 lg:border-r border-slate-800/80 relative" style="background-image: linear-gradient(to right, rgba(148,163,184,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.06) 1px, transparent 1px); background-size: 28px 28px;">
-    <!-- Uniform Small Calculation Symbols Orbiting Around the Card Circle -->
-    <div class="outer-sym-orbit-wrap" aria-hidden="true">
-      <div class="outer-sym-spinner">
-        <div class="outer-sym-slot" style="--cos-o: 0.0; --sin-o: -1.0;"><span class="outer-sym-uniform text-emerald-300">+</span></div>
-        <div class="outer-sym-slot" style="--cos-o: 0.5; --sin-o: -0.866;"><span class="outer-sym-uniform text-sky-300">−</span></div>
-        <div class="outer-sym-slot" style="--cos-o: 0.866; --sin-o: -0.5;"><span class="outer-sym-uniform text-amber-300">×</span></div>
-        <div class="outer-sym-slot" style="--cos-o: 1.0; --sin-o: 0.0;"><span class="outer-sym-uniform text-purple-300">÷</span></div>
-        <div class="outer-sym-slot" style="--cos-o: 0.866; --sin-o: 0.5;"><span class="outer-sym-uniform text-teal-300">%</span></div>
-        <div class="outer-sym-slot" style="--cos-o: 0.5; --sin-o: 0.866;"><span class="outer-sym-uniform text-rose-300">=</span></div>
-        <div class="outer-sym-slot" style="--cos-o: 0.0; --sin-o: 1.0;"><span class="outer-sym-uniform text-yellow-200">₹</span></div>
-        <div class="outer-sym-slot" style="--cos-o: -0.5; --sin-o: 0.866;"><span class="outer-sym-uniform text-cyan-200">±</span></div>
-        <div class="outer-sym-slot" style="--cos-o: -0.866; --sin-o: 0.5;"><span class="outer-sym-uniform text-indigo-300">≈</span></div>
-        <div class="outer-sym-slot" style="--cos-o: -1.0; --sin-o: 0.0;"><span class="outer-sym-uniform text-emerald-200">+</span></div>
-        <div class="outer-sym-slot" style="--cos-o: -0.866; --sin-o: -0.5;"><span class="outer-sym-uniform text-amber-200">−</span></div>
-        <div class="outer-sym-slot" style="--cos-o: -0.5; --sin-o: -0.866;"><span class="outer-sym-uniform text-sky-200">÷</span></div>
-      </div>
-    </div>
 
     <!-- Top Bar: Mobile shows small PNG logo on left + Powered by MunimJi on right; Desktop hides green pill & duplicate logo -->
     <div class="flex items-center justify-between gap-2 relative z-30">
@@ -6114,30 +5893,6 @@ renderProcessingTable = function() {
   syncProcessingRawStockBanner();
 };
 
-// Non-repeating alternating glow controller across calculation symbols
-(function initNonRepeatingSymbolGlow() {
-  const ids = [0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => 'calcSym-' + i);
-  let lastIdx = -1;
-
-  function triggerNextGlow() {
-    const els = ids.map(id => document.getElementById(id)).filter(Boolean);
-    if (!els.length) return;
-    els.forEach(el => el.classList.remove('calc-glow-active'));
-
-    const pool = els.map((_, idx) => idx).filter(idx => idx !== lastIdx);
-    const chosenIdx = pool[Math.floor(Math.random() * pool.length)];
-    lastIdx = chosenIdx;
-    els[chosenIdx].classList.add('calc-glow-active');
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    syncProcessingRawStockBanner();
-    triggerNextGlow();
-    setInterval(triggerNextGlow, 3600);
-  });
-})();
-
-
 let activeSalePeriodFilter = 'all';
 let activePurchasePeriodFilter = 'all';
 
@@ -6356,48 +6111,6 @@ window.addEventListener('DOMContentLoaded', () => {
   renderPurchaseHistoryTable();
 });
 
-
-const LOCK_SCENERY_IMAGES = [
-  "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=900&q=75",
-  "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=75",
-  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=75",
-  "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=900&q=75"
-];
-let _lockSceneryIdx = 0;
-
-function updateLockScreenClockAndScenery() {
-  const now = new Date();
-  const days = ['रविवार', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार'];
-  const months = ['जनवरी', 'फ़रवरी', 'मार्च', 'अप्रैल', 'मई', 'जून', 'जुलाई', 'अगस्त', 'सितंबर', 'अक्टूबर', 'नवंबर', 'दिसंबर'];
-  let hrs = now.getHours();
-  const ampm = hrs >= 12 ? 'PM' : 'AM';
-  hrs = hrs % 12 || 12;
-
-  const hEl = document.getElementById('lockClockHour');
-  const mEl = document.getElementById('lockClockMin');
-  const sEl = document.getElementById('lockClockSec');
-  const aEl = document.getElementById('lockClockAmPm');
-  const dEl = document.getElementById('lockScreenDayLine');
-
-  if (hEl) hEl.textContent = String(hrs).padStart(2, '0');
-  if (mEl) mEl.textContent = String(now.getMinutes()).padStart(2, '0');
-  if (sEl) sEl.textContent = String(now.getSeconds()).padStart(2, '0');
-  if (aEl) aEl.textContent = ampm;
-  if (dEl) dEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
-}
-
-function rotateLockScenerySlide() {
-  const bgEl = document.getElementById('desktopSceneryBg');
-  if (!bgEl) return;
-  _lockSceneryIdx = (_lockSceneryIdx + 1) % LOCK_SCENERY_IMAGES.length;
-  bgEl.style.backgroundImage = `url('${LOCK_SCENERY_IMAGES[_lockSceneryIdx]}')`;
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-  updateLockScreenClockAndScenery();
-  setInterval(updateLockScreenClockAndScenery, 1000);
-  setInterval(rotateLockScenerySlide, 7000);
-});
 
 // Strict separation between Payment In (RECEIPT) and Payment Out (PAYMENT)
 setVoucherWorkspaceMode = function(vType) {
