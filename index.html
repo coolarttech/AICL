@@ -313,7 +313,7 @@
     }
   </style>
   <div class="splash-anim flex flex-col items-center px-4 text-center">
-    <img src="logo.png" alt="MunimJi by Cool Art®" class="h-24 sm:h-28 md:h-32 w-auto object-contain mb-2">
+    <img src="logo.png" alt="MunimJi by Cool Art®" class="h-18 sm:h-20 md:h-24 w-auto object-contain mb-2" style="max-height: 92px;">
     <span class="text-[11px] font-semibold tracking-wider text-[#132A46] bg-slate-100 px-3.5 py-1 rounded-full border border-slate-200">मुनीम जी ERP • तैयार हो रहा है</span>
     <div class="apple-boot-track" aria-hidden="true">
       <div class="apple-boot-fill"></div>
@@ -841,10 +841,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v35 • 35 वर्जन</span>
+          <span id="versionBadgeDisplay">v36 • 36 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 23 Nov 2026 (v35)
+          Last Updated On: 23 Nov 2026 (v36)
         </div>
       </div>
     </div>
@@ -1316,6 +1316,22 @@
             <div id="salePartyBanner" class="hidden bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs grid grid-cols-2 md:grid-cols-5 gap-3"></div>
 
             <div id="seedSaleFields" class="bg-emerald-50/40 p-4 rounded-xl border border-emerald-200/80 space-y-3">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pb-2 border-b border-emerald-200/70">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">कॉमन फसल चुनें (Crop)</label>
+                  <select id="saleCropSelect" onchange="onSaleCropChange()" class="w-full border border-emerald-300 rounded-xl px-3 py-2 text-sm bg-white font-semibold"></select>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">कॉमन वैरायटी चुनें (Variety)</label>
+                  <select id="saleVarietySelect" onchange="onSaleVarietyChange()" class="w-full border border-emerald-300 rounded-xl px-3 py-2 text-sm bg-white"></select>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">वर्ग चुनें (Class / Varg)</label>
+                  <select id="saleClassSelect" onchange="onSaleClassChange()" class="w-full border border-emerald-300 rounded-xl px-3 py-2 text-sm bg-white font-semibold text-[#132A46]">
+                    <option value="">-- पहले वैरायटी चुनें --</option>
+                  </select>
+                </div>
+              </div>
               <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-3.5">
                 <div class="sm:col-span-2">
                   <label class="block text-xs font-semibold text-slate-700 mb-1">आइटम चुनें (Items Master से) *</label>
@@ -6729,8 +6745,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v35",
-  totalVersionsUpdated: 35,
+  currentVersion: "v36",
+  totalVersionsUpdated: 36,
   lastUpdatedDateLabel: "23 Nov 2026"
 };
 
@@ -8118,8 +8134,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncPlanVersionDom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v35 • 35 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v35)";
+    if (verEl) verEl.textContent = "v36 • 36 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v36)";
     if (typeof renderPlanTrackerCard === "function") {
       try { renderPlanTrackerCard(); } catch (e) {}
     }
@@ -8405,8 +8421,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v35 • 35 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v35)";
+    if (verEl) verEl.textContent = "v36 • 36 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v36)";
   });
 })();
 
@@ -8549,8 +8565,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v35 • 35 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v35)";
+    if (verEl) verEl.textContent = "v36 • 36 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v36)";
     if (typeof populatePurchaseCropCascade === "function") {
       populatePurchaseCropCascade();
     }
@@ -8626,8 +8642,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV35Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v35 • 35 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v35)";
+    if (verEl) verEl.textContent = "v36 • 36 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v36)";
     updateLoginTopClockLive();
   }
 
@@ -8642,6 +8658,219 @@ setInterval(renderPlanTrackerCard, 60000);
       highlightActiveSidebarTab(tName, document.getElementById("vchType")?.value || "PAYMENT");
     }
   });
+})();
+
+
+(function applyV36InvoiceTermsAndCommonSaleMapping() {
+  if (typeof PLAN_CONFIG === "object" && PLAN_CONFIG) {
+    PLAN_CONFIG.currentVersion = "v36";
+    PLAN_CONFIG.totalVersionsUpdated = 36;
+    PLAN_CONFIG.lastUpdatedDateLabel = "23 Nov 2026";
+  }
+
+  const ADDR_LINE_1 = "02, Ramghat Road, Swarn jayanti Nagar,";
+  const ADDR_LINE_2 = "Aligarh, Uttar Pradesh, 202001";
+  const ADDR_BR = `${ADDR_LINE_1}<br>${ADDR_LINE_2}`;
+
+  const TERMS_BY_KIND = {
+    SALE: [
+      "1. बिक्री किए गए बीज या मंडी माल की मात्रा, लॉट संख्या, पैकिंग व वजन का मिलान डिलीवरी समय कर लें।",
+      "2. बीज को नमी, सीधी धूप व कीटों से सुरक्षित सूखे स्थान पर रखें; निर्धारित बिल भुगतान समय पर देय होगा।",
+      "3. किसी भी विवाद की स्थिति में न्यायक्षेत्र अलीगढ़ (उत्तर प्रदेश) रहेगा।"
+    ],
+    PURCHASE: [
+      "1. किसान या सप्लायर से प्राप्त फसल का भर्ती वजन, कद्दा कटौती (%) एवं अन्य निर्धारित कटौतियाँ बिल के अनुसार मान्य होंगी।",
+      "2. कच्चे माल की नमी, सफाई व गुणवत्ता का मिलान धर्मकांटा/प्राप्ति समय के आधार पर किया गया है।",
+      "3. बिल की शुद्ध देय राशि का भुगतान या खाते में समायोजन आपसी सहमति व लेजर विवरण के अनुसार होगा।"
+    ],
+    RECEIPT: [
+      "1. यह रसीद (Payment In) केवल पार्टी/खरीदार से प्राप्त जमा राशि की पुष्टि के लिए है; चेक/ऑनलाइन राशि क्लियर होने पर अंतिम मान्य होगी।",
+      "2. प्राप्त राशि से संबंधित पार्टी के खाते का बकाया कम किया गया है; कृपया रसीद नं. व शेष सुरक्षित रखें।",
+      "3. किसी भी लेखा मिलान या त्रुटि सुधार के लिए तुरंत कार्यालय से संपर्क करें।"
+    ],
+    PAYMENT: [
+      "1. यह रसीद (Payment Out) केवल किसान/पार्टी को दिए गए भुगतान या एडवांस की पुष्टि के लिए है।",
+      "2. भुगतान या एडवांस की प्रविष्टि संबंधित पार्टी के खाते/लेजर में दर्ज कर दी गई है; कृपया भुगतान समय पर मिलान कर लें।",
+      "3. किसी भी विवाद या मिलान के लिए न्यायक्षेत्र अलीगढ़ (उत्तर प्रदेश) रहेगा।"
+    ]
+  };
+
+  window.populateSaleCommonCascade = function() {
+    const cropSel = document.getElementById("saleCropSelect");
+    const varSel = document.getElementById("saleVarietySelect");
+    const clsSel = document.getElementById("saleClassSelect");
+    if (!cropSel || !varSel) return;
+
+    const crops = Array.from(new Set(
+      (state.rawItems || []).map(x => (x.name || "").trim()).filter(Boolean)
+    )).sort((a, b) => a.localeCompare(b, "hi"));
+
+    const prevCrop = cropSel.value;
+    cropSel.innerHTML = `<option value="">-- कॉमन फसल चुनें --</option>` +
+      crops.map(c => `<option value="${encodeURIComponent(c)}">${c}</option>`).join("");
+    if (prevCrop && crops.some(c => encodeURIComponent(c) === prevCrop || c === prevCrop)) {
+      cropSel.value = prevCrop;
+    }
+    if (clsSel) clsSel.innerHTML = `<option value="">-- पहले वैरायटी चुनें --</option>`;
+    onSaleCropChange();
+  };
+
+  window.onSaleCropChange = function() {
+    const cropVal = decodeURIComponent(document.getElementById("saleCropSelect")?.value || "").trim();
+    const varSel = document.getElementById("saleVarietySelect");
+    const clsSel = document.getElementById("saleClassSelect");
+    if (!varSel) return;
+
+    const matching = (state.rawItems || []).filter(x => (x.name || "").trim() === cropVal);
+    const uniqueVars = Array.from(new Set(
+      matching.map(m => (m.variety || "-").trim()).filter(Boolean)
+    ));
+    varSel.innerHTML = `<option value="">-- कॉमन वैरायटी चुनें --</option>` +
+      uniqueVars.map(v => `<option value="${encodeURIComponent(v)}">${v}</option>`).join("");
+    if (clsSel) clsSel.innerHTML = `<option value="">-- पहले वैरायटी चुनें --</option>`;
+  };
+
+  window.onSaleVarietyChange = function() {
+    const cropVal = decodeURIComponent(document.getElementById("saleCropSelect")?.value || "").trim();
+    const chosenVar = decodeURIComponent(document.getElementById("saleVarietySelect")?.value || "").trim();
+    const clsSel = document.getElementById("saleClassSelect");
+    if (!clsSel) return;
+
+    if (!chosenVar) {
+      clsSel.innerHTML = `<option value="">-- पहले वैरायटी चुनें --</option>`;
+      return;
+    }
+    const varItems = (state.rawItems || []).filter(x =>
+      (x.name || "").trim() === cropVal && (x.variety || "-").trim() === chosenVar
+    );
+    const classes = Array.from(new Set(
+      varItems.map(it => (it.className || "").trim()).filter(c => c && c !== "-")
+    ));
+    const choices = classes.length ? classes : ["Foundation", "Certified", "TL", "Standard"];
+    clsSel.innerHTML = `<option value="">-- वर्ग चुनें --</option>` +
+      choices.map(c => `<option value="${encodeURIComponent(c)}">${c}</option>`).join("");
+  };
+
+  window.onSaleClassChange = function() {
+    const cropVal = decodeURIComponent(document.getElementById("saleCropSelect")?.value || "").trim();
+    const varVal = decodeURIComponent(document.getElementById("saleVarietySelect")?.value || "").trim();
+    const clsVal = decodeURIComponent(document.getElementById("saleClassSelect")?.value || "").trim();
+    const form = document.getElementById("saleForm");
+    if (form) {
+      form.dataset.commonCrop = cropVal;
+      form.dataset.commonVariety = varVal;
+      form.dataset.commonClass = clsVal;
+    }
+    if (typeof calcSaleTotal === "function") calcSaleTotal();
+  };
+
+  const _origRefreshV36 = typeof refreshSelectors === "function" ? refreshSelectors : null;
+  if (_origRefreshV36) {
+    window.refreshSelectors = function() {
+      const res = _origRefreshV36.apply(this, arguments);
+      const saleItemEl = document.getElementById("saleItemId");
+      if (saleItemEl && Array.isArray(state.saleItems)) {
+        const curSaleVal = saleItemEl.value;
+        const validSaleIds = new Set(state.saleItems.map(s => String(s.id)));
+        saleItemEl.innerHTML = `<option value="">-- आइटम चुनें (बिक्री आइटम) --</option>` +
+          state.saleItems.map(i => `<option value="${i.id}">${i.name} [${i.category}] — ${i.packKg}kg (स्टॉक: ${i.stockBags} बैग)</option>`).join("");
+        if (curSaleVal && validSaleIds.has(String(curSaleVal))) {
+          saleItemEl.value = curSaleVal;
+        }
+      }
+      populateSaleCommonCascade();
+      return res;
+    };
+  }
+
+  const _origSaveSaleV36 = typeof saveSaleInvoice === "function" ? saveSaleInvoice : null;
+  if (_origSaveSaleV36) {
+    window.saveSaleInvoice = function(e) {
+      const cropVal = decodeURIComponent(document.getElementById("saleCropSelect")?.value || "").trim();
+      const varVal = decodeURIComponent(document.getElementById("saleVarietySelect")?.value || "").trim();
+      const clsVal = decodeURIComponent(document.getElementById("saleClassSelect")?.value || "").trim();
+
+      const saleItemEl = document.getElementById("saleItemId");
+      if (saleItemEl && String(saleItemEl.value || "").startsWith("RAW-")) {
+        saleItemEl.value = "";
+      }
+
+      const ret = _origSaveSaleV36.call(this, e);
+      if (state.transactions && state.transactions.length) {
+        const latest = state.transactions[0];
+        if (latest && latest.type === "SALE" && (cropVal || varVal || clsVal)) {
+          const commonTag = [cropVal, varVal, clsVal ? `वर्ग: ${clsVal}` : ""].filter(Boolean).join(" • ");
+          latest.commonCrop = cropVal;
+          latest.commonVariety = varVal;
+          latest.commonClass = clsVal;
+          if (!latest.itemId || String(latest.itemId).startsWith("RAW-")) {
+            latest.itemId = "";
+            latest.itemName = commonTag || latest.itemName;
+          } else {
+            latest.note = `${latest.note || ""} | कॉमन: ${commonTag}`.replace(/^\s*\|\s*/, "");
+          }
+          saveState();
+        }
+      }
+      return ret;
+    };
+  }
+
+  const _origPreviewThemeV36 = typeof previewSampleInvoiceTheme === "function" ? previewSampleInvoiceTheme : null;
+  window.previewSampleInvoiceTheme = function() {
+    if (_origPreviewThemeV36) _origPreviewThemeV36();
+    const area = document.getElementById("printArea");
+    if (!area) return;
+    area.innerHTML = area.innerHTML
+      .replace(/class="h-14 w-14 rounded-full object-cover border border-slate-200 shrink-0"/g, 'class="h-16 w-auto max-w-[108px] object-contain shrink-0"')
+      .replace(/02, Ramghat Road, Swarn jayanti Nagar, Aligarh, Uttar Pradesh, 202001/g, ADDR_BR);
+  };
+
+  const _origOpenReceiptV36 = typeof openReceipt === "function" ? openReceipt : null;
+  if (_origOpenReceiptV36) {
+    window.openReceipt = function(txId) {
+      const res = _origOpenReceiptV36.apply(this, arguments);
+      const tx = (state.transactions || []).find(x => x.id === txId);
+      const area = document.getElementById("printArea");
+      if (!tx || !area) return res;
+
+      area.innerHTML = area.innerHTML
+        .replace(/class="h-14 w-auto max-w-\[96px\] object-contain shrink-0"/g, 'class="h-16 w-auto max-w-[108px] object-contain shrink-0"')
+        .replace(/02, Ramghat Road, Swarn jayanti Nagar, Aligarh, Uttar Pradesh, 202001/g, ADDR_BR);
+
+      const kindKey = tx.type === "PURCHASE" ? "PURCHASE" : (tx.type === "RECEIPT" ? "RECEIPT" : (tx.type === "PAYMENT" ? "PAYMENT" : "SALE"));
+      const kindTitle = kindKey === "PURCHASE" ? "खरीद बिल" : (kindKey === "RECEIPT" ? "पैसा जमा (Payment In)" : (kindKey === "PAYMENT" ? "पैसा भुगतान (Payment Out)" : "बिक्री बिल"));
+      const lines = TERMS_BY_KIND[kindKey] || TERMS_BY_KIND.SALE;
+      const termsBlockHtml = `
+        <div class="mt-3 pt-3 border-t border-neutral-200 text-xs">
+          <p class="font-bold text-slate-800">Terms & Conditions (${kindTitle}):</p>
+          <ul class="mt-1 space-y-1 text-[11px] text-neutral-600">
+            ${lines.map(l => `<li>${l}</li>`).join("")}
+          </ul>
+        </div>
+      `;
+
+      const card = area.querySelector(".bg-white.rounded-md");
+      if (card && !card.querySelector("[data-v36-terms='1']")) {
+        const wrap = document.createElement("div");
+        wrap.setAttribute("data-v36-terms", "1");
+        wrap.innerHTML = termsBlockHtml;
+        card.appendChild(wrap);
+      }
+      return res;
+    };
+  }
+
+  function syncV36Dom() {
+    const verEl = document.getElementById("versionBadgeDisplay");
+    const updEl = document.getElementById("lastUpdatedOnDisplay");
+    if (verEl) verEl.textContent = "v36 • 36 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v36)";
+    populateSaleCommonCascade();
+  }
+
+  window.addEventListener("DOMContentLoaded", syncV36Dom);
+  syncV36Dom();
 })();
 
 </script>
