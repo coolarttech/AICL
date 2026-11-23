@@ -245,9 +245,11 @@
   .hero-png-bottom-center img {
     max-height: var(--photo-max-h);
     width: auto;
+    display: block;
+    vertical-align: bottom;
     object-fit: contain;
     object-position: bottom center;
-    filter: drop-shadow(0 20px 36px rgba(0, 0, 0, 0.78));
+    filter: drop-shadow(0 18px 32px rgba(0, 0, 0, 0.78));
     user-select: none;
     pointer-events: none;
   }
@@ -495,11 +497,10 @@
       </div>
     </div>
 
-    <!-- Founder Reference Line Right Above the Thin Divider Line (English Name + Left/Aligned Placement) -->
-    <div class="hidden lg:flex items-center justify-start relative z-30 pb-1.5">
-      <p class="text-[11px] text-slate-400 tracking-wide">
-        <span class="text-slate-200 font-semibold">Krishan Kant Bhardwaj</span> — Founder, <b class="text-emerald-400 font-semibold">CoolArt®</b> <span class="text-slate-400">(MunimJi Platform)</span>
-      </p>
+    <!-- Founder Reference Line Right Above the Thin Divider Line (Two-Line Clean Stack) -->
+    <div class="hidden lg:flex flex-col items-start justify-end relative z-30 pb-1.5 leading-snug">
+      <p class="text-xs font-semibold text-slate-100 tracking-wide">Krishan Kant Bhardwaj</p>
+      <p class="text-[11px] text-slate-400">Founder, <b class="text-emerald-400 font-semibold">CoolArt®</b> <span class="text-slate-400">(MunimJi Platform)</span></p>
     </div>
 
     <!-- Desktop Footer Only (Mobile keeps bottom clean during login) -->
@@ -840,10 +841,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v34 • 34 वर्जन</span>
+          <span id="versionBadgeDisplay">v35 • 35 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 23 Nov 2026 (v34)
+          Last Updated On: 23 Nov 2026 (v35)
         </div>
       </div>
     </div>
@@ -6728,8 +6729,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v34",
-  totalVersionsUpdated: 34,
+  currentVersion: "v35",
+  totalVersionsUpdated: 35,
   lastUpdatedDateLabel: "23 Nov 2026"
 };
 
@@ -8117,8 +8118,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncPlanVersionDom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v34 • 34 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v34)";
+    if (verEl) verEl.textContent = "v35 • 35 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v35)";
     if (typeof renderPlanTrackerCard === "function") {
       try { renderPlanTrackerCard(); } catch (e) {}
     }
@@ -8404,8 +8405,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v34 • 34 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v34)";
+    if (verEl) verEl.textContent = "v35 • 35 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v35)";
   });
 })();
 
@@ -8548,10 +8549,97 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v34 • 34 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v34)";
+    if (verEl) verEl.textContent = "v35 • 35 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v35)";
     if (typeof populatePurchaseCropCascade === "function") {
       populatePurchaseCropCascade();
+    }
+  });
+})();
+
+
+(function applyV35VideoFixes() {
+  if (typeof PLAN_CONFIG === "object" && PLAN_CONFIG) {
+    PLAN_CONFIG.currentVersion = "v35";
+    PLAN_CONFIG.totalVersionsUpdated = 35;
+    PLAN_CONFIG.lastUpdatedDateLabel = "23 Nov 2026";
+  }
+
+  function updateLoginTopClockLive() {
+    const now = new Date();
+    const days = ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
+    const months = ["जनवरी", "फ़रवरी", "मार्च", "अप्रैल", "मई", "जून", "जुलाई", "अगस्त", "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर"];
+
+    let hrs = now.getHours();
+    const ampm = hrs >= 12 ? "PM" : "AM";
+    hrs = hrs % 12 || 12;
+
+    const hEl = document.getElementById("lockClockHour");
+    const mEl = document.getElementById("lockClockMin");
+    const sEl = document.getElementById("lockClockSec");
+    const aEl = document.getElementById("lockClockAmPm");
+    const dEl = document.getElementById("lockScreenDayLine");
+
+    if (hEl) hEl.textContent = String(hrs).padStart(2, "0");
+    if (mEl) mEl.textContent = String(now.getMinutes()).padStart(2, "0");
+    if (sEl) sEl.textContent = String(now.getSeconds()).padStart(2, "0");
+    if (aEl) aEl.textContent = ampm;
+    if (dEl) dEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+  }
+
+  function highlightActiveSidebarTab(tabKey, voucherSubType) {
+    document.querySelectorAll(".nav-tab").forEach(btn => {
+      btn.classList.remove("bg-[#1E293B]", "text-white", "font-semibold");
+      btn.classList.add("text-slate-300", "font-medium");
+    });
+
+    let targetId = "tab-" + tabKey;
+    if (tabKey === "vouchers") {
+      targetId = (voucherSubType === "RECEIPT") ? "tab-vouchers-in" : "tab-vouchers";
+    }
+    const activeBtn = document.getElementById(targetId);
+    if (activeBtn) {
+      activeBtn.classList.add("bg-[#1E293B]", "text-white", "font-semibold");
+      activeBtn.classList.remove("text-slate-300", "font-medium");
+    }
+  }
+
+  const _origSwitchV35 = typeof switchTab === "function" ? switchTab : null;
+  if (_origSwitchV35) {
+    window.switchTab = function(tab, fromPopState = false) {
+      const res = _origSwitchV35.call(this, tab, fromPopState);
+      const curVchType = document.getElementById("vchType")?.value || "PAYMENT";
+      highlightActiveSidebarTab(tab, curVchType);
+      return res;
+    };
+  }
+
+  const _origPresetV35 = typeof openVoucherPreset === "function" ? openVoucherPreset : null;
+  if (_origPresetV35) {
+    window.openVoucherPreset = function(vType) {
+      const res = _origPresetV35.call(this, vType);
+      highlightActiveSidebarTab("vouchers", vType);
+      return res;
+    };
+  }
+
+  function syncV35Dom() {
+    const verEl = document.getElementById("versionBadgeDisplay");
+    const updEl = document.getElementById("lastUpdatedOnDisplay");
+    if (verEl) verEl.textContent = "v35 • 35 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v35)";
+    updateLoginTopClockLive();
+  }
+
+  updateLoginTopClockLive();
+  setInterval(updateLoginTopClockLive, 1000);
+
+  window.addEventListener("DOMContentLoaded", () => {
+    syncV35Dom();
+    const visibleSec = Array.from(document.querySelectorAll("main > section")).find(s => !s.classList.contains("hidden"));
+    if (visibleSec && visibleSec.id && visibleSec.id.startsWith("view-")) {
+      const tName = visibleSec.id.replace("view-", "");
+      highlightActiveSidebarTab(tName, document.getElementById("vchType")?.value || "PAYMENT");
     }
   });
 })();
