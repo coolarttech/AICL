@@ -488,15 +488,42 @@
 </head>
 <body class="min-h-screen flex flex-col bg-[#f6f9f7]" oncontextmenu="return false;" ondragstart="return false;">
 
-<!-- Fast Startup Splash Screen -->
-<div id="splashScreen" class="fixed inset-0 bg-white z-[100] flex flex-col items-center justify-center transition-opacity duration-200 no-print">
-  <div class="splash-anim flex flex-col items-center">
-    <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-40 md:h-48 w-auto object-contain mb-3">
-    <span class="text-xs font-semibold tracking-wider uppercase text-[#1EA668] bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200">Agri-Seed ERP</span>
+<!-- Startup Splash Screen (MunimJi Branded + ~1.5s Apple-style Loading Indicator) -->
+<div id="splashScreen" class="fixed inset-0 bg-white z-[100] flex flex-col items-center justify-center transition-opacity duration-300 no-print">
+  <style>
+    @keyframes appleBootBarFill {
+      0% { width: 6%; }
+      35% { width: 48%; }
+      75% { width: 84%; }
+      100% { width: 100%; }
+    }
+    .apple-boot-track {
+      width: 176px;
+      height: 5px;
+      border-radius: 9999px;
+      background: #e2e8f0;
+      overflow: hidden;
+      margin-top: 18px;
+      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.08);
+    }
+    .apple-boot-fill {
+      height: 100%;
+      width: 6%;
+      border-radius: 9999px;
+      background: linear-gradient(90deg, #132A46 0%, #1EA668 100%);
+      animation: appleBootBarFill 1.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+  </style>
+  <div class="splash-anim flex flex-col items-center px-4 text-center">
+    <img src="logo.png" alt="MunimJi by Cool Art®" class="h-24 sm:h-28 md:h-32 w-auto object-contain mb-2">
+    <span class="text-[11px] font-semibold tracking-wider text-[#132A46] bg-slate-100 px-3.5 py-1 rounded-full border border-slate-200">मुनीम जी ERP • तैयार हो रहा है</span>
+    <div class="apple-boot-track" aria-hidden="true">
+      <div class="apple-boot-fill"></div>
+    </div>
   </div>
-  <div class="absolute bottom-8 flex items-center gap-2.5 text-xs text-slate-400">
-    <span>Powered by</span>
-    <img src="logo.png" alt="MunimJi by Cool Art®" class="h-6 w-auto object-contain">
+  <div class="absolute bottom-8 flex items-center gap-2 text-xs text-slate-400">
+    <span>Developed by</span>
+    <b class="text-[#132A46] font-bold">Team CoolArt®</b>
   </div>
 </div>
 
@@ -716,33 +743,30 @@
 
   <!-- Right PIN Entry Panel -->
   <div class="lg:col-span-5 flex flex-col justify-between items-center p-4 sm:p-7 bg-[#0B0F17] lg:min-h-0 overflow-hidden">
-    <!-- Desktop-Only Top Clock Box With Flowing Natural Scenery + Today's Day + Bold White Apple-Style Time & Seconds -->
-    <div class="hidden lg:block w-full max-w-[340px] desktop-scenery-clock-box">
-      <div id="desktopSceneryBg" class="desktop-scenery-bg-slide" style="background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=900&q=75');"></div>
-      <div class="desktop-scenery-scrim">
-        <p id="lockScreenDayLine" class="text-xs font-semibold text-white/95 tracking-wide">सोमवार, 23 नवंबर 2026</p>
-        <div class="num-clean text-4xl font-bold text-white tracking-tight leading-tight mt-1 flex items-baseline justify-center">
-          <span id="lockClockHour">12</span><span class="clock-colon mx-0.5 text-white">:</span><span id="lockClockMin">05</span><span id="lockClockSec" class="text-xl font-semibold text-white/90 ml-1">00</span><span id="lockClockAmPm" class="text-xs font-semibold uppercase text-white/85 ml-1.5">AM</span>
-        </div>
+    <!-- Desktop Frosted-Glass Minimal Clock Card (Idea #1: No Scenery Patch) -->
+    <div class="hidden lg:block w-full max-w-[330px] rounded-2xl bg-white/[0.05] backdrop-blur-md border border-white/15 px-5 py-3.5 text-center shadow-lg">
+      <p id="lockScreenDayLine" class="text-[11px] font-medium text-slate-300 tracking-wide">सोमवार, 23 नवंबर 2026</p>
+      <div class="num-clean text-3xl font-bold text-white tracking-tight leading-tight mt-1 flex items-baseline justify-center">
+        <span id="lockClockHour">12</span><span class="clock-colon mx-0.5 text-emerald-400">:</span><span id="lockClockMin">05</span><span id="lockClockSec" class="text-lg font-semibold text-slate-300 ml-1">00</span><span id="lockClockAmPm" class="text-xs font-semibold uppercase text-emerald-300 ml-1.5">AM</span>
       </div>
     </div>
 
-    <div class="w-full max-w-[290px] lg:max-w-xs my-auto space-y-3.5 py-2">
+    <div class="w-full max-w-[300px] lg:max-w-xs my-auto space-y-3.5 py-2">
       <div class="flex flex-col items-center text-center">
-        <!-- Unboxed Vaidik Seeds Logo on Desktop PIN panel -->
-        <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स लोगो" class="hidden lg:block h-20 w-20 object-contain mb-2.5">
+        <!-- Slightly Enlarged Unboxed Vaidik Seeds Logo on Desktop PIN panel -->
+        <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स लोगो" class="hidden lg:block h-24 w-24 object-contain mb-2.5">
         <h1 class="text-lg lg:text-xl font-bold text-white tracking-tight">वैदिक सीड्स</h1>
-        <p class="text-[11px] lg:text-xs text-slate-400 mt-0.5">पोर्टल खोलने के लिए PIN दर्ज करें</p>
+        <p class="text-[11px] lg:text-xs text-emerald-300/90 font-medium mt-0.5">स्वागत है • आपका व्यापारिक खाता</p>
       </div>
 
       <form id="pinUnlockForm" onsubmit="verifyPinUnlock(event)" class="space-y-2.5">
         <div class="flex items-center justify-center gap-2">
           <input type="password" id="unlockPinInput" inputmode="numeric" autocomplete="off" required placeholder="••••" class="num-clean w-32 bg-slate-900/95 border border-slate-700 focus:border-emerald-400 rounded-xl px-3 py-2 text-center text-sm font-bold tracking-[0.28em] text-white outline-none transition">
-          <button type="submit" class="bg-[#1EA668] hover:bg-emerald-600 text-white font-semibold px-3.5 py-2 rounded-xl text-xs shadow-sm transition shrink-0">
-            कंटिन्यू
+          <button type="submit" class="bg-[#1EA668] hover:bg-emerald-600 text-white font-semibold px-4 py-2 rounded-xl text-xs shadow-sm transition shrink-0">
+            Unlock
           </button>
         </div>
-        <p id="pinUnlockError" class="hidden text-xs font-semibold text-rose-400 text-center">गलत PIN! कृपया सही PIN दर्ज करें।</p>
+        <p id="pinUnlockError" class="hidden text-xs font-semibold text-rose-400 text-center">अमान्य कोड! कृपया पुनः प्रयास करें।</p>
       </form>
     </div>
 
@@ -1037,10 +1061,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v33 • 33 वर्जन</span>
+          <span id="versionBadgeDisplay">v34 • 34 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 23 Nov 2026 (v33)
+          Last Updated On: 23 Nov 2026 (v34)
         </div>
       </div>
     </div>
@@ -1713,8 +1737,11 @@
                 <select id="purVarietySelect" onchange="onPurVarietyChange()" class="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm bg-white"></select>
               </div>
               <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1">3. वर्ग (Class / Varg)</label>
-                <input type="text" id="purClassDisplay" readonly placeholder="वैरायटी चुनते ही वर्ग आएगा" class="w-full border border-slate-200 bg-slate-50 rounded-xl px-3 py-2.5 text-sm font-semibold text-[#132A46]">
+                <label class="block text-xs font-semibold text-slate-700 mb-1">3. वर्ग चुनें (Class / Varg)</label>
+                <select id="purClassSelect" onchange="onPurClassChange()" class="w-full border border-slate-300 bg-white rounded-xl px-3 py-2.5 text-sm font-semibold text-[#132A46]">
+                  <option value="">-- पहले वैरायटी चुनें --</option>
+                </select>
+                <input type="hidden" id="purClassDisplay" value="">
               </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -5323,8 +5350,8 @@ window.addEventListener('DOMContentLoaded', () => {
   if (splash) {
     setTimeout(() => {
       splash.style.opacity = '0';
-      setTimeout(() => splash.remove(), 200);
-    }, 350);
+      setTimeout(() => splash.remove(), 250);
+    }, 1500);
   }
 
   const today = new Date().toISOString().slice(0, 10);
@@ -6988,8 +7015,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v33",
-  totalVersionsUpdated: 33,
+  currentVersion: "v34",
+  totalVersionsUpdated: 34,
   lastUpdatedDateLabel: "23 Nov 2026"
 };
 
@@ -8377,8 +8404,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncPlanVersionDom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v33 • 33 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v33)";
+    if (verEl) verEl.textContent = "v34 • 34 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v34)";
     if (typeof renderPlanTrackerCard === "function") {
       try { renderPlanTrackerCard(); } catch (e) {}
     }
@@ -8664,8 +8691,155 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v33 • 33 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v33)";
+    if (verEl) verEl.textContent = "v34 • 34 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v34)";
+  });
+})();
+
+
+(function applyV34PurchaseCascadeAndLoginPolish() {
+  if (typeof PLAN_CONFIG === "object" && PLAN_CONFIG) {
+    PLAN_CONFIG.currentVersion = "v34";
+    PLAN_CONFIG.totalVersionsUpdated = 34;
+    PLAN_CONFIG.lastUpdatedDateLabel = "23 Nov 2026";
+  }
+
+  window.populatePurchaseCropCascade = function() {
+    const cropSel = document.getElementById("purCropSelect");
+    const varSel = document.getElementById("purVarietySelect");
+    const clsSel = document.getElementById("purClassSelect");
+    const clsHidden = document.getElementById("purClassDisplay");
+    const hiddenItemSel = document.getElementById("purItemId");
+    if (!cropSel || !varSel) return;
+
+    const crops = Array.from(new Set(
+      (state.rawItems || []).map(x => (x.name || "").trim()).filter(Boolean)
+    )).sort((a, b) => a.localeCompare(b, "hi"));
+
+    const prevCrop = cropSel.value;
+    cropSel.innerHTML = `<option value="">-- फसल चुनें --</option>` +
+      crops.map(c => `<option value="${c}">${c}</option>`).join("");
+
+    if (prevCrop && crops.includes(prevCrop)) {
+      cropSel.value = prevCrop;
+    }
+    if (clsSel) clsSel.innerHTML = `<option value="">-- पहले वैरायटी चुनें --</option>`;
+    if (clsHidden) clsHidden.value = "";
+    if (hiddenItemSel) hiddenItemSel.value = "";
+    onPurCropChange();
+  };
+
+  window.onPurCropChange = function() {
+    const cropVal = (document.getElementById("purCropSelect")?.value || "").trim();
+    const varSel = document.getElementById("purVarietySelect");
+    const clsSel = document.getElementById("purClassSelect");
+    const clsHidden = document.getElementById("purClassDisplay");
+    const hiddenItemSel = document.getElementById("purItemId");
+    if (!varSel) return;
+
+    const matching = (state.rawItems || []).filter(x => (x.name || "").trim() === cropVal);
+    // Deduplicate varieties so common varieties like DBW 187 appear once
+    const uniqueVarieties = Array.from(new Set(
+      matching.map(m => (m.variety || "-").trim()).filter(Boolean)
+    ));
+
+    varSel.innerHTML = `<option value="">-- वैरायटी चुनें --</option>` +
+      uniqueVarieties.map(v => `<option value="${encodeURIComponent(v)}">${v}</option>`).join("");
+
+    if (clsSel) clsSel.innerHTML = `<option value="">-- पहले वैरायटी चुनें --</option>`;
+    if (clsHidden) clsHidden.value = "";
+    if (hiddenItemSel) hiddenItemSel.value = "";
+  };
+
+  window.onPurVarietyChange = function() {
+    const cropVal = (document.getElementById("purCropSelect")?.value || "").trim();
+    const rawVarEnc = document.getElementById("purVarietySelect")?.value || "";
+    const chosenVar = decodeURIComponent(rawVarEnc).trim();
+    const clsSel = document.getElementById("purClassSelect");
+    const clsHidden = document.getElementById("purClassDisplay");
+    const hiddenItemSel = document.getElementById("purItemId");
+
+    if (!clsSel) return;
+    if (!chosenVar) {
+      clsSel.innerHTML = `<option value="">-- पहले वैरायटी चुनें --</option>`;
+      if (clsHidden) clsHidden.value = "";
+      if (hiddenItemSel) hiddenItemSel.value = "";
+      return;
+    }
+
+    const varItems = (state.rawItems || []).filter(x =>
+      (x.name || "").trim() === cropVal && (x.variety || "-").trim() === chosenVar
+    );
+
+    // Collect available classes for this common variety; if none specified, provide default options
+    const classes = Array.from(new Set(
+      varItems.map(it => (it.className || "").trim()).filter(c => c && c !== "-")
+    ));
+    const classChoices = classes.length ? classes : ["Foundation", "Certified", "TL", "Standard"];
+
+    clsSel.innerHTML = `<option value="">-- वर्ग चुनें --</option>` +
+      classChoices.map(c => `<option value="${encodeURIComponent(c)}">${c}</option>`).join("");
+
+    // Link first matching item ID initially; refine when class is selected
+    const firstItem = varItems[0] || null;
+    if (hiddenItemSel) hiddenItemSel.value = firstItem ? firstItem.id : "";
+    if (clsHidden) clsHidden.value = "";
+  };
+
+  window.onPurClassChange = function() {
+    const cropVal = (document.getElementById("purCropSelect")?.value || "").trim();
+    const chosenVar = decodeURIComponent(document.getElementById("purVarietySelect")?.value || "").trim();
+    const chosenClass = decodeURIComponent(document.getElementById("purClassSelect")?.value || "").trim();
+    const clsHidden = document.getElementById("purClassDisplay");
+    const hiddenItemSel = document.getElementById("purItemId");
+
+    if (clsHidden) clsHidden.value = chosenClass;
+
+    const exactItem = (state.rawItems || []).find(x =>
+      (x.name || "").trim() === cropVal &&
+      (x.variety || "-").trim() === chosenVar &&
+      (x.className || "").trim() === chosenClass
+    ) || (state.rawItems || []).find(x =>
+      (x.name || "").trim() === cropVal &&
+      (x.variety || "-").trim() === chosenVar
+    );
+
+    if (exactItem && hiddenItemSel) {
+      hiddenItemSel.value = exactItem.id;
+    }
+  };
+
+  const _origSavePurV34 = typeof savePurchaseBill === "function" ? savePurchaseBill : null;
+  if (_origSavePurV34) {
+    savePurchaseBill = function(e) {
+      const chosenClass = decodeURIComponent(document.getElementById("purClassSelect")?.value || "").trim();
+      const chosenVar = decodeURIComponent(document.getElementById("purVarietySelect")?.value || "").trim();
+      const chosenCrop = (document.getElementById("purCropSelect")?.value || "").trim();
+      const itemId = document.getElementById("purItemId")?.value || "";
+      const itemObj = (state.rawItems || []).find(x => x.id === itemId);
+
+      const ret = _origSavePurV34.call(this, e);
+      if (state.transactions && state.transactions.length) {
+        const latest = state.transactions[0];
+        if (latest && latest.type === "PURCHASE") {
+          const vLabel = chosenVar || (itemObj ? itemObj.variety : "-");
+          const cLabel = chosenClass || (itemObj && itemObj.className ? itemObj.className : "-");
+          latest.itemName = `${chosenCrop || (itemObj ? itemObj.name : "Raw Crop")} — ${vLabel} (${cLabel})`;
+          saveState();
+        }
+      }
+      return ret;
+    };
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const verEl = document.getElementById("versionBadgeDisplay");
+    const updEl = document.getElementById("lastUpdatedOnDisplay");
+    if (verEl) verEl.textContent = "v34 • 34 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v34)";
+    if (typeof populatePurchaseCropCascade === "function") {
+      populatePurchaseCropCascade();
+    }
   });
 })();
 
