@@ -841,10 +841,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v37 • 37 वर्जन</span>
+          <span id="versionBadgeDisplay">v38 • 38 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 23 Nov 2026 (v37)
+          Last Updated On: 24 Nov 2026 (v38)
         </div>
       </div>
     </div>
@@ -6729,9 +6729,9 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v37",
-  totalVersionsUpdated: 37,
-  lastUpdatedDateLabel: "23 Nov 2026"
+  currentVersion: "v38",
+  totalVersionsUpdated: 38,
+  lastUpdatedDateLabel: "24 Nov 2026"
 };
 
 function toggleSidebarSettingsDropdown() {
@@ -8118,8 +8118,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncPlanVersionDom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v37 • 37 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v37)";
+    if (verEl) verEl.textContent = "v38 • 38 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v38)";
     if (typeof renderPlanTrackerCard === "function") {
       try { renderPlanTrackerCard(); } catch (e) {}
     }
@@ -8405,8 +8405,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v37 • 37 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v37)";
+    if (verEl) verEl.textContent = "v38 • 38 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v38)";
   });
 })();
 
@@ -8549,8 +8549,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v37 • 37 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v37)";
+    if (verEl) verEl.textContent = "v38 • 38 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v38)";
     if (typeof populatePurchaseCropCascade === "function") {
       populatePurchaseCropCascade();
     }
@@ -8626,8 +8626,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV35Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v37 • 37 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v37)";
+    if (verEl) verEl.textContent = "v38 • 38 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v38)";
     updateLoginTopClockLive();
   }
 
@@ -8697,26 +8697,7 @@ setInterval(renderPlanTrackerCard, 60000);
     };
   }
 
-  const ret = _origSaveSaleV36.call(this, e);
-      if (state.transactions && state.transactions.length) {
-        const latest = state.transactions[0];
-        if (latest && latest.type === "SALE" && (cropVal || varVal || clsVal)) {
-          const commonTag = [cropVal, varVal, clsVal ? `वर्ग: ${clsVal}` : ""].filter(Boolean).join(" • ");
-          latest.commonCrop = cropVal;
-          latest.commonVariety = varVal;
-          latest.commonClass = clsVal;
-          if (!latest.itemId || String(latest.itemId).startsWith("RAW-")) {
-            latest.itemId = "";
-            latest.itemName = commonTag || latest.itemName;
-          } else {
-            latest.note = `${latest.note || ""} | कॉमन: ${commonTag}`.replace(/^\s*\|\s*/, "");
-          }
-          saveState();
-        }
-      }
-      return ret;
-    };
-  }
+
 
   const _origPreviewThemeV36 = typeof previewSampleInvoiceTheme === "function" ? previewSampleInvoiceTheme : null;
   window.previewSampleInvoiceTheme = function() {
@@ -8766,12 +8747,150 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV36Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v37 • 37 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v37)";
+    if (verEl) verEl.textContent = "v38 • 38 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v38)";
   }
 
   window.addEventListener("DOMContentLoaded", syncV36Dom);
   syncV36Dom();
+})();
+
+
+(function applyV38ClockAndSheetSyncFix() {
+  if (typeof PLAN_CONFIG === "object" && PLAN_CONFIG) {
+    PLAN_CONFIG.currentVersion = "v38";
+    PLAN_CONFIG.totalVersionsUpdated = 38;
+    PLAN_CONFIG.lastUpdatedDateLabel = "24 Nov 2026";
+  }
+
+  function tickAllClocksNow() {
+    const now = new Date();
+    const days = ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
+    const months = ["जनवरी", "फ़रवरी", "मार्च", "अप्रैल", "मई", "जून", "जुलाई", "अगस्त", "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर"];
+    let hrs = now.getHours();
+    const ampm = hrs >= 12 ? "PM" : "AM";
+    hrs = hrs % 12 || 12;
+
+    const hStr = String(hrs).padStart(2, "0");
+    const mStr = String(now.getMinutes()).padStart(2, "0");
+    const sStr = String(now.getSeconds()).padStart(2, "0");
+    const dStr = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+
+    ["clockHour", "lockClockHour"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = hStr;
+    });
+    ["clockMin", "lockClockMin"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = mStr;
+    });
+    ["clockSec", "lockClockSec"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = sStr;
+    });
+    ["clockAmPm", "lockClockAmPm"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = ampm;
+    });
+    ["clockDateLine", "lockScreenDayLine"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = dStr;
+    });
+  }
+
+  function syncDashboardBadges() {
+    const pEl = document.getElementById("dashCountParties");
+    const sEl = document.getElementById("dashCountSales");
+    const puEl = document.getElementById("dashCountPurchases");
+    const stEl = document.getElementById("dashCountStaffBig");
+    if (pEl) pEl.textContent = String((state.parties || []).length);
+    if (sEl) sEl.textContent = String((state.transactions || []).filter(t => t.type === "SALE").length);
+    if (puEl) puEl.textContent = String((state.transactions || []).filter(t => t.type === "PURCHASE").length);
+    if (stEl) stEl.textContent = String((state.staff || []).length);
+  }
+
+  const _origRenderDashV38 = typeof renderDashboard === "function" ? renderDashboard : null;
+  if (_origRenderDashV38) {
+    window.renderDashboard = function() {
+      const r = _origRenderDashV38.apply(this, arguments);
+      syncDashboardBadges();
+      return r;
+    };
+  }
+
+  window.forcePullSheetNow = function() {
+    const url = (state && state.settings && state.settings.sheetUrl) ? state.settings.sheetUrl : DEPLOYED_SHEET_URL;
+    if (!url || !navigator.onLine) {
+      setSyncLedState("offline");
+      return;
+    }
+    setSyncLedState("pending");
+    fetch(url + "?action=GET_ALL&t=" + Date.now(), { cache: "no-store", redirect: "follow" })
+      .then(r => r.text())
+      .then(txt => {
+        let res = null;
+        try { res = JSON.parse(txt); } catch (e) { res = null; }
+        if (!res || res.status !== "ok") {
+          setSyncLedState("synced");
+          return;
+        }
+        if (Array.isArray(res.parties)) {
+          const normP = res.parties.map(p => ({ ...p, createdDate: normalizeSheetDate(p.createdDate) }));
+          state.parties = normP.length ? mergePreserveRecent(state.parties, normP) : state.parties;
+        }
+        if (Array.isArray(res.rawItems) && res.rawItems.length) {
+          state.rawItems = mergePreserveRecent(state.rawItems, res.rawItems);
+        }
+        if (Array.isArray(res.saleItems) && res.saleItems.length) {
+          state.saleItems = mergePreserveRecent(state.saleItems, res.saleItems);
+        }
+        if (Array.isArray(res.transactions) && res.transactions.length) {
+          const normT = res.transactions.map(t => ({ ...t, date: normalizeSheetDate(t.date) }));
+          state.transactions = mergePreserveRecent(state.transactions, normT);
+        }
+        if (Array.isArray(res.expenses) && res.expenses.length) {
+          const normE = res.expenses.map(ex => ({ ...ex, date: normalizeSheetDate(ex.date) }));
+          state.expenses = mergePreserveRecent(state.expenses, normE);
+        }
+        if (Array.isArray(res.processingBatches) && res.processingBatches.length) {
+          const normB = res.processingBatches.map(b => ({ ...b, date: normalizeSheetDate(b.date) }));
+          state.processingBatches = mergePreserveRecent(state.processingBatches, normB);
+        }
+        if (Array.isArray(res.staff) && res.staff.length) {
+          state.staff = mergePreserveRecent(state.staff, res.staff);
+        }
+        saveState();
+        if (typeof refreshSelectors === "function") refreshSelectors();
+        if (typeof renderDashboard === "function") renderDashboard();
+        if (typeof renderPartyList === "function") renderPartyList();
+        if (typeof renderMasters === "function") renderMasters();
+        if (typeof renderExpensesTable === "function") renderExpensesTable();
+        if (typeof renderProcessingTable === "function") renderProcessingTable();
+        if (typeof renderStaffTable === "function") renderStaffTable();
+        setSyncLedState("synced");
+      })
+      .catch(() => {
+        setSyncLedState(navigator.onLine ? "pending" : "offline");
+      });
+  };
+
+  function syncV38Dom() {
+    const verEl = document.getElementById("versionBadgeDisplay");
+    const updEl = document.getElementById("lastUpdatedOnDisplay");
+    if (verEl) verEl.textContent = "v38 • 38 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v38)";
+    tickAllClocksNow();
+    syncDashboardBadges();
+  }
+
+  tickAllClocksNow();
+  setInterval(tickAllClocksNow, 1000);
+  forcePullSheetNow();
+
+  window.addEventListener("DOMContentLoaded", () => {
+    syncV38Dom();
+    forcePullSheetNow();
+  });
 })();
 
 </script>
