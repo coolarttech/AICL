@@ -841,10 +841,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v36 • 36 वर्जन</span>
+          <span id="versionBadgeDisplay">v37 • 37 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 23 Nov 2026 (v36)
+          Last Updated On: 23 Nov 2026 (v37)
         </div>
       </div>
     </div>
@@ -1316,22 +1316,6 @@
             <div id="salePartyBanner" class="hidden bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs grid grid-cols-2 md:grid-cols-5 gap-3"></div>
 
             <div id="seedSaleFields" class="bg-emerald-50/40 p-4 rounded-xl border border-emerald-200/80 space-y-3">
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pb-2 border-b border-emerald-200/70">
-                <div>
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">कॉमन फसल चुनें (Crop)</label>
-                  <select id="saleCropSelect" onchange="onSaleCropChange()" class="w-full border border-emerald-300 rounded-xl px-3 py-2 text-sm bg-white font-semibold"></select>
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">कॉमन वैरायटी चुनें (Variety)</label>
-                  <select id="saleVarietySelect" onchange="onSaleVarietyChange()" class="w-full border border-emerald-300 rounded-xl px-3 py-2 text-sm bg-white"></select>
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">वर्ग चुनें (Class / Varg)</label>
-                  <select id="saleClassSelect" onchange="onSaleClassChange()" class="w-full border border-emerald-300 rounded-xl px-3 py-2 text-sm bg-white font-semibold text-[#132A46]">
-                    <option value="">-- पहले वैरायटी चुनें --</option>
-                  </select>
-                </div>
-              </div>
               <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-3.5">
                 <div class="sm:col-span-2">
                   <label class="block text-xs font-semibold text-slate-700 mb-1">आइटम चुनें (Items Master से) *</label>
@@ -6745,8 +6729,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v36",
-  totalVersionsUpdated: 36,
+  currentVersion: "v37",
+  totalVersionsUpdated: 37,
   lastUpdatedDateLabel: "23 Nov 2026"
 };
 
@@ -8134,8 +8118,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncPlanVersionDom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v36 • 36 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v36)";
+    if (verEl) verEl.textContent = "v37 • 37 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v37)";
     if (typeof renderPlanTrackerCard === "function") {
       try { renderPlanTrackerCard(); } catch (e) {}
     }
@@ -8421,8 +8405,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v36 • 36 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v36)";
+    if (verEl) verEl.textContent = "v37 • 37 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v37)";
   });
 })();
 
@@ -8565,8 +8549,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v36 • 36 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v36)";
+    if (verEl) verEl.textContent = "v37 • 37 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v37)";
     if (typeof populatePurchaseCropCascade === "function") {
       populatePurchaseCropCascade();
     }
@@ -8642,8 +8626,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV35Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v36 • 36 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v36)";
+    if (verEl) verEl.textContent = "v37 • 37 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v37)";
     updateLoginTopClockLive();
   }
 
@@ -8695,75 +8679,6 @@ setInterval(renderPlanTrackerCard, 60000);
     ]
   };
 
-  window.populateSaleCommonCascade = function() {
-    const cropSel = document.getElementById("saleCropSelect");
-    const varSel = document.getElementById("saleVarietySelect");
-    const clsSel = document.getElementById("saleClassSelect");
-    if (!cropSel || !varSel) return;
-
-    const crops = Array.from(new Set(
-      (state.rawItems || []).map(x => (x.name || "").trim()).filter(Boolean)
-    )).sort((a, b) => a.localeCompare(b, "hi"));
-
-    const prevCrop = cropSel.value;
-    cropSel.innerHTML = `<option value="">-- कॉमन फसल चुनें --</option>` +
-      crops.map(c => `<option value="${encodeURIComponent(c)}">${c}</option>`).join("");
-    if (prevCrop && crops.some(c => encodeURIComponent(c) === prevCrop || c === prevCrop)) {
-      cropSel.value = prevCrop;
-    }
-    if (clsSel) clsSel.innerHTML = `<option value="">-- पहले वैरायटी चुनें --</option>`;
-    onSaleCropChange();
-  };
-
-  window.onSaleCropChange = function() {
-    const cropVal = decodeURIComponent(document.getElementById("saleCropSelect")?.value || "").trim();
-    const varSel = document.getElementById("saleVarietySelect");
-    const clsSel = document.getElementById("saleClassSelect");
-    if (!varSel) return;
-
-    const matching = (state.rawItems || []).filter(x => (x.name || "").trim() === cropVal);
-    const uniqueVars = Array.from(new Set(
-      matching.map(m => (m.variety || "-").trim()).filter(Boolean)
-    ));
-    varSel.innerHTML = `<option value="">-- कॉमन वैरायटी चुनें --</option>` +
-      uniqueVars.map(v => `<option value="${encodeURIComponent(v)}">${v}</option>`).join("");
-    if (clsSel) clsSel.innerHTML = `<option value="">-- पहले वैरायटी चुनें --</option>`;
-  };
-
-  window.onSaleVarietyChange = function() {
-    const cropVal = decodeURIComponent(document.getElementById("saleCropSelect")?.value || "").trim();
-    const chosenVar = decodeURIComponent(document.getElementById("saleVarietySelect")?.value || "").trim();
-    const clsSel = document.getElementById("saleClassSelect");
-    if (!clsSel) return;
-
-    if (!chosenVar) {
-      clsSel.innerHTML = `<option value="">-- पहले वैरायटी चुनें --</option>`;
-      return;
-    }
-    const varItems = (state.rawItems || []).filter(x =>
-      (x.name || "").trim() === cropVal && (x.variety || "-").trim() === chosenVar
-    );
-    const classes = Array.from(new Set(
-      varItems.map(it => (it.className || "").trim()).filter(c => c && c !== "-")
-    ));
-    const choices = classes.length ? classes : ["Foundation", "Certified", "TL", "Standard"];
-    clsSel.innerHTML = `<option value="">-- वर्ग चुनें --</option>` +
-      choices.map(c => `<option value="${encodeURIComponent(c)}">${c}</option>`).join("");
-  };
-
-  window.onSaleClassChange = function() {
-    const cropVal = decodeURIComponent(document.getElementById("saleCropSelect")?.value || "").trim();
-    const varVal = decodeURIComponent(document.getElementById("saleVarietySelect")?.value || "").trim();
-    const clsVal = decodeURIComponent(document.getElementById("saleClassSelect")?.value || "").trim();
-    const form = document.getElementById("saleForm");
-    if (form) {
-      form.dataset.commonCrop = cropVal;
-      form.dataset.commonVariety = varVal;
-      form.dataset.commonClass = clsVal;
-    }
-    if (typeof calcSaleTotal === "function") calcSaleTotal();
-  };
-
   const _origRefreshV36 = typeof refreshSelectors === "function" ? refreshSelectors : null;
   if (_origRefreshV36) {
     window.refreshSelectors = function() {
@@ -8778,24 +8693,11 @@ setInterval(renderPlanTrackerCard, 60000);
           saleItemEl.value = curSaleVal;
         }
       }
-      populateSaleCommonCascade();
       return res;
     };
   }
 
-  const _origSaveSaleV36 = typeof saveSaleInvoice === "function" ? saveSaleInvoice : null;
-  if (_origSaveSaleV36) {
-    window.saveSaleInvoice = function(e) {
-      const cropVal = decodeURIComponent(document.getElementById("saleCropSelect")?.value || "").trim();
-      const varVal = decodeURIComponent(document.getElementById("saleVarietySelect")?.value || "").trim();
-      const clsVal = decodeURIComponent(document.getElementById("saleClassSelect")?.value || "").trim();
-
-      const saleItemEl = document.getElementById("saleItemId");
-      if (saleItemEl && String(saleItemEl.value || "").startsWith("RAW-")) {
-        saleItemEl.value = "";
-      }
-
-      const ret = _origSaveSaleV36.call(this, e);
+  const ret = _origSaveSaleV36.call(this, e);
       if (state.transactions && state.transactions.length) {
         const latest = state.transactions[0];
         if (latest && latest.type === "SALE" && (cropVal || varVal || clsVal)) {
@@ -8864,9 +8766,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV36Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v36 • 36 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v36)";
-    populateSaleCommonCascade();
+    if (verEl) verEl.textContent = "v37 • 37 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 23 Nov 2026 (v37)";
   }
 
   window.addEventListener("DOMContentLoaded", syncV36Dom);
