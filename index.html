@@ -7783,8 +7783,203 @@ setInterval(renderPlanTrackerCard, 60000);
   ["sale", "pur", "vch"].forEach(attachArrowKeyNav);
 })();
 
+
+(function fixPartyDropdownSelectionAndHighlight() {
+  const activeIdxMap = { sale: 0, pur: 0, vch: 0 };
+  const listMap = { sale: [], pur: [], vch: [] };
+
+  function getStartsWithMatches(queryText, selectedPartyId) {
+    const q = (queryText || "").trim().toLowerCase();
+    const sorted = [...(state.parties || [])].sort((a, b) =>
+      String(a.name || "").localeCompare(String(b.name || ""), "hi")
+    );
+    if (!q) return sorted;
+
+    return sorted.filter(p => {
+      const pName = String(p.name || "").trim().toLowerCase();
+      const fullLabel = `${p.name} (${p.village}) — ${p.role}`.toLowerCase();
+      if (selectedPartyId && String(p.id) === String(selectedPartyId) && q === fullLabel) {
+        return true;
+      }
+      return pName.startsWith(q);
+    });
+  }
+
+  window.renderPartyDropdownList = function(prefix, queryText) {
+    const dd = document.getElementById(prefix + "PartyDropdown");
+    if (!dd) return;
+    const trimmed = (queryText || "").trim();
+    const selectedId = document.getElementById(prefix + "PartyId")?.value || "";
+
+    if (!trimmed) {
+      listMap[prefix] = [];
+      activeIdxMap[prefix] = -1;
+      dd.innerHTML = `<div class="px-3.5 py-3 text-xs text-slate-500 bg-white text-center">${(state.parties && state.parties.length) ? "नाम के शुरुआती अक्षर लिखें (जैसे M, MA, MAN) — मिलते नाम नीचे आएंगे" : "पहले पार्टी लेजर में पार्टी जोड़ें"}</div>`;
+      return;
+    }
+
+    const matches = getStartsWithMatches(trimmed, selectedId);
+    listMap[prefix] = matches;
+
+    if (!matches.length) {
+      activeIdxMap[prefix] = -1;
+      dd.innerHTML = `<div class="px-3.5 py-3 text-xs text-rose-600 bg-white font-medium text-center">"${trimmed}" से शुरू होने वाला कोई नाम नहीं मिला</div>`;
+      return;
+    }
+
+    if (activeIdxMap[prefix] < 0 || activeIdxMap[prefix] >= matches.length) {
+      activeIdxMap[prefix] = 0;
+    }
+
+    const curActive = activeIdxMap[prefix];
+
+    dd.innerHTML = matches.map((p, idx) => {
+      const isActive = (idx === curActive);
+      const bal = getPartyBalance(p.id);
+      const encodedId = encodeURIComponent(String(p.id));
+      const tag = bal > 0
+        ? `<span class="num-clean text-[11px] font-bold ${isActive ? 'text-amber-300' : 'text-rose-600'}">लेना: ₹${bal.toLocaleString("en-IN")}</span>`
+        : (bal < 0
+            ? `<span class="num-clean text-[11px] font-bold ${isActive ? 'text-emerald-300' : 'text-[#1EA668]'}">देना: ₹${Math.abs(bal).toLocaleString("en-IN")}</span>`
+            : `<span class="num-clean text-[11px] ${isActive ? 'text-slate-300' : 'text-slate-500'}">₹0</span>`);
+
+      const lightRow = "bg-white text-[#132A46] border-l-4 border-transparent hover:bg-[#1E293B] hover:text-white hover:border-emerald-400 group";
+      const darkActiveRow = "bg-[#1E293B] text-white border-l-4 border-emerald-400 group";
+
+      return `
+        <div role="option"
+          aria-selected="${isActive}"
+          data-party-idx="${idx}"
+          onmouseenter="setPartyHighlightIdx('${prefix}', ${idx})"
+          onmousedown="event.preventDefault(); selectSearchParty('${prefix}', '${encodedId}')"
+          class="px-3.5 py-2.5 ${isActive ? darkActiveRow : lightRow} cursor-pointer flex items-center justify-between gap-2 transition-colors select-none">
+          <div class="min-w-0">
+            <p class="text-xs sm:text-sm font-bold truncate">
+              ${p.name}
+              <span class="text-[10px] font-semibold px-1.5 py-0.5 rounded ml-1 ${isActive ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-700 group-hover:bg-emerald-500 group-hover:text-white'}">${p.role}</span>
+            </p>
+            <p class="text-[11px] ${isActive ? 'text-slate-200' : 'text-slate-500 group-hover:text-slate-200'} truncate mt-0.5">${p.village} • <span class="num-clean">${p.phone || "-"}</span></p>
+          </div>
+          <div class="shrink-0">${tag}</div>
+        </div>
+      `;
+    }).join("");
+  };
+
+  window.setPartyHighlightIdx = function(prefix, idx) {
+    activeIdxMap[prefix] = idx;
+    const input = document.getElementById(prefix + "PartySearch");
+    renderPartyDropdownList(prefix, input ? input.value : "");
+  };
+
+  window.openPartyDropdown = function(prefix) {
+    const input = document.getElementById(prefix + "PartySearch");
+    const dd = document.getElementById(prefix + "PartyDropdown");
+    if (!dd) return;
+    activeIdxMap[prefix] = 0;
+    renderPartyDropdownList(prefix, input ? input.value : "");
+    dd.classList.remove("hidden");
+  };
+
+  window.filterPartyDropdown = function(prefix) {
+    const input = document.getElementById(prefix + "PartySearch");
+    const hiddenEl = document.getElementById(prefix + "PartyId");
+    const dd = document.getElementById(prefix + "PartyDropdown");
+    if (hiddenEl) hiddenEl.value = "";
+    activeIdxMap[prefix] = 0;
+    if (!dd) return;
+    renderPartyDropdownList(prefix, input ? input.value : "");
+    dd.classList.remove("hidden");
+  };
+
+  window.selectSearchParty = function(prefix, rawPartyId) {
+    const targetId = decodeURIComponent(String(rawPartyId || ""));
+    const p = (state.parties || []).find(x => String(x.id) === targetId);
+    if (!p) return;
+    const hiddenEl = document.getElementById(prefix + "PartyId");
+    const searchEl = document.getElementById(prefix + "PartySearch");
+    const dd = document.getElementById(prefix + "PartyDropdown");
+    if (hiddenEl) hiddenEl.value = p.id;
+    if (searchEl) searchEl.value = `${p.name} (${p.village}) — ${p.role}`;
+    if (dd) dd.classList.add("hidden");
+    if (prefix === "sale" && typeof onSalePartyChange === "function") onSalePartyChange();
+    if (prefix === "pur" && typeof onPurPartyChange === "function") onPurPartyChange();
+  };
+
+  window.resolvePartyIdFromField = function(hiddenId, searchId) {
+    const hEl = document.getElementById(hiddenId);
+    const sEl = document.getElementById(searchId);
+    if (hEl && hEl.value && (state.parties || []).some(x => String(x.id) === String(hEl.value))) {
+      return hEl.value;
+    }
+    const typed = (sEl?.value || "").trim().toLowerCase();
+    if (typed && (state.parties || []).length) {
+      const exact = state.parties.find(p =>
+        (`${p.name} (${p.village}) — ${p.role}`).toLowerCase() === typed
+      );
+      if (exact) {
+        if (hEl) hEl.value = exact.id;
+        return exact.id;
+      }
+    }
+    return "";
+  };
+
+  function bindPartyKeyboardKeys(prefix) {
+    const input = document.getElementById(prefix + "PartySearch");
+    if (!input || input.dataset.partyKeyBound === "1") return;
+    input.dataset.partyKeyBound = "1";
+
+    input.addEventListener("keydown", function(e) {
+      const dd = document.getElementById(prefix + "PartyDropdown");
+      const list = listMap[prefix] || [];
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        if (!list.length) return;
+        if (dd && dd.classList.contains("hidden")) {
+          renderPartyDropdownList(prefix, input.value);
+          dd.classList.remove("hidden");
+        }
+        const nextIdx = activeIdxMap[prefix] < list.length - 1 ? activeIdxMap[prefix] + 1 : 0;
+        activeIdxMap[prefix] = nextIdx;
+        renderPartyDropdownList(prefix, input.value);
+        const activeEl = dd?.querySelector(`[data-party-idx="${nextIdx}"]`);
+        if (activeEl) activeEl.scrollIntoView({ block: "nearest" });
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        if (!list.length) return;
+        if (dd && dd.classList.contains("hidden")) {
+          renderPartyDropdownList(prefix, input.value);
+          dd.classList.remove("hidden");
+        }
+        const prevIdx = activeIdxMap[prefix] > 0 ? activeIdxMap[prefix] - 1 : list.length - 1;
+        activeIdxMap[prefix] = prevIdx;
+        renderPartyDropdownList(prefix, input.value);
+        const activeEl = dd?.querySelector(`[data-party-idx="${prevIdx}"]`);
+        if (activeEl) activeEl.scrollIntoView({ block: "nearest" });
+      } else if (e.key === "Enter") {
+        if (dd && !dd.classList.contains("hidden") && list.length) {
+          const pickIdx = (activeIdxMap[prefix] >= 0 && activeIdxMap[prefix] < list.length) ? activeIdxMap[prefix] : 0;
+          const chosen = list[pickIdx];
+          if (chosen) {
+            e.preventDefault();
+            e.stopPropagation();
+            selectSearchParty(prefix, encodeURIComponent(String(chosen.id)));
+          }
+        }
+      } else if (e.key === "Escape") {
+        if (dd) dd.classList.add("hidden");
+      }
+    });
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    ["sale", "pur", "vch"].forEach(bindPartyKeyboardKeys);
+  });
+  ["sale", "pur", "vch"].forEach(bindPartyKeyboardKeys);
+})();
+
 </script>
 </body>
-</html>
-
 </html>
