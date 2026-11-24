@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html lang="hi">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
+"yes">
 <meta name="apple-mobile-web-app-title" content="MunimJi ERP">
 <meta name="theme-color" content="#0F172A">
 <title>MunimJi by Cool Art® — Vaidik Seeds Agri-Seed ERP</title>
@@ -841,10 +836,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v38 • 38 वर्जन</span>
+          <span id="versionBadgeDisplay">v39 • 39 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 24 Nov 2026 (v38)
+          Last Updated On: 24 Nov 2026 (v39)
         </div>
       </div>
     </div>
@@ -1987,27 +1982,55 @@
             </div>
           </div>
 
-          <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-5 space-y-4">
-            <div class="flex items-start justify-between gap-2 border-b border-slate-100 pb-2.5">
+          <div class="bg-white rounded-2xl border border-emerald-200/90 shadow-xs p-4 sm:p-5 space-y-4">
+            <div class="flex items-start justify-between gap-2 border-b border-emerald-100 pb-2.5">
               <div>
                 <h3 class="text-sm sm:text-base font-bold text-[#1EA668]">वैदिक सीड्स के वे उत्पाद जो बिक्री के लिए हैं</h3>
                 <p class="text-[11px] text-slate-500 mt-0.5">जिन्हें हम किसान, वेंडर या अन्य किसी व्यक्ति को बेचते हैं, वे उत्पाद यहाँ जोड़ें।</p>
               </div>
               <span id="saleItemFeedback" class="text-[11px] font-semibold text-[#1EA668] shrink-0"></span>
             </div>
-            <form id="saleItemForm" onsubmit="saveSaleItem(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+
+            <form id="saleItemForm" onsubmit="saveSaleItem(event)" class="space-y-3.5">
               <input type="hidden" id="editSaleItemId" value="">
-              <input type="text" id="finItemName" placeholder="उत्पाद / बीज का नाम *" required class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
-              <input type="text" id="finItemCat" placeholder="कैटेगरी / क्लास *" required class="border border-slate-300 rounded-xl px-3 py-2 text-sm">
-              <input type="number" id="finItemPack" placeholder="पैकेट Kg *" min="1" required class="num-clean border border-slate-300 rounded-xl px-3 py-2 text-sm">
-              <input type="number" step="0.01" id="finItemRate" placeholder="डिफ़ॉल्ट रेट ₹/Kg *" min="0" required class="num-clean border border-slate-300 rounded-xl px-3 py-2 text-sm">
-              <input type="number" id="finItemStock" placeholder="ओपनिंग स्टॉक बैग *" min="0" required class="num-clean border border-slate-300 rounded-xl px-3 py-2 text-sm">
-              <button type="submit" class="bg-[#1EA668] hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl text-sm transition">+ बिक्री उत्पाद सेव करें</button>
+
+              <!-- Top Divided Block: Crop / Variety / Class (Green theme for Sale items) -->
+              <div class="rounded-xl bg-emerald-50/60 border border-emerald-200/90 p-3 space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-bold text-[#1EA668]">फसल, वैरायटी व वर्ग विवरण (बिक्री के लिए)</span>
+                  <span class="text-[10px] font-semibold text-emerald-700 bg-white border border-emerald-200 px-2 py-0.5 rounded-full">बिक्री उत्पाद</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  <input type="text" id="saleCropName" placeholder="उत्पाद / फसल का नाम" class="border border-emerald-300 focus:border-[#1EA668] bg-white rounded-xl px-3 py-2 text-sm text-[#132A46]">
+                  <input type="text" id="saleVarietyName" placeholder="वैरायटी / विवरण" class="border border-emerald-300 focus:border-[#1EA668] bg-white rounded-xl px-3 py-2 text-sm text-[#132A46]">
+                  <input type="text" id="saleClassName" placeholder="वर्ग (उदा. Foundation / Certified)" class="border border-emerald-300 focus:border-[#1EA668] bg-white rounded-xl px-3 py-2 text-sm text-[#132A46]">
+                </div>
+              </div>
+
+              <!-- Bottom Divided Block: Existing Product / Seed Name, Category, Pack Kg, Default Rate, Opening Stock Bags -->
+              <div class="rounded-xl bg-slate-50/70 border border-emerald-200/70 p-3 space-y-2.5">
+                <span class="block text-[11px] font-semibold text-emerald-800">पैकिंग, रेट व ओपनिंग स्टॉक विवरण</span>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <input type="text" id="finItemName" placeholder="उत्पाद / बीज का नाम *" required class="border border-emerald-300 focus:border-[#1EA668] bg-white rounded-xl px-3 py-2 text-sm">
+                  <input type="text" id="finItemCat" placeholder="कैटेगरी / क्लास *" required class="border border-emerald-300 focus:border-[#1EA668] bg-white rounded-xl px-3 py-2 text-sm">
+                  <input type="number" id="finItemPack" placeholder="पैकेट Kg *" min="1" required class="num-clean border border-emerald-300 focus:border-[#1EA668] bg-white rounded-xl px-3 py-2 text-sm">
+                  <input type="number" step="0.01" id="finItemRate" placeholder="डिफ़ॉल्ट रेट ₹/Kg *" min="0" required class="num-clean border border-emerald-300 focus:border-[#1EA668] bg-white rounded-xl px-3 py-2 text-sm">
+                  <input type="number" id="finItemStock" placeholder="ओपनिंग स्टॉक बैग *" min="0" required class="num-clean border border-emerald-300 focus:border-[#1EA668] bg-white rounded-xl px-3 py-2 text-sm">
+                  <button type="submit" class="bg-[#1EA668] hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl text-sm transition">+ बिक्री उत्पाद सेव करें</button>
+                </div>
+              </div>
             </form>
+
             <div class="overflow-x-auto">
-              <table class="w-full text-xs text-left border-t border-slate-100">
-                <thead class="bg-slate-50 text-xs text-slate-500 font-medium">
-                  <tr><th class="py-2 px-2">उत्पाद नाम</th><th class="py-2 px-2">कैटेगरी</th><th class="py-2 px-2">पैकिंग</th><th class="py-2 px-2 text-right">स्टॉक</th><th class="py-2 px-2 text-right">एक्शन</th></tr>
+              <table class="w-full text-xs text-left border-t border-emerald-100">
+                <thead class="bg-emerald-50/70 text-emerald-900 text-xs font-medium">
+                  <tr>
+                    <th class="py-2 px-2">उत्पाद / फसल व वैरायटी</th>
+                    <th class="py-2 px-2">कैटेगरी / वर्ग</th>
+                    <th class="py-2 px-2">पैकिंग</th>
+                    <th class="py-2 px-2 text-right">स्टॉक</th>
+                    <th class="py-2 px-2 text-right">एक्शन</th>
+                  </tr>
                 </thead>
                 <tbody id="saleItemsTable" class="divide-y divide-slate-100">
                   <tr><td colspan="5" class="py-6 text-center text-slate-400">कोई बिक्री उत्पाद नहीं जुड़ा</td></tr>
@@ -6729,8 +6752,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v38",
-  totalVersionsUpdated: 38,
+  currentVersion: "v39",
+  totalVersionsUpdated: 39,
   lastUpdatedDateLabel: "24 Nov 2026"
 };
 
@@ -8118,8 +8141,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncPlanVersionDom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v38 • 38 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v38)";
+    if (verEl) verEl.textContent = "v39 • 39 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v39)";
     if (typeof renderPlanTrackerCard === "function") {
       try { renderPlanTrackerCard(); } catch (e) {}
     }
@@ -8405,8 +8428,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v38 • 38 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v38)";
+    if (verEl) verEl.textContent = "v39 • 39 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v39)";
   });
 })();
 
@@ -8549,8 +8572,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v38 • 38 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v38)";
+    if (verEl) verEl.textContent = "v39 • 39 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v39)";
     if (typeof populatePurchaseCropCascade === "function") {
       populatePurchaseCropCascade();
     }
@@ -8626,8 +8649,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV35Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v38 • 38 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v38)";
+    if (verEl) verEl.textContent = "v39 • 39 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v39)";
     updateLoginTopClockLive();
   }
 
@@ -8747,8 +8770,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV36Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v38 • 38 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v38)";
+    if (verEl) verEl.textContent = "v39 • 39 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v39)";
   }
 
   window.addEventListener("DOMContentLoaded", syncV36Dom);
@@ -8877,8 +8900,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV38Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v38 • 38 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v38)";
+    if (verEl) verEl.textContent = "v39 • 39 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v39)";
     tickAllClocksNow();
     syncDashboardBadges();
   }
@@ -8891,6 +8914,131 @@ setInterval(renderPlanTrackerCard, 60000);
     syncV38Dom();
     forcePullSheetNow();
   });
+})();
+
+
+(function applyV39SaleItemsCropVarietyClass() {
+  if (typeof PLAN_CONFIG === "object" && PLAN_CONFIG) {
+    PLAN_CONFIG.currentVersion = "v39";
+    PLAN_CONFIG.totalVersionsUpdated = 39;
+    PLAN_CONFIG.lastUpdatedDateLabel = "24 Nov 2026";
+  }
+
+  window.saveSaleItem = function(e) {
+    e.preventDefault();
+    const editId = document.getElementById("editSaleItemId")?.value || "";
+    const cropName = (document.getElementById("saleCropName")?.value || "").trim();
+    const varietyName = (document.getElementById("saleVarietyName")?.value || "").trim();
+    const className = (document.getElementById("saleClassName")?.value || "").trim();
+    const baseName = (document.getElementById("finItemName")?.value || "").trim();
+    const catName = (document.getElementById("finItemCat")?.value || "").trim();
+    const packKg = Number(document.getElementById("finItemPack")?.value) || 0;
+    const rate = Number(document.getElementById("finItemRate")?.value) || 0;
+    const stockBags = Number(document.getElementById("finItemStock")?.value) || 0;
+
+    const obj = {
+      id: editId || ("SAL-" + (100 + state.saleItems.length + Math.floor(Math.random() * 900))),
+      masterType: "SALE",
+      cropName,
+      varietyName,
+      className,
+      name: baseName,
+      category: catName,
+      packKg,
+      rate,
+      stockBags,
+      updatedAt: new Date().toISOString().slice(0, 10)
+    };
+
+    if (editId) {
+      const idx = state.saleItems.findIndex(x => x.id === editId);
+      if (idx !== -1) state.saleItems[idx] = obj;
+      document.getElementById("editSaleItemId").value = "";
+    } else {
+      state.saleItems.unshift(obj);
+    }
+
+    saveState();
+    if (typeof syncToGoogleSheet === "function") {
+      syncToGoogleSheet({
+        sheetTab: "Items_Master",
+        actionType: "UPSERT",
+        id: obj.id,
+        masterType: "Finished Sale",
+        name: obj.name,
+        cropName: obj.cropName,
+        varietyName: obj.varietyName,
+        className: obj.className,
+        varietyOrClass: `${obj.category}${obj.className ? " | वर्ग: " + obj.className : ""}`,
+        packKg: obj.packKg,
+        rate: obj.rate,
+        openingStock: obj.stockBags,
+        status: "Active",
+        updatedAt: obj.updatedAt
+      });
+    }
+
+    document.getElementById("saleItemForm")?.reset();
+    const fb = document.getElementById("saleItemFeedback");
+    if (fb) { fb.textContent = `✓ "${obj.name}" जुड़ गया`; setTimeout(() => fb.textContent = "", 2500); }
+    if (typeof renderMasters === "function") renderMasters();
+    if (typeof refreshSelectors === "function") refreshSelectors();
+  };
+
+  window.editSaleItem = function(id) {
+    const it = (state.saleItems || []).find(x => x.id === id);
+    if (!it) return;
+    document.getElementById("editSaleItemId").value = it.id;
+    if (document.getElementById("saleCropName")) document.getElementById("saleCropName").value = it.cropName || "";
+    if (document.getElementById("saleVarietyName")) document.getElementById("saleVarietyName").value = it.varietyName || "";
+    if (document.getElementById("saleClassName")) document.getElementById("saleClassName").value = it.className || "";
+    document.getElementById("finItemName").value = it.name || "";
+    document.getElementById("finItemCat").value = it.category || "";
+    document.getElementById("finItemPack").value = it.packKg || 0;
+    document.getElementById("finItemRate").value = it.rate || 0;
+    document.getElementById("finItemStock").value = it.stockBags || 0;
+  };
+
+  const _origRenderMastersV39 = typeof renderMasters === "function" ? renderMasters : null;
+  window.renderMasters = function() {
+    if (_origRenderMastersV39) _origRenderMastersV39();
+    const st = document.getElementById("saleItemsTable");
+    if (st) {
+      st.innerHTML = (state.saleItems && state.saleItems.length)
+        ? state.saleItems.map(i => {
+            const cropVarLine = [i.cropName, i.varietyName].filter(Boolean).join(" — ");
+            const clsBadge = i.className
+              ? `<span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-900 font-semibold ml-1">वर्ग: ${i.className}</span>`
+              : "";
+            return `
+              <tr>
+                <td class="py-2 px-2">
+                  <p class="font-medium text-[#132A46]">${i.name}</p>
+                  ${cropVarLine ? `<p class="text-[10px] text-emerald-700 font-medium">${cropVarLine}</p>` : ""}
+                </td>
+                <td class="py-2 px-2"><span class="px-2 py-0.5 bg-emerald-50 text-[#1EA668] border border-emerald-200 rounded text-xs font-semibold">${i.category}</span>${clsBadge}</td>
+                <td class="num-clean py-2 px-2">${i.packKg} Kg</td>
+                <td class="num-clean py-2 px-2 text-right font-semibold">${i.stockBags} बैग</td>
+                <td class="py-2 px-2 text-right space-x-1.5">
+                  <button onclick="editSaleItem('${i.id}')" class="text-sky-700 font-semibold underline">Edit</button>
+                  <button onclick="deleteSaleItem('${i.id}')" class="text-rose-600 font-semibold underline">Del</button>
+                </td>
+              </tr>`;
+          }).join("")
+        : `<tr><td colspan="5" class="py-6 text-center text-slate-400">कोई बिक्री उत्पाद नहीं जुड़ा</td></tr>`;
+    }
+  };
+
+  function syncV39Dom() {
+    const verEl = document.getElementById("versionBadgeDisplay");
+    const updEl = document.getElementById("lastUpdatedOnDisplay");
+    if (verEl) verEl.textContent = "v39 • 39 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v39)";
+    if (typeof renderMasters === "function") renderMasters();
+  }
+
+  window.addEventListener("DOMContentLoaded", syncV39Dom);
+  syncV39Dom();
 })();
 
 </script>
