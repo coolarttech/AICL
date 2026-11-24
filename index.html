@@ -313,7 +313,7 @@
     }
   </style>
   <div class="splash-anim flex flex-col items-center px-4 text-center">
-    <img src="logo.png" alt="MunimJi by Cool Art®" class="h-18 sm:h-20 md:h-24 w-auto object-contain mb-2" style="max-height: 92px;">
+    <img src="logo.png" alt="MunimJi by Cool Art®" class="h-12 sm:h-14 md:h-15 w-auto object-contain mb-2" style="max-height: 60px;">
     <span class="text-[11px] font-semibold tracking-wider text-[#132A46] bg-slate-100 px-3.5 py-1 rounded-full border border-slate-200">मुनीम जी ERP • तैयार हो रहा है</span>
     <div class="apple-boot-track" aria-hidden="true">
       <div class="apple-boot-fill"></div>
@@ -841,10 +841,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v40 • 40 वर्जन</span>
+          <span id="versionBadgeDisplay">v42 • 42 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 24 Nov 2026 (v40)
+          Last Updated On: 24 Nov 2026 (v42)
         </div>
       </div>
     </div>
@@ -6733,8 +6733,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v40",
-  totalVersionsUpdated: 40,
+  currentVersion: "v42",
+  totalVersionsUpdated: 42,
   lastUpdatedDateLabel: "24 Nov 2026"
 };
 
@@ -8122,8 +8122,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncPlanVersionDom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v40 • 40 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v40)";
+    if (verEl) verEl.textContent = "v42 • 42 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v42)";
     if (typeof renderPlanTrackerCard === "function") {
       try { renderPlanTrackerCard(); } catch (e) {}
     }
@@ -8409,8 +8409,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v40 • 40 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v40)";
+    if (verEl) verEl.textContent = "v42 • 42 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v42)";
   });
 })();
 
@@ -8553,8 +8553,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v40 • 40 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v40)";
+    if (verEl) verEl.textContent = "v42 • 42 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v42)";
     if (typeof populatePurchaseCropCascade === "function") {
       populatePurchaseCropCascade();
     }
@@ -8630,8 +8630,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV35Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v40 • 40 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v40)";
+    if (verEl) verEl.textContent = "v42 • 42 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v42)";
     updateLoginTopClockLive();
   }
 
@@ -8751,8 +8751,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV36Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v40 • 40 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v40)";
+    if (verEl) verEl.textContent = "v42 • 42 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v42)";
   }
 
   window.addEventListener("DOMContentLoaded", syncV36Dom);
@@ -8881,8 +8881,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV38Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v40 • 40 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v40)";
+    if (verEl) verEl.textContent = "v42 • 42 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v42)";
     tickAllClocksNow();
     syncDashboardBadges();
   }
@@ -9012,13 +9012,115 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV40Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v40 • 40 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v40)";
+    if (verEl) verEl.textContent = "v42 • 42 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v42)";
     if (typeof renderMasters === "function") renderMasters();
   }
 
   window.addEventListener("DOMContentLoaded", syncV40Dom);
   syncV40Dom();
+})();
+
+
+(function applyV42SaleExtraKgAndAutoDesc() {
+  if (typeof PLAN_CONFIG === "object" && PLAN_CONFIG) {
+    PLAN_CONFIG.currentVersion = "v42";
+    PLAN_CONFIG.totalVersionsUpdated = 42;
+    PLAN_CONFIG.lastUpdatedDateLabel = "24 Nov 2026";
+  }
+
+  function computeSeedSaleBreakdown() {
+    const pack = Number(document.getElementById("salePackSize")?.value) || 0;
+    const qty = Number(document.getElementById("saleQty")?.value) || 0;
+    const extraKg = Number(document.getElementById("saleExtraKg")?.value) || 0;
+    const rate = Number(document.getElementById("saleRate")?.value) || 0;
+    const bagsKg = pack * qty;
+    const totalKg = Math.max(0, bagsKg + extraKg);
+    const amount = Math.round(totalKg * rate);
+    const descText = `${qty} बैग (${bagsKg.toLocaleString("en-IN")} Kg) + ${extraKg.toLocaleString("en-IN")} Kg अतिरिक्त = कुल ${totalKg.toLocaleString("en-IN")} Kg`;
+    return { pack, qty, extraKg, rate, bagsKg, totalKg, amount, descText };
+  }
+
+  function refreshSaleAutoDescriptionUi() {
+    const descEl = document.getElementById("saleAutoDescShow");
+    if (!descEl) return;
+    const isMandi = Boolean(document.getElementById("channelMandi")?.checked);
+    if (!isMandi) {
+      const b = computeSeedSaleBreakdown();
+      descEl.textContent = b.descText;
+    } else {
+      const wKg = Number(document.getElementById("mandiWeightKg")?.value) || 0;
+      const rQtl = Number(document.getElementById("mandiRateQtl")?.value) || 0;
+      const ded = Number(document.getElementById("mandiDeductionRs")?.value) || 0;
+      const netRs = Math.max(0, Math.round((wKg / 100) * rQtl) - ded);
+      descEl.textContent = `मंडी वजन: ${wKg.toLocaleString("en-IN")} Kg @ ₹${rQtl}/Qtl − कटौती ₹${ded.toLocaleString("en-IN")} = ₹${netRs.toLocaleString("en-IN")}`;
+    }
+  }
+
+  const _origCalcSaleV42 = typeof calcSaleTotal === "function" ? calcSaleTotal : null;
+  window.calcSaleTotal = function() {
+    if (_origCalcSaleV42) _origCalcSaleV42.apply(this, arguments);
+    const pid = document.getElementById("salePartyId")?.value || "";
+    const editId = document.getElementById("editSaleTxId")?.value || null;
+    const oldBal = typeof getPartyBalance === "function" ? getPartyBalance(pid, editId) : 0;
+    const isMandi = Boolean(document.getElementById("channelMandi")?.checked);
+    const paid = Number(document.getElementById("saleCashPaid")?.value) || 0;
+
+    if (!isMandi) {
+      const b = computeSeedSaleBreakdown();
+      const totalKgEl = document.getElementById("saleTotalKg");
+      const billTotalEl = document.getElementById("saleBillTotal");
+      const netLedgerEl = document.getElementById("saleNetLedger");
+      if (totalKgEl) totalKgEl.innerText = `${b.totalKg.toLocaleString("en-IN")} Kg`;
+      if (billTotalEl) billTotalEl.innerText = `₹${b.amount.toLocaleString("en-IN")}`;
+      if (netLedgerEl) {
+        const newBal = oldBal + b.amount - paid;
+        netLedgerEl.innerText = newBal >= 0
+          ? `₹${newBal.toLocaleString("en-IN")} (लेना है)`
+          : `₹${Math.abs(newBal).toLocaleString("en-IN")} (देना है)`;
+      }
+    }
+    refreshSaleAutoDescriptionUi();
+  };
+
+  const _origSaveSaleV42 = typeof saveSaleInvoice === "function" ? saveSaleInvoice : null;
+  if (_origSaveSaleV42) {
+    window.saveSaleInvoice = function(e) {
+      const isMandi = Boolean(document.getElementById("channelMandi")?.checked);
+      const res = _origSaveSaleV42.apply(this, arguments);
+      if (!isMandi && state.transactions && state.transactions.length) {
+        const b = computeSeedSaleBreakdown();
+        const latest = state.transactions[0];
+        if (latest && latest.type === "SALE" && latest.saleChannel !== "Mandi Supply") {
+          latest.extraKg = b.extraKg;
+          latest.totalKg = b.totalKg;
+          latest.amount = b.amount;
+          latest.note = `${b.qty} बैग (${b.pack}kg) + ${b.extraKg}kg अतिरिक्त = ${b.totalKg}kg @ ₹${b.rate}/kg`;
+          saveState();
+        }
+      }
+      return res;
+    };
+  }
+
+  ["salePackSize", "saleQty", "saleExtraKg", "saleRate", "mandiWeightKg", "mandiRateQtl", "mandiDeductionRs"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("input", () => window.calcSaleTotal());
+      el.addEventListener("change", () => window.calcSaleTotal());
+    }
+  });
+
+  function syncV42Dom() {
+    const verEl = document.getElementById("versionBadgeDisplay");
+    const updEl = document.getElementById("lastUpdatedOnDisplay");
+    if (verEl) verEl.textContent = "v42 • 42 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v42)";
+    if (typeof window.calcSaleTotal === "function") window.calcSaleTotal();
+  }
+
+  window.addEventListener("DOMContentLoaded", syncV42Dom);
+  syncV42Dom();
 })();
 
 </script>
