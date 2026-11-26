@@ -846,10 +846,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v46 • 46 वर्जन</span>
+          <span id="versionBadgeDisplay">v48 • 48 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 26 Nov 2026 (v46)
+          Last Updated On: 26 Nov 2026 (v48)
         </div>
       </div>
     </div>
@@ -1322,31 +1322,19 @@
 
             <div id="seedSaleFields" class="bg-emerald-50/40 p-4 rounded-xl border border-emerald-200/80 space-y-3">
               <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-emerald-200/70">
-                <span class="text-xs font-bold text-[#132A46]">बिक्री आइटम लाइनें (एक या अधिक आइटम जोड़ें)</span>
-                <button type="button" onclick="addSaleLineRow()" class="px-3 py-1 rounded-lg bg-[#1EA668] hover:bg-emerald-700 text-white text-xs font-bold shadow-2xs transition">+ दूसरी आइटम लाइन जोड़ें</button>
+                <span class="text-xs font-bold text-[#132A46]">बिक्री आइटम विवरण (इनवॉइस टेबल — एक या अधिक लाइनें)</span>
               </div>
               <div id="saleMultiLinesContainer" class="space-y-2.5"></div>
-              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-3.5">
-                <div class="sm:col-span-2">
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">आइटम चुनें (Items Master से) *</label>
-                  <select id="saleItemId" onchange="onSaleItemChange()" class="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm bg-white"></select>
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">पैकेट / बैग साइज (Kg)</label>
-                  <input type="number" id="salePackSize" value="0" min="0" oninput="calcSaleTotal()" class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm bg-white">
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">बैग संख्या (Qty Bags)</label>
-                  <input type="number" id="saleQty" value="0" min="0" oninput="calcSaleTotal()" class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm bg-white">
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-emerald-900 mb-1">बैग के अतिरिक्त वजन (Kg)</label>
-                  <input type="number" step="0.01" id="saleExtraKg" value="0" min="0" oninput="calcSaleTotal()" placeholder="उदा. 2" class="num-clean w-full border border-emerald-300 rounded-xl px-3 py-2.5 text-sm font-semibold bg-white">
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">रेट (₹ प्रति Kg)</label>
-                  <input type="number" step="0.01" id="saleRate" value="0" min="0" oninput="calcSaleTotal()" class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm bg-white">
-                </div>
+              <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+                <span class="text-[11px] text-slate-500">दूसरी या अगली आइटम लाइन नीचे जोड़ें:</span>
+                <button type="button" onclick="addSaleLineRow()" class="px-3.5 py-1.5 rounded-lg bg-[#1EA668] hover:bg-emerald-700 text-white text-xs font-bold shadow-2xs transition">+ दूसरी आइटम लाइन जोड़ें</button>
+              </div>
+              <div class="hidden">
+                <select id="saleItemId" onchange="onSaleItemChange()"></select>
+                <input type="number" id="salePackSize" value="0">
+                <input type="number" id="saleQty" value="0">
+                <input type="number" step="0.01" id="saleExtraKg" value="0">
+                <input type="number" step="0.01" id="saleRate" value="0">
               </div>
               <div class="bg-white border border-emerald-200 rounded-xl px-3.5 py-2 text-xs text-slate-700 flex flex-wrap items-center justify-between gap-2">
                 <span class="font-semibold text-[#132A46]">आइटम विवरण (Auto):</span>
@@ -1516,12 +1504,26 @@
 
             <div id="purPartyBanner" class="hidden bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs grid grid-cols-2 md:grid-cols-5 gap-3"></div>
 
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 border-y-2 border-slate-300 py-3 bg-slate-50/50 px-3 rounded-lg">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">धर्मकांटा पर्ची नं.</label>
+                <input type="text" id="purKantaSlip" placeholder="उदा. KS-101" class="num-clean w-full border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">गाड़ी / ट्रैक्टर नंबर</label>
+                <input type="text" id="purVehicle" placeholder="उदा. UP81-5521" class="num-clean w-full border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white">
+              </div>
+            </div>
+
             <div class="bg-sky-50/35 p-3.5 rounded-xl border border-sky-200/80 space-y-3">
               <div class="flex flex-wrap items-center justify-between gap-2 pb-1.5 border-b border-sky-200/70">
-                <span class="text-xs font-bold text-[#132A46]">खरीद फसल / आइटम लाइनें (एक या अधिक लाइन जोड़ें)</span>
-                <button type="button" onclick="addPurchaseLineRow()" class="px-3 py-1 rounded-lg bg-[#132A46] hover:bg-slate-800 text-white text-xs font-bold shadow-2xs transition">+ दूसरी खरीद लाइन जोड़ें</button>
+                <span class="text-xs font-bold text-[#132A46]">खरीद फसल / आइटम विवरण (इनवॉइस लाइनें — भर्ती बैग साइज, गोदाम बोरी, कुल कट्टे, अतिरिक्त वजन व खरीद भाव)</span>
               </div>
               <div id="purMultiLinesContainer" class="space-y-2.5"></div>
+              <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+                <span class="text-[11px] text-slate-500">दूसरी या अगली खरीद लाइन नीचे जोड़ें (हर लाइन का अपना सब-टोटल जुड़ेगा):</span>
+                <button type="button" onclick="addPurchaseLineRow()" class="px-3.5 py-1.5 rounded-lg bg-[#132A46] hover:bg-slate-800 text-white text-xs font-bold shadow-2xs transition">+ दूसरी खरीद लाइन जोड़ें</button>
+              </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 hidden">
               <div>
@@ -1541,63 +1543,34 @@
                 <input type="hidden" id="purClassDisplay" value="">
               </div>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1">धर्मकांटा पर्ची नं.</label>
-                <input type="text" id="purKantaSlip" placeholder="उदा. KS-101" class="num-clean w-full border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm bg-white">
+
+            <div class="bg-white p-3.5 rounded-lg border-2 border-slate-300 space-y-3">
+              <div class="bg-slate-50 border border-slate-300 rounded-lg px-3.5 py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <span class="text-slate-700 font-bold">कुल भर्ती वजन (बैग × साइज + अतिरिक्त वजन):</span>
+                <span id="purAutoGrossWeightShow" class="num-clean text-sm font-extrabold text-[#132A46]">0 Kg (0.00 क्विंटल)</span>
               </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1">गाड़ी / ट्रैक्टर नंबर</label>
-                <input type="text" id="purVehicle" placeholder="उदा. UP81-5521" class="num-clean w-full border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm bg-white">
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-1">
+                <div>
+                  <label class="block text-xs font-bold text-amber-900 mb-1">कद्दा कटौती (%)</label>
+                  <input type="number" step="0.01" id="purKaddaPct" value="1" min="0" oninput="calcPurchaseTotal()" class="num-clean w-full border border-amber-400 rounded-lg px-3 py-2 text-sm font-bold bg-white">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">कटौती: लेबर चार्ज (₹)</label>
+                  <input type="number" id="purLaborDed" value="0" min="0" oninput="calcPurchaseTotal()" class="num-clean w-full border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">कटौती: ट्रांसपोर्ट / भाड़ा (₹)</label>
+                  <input type="number" id="purTransDed" value="0" min="0" oninput="calcPurchaseTotal()" class="num-clean w-full border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white">
+                </div>
               </div>
             </div>
 
-            <div class="bg-sky-50/40 p-4 rounded-xl border border-sky-200/80 space-y-4">
-              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                <div>
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">भर्ती बैग साइज (गोदाम बोरी)</label>
-                  <select id="purBagSize" onchange="calcPurchaseTotal()" class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm bg-white">
-                    <option value="50">50 Kg बोरी</option>
-                    <option value="55">55 Kg बोरी</option>
-                    <option value="60">60 Kg बोरी</option>
-                    <option value="40">40 Kg बोरी</option>
-                  </select>
-                </div>
-                <div>
-                  <label id="purBagsLabel" class="block text-xs font-semibold text-slate-700 mb-1">कुल कट्टे / बैग (किसान से खरीदे गए)</label>
-                  <input type="number" id="purBags" value="0" min="0" oninput="calcPurchaseTotal()" class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm font-semibold bg-white">
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-sky-900 mb-1">बोरी के अतिरिक्त वजन (Kg)</label>
-                  <input type="number" step="0.01" id="purExtraKg" value="0" min="0" oninput="calcPurchaseTotal()" placeholder="उदा. 25 या 0" class="num-clean w-full border border-sky-300 rounded-xl px-3 py-2.5 text-sm font-semibold bg-white">
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">खरीद भाव (₹ / क्विंटल) *</label>
-                  <input type="number" step="0.01" id="purRateQtl" value="0" min="0" oninput="calcPurchaseTotal()" required class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm font-semibold bg-white">
-                </div>
-              </div>
-
-              <!-- Auto Calculated Total Weight Banner (Bags * BagSize + Extra Kg -> Kg & Quintal) -->
-              <div class="bg-white border border-sky-200 rounded-xl px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
-                <span class="text-slate-600 font-medium">कुल भर्ती वजन (बैग × साइज + अतिरिक्त वजन):</span>
-                <span id="purAutoGrossWeightShow" class="num-clean text-sm font-bold text-[#132A46]">0 Kg (0.00 क्विंटल)</span>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-sky-200/60">
-                <div>
-                  <label class="block text-xs font-semibold text-amber-800 mb-1">कद्दा कटौती (%)</label>
-                  <input type="number" step="0.01" id="purKaddaPct" value="1" min="0" oninput="calcPurchaseTotal()" class="num-clean w-full border border-amber-300 rounded-xl px-3 py-2 text-sm font-semibold bg-white">
-                </div>
-                <div>
-                  <label class="block text-xs font-medium text-slate-600 mb-1">कटौती: लेबर चार्ज (₹)</label>
-                  <input type="number" id="purLaborDed" value="0" min="0" oninput="calcPurchaseTotal()" class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white">
-                </div>
-                <div>
-                  <label class="block text-xs font-medium text-slate-600 mb-1">कटौती: ट्रांसपोर्ट / भाड़ा (₹)</label>
-                  <input type="number" id="purTransDed" value="0" min="0" oninput="calcPurchaseTotal()" class="num-clean w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white">
-                </div>
-
-              </div>
+            <div class="hidden">
+              <select id="purBagSize"><option value="50" selected>50</option></select>
+              <input type="number" id="purBags" value="0">
+              <input type="number" step="0.01" id="purExtraKg" value="0">
+              <input type="number" step="0.01" id="purRateQtl" value="0">
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-6 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200 items-center">
@@ -6787,8 +6760,8 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v46",
-  totalVersionsUpdated: 46,
+  currentVersion: "v48",
+  totalVersionsUpdated: 48,
   lastUpdatedDateLabel: "26 Nov 2026"
 };
 
@@ -8176,8 +8149,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncPlanVersionDom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v46 • 46 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v46)";
+    if (verEl) verEl.textContent = "v48 • 48 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v48)";
     if (typeof renderPlanTrackerCard === "function") {
       try { renderPlanTrackerCard(); } catch (e) {}
     }
@@ -8463,8 +8436,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v46 • 46 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v46)";
+    if (verEl) verEl.textContent = "v48 • 48 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v48)";
   });
 })();
 
@@ -8607,8 +8580,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v46 • 46 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v46)";
+    if (verEl) verEl.textContent = "v48 • 48 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v48)";
     if (typeof populatePurchaseCropCascade === "function") {
       populatePurchaseCropCascade();
     }
@@ -8684,8 +8657,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV35Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v46 • 46 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v46)";
+    if (verEl) verEl.textContent = "v48 • 48 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v48)";
     updateLoginTopClockLive();
   }
 
@@ -8805,8 +8778,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV36Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v46 • 46 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v46)";
+    if (verEl) verEl.textContent = "v48 • 48 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v48)";
   }
 
   window.addEventListener("DOMContentLoaded", syncV36Dom);
@@ -8935,8 +8908,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV38Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v46 • 46 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v46)";
+    if (verEl) verEl.textContent = "v48 • 48 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v48)";
     tickAllClocksNow();
     syncDashboardBadges();
   }
@@ -9066,8 +9039,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV40Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v46 • 46 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v46)";
+    if (verEl) verEl.textContent = "v48 • 48 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v48)";
     if (typeof renderMasters === "function") renderMasters();
   }
 
@@ -9168,8 +9141,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV42Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v46 • 46 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v46)";
+    if (verEl) verEl.textContent = "v48 • 48 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v48)";
     if (typeof window.calcSaleTotal === "function") window.calcSaleTotal();
   }
 
@@ -9688,8 +9661,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV44Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v46 • 46 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v46)";
+    if (verEl) verEl.textContent = "v48 • 48 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v48)";
     window.renderSaleLineRows();
     window.renderPurchaseLineRows();
   }
@@ -10293,8 +10266,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV45Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v46 • 46 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v46)";
+    if (verEl) verEl.textContent = "v48 • 48 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v48)";
   }
 
   window.addEventListener("DOMContentLoaded", syncV45Dom);
@@ -10317,11 +10290,750 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV46Ui() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v46 • 46 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v46)";
+    if (verEl) verEl.textContent = "v48 • 48 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v48)";
   }
   window.addEventListener("DOMContentLoaded", syncV46Ui);
   syncV46Ui();
+})();
+
+
+(function applyV47CleanInvoiceTablesAndLineTotals() {
+  if (typeof PLAN_CONFIG === "object" && PLAN_CONFIG) {
+    PLAN_CONFIG.currentVersion = "v47";
+    PLAN_CONFIG.totalVersionsUpdated = 47;
+    PLAN_CONFIG.lastUpdatedDateLabel = "26 Nov 2026";
+  }
+
+  // Ensure helper getters exist
+  function esc(v) {
+    return String(v ?? "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+  }
+
+  let sLines = [{ itemId: "", packKg: 0, qty: 0, extraKg: 0, rate: 0 }];
+  let pLines = [{ itemName: (state.rawItems && state.rawItems[0] ? state.rawItems[0].name : ""), bagSize: 50, bags: 0, extraKg: 0, rateQtl: 0 }];
+
+  function syncSaleHiddenFirst() {
+    const f = sLines[0] || { itemId: "", packKg: 0, qty: 0, extraKg: 0, rate: 0 };
+    if (document.getElementById("saleItemId")) document.getElementById("saleItemId").value = f.itemId || "";
+    if (document.getElementById("salePackSize")) document.getElementById("salePackSize").value = f.packKg || 0;
+    if (document.getElementById("saleQty")) document.getElementById("saleQty").value = f.qty || 0;
+    if (document.getElementById("saleExtraKg")) document.getElementById("saleExtraKg").value = f.extraKg || 0;
+    if (document.getElementById("saleRate")) document.getElementById("saleRate").value = f.rate || 0;
+  }
+
+  function syncPurHiddenFirst() {
+    const f = pLines[0] || { itemName: "", bagSize: 50, bags: 0, extraKg: 0, rateQtl: 0 };
+    if (document.getElementById("purBagSize")) document.getElementById("purBagSize").value = f.bagSize || 50;
+    if (document.getElementById("purBags")) document.getElementById("purBags").value = f.bags || 0;
+    if (document.getElementById("purExtraKg")) document.getElementById("purExtraKg").value = f.extraKg || 0;
+    if (document.getElementById("purRateQtl")) document.getElementById("purRateQtl").value = f.rateQtl || 0;
+  }
+
+  function formatLineHeading(prefix, idx) {
+    return `${prefix} लाइन ${idx + 1}`;
+  }
+
+  window.renderSaleLineRows = function() {
+    if (!Array.isArray(sLines) || !sLines.length) sLines = [{ itemId: "", packKg: 0, qty: 0, extraKg: 0, rate: 0 }];
+    const box = document.getElementById("saleMultiLinesContainer");
+    if (!box) return;
+
+    const rowsHtml = sLines.map((ln, idx) => {
+      const pKg = Number(ln.packKg) || 0;
+      const qBags = Number(ln.qty) || 0;
+      const eKg = Number(ln.extraKg) || 0;
+      const rKg = Number(ln.rate) || 0;
+      const lKg = Math.max(0, (pKg * qBags) + eKg);
+      const lAmt = Math.round(lKg * rKg);
+
+      return `
+        <tr class="border-b-2 border-slate-300 bg-white">
+          <td class="py-2.5 px-2.5 border-r border-slate-300 align-top whitespace-nowrap">
+            <span class="inline-block font-extrabold text-xs text-[#132A46] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">${formatLineHeading("लाइन", idx)}</span>
+          </td>
+          <td class="py-2 px-2.5 border-r border-slate-300 min-w-[175px]">
+            <select onchange="onSaleLineItemSelect(${idx}, this.value)" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs sm:text-sm bg-white font-semibold text-[#132A46]">
+              ${window.getSaleItemOptionsHtml ? window.getSaleItemOptionsHtml(ln.itemId) : `<option value="">-- आइटम चुनें --</option>`}
+            </select>
+          </td>
+          <td class="py-2 px-2 border-r border-slate-300 w-24">
+            <input type="number" value="${pKg}" min="0" oninput="onSaleLineField(${idx}, 'packKg', this.value)" class="num-clean w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs sm:text-sm text-right bg-white">
+          </td>
+          <td class="py-2 px-2 border-r border-slate-300 w-24">
+            <input type="number" value="${qBags}" min="0" oninput="onSaleLineField(${idx}, 'qty', this.value)" class="num-clean w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs sm:text-sm text-right bg-white">
+          </td>
+          <td class="py-2 px-2 border-r border-slate-300 w-24">
+            <input type="number" step="0.01" value="${eKg}" min="0" oninput="onSaleLineField(${idx}, 'extraKg', this.value)" class="num-clean w-full border border-emerald-300 rounded-lg px-2 py-1.5 text-xs sm:text-sm text-right font-semibold bg-white">
+          </td>
+          <td class="py-2 px-2 border-r border-slate-300 w-24">
+            <input type="number" step="0.01" value="${rKg}" min="0" oninput="onSaleLineField(${idx}, 'rate', this.value)" class="num-clean w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs sm:text-sm text-right font-semibold bg-white">
+          </td>
+          <td class="py-2 px-2.5 border-r border-slate-300 text-right whitespace-nowrap">
+            <div class="num-clean text-xs font-bold text-[#132A46]">${lKg.toLocaleString("en-IN")} Kg</div>
+            <div class="num-clean text-xs font-extrabold text-[#1EA668]">₹${lAmt.toLocaleString("en-IN")}</div>
+          </td>
+          <td class="py-2 px-2 text-center whitespace-nowrap">
+            ${sLines.length > 1
+              ? `<button type="button" onclick="removeSaleLineRow(${idx})" class="px-2 py-1 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold">हटाएं</button>`
+              : `<span class="text-[11px] text-slate-400">—</span>`}
+          </td>
+        </tr>
+      `;
+    }).join("");
+
+    const sumKg = sLines.reduce((s, ln) => s + Math.max(0, (Number(ln.packKg) || 0) * (Number(ln.qty) || 0) + (Number(ln.extraKg) || 0)), 0);
+    const sumAmt = sLines.reduce((s, ln) => {
+      const lKg = Math.max(0, (Number(ln.packKg) || 0) * (Number(ln.qty) || 0) + (Number(ln.extraKg) || 0));
+      return s + Math.round(lKg * (Number(ln.rate) || 0));
+    }, 0);
+
+    box.innerHTML = `
+      <div class="border-2 border-slate-400 rounded-xl overflow-x-auto bg-white">
+        <table class="w-full text-xs border-collapse text-left">
+          <thead>
+            <tr class="bg-[#132A46] text-white border-b-2 border-slate-400">
+              <th class="py-2 px-2.5 border-r border-slate-600 font-bold">लाइन</th>
+              <th class="py-2 px-2.5 border-r border-slate-600 font-bold">आइटम / वर्ग</th>
+              <th class="py-2 px-2 border-r border-slate-600 font-bold text-right">बैग (Kg)</th>
+              <th class="py-2 px-2 border-r border-slate-600 font-bold text-right">संख्या</th>
+              <th class="py-2 px-2 border-r border-slate-600 font-bold text-right">अतिरिक्त Kg</th>
+              <th class="py-2 px-2 border-r border-slate-600 font-bold text-right">रेट (₹)</th>
+              <th class="py-2 px-2.5 border-r border-slate-600 font-bold text-right">लाइन कुल</th>
+              <th class="py-2 px-2 font-bold text-center">एक्शन</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml}
+          </tbody>
+          <tfoot>
+            <tr class="bg-emerald-50/90 border-t-2 border-slate-400 font-extrabold text-[#132A46]">
+              <td colspan="6" class="py-2 px-3 border-r border-slate-300 text-right">सभी लाइनों का कुल योग (Total):</td>
+              <td class="py-2 px-2.5 border-r border-slate-300 text-right num-clean whitespace-nowrap">
+                <div>${sumKg.toLocaleString("en-IN")} Kg</div>
+                <div class="text-[#1EA668]">₹${sumAmt.toLocaleString("en-IN")}</div>
+              </td>
+              <td class="py-2 px-2 text-center"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    `;
+    syncSaleHiddenFirst();
+  };
+
+  window.addSaleLineRow = function() {
+    sLines.push({ itemId: "", packKg: 0, qty: 0, extraKg: 0, rate: 0 });
+    window.renderSaleLineRows();
+    window.calcSaleTotal();
+  };
+
+  window.removeSaleLineRow = function(idx) {
+    if (sLines.length <= 1) return;
+    sLines.splice(idx, 1);
+    window.renderSaleLineRows();
+    window.calcSaleTotal();
+  };
+
+  window.onSaleLineItemSelect = function(idx, itemId) {
+    const found = (state.saleItems || []).find(x => String(x.id) === String(itemId));
+    sLines[idx].itemId = itemId;
+    if (found) {
+      sLines[idx].packKg = Number(found.packKg) || sLines[idx].packKg || 0;
+      sLines[idx].rate = Number(found.rate) || sLines[idx].rate || 0;
+    }
+    window.renderSaleLineRows();
+    window.calcSaleTotal();
+  };
+
+  window.onSaleLineField = function(idx, field, val) {
+    if (!sLines[idx]) return;
+    sLines[idx][field] = Number(val) || 0;
+    syncSaleHiddenFirst();
+    window.renderSaleLineRows();
+    window.calcSaleTotal();
+  };
+
+  window.renderPurchaseLineRows = function() {
+    if (!Array.isArray(pLines) || !pLines.length) {
+      pLines = [{ itemName: (state.rawItems && state.rawItems[0] ? state.rawItems[0].name : ""), bagSize: 50, bags: 0, extraKg: 0, rateQtl: 0 }];
+    }
+    const box = document.getElementById("purMultiLinesContainer");
+    if (!box) return;
+    const kPct = Number(document.getElementById("purKaddaPct")?.value ?? 1);
+
+    const rowsHtml = pLines.map((ln, idx) => {
+      const bSz = Number(ln.bagSize) || 50;
+      const bCnt = Number(ln.bags) || 0;
+      const eKg = Number(ln.extraKg) || 0;
+      const rQtl = Number(ln.rateQtl) || 0;
+      const gKg = Math.max(0, (bCnt * bSz) + eKg);
+      const kKg = Math.round((gKg * kPct) / 100);
+      const nKg = Math.max(0, gKg - kKg);
+      const lAmt = Math.round((nKg / 100) * rQtl);
+
+      return `
+        <tr class="border-b-2 border-slate-300 bg-white">
+          <td class="py-2.5 px-2.5 border-r border-slate-300 align-top whitespace-nowrap">
+            <span class="inline-block font-extrabold text-xs text-[#132A46] bg-sky-50 border border-sky-200 px-2 py-0.5 rounded">${formatLineHeading("लाइन", idx)}</span>
+          </td>
+          <td class="py-2 px-2.5 border-r border-slate-300 min-w-[165px]">
+            <select onchange="onPurLineField(${idx}, 'itemName', this.value)" class="w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs sm:text-sm bg-white font-semibold text-[#132A46]">
+              ${window.getRawItemOptionsHtml ? window.getRawItemOptionsHtml(ln.itemName) : `<option value="">-- फसल चुनें --</option>`}
+            </select>
+          </td>
+          <td class="py-2 px-2 border-r border-slate-300 w-24">
+            <select onchange="onPurLineField(${idx}, 'bagSize', Number(this.value))" class="num-clean w-full border border-slate-300 rounded-lg px-1.5 py-1.5 text-xs sm:text-sm bg-white">
+              <option value="50" ${bSz===50?"selected":""}>50 Kg</option>
+              <option value="55" ${bSz===55?"selected":""}>55 Kg</option>
+              <option value="60" ${bSz===60?"selected":""}>60 Kg</option>
+              <option value="40" ${bSz===40?"selected":""}>40 Kg</option>
+            </select>
+          </td>
+          <td class="py-2 px-2 border-r border-slate-300 w-20">
+            <input type="number" value="${bCnt}" min="0" oninput="onPurLineField(${idx}, 'bags', Number(this.value))" class="num-clean w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs sm:text-sm text-right font-semibold bg-white">
+          </td>
+          <td class="py-2 px-2 border-r border-slate-300 w-24">
+            <input type="number" step="0.01" value="${eKg}" min="0" oninput="onPurLineField(${idx}, 'extraKg', Number(this.value))" class="num-clean w-full border border-sky-300 rounded-lg px-2 py-1.5 text-xs sm:text-sm text-right font-semibold bg-white">
+          </td>
+          <td class="py-2 px-2 border-r border-slate-300 w-24">
+            <input type="number" step="0.01" value="${rQtl}" min="0" oninput="onPurLineField(${idx}, 'rateQtl', Number(this.value))" class="num-clean w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs sm:text-sm text-right font-semibold bg-white">
+          </td>
+          <td class="py-2 px-2.5 border-r border-slate-300 text-right whitespace-nowrap">
+            <div class="num-clean text-xs font-bold text-[#132A46]">शुद्ध: ${nKg.toLocaleString("en-IN")} Kg</div>
+            <div class="num-clean text-xs font-extrabold text-sky-800">₹${lAmt.toLocaleString("en-IN")}</div>
+          </td>
+          <td class="py-2 px-2 text-center whitespace-nowrap">
+            ${pLines.length > 1
+              ? `<button type="button" onclick="removePurchaseLineRow(${idx})" class="px-2 py-1 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold">हटाएं</button>`
+              : `<span class="text-[11px] text-slate-400">—</span>`}
+          </td>
+        </tr>
+      `;
+    }).join("");
+
+    const sumNetKg = pLines.reduce((s, ln) => {
+      const gKg = Math.max(0, (Number(ln.bags) || 0) * (Number(ln.bagSize) || 50) + (Number(ln.extraKg) || 0));
+      const kKg = Math.round((gKg * kPct) / 100);
+      return s + Math.max(0, gKg - kKg);
+    }, 0);
+    const sumAmt = pLines.reduce((s, ln) => {
+      const gKg = Math.max(0, (Number(ln.bags) || 0) * (Number(ln.bagSize) || 50) + (Number(ln.extraKg) || 0));
+      const kKg = Math.round((gKg * kPct) / 100);
+      const nKg = Math.max(0, gKg - kKg);
+      return s + Math.round((nKg / 100) * (Number(ln.rateQtl) || 0));
+    }, 0);
+
+    box.innerHTML = `
+      <div class="border-2 border-slate-400 rounded-xl overflow-x-auto bg-white">
+        <table class="w-full text-xs border-collapse text-left">
+          <thead>
+            <tr class="bg-[#132A46] text-white border-b-2 border-slate-400">
+              <th class="py-2 px-2.5 border-r border-slate-600 font-bold">लाइन</th>
+              <th class="py-2 px-2.5 border-r border-slate-600 font-bold">फसल / आइटम</th>
+              <th class="py-2 px-2 border-r border-slate-600 font-bold text-right">बैग साइज</th>
+              <th class="py-2 px-2 border-r border-slate-600 font-bold text-right">कट्टे</th>
+              <th class="py-2 px-2 border-r border-slate-600 font-bold text-right">अतिरिक्त Kg</th>
+              <th class="py-2 px-2 border-r border-slate-600 font-bold text-right">भाव (₹/Qtl)</th>
+              <th class="py-2 px-2.5 border-r border-slate-600 font-bold text-right">लाइन कुल</th>
+              <th class="py-2 px-2 font-bold text-center">एक्शन</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml}
+          </tbody>
+          <tfoot>
+            <tr class="bg-sky-50/90 border-t-2 border-slate-400 font-extrabold text-[#132A46]">
+              <td colspan="6" class="py-2 px-3 border-r border-slate-300 text-right">सभी लाइनों का कुल योग (Total):</td>
+              <td class="py-2 px-2.5 border-r border-slate-300 text-right num-clean whitespace-nowrap">
+                <div>${sumNetKg.toLocaleString("en-IN")} Kg</div>
+                <div class="text-sky-800">₹${sumAmt.toLocaleString("en-IN")}</div>
+              </td>
+              <td class="py-2 px-2 text-center"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    `;
+    syncPurHiddenFirst();
+  };
+
+  window.addPurchaseLineRow = function() {
+    const defItem = (state.rawItems && state.rawItems[0] ? state.rawItems[0].name : "");
+    pLines.push({ itemName: defItem, bagSize: 50, bags: 0, extraKg: 0, rateQtl: 0 });
+    window.renderPurchaseLineRows();
+    window.calcPurchaseTotal();
+  };
+
+  window.removePurchaseLineRow = function(idx) {
+    if (pLines.length <= 1) return;
+    pLines.splice(idx, 1);
+    window.renderPurchaseLineRows();
+    window.calcPurchaseTotal();
+  };
+
+  window.onPurLineField = function(idx, field, val) {
+    if (!pLines[idx]) return;
+    pLines[idx][field] = (field === "itemName") ? val : (Number(val) || 0);
+    syncPurHiddenFirst();
+    window.renderPurchaseLineRows();
+    window.calcPurchaseTotal();
+  };
+
+  window.calcSaleTotal = function() {
+    const pid = document.getElementById("salePartyId")?.value || "";
+    const editId = document.getElementById("editSaleTxId")?.value || null;
+    const oldBal = typeof getPartyBalance === "function" ? getPartyBalance(pid, editId) : 0;
+    const isMandi = Boolean(document.getElementById("channelMandi")?.checked);
+    const paid = Number(document.getElementById("saleCashPaid")?.value) || 0;
+
+    if (!isMandi) {
+      let totalKg = 0;
+      let billAmt = 0;
+      let totalBags = 0;
+      let totalExtra = 0;
+      sLines.forEach(ln => {
+        const pKg = Number(ln.packKg) || 0;
+        const qBags = Number(ln.qty) || 0;
+        const eKg = Number(ln.extraKg) || 0;
+        const rKg = Number(ln.rate) || 0;
+        const lKg = Math.max(0, (pKg * qBags) + eKg);
+        totalKg += lKg;
+        totalBags += qBags;
+        totalExtra += eKg;
+        billAmt += Math.round(lKg * rKg);
+      });
+      const newBal = oldBal + billAmt - paid;
+      if (document.getElementById("saleTotalKg")) document.getElementById("saleTotalKg").innerText = `${totalKg.toLocaleString("en-IN")} Kg`;
+      if (document.getElementById("saleBillTotal")) document.getElementById("saleBillTotal").innerText = `₹${billAmt.toLocaleString("en-IN")}`;
+      if (document.getElementById("saleNetLedger")) {
+        document.getElementById("saleNetLedger").innerText = newBal >= 0
+          ? `₹${newBal.toLocaleString("en-IN")} (लेना है)`
+          : `₹${Math.abs(newBal).toLocaleString("en-IN")} (देना है)`;
+      }
+      if (document.getElementById("saleAutoDescShow")) {
+        document.getElementById("saleAutoDescShow").textContent = `${sLines.length} लाइन • ${totalBags} बैग + ${totalExtra} Kg अतिरिक्त = कुल ${totalKg.toLocaleString("en-IN")} Kg`;
+      }
+    } else {
+      const totalKg = Number(document.getElementById("mandiWeightKg")?.value) || 0;
+      const rateQtl = Number(document.getElementById("mandiRateQtl")?.value) || 0;
+      const ded = Number(document.getElementById("mandiDeductionRs")?.value) || 0;
+      const billAmt = Math.max(0, Math.round((totalKg / 100) * rateQtl) - ded);
+      const newBal = oldBal + billAmt - paid;
+      if (document.getElementById("saleTotalKg")) document.getElementById("saleTotalKg").innerText = `${totalKg.toLocaleString("en-IN")} Kg`;
+      if (document.getElementById("saleBillTotal")) document.getElementById("saleBillTotal").innerText = `₹${billAmt.toLocaleString("en-IN")}`;
+      if (document.getElementById("saleNetLedger")) {
+        document.getElementById("saleNetLedger").innerText = newBal >= 0
+          ? `₹${newBal.toLocaleString("en-IN")} (लेना है)`
+          : `₹${Math.abs(newBal).toLocaleString("en-IN")} (देना है)`;
+      }
+    }
+  };
+
+  window.calcPurchaseTotal = function() {
+    const pid = document.getElementById("purPartyId")?.value || "";
+    const editId = document.getElementById("editPurTxId")?.value || null;
+    const oldBal = typeof getPartyBalance === "function" ? getPartyBalance(pid, editId) : 0;
+    const kaddaPct = Number(document.getElementById("purKaddaPct")?.value ?? 1);
+    const labor = Number(document.getElementById("purLaborDed")?.value) || 0;
+    const trans = Number(document.getElementById("purTransDed")?.value) || 0;
+    const paidNow = Number(document.getElementById("purPaidNow")?.value) || 0;
+
+    let grossKg = 0;
+    let kaddaKg = 0;
+    let netKg = 0;
+    let grossAmt = 0;
+
+    pLines.forEach(ln => {
+      const bSz = Number(ln.bagSize) || 50;
+      const bCnt = Number(ln.bags) || 0;
+      const eKg = Number(ln.extraKg) || 0;
+      const rQtl = Number(ln.rateQtl) || 0;
+      const gKg = Math.max(0, (bCnt * bSz) + eKg);
+      const kKg = Math.round((gKg * kaddaPct) / 100);
+      const nKg = Math.max(0, gKg - kKg);
+      grossKg += gKg;
+      kaddaKg += kKg;
+      netKg += nKg;
+      grossAmt += Math.round((nKg / 100) * rQtl);
+    });
+
+    const netPayable = Math.max(0, grossAmt - labor - trans);
+    const finalBal = oldBal - netPayable + paidNow;
+
+    if (document.getElementById("purAutoGrossWeightShow")) {
+      document.getElementById("purAutoGrossWeightShow").innerText = `${grossKg.toLocaleString("en-IN")} Kg (${(grossKg / 100).toFixed(2)} क्विंटल)`;
+    }
+    if (document.getElementById("purKaddaLabel")) document.getElementById("purKaddaLabel").innerText = `कद्दा कटौती (${kaddaPct}%)`;
+    if (document.getElementById("purKaddaShow")) document.getElementById("purKaddaShow").innerText = `${kaddaKg.toLocaleString("en-IN")} Kg`;
+    if (document.getElementById("purNetKgShow")) document.getElementById("purNetKgShow").innerText = `${netKg.toLocaleString("en-IN")} Kg (${(netKg / 100).toFixed(2)} Qtl)`;
+    if (document.getElementById("purNetAmtShow")) document.getElementById("purNetAmtShow").innerText = `₹${netPayable.toLocaleString("en-IN")}`;
+    if (document.getElementById("purPrevBalShow")) {
+      document.getElementById("purPrevBalShow").innerText = oldBal > 0
+        ? `₹${oldBal.toLocaleString("en-IN")} (लेना बाकी)`
+        : (oldBal < 0 ? `₹${Math.abs(oldBal).toLocaleString("en-IN")} (देना बाकी)` : "₹0");
+    }
+    if (document.getElementById("purFinalLedgerShow")) {
+      document.getElementById("purFinalLedgerShow").innerText = finalBal > 0
+        ? `₹${finalBal.toLocaleString("en-IN")} (लेना बाकी)`
+        : (finalBal < 0 ? `₹${Math.abs(finalBal).toLocaleString("en-IN")} (देना बाकी)` : "₹0");
+    }
+  };
+
+  window.saveSaleInvoice = function(e) {
+    e.preventDefault();
+    const pid = resolvePartyIdFromField("salePartyId", "salePartySearch");
+    if (!pid) { alert("कृपया पहले पार्टी चुनें या पार्टी लेजर में जोड़ें।"); return; }
+
+    const editId = document.getElementById("editSaleTxId")?.value || "";
+    const isMandi = Boolean(document.getElementById("channelMandi")?.checked);
+    const dateVal = document.getElementById("saleDate")?.value || new Date().toISOString().slice(0, 10);
+    const lotNo = (document.getElementById("saleLotNo")?.value || "").trim() || "-";
+    const refVal = (document.getElementById("saleCustomNoInput")?.value || "").trim();
+    const paid = Number(document.getElementById("saleCashPaid")?.value) || 0;
+
+    let tx;
+    if (!isMandi) {
+      let totalKg = 0;
+      let amount = 0;
+      const names = [];
+      const details = [];
+      const cleanLines = sLines.map((ln, idx) => {
+        const it = (state.saleItems || []).find(x => String(x.id) === String(ln.itemId));
+        const pKg = Number(ln.packKg) || 0;
+        const qBags = Number(ln.qty) || 0;
+        const eKg = Number(ln.extraKg) || 0;
+        const rKg = Number(ln.rate) || 0;
+        const lKg = Math.max(0, (pKg * qBags) + eKg);
+        const lAmt = Math.round(lKg * rKg);
+        totalKg += lKg;
+        amount += lAmt;
+        const iName = it ? it.name : "Seed Sale";
+        names.push(iName);
+        details.push(`लाइन ${idx + 1} (${iName}): ${qBags} बैग(${pKg}kg)+${eKg}kg @ ₹${rKg} = ₹${lAmt}`);
+        return {
+          lineNo: idx + 1,
+          itemId: ln.itemId || "",
+          itemName: iName,
+          category: it ? (it.category || "-") : "-",
+          packKg: pKg,
+          qty: qBags,
+          extraKg: eKg,
+          rate: rKg,
+          totalKg: lKg,
+          amount: lAmt
+        };
+      });
+
+      const invNo = editId || ("INV-" + (2001 + state.transactions.filter(t => t.type === "SALE").length));
+      tx = {
+        id: invNo,
+        refNo: refVal,
+        type: "SALE",
+        saleChannel: "Seed Sale",
+        date: dateVal,
+        seasonYear: getSeasonYear(dateVal),
+        partyId: pid,
+        lotNo,
+        itemId: cleanLines[0]?.itemId || "",
+        itemName: names.length ? Array.from(new Set(names)).join(", ") : "Seed Sale",
+        category: cleanLines.length > 1 ? "Multi-Line" : (cleanLines[0]?.category || "-"),
+        packKg: Number(cleanLines[0]?.packKg) || 0,
+        qty: cleanLines.reduce((s, x) => s + (Number(x.qty) || 0), 0),
+        extraKg: cleanLines.reduce((s, x) => s + (Number(x.extraKg) || 0), 0),
+        totalKg,
+        rate: Number(cleanLines[0]?.rate) || 0,
+        deductions: 0,
+        amount,
+        paid,
+        lines: cleanLines,
+        note: details.join(" | ")
+      };
+    } else {
+      const mandiLoc = (document.getElementById("mandiLocation")?.value || "").trim() || "-";
+      const vehSlip = (document.getElementById("mandiVehicleSlip")?.value || "").trim() || "-";
+      const comm = (document.getElementById("mandiCommodity")?.value || "").trim() || "Mandi Supply";
+      const totalKg = Number(document.getElementById("mandiWeightKg")?.value) || 0;
+      const rateQtl = Number(document.getElementById("mandiRateQtl")?.value) || 0;
+      const ded = Number(document.getElementById("mandiDeductionRs")?.value) || 0;
+      const amount = Math.max(0, Math.round((totalKg / 100) * rateQtl) - ded);
+      const invNo = editId || ("MND-" + (501 + state.transactions.filter(t => t.saleChannel === "Mandi Supply").length));
+
+      tx = {
+        id: invNo,
+        refNo: refVal,
+        type: "SALE",
+        saleChannel: "Mandi Supply",
+        date: dateVal,
+        seasonYear: getSeasonYear(dateVal),
+        partyId: pid,
+        lotNo,
+        mandiOrLocation: mandiLoc,
+        vehicleOrSlip: vehSlip,
+        itemName: comm,
+        category: "Mandi Supply",
+        packKg: 0,
+        qty: 0,
+        totalKg,
+        rate: rateQtl,
+        deductions: ded,
+        amount,
+        paid,
+        note: `मंडी: ${mandiLoc} | वजन: ${totalKg}kg @ ₹${rateQtl}/Qtl`
+      };
+    }
+
+    if (editId) {
+      const idx = state.transactions.findIndex(x => x.id === editId);
+      if (idx !== -1) state.transactions[idx] = tx;
+    } else {
+      state.transactions.unshift(tx);
+    }
+
+    const partyObj = state.parties.find(x => x.id === pid);
+    const runBal = getPartyBalance(pid);
+    saveState();
+    syncToGoogleSheet({
+      sheetTab: "Sales_Invoices",
+      actionType: "UPSERT",
+      ...tx,
+      partyName: partyObj ? partyObj.name : "",
+      runningBalance: runBal,
+      createdBy: state.role
+    });
+
+    sLines = [{ itemId: "", packKg: 0, qty: 0, extraKg: 0, rate: 0 }];
+    if (document.getElementById("saleCustomNoInput")) document.getElementById("saleCustomNoInput").value = "";
+    window.renderSaleLineRows();
+    resetSaleForm();
+    openReceipt(tx.id);
+    switchTab("dashboard");
+  };
+
+  window.savePurchaseBill = function(e) {
+    e.preventDefault();
+    const pid = resolvePartyIdFromField("purPartyId", "purPartySearch");
+    if (!pid) { alert("कृपया पहले किसान / पार्टी चुनें या पार्टी लेजर में जोड़ें।"); return; }
+
+    const editId = document.getElementById("editPurTxId")?.value || "";
+    const dateVal = document.getElementById("purDate")?.value || new Date().toISOString().slice(0, 10);
+    const lotNo = (document.getElementById("purLotNo")?.value || "").trim() || "-";
+    const refVal = (document.getElementById("purCustomNoInput")?.value || "").trim();
+    const kaddaPct = Number(document.getElementById("purKaddaPct")?.value ?? 1);
+    const labor = Number(document.getElementById("purLaborDed")?.value) || 0;
+    const trans = Number(document.getElementById("purTransDed")?.value) || 0;
+    const paid = Number(document.getElementById("purPaidNow")?.value) || 0;
+
+    let grossKg = 0;
+    let kaddaKg = 0;
+    let netKg = 0;
+    let grossAmount = 0;
+    const names = [];
+    const notes = [];
+
+    const cleanPurLines = pLines.map((ln, idx) => {
+      const bSz = Number(ln.bagSize) || 50;
+      const bCnt = Number(ln.bags) || 0;
+      const eKg = Number(ln.extraKg) || 0;
+      const rQtl = Number(ln.rateQtl) || 0;
+      const gKg = Math.max(0, (bCnt * bSz) + eKg);
+      const kKg = Math.round((gKg * kaddaPct) / 100);
+      const nKg = Math.max(0, gKg - kKg);
+      const lAmt = Math.round((nKg / 100) * rQtl);
+      grossKg += gKg;
+      kaddaKg += kKg;
+      netKg += nKg;
+      grossAmount += lAmt;
+      const cName = ln.itemName || "Raw Crop";
+      names.push(cName);
+      notes.push(`लाइन ${idx + 1} (${cName}): ${bCnt} कट्टे(${bSz}kg)+${eKg}kg @ ₹${rQtl}/Qtl = ₹${lAmt}`);
+      return {
+        lineNo: idx + 1,
+        itemName: cName,
+        bagSize: bSz,
+        bags: bCnt,
+        extraKg: eKg,
+        grossKg: gKg,
+        kaddaKg: kKg,
+        netKg: nKg,
+        rateQtl: rQtl,
+        amount: lAmt
+      };
+    });
+
+    const deductions = labor + trans;
+    const amount = Math.max(0, grossAmount - deductions);
+    const billNo = editId || ("PUR-" + (1001 + state.transactions.filter(t => t.type === "PURCHASE").length));
+
+    const tx = {
+      id: billNo,
+      refNo: refVal,
+      type: "PURCHASE",
+      saleChannel: "Raw Purchase",
+      date: dateVal,
+      seasonYear: getSeasonYear(dateVal),
+      partyId: pid,
+      lotNo,
+      kantaSlip: (document.getElementById("purKantaSlip")?.value || "").trim() || "-",
+      vehicle: (document.getElementById("purVehicle")?.value || "").trim() || "-",
+      itemName: names.length ? Array.from(new Set(names)).join(", ") : "Raw Crop",
+      bagSize: Number(cleanPurLines[0]?.bagSize) || 50,
+      bags: cleanPurLines.reduce((s, x) => s + (Number(x.bags) || 0), 0),
+      extraKg: cleanPurLines.reduce((s, x) => s + (Number(x.extraKg) || 0), 0),
+      grossKg,
+      kaddaPct,
+      kaddaKg,
+      netKg,
+      rateQtl: Number(cleanPurLines[0]?.rateQtl) || 0,
+      labor,
+      trans,
+      weed: 0,
+      deductions,
+      grossAmount,
+      amount,
+      paid,
+      lines: cleanPurLines,
+      note: notes.join(" | ")
+    };
+
+    if (editId) {
+      const idx = state.transactions.findIndex(x => x.id === editId);
+      if (idx !== -1) state.transactions[idx] = tx;
+    } else {
+      state.transactions.unshift(tx);
+    }
+
+    const partyObj = state.parties.find(x => x.id === pid);
+    const runBal = getPartyBalance(pid);
+    saveState();
+    syncToGoogleSheet({
+      sheetTab: "Purchase_Bills",
+      actionType: "UPSERT",
+      ...tx,
+      partyName: partyObj ? partyObj.name : "",
+      runningBalance: runBal,
+      createdBy: state.role
+    });
+
+    pLines = [{ itemName: (state.rawItems && state.rawItems[0] ? state.rawItems[0].name : ""), bagSize: 50, bags: 0, extraKg: 0, rateQtl: 0 }];
+    if (document.getElementById("purCustomNoInput")) document.getElementById("purCustomNoInput").value = "";
+    window.renderPurchaseLineRows();
+    resetPurchaseForm();
+    openReceipt(tx.id);
+    switchTab("dashboard");
+  };
+
+  // Load lines when editing an existing transaction
+  const _origEditV47 = typeof editTransaction === "function" ? editTransaction : null;
+  if (_origEditV47) {
+    window.editTransaction = function(txId) {
+      const tx = state.transactions.find(x => x.id === txId);
+      if (tx && tx.type === "SALE" && Array.isArray(tx.lines) && tx.lines.length) {
+        sLines = tx.lines.map(l => ({ ...l }));
+      } else if (tx && tx.type === "SALE") {
+        sLines = [{ itemId: tx.itemId || "", packKg: tx.packKg || 0, qty: tx.qty || 0, extraKg: tx.extraKg || 0, rate: tx.rate || 0 }];
+      }
+      if (tx && tx.type === "PURCHASE" && Array.isArray(tx.lines) && tx.lines.length) {
+        pLines = tx.lines.map(l => ({ ...l }));
+      } else if (tx && tx.type === "PURCHASE") {
+        pLines = [{ itemName: tx.itemName || "", bagSize: tx.bagSize || 50, bags: tx.bags || 0, extraKg: tx.extraKg || 0, rateQtl: tx.rateQtl || 0 }];
+      }
+      const res = _origEditV47.apply(this, arguments);
+      window.renderSaleLineRows();
+      window.renderPurchaseLineRows();
+      return res;
+    };
+  }
+
+  function initV47Tables() {
+    const verEl = document.getElementById("versionBadgeDisplay");
+    const updEl = document.getElementById("lastUpdatedOnDisplay");
+    if (verEl) verEl.textContent = "v48 • 48 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v48)";
+    window.renderSaleLineRows();
+    window.renderPurchaseLineRows();
+    window.calcSaleTotal();
+    window.calcPurchaseTotal();
+  }
+
+  window.addEventListener("DOMContentLoaded", initV47Tables);
+  initV47Tables();
+})();
+
+
+(function applyV48PurchaseOrderAndLineSubtotals() {
+  if (typeof PLAN_CONFIG === "object" && PLAN_CONFIG) {
+    PLAN_CONFIG.currentVersion = "v48";
+    PLAN_CONFIG.totalVersionsUpdated = 48;
+    PLAN_CONFIG.lastUpdatedDateLabel = "26 Nov 2026";
+  }
+
+  // Re-render purchase lines with clear line subtotal & full item details (भर्ती बैग साइज / गोदाम बोरी, कुल कट्टे, अतिरिक्त वजन, खरीद भाव)
+  const _origRenderPurLinesV48 = typeof renderPurchaseLineRows === "function" ? renderPurchaseLineRows : null;
+  if (_origRenderPurLinesV48) {
+    window.renderPurchaseLineRows = function() {
+      const res = _origRenderPurLinesV48.apply(this, arguments);
+      const box = document.getElementById("purMultiLinesContainer");
+      if (!box) return res;
+      // Add explicit line sub-total summary strip under the table if multiple lines exist
+      const rows = box.querySelectorAll("tbody tr");
+      if (rows.length > 0) {
+        const kPct = Number(document.getElementById("purKaddaPct")?.value ?? 1);
+        let subLinesHtml = '<div class="mt-2.5 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">';
+        let grandSub = 0;
+        let grandNetKg = 0;
+        rows.forEach((tr, i) => {
+          const selects = tr.querySelectorAll("select");
+          const inputs = tr.querySelectorAll("input[type=number]");
+          const itemSel = selects[0]?.value || "आइटम";
+          const bagSz = Number(selects[1]?.value || 50);
+          const bCnt = Number(inputs[0]?.value || 0);
+          const eKg = Number(inputs[1]?.value || 0);
+          const rQtl = Number(inputs[2]?.value || 0);
+          const gKg = Math.max(0, (bCnt * bagSz) + eKg);
+          const kKg = Math.round((gKg * kPct) / 100);
+          const nKg = Math.max(0, gKg - kKg);
+          const sAmt = Math.round((nKg / 100) * rQtl);
+          grandSub += sAmt;
+          grandNetKg += nKg;
+          subLinesHtml += `
+            <div class="bg-white border border-slate-300 rounded-lg px-3 py-2 flex items-center justify-between gap-2">
+              <div class="min-w-0">
+                <p class="font-bold text-[#132A46] truncate">सब-टोटल लाइन ${i + 1} (${itemSel})</p>
+                <p class="num-clean text-[11px] text-slate-600">गोदाम बोरी ${bagSz}kg × ${bCnt} कट्टे + ${eKg}kg • शुद्ध: ${nKg.toLocaleString("en-IN")}kg @ ₹${rQtl}/Qtl</p>
+              </div>
+              <span class="num-clean font-extrabold text-sky-800 whitespace-nowrap">₹${sAmt.toLocaleString("en-IN")}</span>
+            </div>
+          `;
+        });
+        subLinesHtml += `</div>
+          <div class="mt-2 bg-[#132A46] text-white rounded-lg px-3.5 py-2 flex items-center justify-between text-xs font-bold">
+            <span>सभी लाइनों का कुल योग (Grand Sub-Total): ${grandNetKg.toLocaleString("en-IN")} Kg</span>
+            <span class="num-clean text-sm text-emerald-300">₹${grandSub.toLocaleString("en-IN")}</span>
+          </div>
+        `;
+        const oldExtra = box.querySelector(".v48-pur-subtotals-wrap");
+        if (oldExtra) oldExtra.remove();
+        const extraWrap = document.createElement("div");
+        extraWrap.className = "v48-pur-subtotals-wrap";
+        extraWrap.innerHTML = subLinesHtml;
+        box.appendChild(extraWrap);
+      }
+      return res;
+    };
+  }
+
+  function syncV48Dom() {
+    const verEl = document.getElementById("versionBadgeDisplay");
+    const updEl = document.getElementById("lastUpdatedOnDisplay");
+    if (verEl) verEl.textContent = "v48 • 48 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v48)";
+    if (typeof window.renderSaleLineRows === "function") window.renderSaleLineRows();
+    if (typeof window.renderPurchaseLineRows === "function") window.renderPurchaseLineRows();
+  }
+
+  window.addEventListener("DOMContentLoaded", syncV48Dom);
+  syncV48Dom();
 })();
 
 </script>
