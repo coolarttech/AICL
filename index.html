@@ -841,10 +841,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v42 • 42 वर्जन</span>
+          <span id="versionBadgeDisplay">v44 • 44 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 24 Nov 2026 (v42)
+          Last Updated On: 26 Nov 2026 (v44)
         </div>
       </div>
     </div>
@@ -1316,6 +1316,11 @@
             <div id="salePartyBanner" class="hidden bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs grid grid-cols-2 md:grid-cols-5 gap-3"></div>
 
             <div id="seedSaleFields" class="bg-emerald-50/40 p-4 rounded-xl border border-emerald-200/80 space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-emerald-200/70">
+                <span class="text-xs font-bold text-[#132A46]">बिक्री आइटम लाइनें (एक या अधिक आइटम जोड़ें)</span>
+                <button type="button" onclick="addSaleLineRow()" class="px-3 py-1 rounded-lg bg-[#1EA668] hover:bg-emerald-700 text-white text-xs font-bold shadow-2xs transition">+ दूसरी आइटम लाइन जोड़ें</button>
+              </div>
+              <div id="saleMultiLinesContainer" class="space-y-2.5"></div>
               <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-3.5">
                 <div class="sm:col-span-2">
                   <label class="block text-xs font-semibold text-slate-700 mb-1">आइटम चुनें (Items Master से) *</label>
@@ -1506,7 +1511,14 @@
 
             <div id="purPartyBanner" class="hidden bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs grid grid-cols-2 md:grid-cols-5 gap-3"></div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-sky-50/35 p-3.5 rounded-xl border border-sky-200/80 space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2 pb-1.5 border-b border-sky-200/70">
+                <span class="text-xs font-bold text-[#132A46]">खरीद फसल / आइटम लाइनें (एक या अधिक लाइन जोड़ें)</span>
+                <button type="button" onclick="addPurchaseLineRow()" class="px-3 py-1 rounded-lg bg-[#132A46] hover:bg-slate-800 text-white text-xs font-bold shadow-2xs transition">+ दूसरी खरीद लाइन जोड़ें</button>
+              </div>
+              <div id="purMultiLinesContainer" class="space-y-2.5"></div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 hidden">
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">1. फसल का नाम चुनें (Crop) *</label>
                 <select id="purCropSelect" onchange="onPurCropChange()" class="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm bg-white font-semibold"></select>
@@ -1887,7 +1899,11 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-xs">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">पार्टी खोजें (Search Party)</label>
+              <input type="text" id="filterPartySearchInput" oninput="renderPartyDuesSummaryTable()" placeholder="🔍 नाम, पिता, गांव या मोबाइल..." class="w-full border border-slate-300 rounded-xl px-3 py-2 bg-white">
+            </div>
             <div>
               <label class="block font-semibold text-slate-700 mb-1">गारंटर के अनुसार (Guarantor-wise)</label>
               <select id="filterGuarantorSelect" onchange="renderPartyDuesSummaryTable()" class="w-full border border-slate-300 rounded-xl px-3 py-2 bg-white">
@@ -6733,9 +6749,9 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v42",
-  totalVersionsUpdated: 42,
-  lastUpdatedDateLabel: "24 Nov 2026"
+  currentVersion: "v44",
+  totalVersionsUpdated: 44,
+  lastUpdatedDateLabel: "26 Nov 2026"
 };
 
 function toggleSidebarSettingsDropdown() {
@@ -8122,8 +8138,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncPlanVersionDom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v42 • 42 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v42)";
+    if (verEl) verEl.textContent = "v44 • 44 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v44)";
     if (typeof renderPlanTrackerCard === "function") {
       try { renderPlanTrackerCard(); } catch (e) {}
     }
@@ -8409,8 +8425,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v42 • 42 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v42)";
+    if (verEl) verEl.textContent = "v44 • 44 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v44)";
   });
 })();
 
@@ -8553,8 +8569,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v42 • 42 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v42)";
+    if (verEl) verEl.textContent = "v44 • 44 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v44)";
     if (typeof populatePurchaseCropCascade === "function") {
       populatePurchaseCropCascade();
     }
@@ -8630,8 +8646,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV35Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v42 • 42 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v42)";
+    if (verEl) verEl.textContent = "v44 • 44 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v44)";
     updateLoginTopClockLive();
   }
 
@@ -8751,8 +8767,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV36Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v42 • 42 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v42)";
+    if (verEl) verEl.textContent = "v44 • 44 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v44)";
   }
 
   window.addEventListener("DOMContentLoaded", syncV36Dom);
@@ -8881,8 +8897,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV38Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v42 • 42 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v42)";
+    if (verEl) verEl.textContent = "v44 • 44 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v44)";
     tickAllClocksNow();
     syncDashboardBadges();
   }
@@ -9012,8 +9028,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV40Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v42 • 42 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v42)";
+    if (verEl) verEl.textContent = "v44 • 44 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v44)";
     if (typeof renderMasters === "function") renderMasters();
   }
 
@@ -9114,13 +9130,534 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV42Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v42 • 42 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 24 Nov 2026 (v42)";
+    if (verEl) verEl.textContent = "v44 • 44 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v44)";
     if (typeof window.calcSaleTotal === "function") window.calcSaleTotal();
   }
 
   window.addEventListener("DOMContentLoaded", syncV42Dom);
   syncV42Dom();
+})();
+
+
+(function applyV44MultiLineItemsAndPartySearch() {
+  if (typeof PLAN_CONFIG === "object" && PLAN_CONFIG) {
+    PLAN_CONFIG.currentVersion = "v44";
+    PLAN_CONFIG.totalVersionsUpdated = 44;
+    PLAN_CONFIG.lastUpdatedDateLabel = "26 Nov 2026";
+  }
+
+  let saleLines = [];
+  let purLines = [];
+
+  function escapeAttr(val) {
+    return String(val ?? "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+  }
+
+  window.getSaleItemOptionsHtml = function(selectedId = "") {
+    const base = `<option value="">-- आइटम चुनें --</option>`;
+    if (!Array.isArray(state.saleItems) || !state.saleItems.length) {
+      return base + `<option value="" disabled>पहले Item Master में बिक्री आइटम जोड़ें</option>`;
+    }
+    return base + state.saleItems.map(i => {
+      const sel = String(i.id) === String(selectedId) ? "selected" : "";
+      const label = `${i.name}${i.category ? " [" + i.category + "]" : ""}${i.packKg ? " — " + i.packKg + "kg" : ""}`;
+      return `<option value="${escapeAttr(i.id)}" ${sel}>${escapeAttr(label)}</option>`;
+    }).join("");
+  };
+
+  window.getRawItemOptionsHtml = function(selectedName = "") {
+    const base = `<option value="">-- कच्ची फसल / आइटम चुनें --</option>`;
+    if (!Array.isArray(state.rawItems) || !state.rawItems.length) {
+      return base + `<option value="" disabled>पहले Item Master में कच्चा आइटम जोड़ें</option>`;
+    }
+    return base + state.rawItems.map(i => {
+      const lbl = `${i.name}${i.variety ? " (" + i.variety + ")" : ""}`;
+      const sel = (String(i.name) === String(selectedName) || String(i.id) === String(selectedName)) ? "selected" : "";
+      return `<option value="${escapeAttr(i.name)}" ${sel}>${escapeAttr(lbl)}</option>`;
+    }).join("");
+  };
+
+  function ensureSaleLinesInitialized() {
+    if (!saleLines.length) {
+      saleLines = [{
+        itemId: document.getElementById("saleItemId")?.value || "",
+        packKg: Number(document.getElementById("salePackSize")?.value) || 0,
+        qty: Number(document.getElementById("saleQty")?.value) || 0,
+        extraKg: Number(document.getElementById("saleExtraKg")?.value) || 0,
+        rate: Number(document.getElementById("saleRate")?.value) || 0
+      }];
+    }
+  }
+
+  function ensurePurLinesInitialized() {
+    if (!purLines.length) {
+      purLines = [{
+        itemName: document.getElementById("purCropSelect")?.value || (state.rawItems[0]?.name || ""),
+        bagSize: Number(document.getElementById("purBagSize")?.value) || 50,
+        bags: Number(document.getElementById("purBags")?.value) || 0,
+        extraKg: Number(document.getElementById("purExtraKg")?.value) || 0,
+        rateQtl: Number(document.getElementById("purRateQtl")?.value) || 0,
+        kaddaPct: Number(document.getElementById("purKaddaPct")?.value ?? 1)
+      }];
+    }
+  }
+
+  window.renderSaleLineRows = function() {
+    ensureSaleLinesInitialized();
+    const box = document.getElementById("saleMultiLinesContainer");
+    if (!box) return;
+    box.innerHTML = saleLines.map((ln, idx) => {
+      const lineKg = Math.max(0, (Number(ln.packKg) || 0) * (Number(ln.qty) || 0) + (Number(ln.extraKg) || 0));
+      const lineAmt = Math.round(lineKg * (Number(ln.rate) || 0));
+      return `
+        <div class="bg-white border border-emerald-200 rounded-xl p-3 space-y-2">
+          <div class="flex items-center justify-between text-[11px] font-bold text-slate-600">
+            <span>लाइन #${idx + 1}</span>
+            <div class="flex items-center gap-3">
+              <span class="num-clean text-[#1EA668]">${lineKg.toLocaleString("en-IN")} Kg • ₹${lineAmt.toLocaleString("en-IN")}</span>
+              ${saleLines.length > 1 ? `<button type="button" onclick="removeSaleLineRow(${idx})" class="text-rose-600 hover:underline font-semibold">हटाएं ✕</button>` : ""}
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-2.5">
+            <div class="sm:col-span-2">
+              <label class="block text-[11px] font-semibold text-slate-700 mb-1">आइटम *</label>
+              <select onchange="onSaleLineItemSelect(${idx}, this.value)" class="w-full border border-slate-300 rounded-xl px-2.5 py-2 text-xs sm:text-sm bg-white">
+                ${window.getSaleItemOptionsHtml(ln.itemId)}
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-700 mb-1">पैकेट / बैग (Kg)</label>
+              <input type="number" value="${Number(ln.packKg) || 0}" min="0" oninput="onSaleLineField(${idx}, 'packKg', this.value)" class="num-clean w-full border border-slate-300 rounded-xl px-2.5 py-2 text-xs sm:text-sm bg-white">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-700 mb-1">बैग संख्या</label>
+              <input type="number" value="${Number(ln.qty) || 0}" min="0" oninput="onSaleLineField(${idx}, 'qty', this.value)" class="num-clean w-full border border-slate-300 rounded-xl px-2.5 py-2 text-xs sm:text-sm bg-white">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-emerald-900 mb-1">अतिरिक्त वजन (Kg)</label>
+              <input type="number" step="0.01" value="${Number(ln.extraKg) || 0}" min="0" oninput="onSaleLineField(${idx}, 'extraKg', this.value)" class="num-clean w-full border border-emerald-300 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold bg-white">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-700 mb-1">रेट (₹/Kg)</label>
+              <input type="number" step="0.01" value="${Number(ln.rate) || 0}" min="0" oninput="onSaleLineField(${idx}, 'rate', this.value)" class="num-clean w-full border border-slate-300 rounded-xl px-2.5 py-2 text-xs sm:text-sm bg-white">
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+    syncFirstSaleInputs();
+  };
+
+  function syncFirstSaleInputs() {
+    const first = saleLines[0] || { itemId: "", packKg: 0, qty: 0, extraKg: 0, rate: 0 };
+    if (document.getElementById("saleItemId")) document.getElementById("saleItemId").value = first.itemId || "";
+    if (document.getElementById("salePackSize")) document.getElementById("salePackSize").value = first.packKg || 0;
+    if (document.getElementById("saleQty")) document.getElementById("saleQty").value = first.qty || 0;
+    if (document.getElementById("saleExtraKg")) document.getElementById("saleExtraKg").value = first.extraKg || 0;
+    if (document.getElementById("saleRate")) document.getElementById("saleRate").value = first.rate || 0;
+  }
+
+  window.addSaleLineRow = function() {
+    ensureSaleLinesInitialized();
+    saleLines.push({ itemId: "", packKg: 0, qty: 0, extraKg: 0, rate: 0 });
+    window.renderSaleLineRows();
+    window.calcSaleTotal();
+  };
+
+  window.removeSaleLineRow = function(idx) {
+    if (saleLines.length <= 1) return;
+    saleLines.splice(idx, 1);
+    window.renderSaleLineRows();
+    window.calcSaleTotal();
+  };
+
+  window.onSaleLineItemSelect = function(idx, itemId) {
+    const found = (state.saleItems || []).find(x => String(x.id) === String(itemId));
+    saleLines[idx].itemId = itemId;
+    if (found) {
+      saleLines[idx].packKg = Number(found.packKg) || saleLines[idx].packKg || 0;
+      saleLines[idx].rate = Number(found.rate) || saleLines[idx].rate || 0;
+    }
+    window.renderSaleLineRows();
+    window.calcSaleTotal();
+  };
+
+  window.onSaleLineField = function(idx, field, val) {
+    if (!saleLines[idx]) return;
+    saleLines[idx][field] = Number(val) || 0;
+    syncFirstSaleInputs();
+    window.calcSaleTotal();
+  };
+
+  window.renderPurchaseLineRows = function() {
+    ensurePurLinesInitialized();
+    const box = document.getElementById("purMultiLinesContainer");
+    if (!box) return;
+    box.innerHTML = purLines.map((ln, idx) => {
+      const grossKg = Math.max(0, (Number(ln.bags) || 0) * (Number(ln.bagSize) || 50) + (Number(ln.extraKg) || 0));
+      const kaddaKg = Math.round((grossKg * (Number(ln.kaddaPct) || 0)) / 100);
+      const netKg = Math.max(0, grossKg - kaddaKg);
+      const lineAmt = Math.round((netKg / 100) * (Number(ln.rateQtl) || 0));
+      return `
+        <div class="bg-white border border-sky-200 rounded-xl p-3 space-y-2.5">
+          <div class="flex items-center justify-between text-[11px] font-bold text-slate-600">
+            <span>खरीद लाइन #${idx + 1}</span>
+            <div class="flex items-center gap-3">
+              <span class="num-clean text-sky-800">शुद्ध: ${netKg.toLocaleString("en-IN")} Kg • ₹${lineAmt.toLocaleString("en-IN")}</span>
+              ${purLines.length > 1 ? `<button type="button" onclick="removePurchaseLineRow(${idx})" class="text-rose-600 hover:underline font-semibold">हटाएं ✕</button>` : ""}
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-2.5">
+            <div class="sm:col-span-2">
+              <label class="block text-[11px] font-semibold text-slate-700 mb-1">फसल / कच्चा आइटम *</label>
+              <select onchange="onPurLineField(${idx}, 'itemName', this.value)" class="w-full border border-slate-300 rounded-xl px-2.5 py-2 text-xs sm:text-sm bg-white font-semibold">
+                ${window.getRawItemOptionsHtml(ln.itemName)}
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-700 mb-1">बैग साइज</label>
+              <select onchange="onPurLineField(${idx}, 'bagSize', Number(this.value))" class="num-clean w-full border border-slate-300 rounded-xl px-2.5 py-2 text-xs sm:text-sm bg-white">
+                <option value="50" ${Number(ln.bagSize)===50?"selected":""}>50 Kg</option>
+                <option value="55" ${Number(ln.bagSize)===55?"selected":""}>55 Kg</option>
+                <option value="60" ${Number(ln.bagSize)===60?"selected":""}>60 Kg</option>
+                <option value="40" ${Number(ln.bagSize)===40?"selected":""}>40 Kg</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-700 mb-1">कट्टे / बैग</label>
+              <input type="number" value="${Number(ln.bags) || 0}" min="0" oninput="onPurLineField(${idx}, 'bags', Number(this.value))" class="num-clean w-full border border-slate-300 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold bg-white">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-sky-900 mb-1">अतिरिक्त (Kg)</label>
+              <input type="number" step="0.01" value="${Number(ln.extraKg) || 0}" min="0" oninput="onPurLineField(${idx}, 'extraKg', Number(this.value))" class="num-clean w-full border border-sky-300 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold bg-white">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-700 mb-1">भाव (₹/Qtl) *</label>
+              <input type="number" step="0.01" value="${Number(ln.rateQtl) || 0}" min="0" oninput="onPurLineField(${idx}, 'rateQtl', Number(this.value))" class="num-clean w-full border border-slate-300 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-semibold bg-white">
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+    syncFirstPurInputs();
+  };
+
+  function syncFirstPurInputs() {
+    const first = purLines[0] || { itemName: "", bagSize: 50, bags: 0, extraKg: 0, rateQtl: 0, kaddaPct: 1 };
+    if (document.getElementById("purBagSize")) document.getElementById("purBagSize").value = first.bagSize || 50;
+    if (document.getElementById("purBags")) document.getElementById("purBags").value = first.bags || 0;
+    if (document.getElementById("purExtraKg")) document.getElementById("purExtraKg").value = first.extraKg || 0;
+    if (document.getElementById("purRateQtl")) document.getElementById("purRateQtl").value = first.rateQtl || 0;
+  }
+
+  window.addPurchaseLineRow = function() {
+    ensurePurLinesInitialized();
+    const defaultItem = state.rawItems?.[0]?.name || "";
+    purLines.push({ itemName: defaultItem, bagSize: 50, bags: 0, extraKg: 0, rateQtl: 0, kaddaPct: Number(document.getElementById("purKaddaPct")?.value ?? 1) });
+    window.renderPurchaseLineRows();
+    window.calcPurchaseTotal();
+  };
+
+  window.removePurchaseLineRow = function(idx) {
+    if (purLines.length <= 1) return;
+    purLines.splice(idx, 1);
+    window.renderPurchaseLineRows();
+    window.calcPurchaseTotal();
+  };
+
+  window.onPurLineField = function(idx, field, val) {
+    if (!purLines[idx]) return;
+    purLines[idx][field] = val;
+    syncFirstPurInputs();
+    window.calcPurchaseTotal();
+  };
+
+  const _origCalcSale = typeof calcSaleTotal === "function" ? calcSaleTotal : null;
+  window.calcSaleTotal = function() {
+    ensureSaleLinesInitialized();
+    const pid = document.getElementById("salePartyId")?.value || "";
+    const editId = document.getElementById("editSaleTxId")?.value || null;
+    const oldBal = typeof getPartyBalance === "function" ? getPartyBalance(pid, editId) : 0;
+    const isMandi = Boolean(document.getElementById("channelMandi")?.checked);
+    const paid = Number(document.getElementById("saleCashPaid")?.value) || 0;
+
+    if (!isMandi) {
+      let totalKg = 0;
+      let billAmt = 0;
+      let totalBags = 0;
+      let totalExtra = 0;
+      saleLines.forEach(ln => {
+        const pKg = Number(ln.packKg) || 0;
+        const qBags = Number(ln.qty) || 0;
+        const eKg = Number(ln.extraKg) || 0;
+        const rKg = Number(ln.rate) || 0;
+        const lKg = Math.max(0, (pKg * qBags) + eKg);
+        totalKg += lKg;
+        totalBags += qBags;
+        totalExtra += eKg;
+        billAmt += Math.round(lKg * rKg);
+      });
+      const newBal = oldBal + billAmt - paid;
+      if (document.getElementById("saleTotalKg")) document.getElementById("saleTotalKg").innerText = `${totalKg.toLocaleString("en-IN")} Kg`;
+      if (document.getElementById("saleBillTotal")) document.getElementById("saleBillTotal").innerText = `₹${billAmt.toLocaleString("en-IN")}`;
+      if (document.getElementById("saleNetLedger")) {
+        document.getElementById("saleNetLedger").innerText = newBal >= 0
+          ? `₹${newBal.toLocaleString("en-IN")} (लेना है)`
+          : `₹${Math.abs(newBal).toLocaleString("en-IN")} (देना है)`;
+      }
+      if (document.getElementById("saleAutoDescShow")) {
+        document.getElementById("saleAutoDescShow").textContent = `${saleLines.length} लाइन • ${totalBags} बैग + ${totalExtra} Kg अतिरिक्त = कुल ${totalKg.toLocaleString("en-IN")} Kg`;
+      }
+    } else if (_origCalcSale) {
+      _origCalcSale.apply(this, arguments);
+    }
+  };
+
+  const _origSaveSale = typeof saveSaleInvoice === "function" ? saveSaleInvoice : null;
+  if (_origSaveSale) {
+    window.saveSaleInvoice = function(e) {
+      const isMandi = Boolean(document.getElementById("channelMandi")?.checked);
+      ensureSaleLinesInitialized();
+      if (!isMandi && saleLines.length > 1) {
+        e.preventDefault();
+        const pid = resolvePartyIdFromField("salePartyId", "salePartySearch");
+        if (!pid) { alert("कृपया पहले पार्टी चुनें या पार्टी लेजर में जोड़ें।"); return; }
+        const editId = document.getElementById("editSaleTxId")?.value;
+        const dateVal = document.getElementById("saleDate")?.value;
+        const lotNo = (document.getElementById("saleLotNo")?.value || "").trim() || "-";
+        const paid = Number(document.getElementById("saleCashPaid")?.value) || 0;
+        let totalKg = 0;
+        let amount = 0;
+        const names = [];
+        const details = [];
+        saleLines.forEach(ln => {
+          const it = (state.saleItems || []).find(x => String(x.id) === String(ln.itemId));
+          const pKg = Number(ln.packKg) || 0;
+          const qBags = Number(ln.qty) || 0;
+          const eKg = Number(ln.extraKg) || 0;
+          const rKg = Number(ln.rate) || 0;
+          const lKg = Math.max(0, (pKg * qBags) + eKg);
+          const lAmt = Math.round(lKg * rKg);
+          totalKg += lKg;
+          amount += lAmt;
+          if (it && it.name) names.push(it.name);
+          details.push(`${it ? it.name : "Item"}: ${qBags} बैग(${pKg}kg)+${eKg}kg @ ₹${rKg} = ₹${lAmt}`);
+        });
+        const invNo = editId || ("INV-" + (2001 + state.transactions.filter(t => t.type === "SALE").length));
+        const tx = {
+          id: invNo, type: "SALE", saleChannel: "Seed Sale", date: dateVal,
+          seasonYear: getSeasonYear(dateVal), partyId: pid, lotNo,
+          itemId: saleLines[0]?.itemId || "",
+          itemName: names.length ? Array.from(new Set(names)).join(", ") : "Multi-Item Seed Sale",
+          category: "Multi-Line",
+          packKg: Number(saleLines[0]?.packKg) || 0,
+          qty: saleLines.reduce((s, x) => s + (Number(x.qty) || 0), 0),
+          extraKg: saleLines.reduce((s, x) => s + (Number(x.extraKg) || 0), 0),
+          totalKg, rate: Number(saleLines[0]?.rate) || 0, deductions: 0, amount, paid,
+          lines: saleLines.map(x => ({ ...x })),
+          note: details.join(" | ")
+        };
+        if (editId) {
+          const idx = state.transactions.findIndex(x => x.id === editId);
+          if (idx !== -1) state.transactions[idx] = tx;
+        } else {
+          state.transactions.unshift(tx);
+        }
+        const partyObj = state.parties.find(x => x.id === pid);
+        const runBal = getPartyBalance(pid);
+        saveState();
+        syncToGoogleSheet({
+          sheetTab: "Sales_Invoices", actionType: "UPSERT", ...tx,
+          partyName: partyObj ? partyObj.name : "", runningBalance: runBal, createdBy: state.role
+        });
+        saleLines = [];
+        window.renderSaleLineRows();
+        resetSaleForm();
+        openReceipt(tx.id);
+        switchTab("dashboard");
+        return;
+      }
+      const res = _origSaveSale.apply(this, arguments);
+      saleLines = [];
+      window.renderSaleLineRows();
+      return res;
+    };
+  }
+
+  const _origCalcPur = typeof calcPurchaseTotal === "function" ? calcPurchaseTotal : null;
+  window.calcPurchaseTotal = function() {
+    ensurePurLinesInitialized();
+    const pid = document.getElementById("purPartyId")?.value || "";
+    const editId = document.getElementById("editPurTxId")?.value || null;
+    const oldBal = typeof getPartyBalance === "function" ? getPartyBalance(pid, editId) : 0;
+    const kaddaPct = Number(document.getElementById("purKaddaPct")?.value ?? 1);
+    const labor = Number(document.getElementById("purLaborDed")?.value) || 0;
+    const trans = Number(document.getElementById("purTransDed")?.value) || 0;
+    const paidNow = Number(document.getElementById("purPaidNow")?.value) || 0;
+
+    let grossKg = 0;
+    let kaddaKg = 0;
+    let netKg = 0;
+    let grossAmt = 0;
+    purLines.forEach(ln => {
+      const bSz = Number(ln.bagSize) || 50;
+      const bCnt = Number(ln.bags) || 0;
+      const eKg = Number(ln.extraKg) || 0;
+      const rQtl = Number(ln.rateQtl) || 0;
+      const gKg = Math.max(0, (bCnt * bSz) + eKg);
+      const kKg = Math.round((gKg * kaddaPct) / 100);
+      const nKg = Math.max(0, gKg - kKg);
+      grossKg += gKg;
+      kaddaKg += kKg;
+      netKg += nKg;
+      grossAmt += Math.round((nKg / 100) * rQtl);
+    });
+
+    const netPayable = Math.max(0, grossAmt - labor - trans);
+    const finalBal = oldBal - netPayable + paidNow;
+
+    if (document.getElementById("purAutoGrossWeightShow")) {
+      document.getElementById("purAutoGrossWeightShow").innerText = `${grossKg.toLocaleString("en-IN")} Kg (${(grossKg / 100).toFixed(2)} क्विंटल)`;
+    }
+    if (document.getElementById("purKaddaLabel")) document.getElementById("purKaddaLabel").innerText = `कद्दा कटौती (${kaddaPct}%)`;
+    if (document.getElementById("purKaddaShow")) document.getElementById("purKaddaShow").innerText = `${kaddaKg.toLocaleString("en-IN")} Kg`;
+    if (document.getElementById("purNetKgShow")) document.getElementById("purNetKgShow").innerText = `${netKg.toLocaleString("en-IN")} Kg (${(netKg / 100).toFixed(2)} Qtl)`;
+    if (document.getElementById("purNetAmtShow")) document.getElementById("purNetAmtShow").innerText = `₹${netPayable.toLocaleString("en-IN")}`;
+    if (document.getElementById("purFinalLedgerShow")) {
+      document.getElementById("purFinalLedgerShow").innerText = finalBal > 0
+        ? `₹${finalBal.toLocaleString("en-IN")} (लेना बाकी)`
+        : (finalBal < 0 ? `₹${Math.abs(finalBal).toLocaleString("en-IN")} (देना बाकी)` : "₹0");
+    }
+    if (_origCalcPur) {
+      const prevEl = document.getElementById("purPrevBalShow");
+      if (prevEl) {
+        prevEl.innerText = oldBal > 0
+          ? `₹${oldBal.toLocaleString("en-IN")} (लेना बाकी)`
+          : (oldBal < 0 ? `₹${Math.abs(oldBal).toLocaleString("en-IN")} (देना बाकी)` : "₹0");
+      }
+    }
+  };
+
+  const _origSavePur = typeof savePurchaseBill === "function" ? savePurchaseBill : null;
+  if (_origSavePur) {
+    window.savePurchaseBill = function(e) {
+      ensurePurLinesInitialized();
+      if (purLines.length > 1) {
+        e.preventDefault();
+        const pid = resolvePartyIdFromField("purPartyId", "purPartySearch");
+        if (!pid) { alert("कृपया पहले किसान / पार्टी चुनें या पार्टी लेजर में जोड़ें।"); return; }
+        const editId = document.getElementById("editPurTxId")?.value;
+        const dateVal = document.getElementById("purDate")?.value;
+        const kaddaPct = Number(document.getElementById("purKaddaPct")?.value ?? 1);
+        const labor = Number(document.getElementById("purLaborDed")?.value) || 0;
+        const trans = Number(document.getElementById("purTransDed")?.value) || 0;
+        const paid = Number(document.getElementById("purPaidNow")?.value) || 0;
+
+        let grossKg = 0;
+        let kaddaKg = 0;
+        let netKg = 0;
+        let grossAmt = 0;
+        const names = [];
+        const notes = [];
+        purLines.forEach(ln => {
+          const bSz = Number(ln.bagSize) || 50;
+          const bCnt = Number(ln.bags) || 0;
+          const eKg = Number(ln.extraKg) || 0;
+          const rQtl = Number(ln.rateQtl) || 0;
+          const gKg = Math.max(0, (bCnt * bSz) + eKg);
+          const kKg = Math.round((gKg * kaddaPct) / 100);
+          const nKg = Math.max(0, gKg - kKg);
+          grossKg += gKg;
+          kaddaKg += kKg;
+          netKg += nKg;
+          grossAmt += Math.round((nKg / 100) * rQtl);
+          if (ln.itemName) names.push(ln.itemName);
+          notes.push(`${ln.itemName || "Crop"}: ${bCnt} बैग(${bSz}kg)+${eKg}kg @ ₹${rQtl}/Qtl`);
+        });
+        const deductions = labor + trans;
+        const amount = Math.max(0, grossAmt - deductions);
+        const billNo = editId || ("PUR-" + (1001 + state.transactions.filter(t => t.type === "PURCHASE").length));
+        const tx = {
+          id: billNo, type: "PURCHASE", saleChannel: "Raw Purchase", date: dateVal,
+          seasonYear: getSeasonYear(dateVal), partyId: pid,
+          lotNo: (document.getElementById("purLotNo")?.value || "").trim() || "-",
+          kantaSlip: (document.getElementById("purKantaSlip")?.value || "").trim() || "-",
+          vehicle: (document.getElementById("purVehicle")?.value || "").trim() || "-",
+          itemName: names.length ? Array.from(new Set(names)).join(", ") : "Multi-Item Purchase",
+          bagSize: Number(purLines[0]?.bagSize) || 50,
+          bags: purLines.reduce((s, x) => s + (Number(x.bags) || 0), 0),
+          extraKg: purLines.reduce((s, x) => s + (Number(x.extraKg) || 0), 0),
+          grossKg, kaddaPct, kaddaKg, netKg, rateQtl: Number(purLines[0]?.rateQtl) || 0,
+          labor, trans, weed: 0, deductions, grossAmount: grossAmt, amount, paid,
+          lines: purLines.map(x => ({ ...x })),
+          note: notes.join(" | ")
+        };
+        if (editId) {
+          const idx = state.transactions.findIndex(x => x.id === editId);
+          if (idx !== -1) state.transactions[idx] = tx;
+        } else {
+          state.transactions.unshift(tx);
+        }
+        const partyObj = state.parties.find(x => x.id === pid);
+        const runBal = getPartyBalance(pid);
+        saveState();
+        syncToGoogleSheet({
+          sheetTab: "Purchase_Bills", actionType: "UPSERT", ...tx,
+          partyName: partyObj ? partyObj.name : "", runningBalance: runBal, createdBy: state.role
+        });
+        purLines = [];
+        window.renderPurchaseLineRows();
+        resetPurchaseForm();
+        openReceipt(tx.id);
+        switchTab("dashboard");
+        return;
+      }
+      const res = _origSavePur.apply(this, arguments);
+      purLines = [];
+      window.renderPurchaseLineRows();
+      return res;
+    };
+  }
+
+  // Enhance Party Dues Summary Table with instant search box (#filterPartySearchInput)
+  const _origGetFilteredParties = typeof getFilteredPartiesForReport === "function" ? getFilteredPartiesForReport : null;
+  if (_origGetFilteredParties) {
+    window.getFilteredPartiesForReport = function() {
+      const baseList = _origGetFilteredParties.apply(this, arguments);
+      const q = (document.getElementById("filterPartySearchInput")?.value || "").trim().toLowerCase();
+      if (!q) return baseList;
+      return baseList.filter(p =>
+        String(p.name || "").toLowerCase().includes(q) ||
+        String(p.father || "").toLowerCase().includes(q) ||
+        String(p.village || "").toLowerCase().includes(q) ||
+        String(p.phone || "").toLowerCase().includes(q) ||
+        String(p.guarantor || "").toLowerCase().includes(q)
+      );
+    };
+  }
+
+  const _origRefreshV44 = typeof refreshSelectors === "function" ? refreshSelectors : null;
+  if (_origRefreshV44) {
+    window.refreshSelectors = function() {
+      const res = _origRefreshV44.apply(this, arguments);
+      window.renderSaleLineRows();
+      window.renderPurchaseLineRows();
+      return res;
+    };
+  }
+
+  function syncV44Dom() {
+    const verEl = document.getElementById("versionBadgeDisplay");
+    const updEl = document.getElementById("lastUpdatedOnDisplay");
+    if (verEl) verEl.textContent = "v44 • 44 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v44)";
+    window.renderSaleLineRows();
+    window.renderPurchaseLineRows();
+  }
+
+  window.addEventListener("DOMContentLoaded", syncV44Dom);
+  syncV44Dom();
 })();
 
 </script>
