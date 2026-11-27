@@ -534,7 +534,7 @@
     <div class="w-full max-w-[300px] lg:max-w-xs my-auto space-y-3.5 py-2">
       <div class="flex flex-col items-center text-center">
         <!-- Slightly Enlarged Unboxed Vaidik Seeds Logo on Desktop PIN panel -->
-        <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स लोगो" class="hidden lg:block h-24 w-24 object-contain mb-2.5">
+        <img src="Vaidik Seeds Logo.png" onerror="handleVaidikLogoError(this)" alt="वैदिक सीड्स लोगो" class="hidden lg:block h-24 w-24 object-contain mb-2.5">
         <h1 class="text-lg lg:text-xl font-bold text-white tracking-tight">वैदिक सीड्स</h1>
         <p class="text-[11px] lg:text-xs text-emerald-300/90 font-medium mt-0.5">स्वागत है • आपका व्यापारिक खाता</p>
       </div>
@@ -614,7 +614,7 @@
       <!-- Top Brand Block Left + Vertical Separator + Status LED Right -->
       <div class="px-3 pt-3.5 pb-3 border-b border-slate-800/90 flex items-center justify-between gap-2">
         <div class="flex items-center gap-2.5 min-w-0">
-          <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-10 w-10 object-contain shrink-0">
+          <img src="Vaidik Seeds Logo.png" onerror="handleVaidikLogoError(this)" alt="वैदिक सीड्स" class="h-10 w-10 object-contain shrink-0">
           <div class="flex flex-col items-center justify-center min-w-0 text-center">
             <p class="text-sm font-bold text-white tracking-tight leading-tight truncate w-full text-center">वैदिक सीड्स</p>
             <span class="inline-block text-[9.5px] font-semibold text-amber-300 bg-amber-400/10 border border-amber-400/25 px-2 py-0.5 rounded-full mt-0.5 leading-tight truncate max-w-full">एग्री सीड ईआरपी</span>
@@ -846,10 +846,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v50 • 50 वर्जन</span>
+          <span id="versionBadgeDisplay">v51 • 51 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 26 Nov 2026 (v50)
+          Last Updated On: 27 Nov 2026 (v51)
         </div>
       </div>
     </div>
@@ -2521,7 +2521,7 @@
 </div>
 
 <script>
-const DEPLOYED_SHEET_URL = "https://script.google.com/macros/s/AKfycbyZCPTwX5Zi_-Tcw_freng7-y0rlMcozb5suF8V8OXo5SYhyVGTR2G5o7ExXn2n3mkV/exec";
+const DEPLOYED_SHEET_URL = "https://script.google.com/macros/s/AKfycbwhOTNBKx9wt5r_P6W3vqGzAfykJziNAz_nG4CFEpk-rsLY52n9XLpAQ_dKdsTEVWqPuA/exec";
 
 // Protection Lock
 (function() {
@@ -4732,7 +4732,7 @@ function previewSampleInvoiceTheme() {
     <div class="bg-white border border-slate-200 rounded-md p-6 sm:p-8 text-slate-800 space-y-6">
       <div class="flex items-start justify-between gap-4 border-b border-slate-200 pb-5">
         <div class="flex items-center gap-3">
-          <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-14 w-14 rounded-full object-cover border border-slate-200 shrink-0">
+          <img src="Vaidik Seeds Logo.png" onerror="handleVaidikLogoError(this)" alt="वैदिक सीड्स" class="h-14 w-14 rounded-full object-cover border border-slate-200 shrink-0">
           <div>
             <p class="text-base font-bold text-slate-900">वैदिक सीड्स</p>
             <p class="num-clean text-[11px] text-slate-500">GSTIN: ${companyGstin}</p>
@@ -4878,7 +4878,7 @@ function openReceipt(txId) {
       <div class="bg-white border ${outerBorderClass} rounded-md p-6 sm:p-8 text-slate-800 space-y-6">
         <div class="flex items-start justify-between gap-4 pb-5 border-b border-neutral-200">
           <div class="flex items-center gap-3">
-            <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-14 w-auto max-w-[96px] object-contain shrink-0">
+            <img src="Vaidik Seeds Logo.png" onerror="handleVaidikLogoError(this)" alt="वैदिक सीड्स" class="h-14 w-auto max-w-[96px] object-contain shrink-0">
             <div>
               <p class="text-base font-bold text-neutral-900">वैदिक सीड्स</p>
               <p class="num-clean text-[11px] text-neutral-500">GSTIN: ${companyGstin}</p>
@@ -4976,7 +4976,7 @@ function openReceipt(txId) {
       <div class="bg-white border ${outerBorderClass} rounded-md p-6 sm:p-8 text-slate-800 space-y-6">
         <div class="flex items-start justify-between gap-4 pb-5 border-b border-neutral-200">
           <div class="flex items-center gap-3">
-            <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-14 w-auto max-w-[96px] object-contain shrink-0">
+            <img src="Vaidik Seeds Logo.png" onerror="handleVaidikLogoError(this)" alt="वैदिक सीड्स" class="h-14 w-auto max-w-[96px] object-contain shrink-0">
             <div>
               <p class="text-base font-bold text-neutral-900">वैदिक सीड्स</p>
               <p class="num-clean text-[11px] text-neutral-500">GSTIN: ${companyGstin}</p>
@@ -6804,9 +6804,9 @@ const PLAN_CONFIG = {
   startDateStr: "2026-11-21",
   endDateStr: "2027-11-21",
   durationDays: 365,
-  currentVersion: "v50",
-  totalVersionsUpdated: 50,
-  lastUpdatedDateLabel: "26 Nov 2026"
+  currentVersion: "v51",
+  totalVersionsUpdated: 51,
+  lastUpdatedDateLabel: "27 Nov 2026"
 };
 
 function toggleSidebarSettingsDropdown() {
@@ -8193,8 +8193,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncPlanVersionDom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v50 • 50 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v50)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     if (typeof renderPlanTrackerCard === "function") {
       try { renderPlanTrackerCard(); } catch (e) {}
     }
@@ -8480,8 +8480,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v50 • 50 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v50)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
   });
 })();
 
@@ -8624,8 +8624,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v50 • 50 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v50)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     if (typeof populatePurchaseCropCascade === "function") {
       populatePurchaseCropCascade();
     }
@@ -8701,8 +8701,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV35Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v50 • 50 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v50)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     updateLoginTopClockLive();
   }
 
@@ -8822,8 +8822,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV36Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v50 • 50 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v50)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
   }
 
   window.addEventListener("DOMContentLoaded", syncV36Dom);
@@ -8952,8 +8952,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV38Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v50 • 50 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v50)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     tickAllClocksNow();
     syncDashboardBadges();
   }
@@ -9083,8 +9083,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV40Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v50 • 50 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v50)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     if (typeof renderMasters === "function") renderMasters();
   }
 
@@ -9185,8 +9185,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV42Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v50 • 50 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v50)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     if (typeof window.calcSaleTotal === "function") window.calcSaleTotal();
   }
 
@@ -9705,8 +9705,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV44Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v50 • 50 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v50)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     window.renderSaleLineRows();
     window.renderPurchaseLineRows();
   }
@@ -10199,7 +10199,7 @@ setInterval(renderPlanTrackerCard, 60000);
                 <p class="text-sm sm:text-base font-extrabold text-slate-900">वैदिक सीड्स</p>
                 <p class="num-clean text-[10.5px] font-semibold text-slate-600">GSTIN: ${companyGstin}</p>
               </div>
-              <img src="Vaidik Seeds Logo.png" alt="वैदिक सीड्स" class="h-12 w-12 object-contain shrink-0">
+              <img src="Vaidik Seeds Logo.png" onerror="handleVaidikLogoError(this)" alt="वैदिक सीड्स" class="h-12 w-12 object-contain shrink-0">
             </div>
             <p class="text-[10.5px] text-slate-600 leading-snug">${companyAddr}</p>
             <p class="num-clean text-[10.5px] font-semibold text-slate-700">Helpline: +91 9458614610</p>
@@ -10310,8 +10310,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV45Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v50 • 50 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v50)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
   }
 
   window.addEventListener("DOMContentLoaded", syncV45Dom);
@@ -10320,7 +10320,7 @@ setInterval(renderPlanTrackerCard, 60000);
 
 
 (function applyV46NewWebAppUrl() {
-  const TARGET_URL = "https://script.google.com/macros/s/AKfycbyZCPTwX5Zi_-Tcw_freng7-y0rlMcozb5suF8V8OXo5SYhyVGTR2G5o7ExXn2n3mkV/exec";
+  const TARGET_URL = "https://script.google.com/macros/s/AKfycbwhOTNBKx9wt5r_P6W3vqGzAfykJziNAz_nG4CFEpk-rsLY52n9XLpAQ_dKdsTEVWqPuA/exec";
   if (typeof PLAN_CONFIG === "object" && PLAN_CONFIG) {
     PLAN_CONFIG.currentVersion = "v46";
     PLAN_CONFIG.totalVersionsUpdated = 46;
@@ -10334,8 +10334,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV46Ui() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v50 • 50 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v50)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
   }
   window.addEventListener("DOMContentLoaded", syncV46Ui);
   syncV46Ui();
@@ -10992,8 +10992,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function initV47Tables() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v50 • 50 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v50)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     window.renderSaleLineRows();
     window.renderPurchaseLineRows();
     window.calcSaleTotal();
@@ -11070,8 +11070,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV48Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v50 • 50 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v50)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     if (typeof window.renderSaleLineRows === "function") window.renderSaleLineRows();
     if (typeof window.renderPurchaseLineRows === "function") window.renderPurchaseLineRows();
   }
@@ -12191,8 +12191,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV49Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v50 • 50 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v50)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     if (typeof window.renderSaleLineRows === "function") window.renderSaleLineRows();
     if (typeof window.renderPurchaseLineRows === "function") window.renderPurchaseLineRows();
     if (typeof window.calcSaleTotal === "function") window.calcSaleTotal();
@@ -12204,22 +12204,63 @@ setInterval(renderPlanTrackerCard, 60000);
 })();
 
 
-(function applyV50FinalCodeAndSheetFields() {
+(function applyV51DeployedUrlAndInvoiceLogo() {
+  const DEPLOYED_URL_V51 = "https://script.google.com/macros/s/AKfycbwhOTNBKx9wt5r_P6W3vqGzAfykJziNAz_nG4CFEpk-rsLY52n9XLpAQ_dKdsTEVWqPuA/exec";
   if (typeof PLAN_CONFIG === "object" && PLAN_CONFIG) {
-    PLAN_CONFIG.currentVersion = "v50";
-    PLAN_CONFIG.totalVersionsUpdated = 50;
-    PLAN_CONFIG.lastUpdatedDateLabel = "26 Nov 2026";
+    PLAN_CONFIG.currentVersion = "v51";
+    PLAN_CONFIG.totalVersionsUpdated = 51;
+    PLAN_CONFIG.lastUpdatedDateLabel = "27 Nov 2026";
+  }
+  
+  function getVaidikLogoSrc() {
+    return "Vaidik Seeds Logo.png";
+  }
+  window.handleVaidikLogoError = function(imgEl) {
+    if (!imgEl || imgEl.dataset.fallbackDone) return;
+    imgEl.dataset.fallbackDone = "1";
+    const candidates = ["Vaidik Seeds Logo.png", "vaidik seeds logo.png", "Vaidik_Seeds_Logo.png", "logo.png"];
+    const cur = imgEl.getAttribute("src") || "";
+    const next = candidates.find(c => c !== cur);
+    if (next) imgEl.src = next;
+  };
+
+  if (typeof state === "object" && state) {
+    if (!state.settings) state.settings = { kaddaPct: 1.0, sheetUrl: DEPLOYED_URL_V51 };
+    state.settings.sheetUrl = DEPLOYED_URL_V51;
+    if (typeof saveState === "function") saveState();
   }
 
-  function syncV50Dom() {
+  // Ensure openReceipt always includes Vaidik Seeds logo cleanly in firm block
+  const _origOpenReceiptV51 = typeof openReceipt === "function" ? openReceipt : null;
+  if (_origOpenReceiptV51) {
+    window.openReceipt = function(txId) {
+      const res = _origOpenReceiptV51.apply(this, arguments);
+      const printArea = document.getElementById("printArea");
+      if (printArea) {
+        const sheet = printArea.querySelector(".a4-invoice-sheet");
+        if (sheet && !sheet.querySelector(".v51-invoice-logo-img")) {
+          const topGrid = sheet.firstElementChild;
+          if (topGrid && topGrid.children && topGrid.children.length >= 2) {
+            const rightFirmCol = topGrid.children[1];
+            const logoWrap = document.createElement("div");
+            logoWrap.className = "flex items-center justify-end gap-2 pb-1";
+            logoWrap.innerHTML = `<img src="Vaidik Seeds Logo.png" onerror="handleVaidikLogoError(this)" alt="वैदिक सीड्स लोगो" class="v51-invoice-logo-img h-10 w-10 object-contain shrink-0">`;
+            rightFirmCol.insertBefore(logoWrap, rightFirmCol.firstChild);
+          }
+        }
+      }
+      return res;
+    };
+  }
+
+  function syncV51Ui() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v50 • 50 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 26 Nov 2026 (v50)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
   }
-
-  window.addEventListener("DOMContentLoaded", syncV50Dom);
-  syncV50Dom();
+  window.addEventListener("DOMContentLoaded", syncV51Ui);
+  syncV51Ui();
 })();
 
 </script>
