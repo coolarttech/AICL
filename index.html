@@ -846,10 +846,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v55 • 55 वर्जन</span>
+          <span id="versionBadgeDisplay">v57 • 57 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 27 Nov 2026 (v55)
+          Last Updated On: 27 Nov 2026 (v57)
         </div>
       </div>
     </div>
@@ -1324,7 +1324,65 @@
               <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-emerald-200/70">
                 <span class="text-xs font-bold text-[#132A46]">बिक्री आइटम विवरण (इनवॉइस टेबल — एक या अधिक लाइनें)</span>
               </div>
-              <div id="saleMultiLinesContainer" class="space-y-2.5"></div>
+              <div id="saleMultiLinesContainer" class="space-y-2.5">
+  <div class="border border-slate-300 rounded-lg overflow-x-auto bg-white">
+    <table class="w-full text-xs border-collapse text-left">
+      <thead>
+        <tr class="bg-[#132A46] text-white border-b border-slate-300">
+          <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">लाइन</th>
+          <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">आइटम / वर्ग</th>
+          <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">संख्या</th>
+          <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">बैग (Kg)</th>
+          <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">अतिरिक्त Kg</th>
+          <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">रेट (₹)</th>
+          <th class="py-1.5 px-2 border-r border-slate-600 font-semibold text-right">लाइन कुल</th>
+          <th class="py-1.5 px-2 font-semibold text-center">एक्शन</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="v55-s-row border-b border-slate-300 bg-white">
+          <td class="py-1.5 px-2 border-r border-slate-300 whitespace-nowrap">
+            <span class="v55-s-lbl font-bold text-xs text-[#132A46]">लाइन 1</span>
+          </td>
+          <td class="py-1.5 px-2 border-r border-slate-300 min-w-[180px]">
+            <select onchange="if(window.onSaleItemPick55)window.onSaleItemPick55(this)" class="v55-s-item w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm bg-white font-semibold text-[#132A46]">
+              <option value="">-- बिक्री आइटम चुनें --</option>
+            </select>
+          </td>
+          <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
+            <input type="text" inputmode="numeric" value="0" oninput="if(window.onSaleNumInp55)window.onSaleNumInp55(this)" class="v55-s-qty num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white" placeholder="0">
+          </td>
+          <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
+            <input type="text" inputmode="decimal" value="0" oninput="if(window.onSaleNumInp55)window.onSaleNumInp55(this)" class="v55-s-pack num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right bg-white" placeholder="0">
+          </td>
+          <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
+            <input type="text" inputmode="decimal" value="0" oninput="if(window.onSaleNumInp55)window.onSaleNumInp55(this)" class="v55-s-extra num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white" placeholder="0">
+          </td>
+          <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
+            <input type="text" inputmode="decimal" value="0" oninput="if(window.onSaleNumInp55)window.onSaleNumInp55(this)" class="v55-s-rate num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white" placeholder="0">
+          </td>
+          <td class="v55-s-row-tot py-1.5 px-2 border-r border-slate-300 text-right whitespace-nowrap">
+            <div class="num-clean text-xs font-bold text-[#132A46]">0 Kg</div>
+            <div class="num-clean text-xs font-bold text-[#1EA668]">₹0</div>
+          </td>
+          <td class="py-1.5 px-2 text-center whitespace-nowrap">
+            <button type="button" onclick="if(window.delSaleRow55)window.delSaleRow55(this)" class="px-2 py-0.5 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold cursor-pointer">हटाएं</button>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="bg-slate-50 border-t border-slate-300 font-bold text-[#132A46]">
+          <td colspan="6" class="py-1.5 px-2.5 border-r border-slate-300 text-right">सभी लाइनों का कुल योग (Sub-Total):</td>
+          <td class="v55-s-foot-tot py-1.5 px-2 border-r border-slate-300 text-right num-clean whitespace-nowrap">
+            <div>0 Kg</div>
+            <div class="text-[#1EA668]">₹0</div>
+          </td>
+          <td class="py-1.5 px-2 text-center"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
               <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
                 <span class="text-[11px] text-slate-500">दूसरी या अगली आइटम लाइन नीचे जोड़ें:</span>
                 <button type="button" onclick="addSaleLineRow()" class="px-3.5 py-1.5 rounded-lg bg-[#1EA668] hover:bg-emerald-700 text-white text-xs font-bold shadow-2xs transition">+ दूसरी आइटम लाइन जोड़ें</button>
@@ -1563,7 +1621,55 @@
               <div class="flex flex-wrap items-center justify-between gap-2 pb-1.5 border-b border-sky-200/70">
                 <span class="text-xs font-bold text-[#132A46]">खरीद फसल / आइटम विवरण (इनवॉइस लाइनें — भर्ती बैग साइज, गोदाम बोरी, कुल कट्टे, अतिरिक्त वजन व खरीद भाव)</span>
               </div>
-              <div id="purMultiLinesContainer" class="space-y-2.5"></div>
+              <div id="purMultiLinesContainer" class="space-y-2.5">
+  <div class="border border-slate-300 rounded-lg overflow-x-auto bg-white">
+    <table class="w-full text-xs border-collapse text-left">
+      <thead>
+        <tr class="bg-[#132A46] text-white border-b border-slate-300">
+          <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">लाइन</th>
+          <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">फसल / आइटम</th>
+          <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">कट्टे / बैग</th>
+          <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">बैग (Kg)</th>
+          <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">अतिरिक्त Kg</th>
+          <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">रेट (₹/Qtl)</th>
+          <th class="py-1.5 px-2 border-r border-slate-600 font-semibold text-right">लाइन कुल</th>
+          <th class="py-1.5 px-2 font-semibold text-center">एक्शन</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="v55-p-row border-b border-slate-300 bg-white">
+          <td class="py-1.5 px-2 border-r border-slate-300 whitespace-nowrap">
+            <span class="font-bold text-xs text-[#132A46]">लाइन 1</span>
+          </td>
+          <td class="py-1.5 px-2 border-r border-slate-300 min-w-[175px]">
+            <select onchange="if(window.onPurLineInp55)window.onPurLineInp55(this)" class="v55-p-item w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm bg-white font-semibold text-[#132A46]">
+              <option value="">-- कच्ची फसल / आइटम चुनें --</option>
+            </select>
+          </td>
+          <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
+            <input type="text" inputmode="numeric" value="0" oninput="if(window.onPurLineInp55)window.onPurLineInp55(this)" class="v55-p-bags num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white" placeholder="0">
+          </td>
+          <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
+            <input type="text" inputmode="decimal" value="50" oninput="if(window.onPurLineInp55)window.onPurLineInp55(this)" class="v55-p-size num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right bg-white" placeholder="50">
+          </td>
+          <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
+            <input type="text" inputmode="decimal" value="0" oninput="if(window.onPurLineInp55)window.onPurLineInp55(this)" class="v55-p-extra num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white" placeholder="0">
+          </td>
+          <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
+            <input type="text" inputmode="decimal" value="0" oninput="if(window.onPurLineInp55)window.onPurLineInp55(this)" class="v55-p-rate num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white" placeholder="0">
+          </td>
+          <td class="py-1.5 px-2 border-r border-slate-300 text-right whitespace-nowrap num-clean">
+            <div class="text-xs font-bold text-[#132A46]">0 Kg</div>
+            <div class="text-xs font-bold text-sky-700">₹0</div>
+          </td>
+          <td class="py-1.5 px-2 text-center whitespace-nowrap">
+            <button type="button" onclick="if(window.delPurRow55)window.delPurRow55(this)" class="px-2 py-0.5 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold cursor-pointer">हटाएं</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
               <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
                 <span class="text-[11px] text-slate-500">दूसरी या अगली खरीद लाइन नीचे जोड़ें (हर लाइन का अपना सब-टोटल जुड़ेगा):</span>
                 <button type="button" onclick="addPurchaseLineRow()" class="px-3.5 py-1.5 rounded-lg bg-[#132A46] hover:bg-slate-800 text-white text-xs font-bold shadow-2xs transition">+ दूसरी खरीद लाइन जोड़ें</button>
@@ -8193,8 +8299,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncPlanVersionDom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v55 • 55 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v55)";
+    if (verEl) verEl.textContent = "v57 • 57 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v57)";
     if (typeof renderPlanTrackerCard === "function") {
       try { renderPlanTrackerCard(); } catch (e) {}
     }
@@ -8480,8 +8586,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v55 • 55 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v55)";
+    if (verEl) verEl.textContent = "v57 • 57 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v57)";
   });
 })();
 
@@ -8624,8 +8730,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v55 • 55 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v55)";
+    if (verEl) verEl.textContent = "v57 • 57 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v57)";
     if (typeof populatePurchaseCropCascade === "function") {
       populatePurchaseCropCascade();
     }
@@ -8701,8 +8807,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV35Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v55 • 55 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v55)";
+    if (verEl) verEl.textContent = "v57 • 57 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v57)";
     updateLoginTopClockLive();
   }
 
@@ -8822,8 +8928,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV36Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v55 • 55 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v55)";
+    if (verEl) verEl.textContent = "v57 • 57 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v57)";
   }
 
   window.addEventListener("DOMContentLoaded", syncV36Dom);
@@ -8952,8 +9058,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV38Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v55 • 55 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v55)";
+    if (verEl) verEl.textContent = "v57 • 57 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v57)";
     tickAllClocksNow();
     syncDashboardBadges();
   }
@@ -9083,8 +9189,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV40Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v55 • 55 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v55)";
+    if (verEl) verEl.textContent = "v57 • 57 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v57)";
     if (typeof renderMasters === "function") renderMasters();
   }
 
@@ -9185,8 +9291,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV42Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v55 • 55 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v55)";
+    if (verEl) verEl.textContent = "v57 • 57 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v57)";
     if (typeof window.calcSaleTotal === "function") window.calcSaleTotal();
   }
 
@@ -9705,8 +9811,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV44Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v55 • 55 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v55)";
+    if (verEl) verEl.textContent = "v57 • 57 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v57)";
     window.renderSaleLineRows();
     window.renderPurchaseLineRows();
   }
@@ -10310,8 +10416,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV45Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v55 • 55 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v55)";
+    if (verEl) verEl.textContent = "v57 • 57 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v57)";
   }
 
   window.addEventListener("DOMContentLoaded", syncV45Dom);
@@ -10334,8 +10440,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV46Ui() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v55 • 55 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v55)";
+    if (verEl) verEl.textContent = "v57 • 57 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v57)";
   }
   window.addEventListener("DOMContentLoaded", syncV46Ui);
   syncV46Ui();
@@ -10992,8 +11098,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function initV47Tables() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v55 • 55 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v55)";
+    if (verEl) verEl.textContent = "v57 • 57 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v57)";
     window.renderSaleLineRows();
     window.renderPurchaseLineRows();
     window.calcSaleTotal();
@@ -11070,8 +11176,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV48Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v55 • 55 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v55)";
+    if (verEl) verEl.textContent = "v57 • 57 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v57)";
     if (typeof window.renderSaleLineRows === "function") window.renderSaleLineRows();
     if (typeof window.renderPurchaseLineRows === "function") window.renderPurchaseLineRows();
   }
@@ -12191,8 +12297,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV49Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v55 • 55 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v55)";
+    if (verEl) verEl.textContent = "v57 • 57 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v57)";
     if (typeof window.renderSaleLineRows === "function") window.renderSaleLineRows();
     if (typeof window.renderPurchaseLineRows === "function") window.renderPurchaseLineRows();
     if (typeof window.calcSaleTotal === "function") window.calcSaleTotal();
@@ -12256,8 +12362,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV51Ui() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v55 • 55 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v55)";
+    if (verEl) verEl.textContent = "v57 • 57 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v57)";
   }
   window.addEventListener("DOMContentLoaded", syncV51Ui);
   syncV51Ui();
@@ -12917,8 +13023,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function bootV55() {
     const vEl = document.getElementById("versionBadgeDisplay");
     const uEl = document.getElementById("lastUpdatedOnDisplay");
-    if (vEl) vEl.textContent = "v55 • 55 वर्जन";
-    if (uEl) uEl.textContent = "Last Updated On: 27 Nov 2026 (v55)";
+    if (vEl) vEl.textContent = "v57 • 57 वर्जन";
+    if (uEl) uEl.textContent = "Last Updated On: 27 Nov 2026 (v57)";
     syncNextBillNo55();
     window.renderSaleLineRows();
     window.renderPurchaseLineRows();
