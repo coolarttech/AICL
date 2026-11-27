@@ -846,10 +846,10 @@
         </div>
         <div class="flex items-center justify-between text-[10px] text-amber-200/80 num-clean pt-1 border-t border-amber-400/20">
           <span id="planElapsedDisplay">चला: 1 दिन</span>
-          <span id="versionBadgeDisplay">v58 • 58 वर्जन</span>
+          <span id="versionBadgeDisplay">v51 • 51 वर्जन</span>
         </div>
         <div id="lastUpdatedOnDisplay" class="text-[9.5px] text-amber-100/75 num-clean truncate">
-          Last Updated On: 27 Nov 2026 (v58)
+          Last Updated On: 27 Nov 2026 (v51)
         </div>
       </div>
     </div>
@@ -1324,65 +1324,7 @@
               <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-emerald-200/70">
                 <span class="text-xs font-bold text-[#132A46]">बिक्री आइटम विवरण (इनवॉइस टेबल — एक या अधिक लाइनें)</span>
               </div>
-              <div id="saleMultiLinesContainer" class="space-y-2.5">
-  <div class="border border-slate-300 rounded-lg overflow-x-auto bg-white">
-    <table class="w-full text-xs border-collapse text-left">
-      <thead>
-        <tr class="bg-[#132A46] text-white border-b border-slate-300">
-          <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">लाइन</th>
-          <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">आइटम / वर्ग</th>
-          <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">संख्या</th>
-          <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">बैग (Kg)</th>
-          <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">अतिरिक्त Kg</th>
-          <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">रेट (₹)</th>
-          <th class="py-1.5 px-2 border-r border-slate-600 font-semibold text-right">लाइन कुल</th>
-          <th class="py-1.5 px-2 font-semibold text-center">एक्शन</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="v55-s-row border-b border-slate-300 bg-white">
-          <td class="py-1.5 px-2 border-r border-slate-300 whitespace-nowrap">
-            <span class="v55-s-lbl font-bold text-xs text-[#132A46]">लाइन 1</span>
-          </td>
-          <td class="py-1.5 px-2 border-r border-slate-300 min-w-[180px]">
-            <select onchange="if(window.onSaleItemPick55)window.onSaleItemPick55(this)" class="v55-s-item w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm bg-white font-semibold text-[#132A46]">
-              <option value="">-- बिक्री आइटम चुनें --</option>
-            </select>
-          </td>
-          <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
-            <input type="text" inputmode="numeric" value="0" oninput="if(window.onSaleNumInp55)window.onSaleNumInp55(this)" class="v55-s-qty num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white" placeholder="0">
-          </td>
-          <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
-            <input type="text" inputmode="decimal" value="0" oninput="if(window.onSaleNumInp55)window.onSaleNumInp55(this)" class="v55-s-pack num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right bg-white" placeholder="0">
-          </td>
-          <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
-            <input type="text" inputmode="decimal" value="0" oninput="if(window.onSaleNumInp55)window.onSaleNumInp55(this)" class="v55-s-extra num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white" placeholder="0">
-          </td>
-          <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
-            <input type="text" inputmode="decimal" value="0" oninput="if(window.onSaleNumInp55)window.onSaleNumInp55(this)" class="v55-s-rate num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white" placeholder="0">
-          </td>
-          <td class="v55-s-row-tot py-1.5 px-2 border-r border-slate-300 text-right whitespace-nowrap">
-            <div class="num-clean text-xs font-bold text-[#132A46]">0 Kg</div>
-            <div class="num-clean text-xs font-bold text-[#1EA668]">₹0</div>
-          </td>
-          <td class="py-1.5 px-2 text-center whitespace-nowrap">
-            <button type="button" onclick="if(window.delSaleRow55)window.delSaleRow55(this)" class="px-2 py-0.5 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold cursor-pointer">हटाएं</button>
-          </td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr class="bg-slate-50 border-t border-slate-300 font-bold text-[#132A46]">
-          <td colspan="6" class="py-1.5 px-2.5 border-r border-slate-300 text-right">सभी लाइनों का कुल योग (Sub-Total):</td>
-          <td class="v55-s-foot-tot py-1.5 px-2 border-r border-slate-300 text-right num-clean whitespace-nowrap">
-            <div>0 Kg</div>
-            <div class="text-[#1EA668]">₹0</div>
-          </td>
-          <td class="py-1.5 px-2 text-center"></td>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
-</div>
+              <div id="saleMultiLinesContainer" class="space-y-2.5"></div>
               <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
                 <span class="text-[11px] text-slate-500">दूसरी या अगली आइटम लाइन नीचे जोड़ें:</span>
                 <button type="button" onclick="addSaleLineRow()" class="px-3.5 py-1.5 rounded-lg bg-[#1EA668] hover:bg-emerald-700 text-white text-xs font-bold shadow-2xs transition">+ दूसरी आइटम लाइन जोड़ें</button>
@@ -1621,55 +1563,7 @@
               <div class="flex flex-wrap items-center justify-between gap-2 pb-1.5 border-b border-sky-200/70">
                 <span class="text-xs font-bold text-[#132A46]">खरीद फसल / आइटम विवरण (इनवॉइस लाइनें — भर्ती बैग साइज, गोदाम बोरी, कुल कट्टे, अतिरिक्त वजन व खरीद भाव)</span>
               </div>
-              <div id="purMultiLinesContainer" class="space-y-2.5">
-  <div class="border border-slate-300 rounded-lg overflow-x-auto bg-white">
-    <table class="w-full text-xs border-collapse text-left">
-      <thead>
-        <tr class="bg-[#132A46] text-white border-b border-slate-300">
-          <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">लाइन</th>
-          <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">फसल / आइटम</th>
-          <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">कट्टे / बैग</th>
-          <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">बैग (Kg)</th>
-          <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">अतिरिक्त Kg</th>
-          <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">रेट (₹/Qtl)</th>
-          <th class="py-1.5 px-2 border-r border-slate-600 font-semibold text-right">लाइन कुल</th>
-          <th class="py-1.5 px-2 font-semibold text-center">एक्शन</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="v55-p-row border-b border-slate-300 bg-white">
-          <td class="py-1.5 px-2 border-r border-slate-300 whitespace-nowrap">
-            <span class="font-bold text-xs text-[#132A46]">लाइन 1</span>
-          </td>
-          <td class="py-1.5 px-2 border-r border-slate-300 min-w-[175px]">
-            <select onchange="if(window.onPurLineInp55)window.onPurLineInp55(this)" class="v55-p-item w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm bg-white font-semibold text-[#132A46]">
-              <option value="">-- कच्ची फसल / आइटम चुनें --</option>
-            </select>
-          </td>
-          <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
-            <input type="text" inputmode="numeric" value="0" oninput="if(window.onPurLineInp55)window.onPurLineInp55(this)" class="v55-p-bags num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white" placeholder="0">
-          </td>
-          <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
-            <input type="text" inputmode="decimal" value="50" oninput="if(window.onPurLineInp55)window.onPurLineInp55(this)" class="v55-p-size num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right bg-white" placeholder="50">
-          </td>
-          <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
-            <input type="text" inputmode="decimal" value="0" oninput="if(window.onPurLineInp55)window.onPurLineInp55(this)" class="v55-p-extra num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white" placeholder="0">
-          </td>
-          <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
-            <input type="text" inputmode="decimal" value="0" oninput="if(window.onPurLineInp55)window.onPurLineInp55(this)" class="v55-p-rate num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white" placeholder="0">
-          </td>
-          <td class="py-1.5 px-2 border-r border-slate-300 text-right whitespace-nowrap num-clean">
-            <div class="text-xs font-bold text-[#132A46]">0 Kg</div>
-            <div class="text-xs font-bold text-sky-700">₹0</div>
-          </td>
-          <td class="py-1.5 px-2 text-center whitespace-nowrap">
-            <button type="button" onclick="if(window.delPurRow55)window.delPurRow55(this)" class="px-2 py-0.5 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold cursor-pointer">हटाएं</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+              <div id="purMultiLinesContainer" class="space-y-2.5"></div>
               <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
                 <span class="text-[11px] text-slate-500">दूसरी या अगली खरीद लाइन नीचे जोड़ें (हर लाइन का अपना सब-टोटल जुड़ेगा):</span>
                 <button type="button" onclick="addPurchaseLineRow()" class="px-3.5 py-1.5 rounded-lg bg-[#132A46] hover:bg-slate-800 text-white text-xs font-bold shadow-2xs transition">+ दूसरी खरीद लाइन जोड़ें</button>
@@ -8299,8 +8193,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncPlanVersionDom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v58 • 58 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v58)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     if (typeof renderPlanTrackerCard === "function") {
       try { renderPlanTrackerCard(); } catch (e) {}
     }
@@ -8586,8 +8480,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v58 • 58 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v58)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
   });
 })();
 
@@ -8730,8 +8624,8 @@ setInterval(renderPlanTrackerCard, 60000);
   window.addEventListener("DOMContentLoaded", () => {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v58 • 58 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v58)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     if (typeof populatePurchaseCropCascade === "function") {
       populatePurchaseCropCascade();
     }
@@ -8807,8 +8701,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV35Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v58 • 58 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v58)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     updateLoginTopClockLive();
   }
 
@@ -8928,8 +8822,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV36Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v58 • 58 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v58)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
   }
 
   window.addEventListener("DOMContentLoaded", syncV36Dom);
@@ -9058,8 +8952,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV38Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v58 • 58 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v58)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     tickAllClocksNow();
     syncDashboardBadges();
   }
@@ -9189,8 +9083,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV40Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v58 • 58 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v58)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     if (typeof renderMasters === "function") renderMasters();
   }
 
@@ -9291,8 +9185,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV42Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v58 • 58 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v58)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     if (typeof window.calcSaleTotal === "function") window.calcSaleTotal();
   }
 
@@ -9811,8 +9705,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV44Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v58 • 58 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v58)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     window.renderSaleLineRows();
     window.renderPurchaseLineRows();
   }
@@ -10416,8 +10310,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV45Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v58 • 58 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v58)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
   }
 
   window.addEventListener("DOMContentLoaded", syncV45Dom);
@@ -10440,8 +10334,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV46Ui() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v58 • 58 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v58)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
   }
   window.addEventListener("DOMContentLoaded", syncV46Ui);
   syncV46Ui();
@@ -11098,8 +10992,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function initV47Tables() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v58 • 58 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v58)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     window.renderSaleLineRows();
     window.renderPurchaseLineRows();
     window.calcSaleTotal();
@@ -11176,8 +11070,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV48Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v58 • 58 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v58)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     if (typeof window.renderSaleLineRows === "function") window.renderSaleLineRows();
     if (typeof window.renderPurchaseLineRows === "function") window.renderPurchaseLineRows();
   }
@@ -12297,8 +12191,8 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV49Dom() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v58 • 58 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v58)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
     if (typeof window.renderSaleLineRows === "function") window.renderSaleLineRows();
     if (typeof window.renderPurchaseLineRows === "function") window.renderPurchaseLineRows();
     if (typeof window.calcSaleTotal === "function") window.calcSaleTotal();
@@ -12362,936 +12256,11 @@ setInterval(renderPlanTrackerCard, 60000);
   function syncV51Ui() {
     const verEl = document.getElementById("versionBadgeDisplay");
     const updEl = document.getElementById("lastUpdatedOnDisplay");
-    if (verEl) verEl.textContent = "v58 • 58 वर्जन";
-    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v58)";
+    if (verEl) verEl.textContent = "v51 • 51 वर्जन";
+    if (updEl) updEl.textContent = "Last Updated On: 27 Nov 2026 (v51)";
   }
   window.addEventListener("DOMContentLoaded", syncV51Ui);
   syncV51Ui();
-})(
-
-
-
-(function applyV58CompleteWorkingCalcAndAll7Updates() {
-  if (typeof PLAN_CONFIG === "object" && PLAN_CONFIG) {
-    PLAN_CONFIG.currentVersion = "v58";
-    PLAN_CONFIG.totalVersionsUpdated = 58;
-    PLAN_CONFIG.lastUpdatedDateLabel = "27 Nov 2026";
-  }
-
-  function cleanNum58(raw) {
-    let s = String(raw ?? "").replace(/[^0-9.]/g, "");
-    const dot = s.indexOf(".");
-    if (dot !== -1) {
-      s = s.slice(0, dot + 1) + s.slice(dot + 1).replace(/\./g, "");
-    }
-    return s;
-  }
-
-  function parseNum58(raw) {
-    const v = Number(cleanNum58(raw));
-    return isNaN(v) ? 0 : v;
-  }
-
-  window.formatDateDDMMYYYY = function(val) {
-    if (!val) return "";
-    const s = String(val).trim();
-    const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
-    if (m) return `${m[3]}/${m[2]}/${m[1]}`;
-    const d = new Date(s);
-    if (!isNaN(d.getTime())) {
-      const dd = String(d.getDate()).padStart(2, "0");
-      const mm = String(d.getMonth() + 1).padStart(2, "0");
-      const yy = d.getFullYear();
-      return `${dd}/${mm}/${yy}`;
-    }
-    return s;
-  };
-
-  // ---------------- SALES MULTI-LINE & TOTAL CALCULATION ----------------
-  function saleOpts58(selId) {
-    const out = [`<option value="">-- बिक्री आइटम चुनें --</option>`];
-    (state.saleItems || []).forEach(it => {
-      const sel = String(it.id) === String(selId) ? " selected" : "";
-      const label = `${it.name || ""}${it.category ? " (" + it.category + ")" : ""}${it.packKg ? " • " + it.packKg + "kg" : ""}`;
-      out.push(`<option value="${it.id}"${sel}>${label}</option>`);
-    });
-    return out.join("");
-  }
-
-  function readSaleRow58(tr) {
-    return {
-      itemId: tr.querySelector("select.v55-s-item")?.value || "",
-      qty: parseNum58(tr.querySelector("input.v55-s-qty")?.value),
-      packKg: parseNum58(tr.querySelector("input.v55-s-pack")?.value),
-      extraKg: parseNum58(tr.querySelector("input.v55-s-extra")?.value),
-      rate: parseNum58(tr.querySelector("input.v55-s-rate")?.value)
-    };
-  }
-
-  function saleRowMarkup58(idx, ln) {
-    const d = {
-      itemId: ln?.itemId || "",
-      qty: Number(ln?.qty) || 0,
-      packKg: Number(ln?.packKg) || 0,
-      extraKg: Number(ln?.extraKg) || 0,
-      rate: Number(ln?.rate) || 0
-    };
-    const lKg = Math.max(0, (d.qty * d.packKg) + d.extraKg);
-    const lAmt = Math.round(lKg * d.rate);
-    return `
-      <tr class="v55-s-row border-b border-slate-300 bg-white">
-        <td class="py-1.5 px-2 border-r border-slate-300 whitespace-nowrap">
-          <span class="v55-s-lbl font-bold text-xs text-[#132A46]">लाइन ${idx + 1}</span>
-        </td>
-        <td class="py-1.5 px-2 border-r border-slate-300 min-w-[180px]">
-          <select onchange="onSaleItemPick58(this)" class="v55-s-item w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm bg-white font-semibold text-[#132A46]">
-            ${saleOpts58(d.itemId)}
-          </select>
-        </td>
-        <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
-          <input type="text" inputmode="numeric" value="${d.qty}" oninput="onSaleNumInp58(this)" class="v55-s-qty num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white" placeholder="0">
-        </td>
-        <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
-          <input type="text" inputmode="decimal" value="${d.packKg}" oninput="onSaleNumInp58(this)" class="v55-s-pack num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right bg-white" placeholder="0">
-        </td>
-        <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
-          <input type="text" inputmode="decimal" value="${d.extraKg}" oninput="onSaleNumInp58(this)" class="v55-s-extra num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white" placeholder="0">
-        </td>
-        <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
-          <input type="text" inputmode="decimal" value="${d.rate}" oninput="onSaleNumInp58(this)" class="v55-s-rate num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white" placeholder="0">
-        </td>
-        <td class="v55-s-row-tot py-1.5 px-2 border-r border-slate-300 text-right whitespace-nowrap">
-          <div class="num-clean text-xs font-bold text-[#132A46]">${lKg.toLocaleString("en-IN")} Kg</div>
-          <div class="num-clean text-xs font-bold text-[#1EA668]">₹${lAmt.toLocaleString("en-IN")}</div>
-        </td>
-        <td class="py-1.5 px-2 text-center whitespace-nowrap">
-          <button type="button" onclick="delSaleRow58(this)" class="px-2 py-0.5 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold cursor-pointer">हटाएं</button>
-        </td>
-      </tr>
-    `;
-  }
-
-  function refreshSaleLinesAndGrandTotal58() {
-    const box = document.getElementById("saleMultiLinesContainer");
-    const trs = box ? Array.from(box.querySelectorAll("tbody tr.v55-s-row")) : [];
-    let linesSumKg = 0;
-    let linesSumAmt = 0;
-    let linesSumQty = 0;
-    let linesSumExtra = 0;
-
-    trs.forEach((tr, i) => {
-      const lbl = tr.querySelector(".v55-s-lbl");
-      if (lbl) lbl.textContent = `लाइन ${i + 1}`;
-      const d = readSaleRow58(tr);
-      const lKg = Math.max(0, (d.qty * d.packKg) + d.extraKg);
-      const lAmt = Math.round(lKg * d.rate);
-      linesSumKg += lKg;
-      linesSumAmt += lAmt;
-      linesSumQty += d.qty;
-      linesSumExtra += d.extraKg;
-
-      const cell = tr.querySelector(".v55-s-row-tot");
-      if (cell) {
-        cell.innerHTML = `<div class="num-clean text-xs font-bold text-[#132A46]">${lKg.toLocaleString("en-IN")} Kg</div><div class="num-clean text-xs font-bold text-[#1EA668]">₹${lAmt.toLocaleString("en-IN")}</div>`;
-      }
-    });
-
-    if (box) {
-      const foot = box.querySelector(".v55-s-foot-tot");
-      if (foot) {
-        foot.innerHTML = `<div>${linesSumKg.toLocaleString("en-IN")} Kg</div><div class="text-[#1EA668]">₹${linesSumAmt.toLocaleString("en-IN")}</div>`;
-      }
-    }
-
-    const pid = document.getElementById("salePartyId")?.value || "";
-    const editId = document.getElementById("editSaleTxId")?.value || null;
-    const oldBal = typeof getPartyBalance === "function" ? getPartyBalance(pid, editId) : 0;
-    const isMandi = Boolean(document.getElementById("channelMandi")?.checked);
-    const paid = parseNum58(document.getElementById("saleCashPaid")?.value);
-    const transOn = Boolean(document.getElementById("saleTransportEnabledChk")?.checked);
-    const transCharge = transOn ? parseNum58(document.getElementById("saleTransportCharge")?.value) : 0;
-    const gstOn = Boolean(document.getElementById("saleGstEnabledChk")?.checked);
-    const gstPct = gstOn ? parseNum58(document.getElementById("saleGstPct")?.value) : 0;
-
-    let finalKg = linesSumKg;
-    let subAmt = linesSumAmt;
-
-    if (isMandi) {
-      finalKg = parseNum58(document.getElementById("mandiWeightKg")?.value);
-      const rateQtl = parseNum58(document.getElementById("mandiRateQtl")?.value);
-      const ded = parseNum58(document.getElementById("mandiDeductionRs")?.value);
-      subAmt = Math.max(0, Math.round((finalKg / 100) * rateQtl) - ded);
-    }
-
-    const taxable = subAmt + transCharge;
-    const gstAmt = gstOn ? Math.round((taxable * gstPct) / 100) : 0;
-    const billAmt = taxable + gstAmt;
-    const newBal = oldBal + billAmt - paid;
-
-    if (document.getElementById("saleGstAmtDisplay")) {
-      document.getElementById("saleGstAmtDisplay").textContent = `₹${gstAmt.toLocaleString("en-IN")}`;
-    }
-    if (document.getElementById("saleTotalKg")) {
-      document.getElementById("saleTotalKg").innerHTML = `${(finalKg / 100).toFixed(2)} Qtl <span class="text-[11px] font-medium text-slate-500">(${finalKg.toLocaleString("en-IN")} Kg)</span>`;
-    }
-    if (document.getElementById("saleBillTotal")) {
-      document.getElementById("saleBillTotal").innerText = `₹${billAmt.toLocaleString("en-IN")}`;
-    }
-    if (document.getElementById("saleNetLedger")) {
-      document.getElementById("saleNetLedger").innerText = newBal >= 0
-        ? `₹${newBal.toLocaleString("en-IN")} (लेना है)`
-        : `₹${Math.abs(newBal).toLocaleString("en-IN")} (देना है)`;
-    }
-    if (!isMandi && document.getElementById("saleAutoDescShow")) {
-      const extraStr = (transCharge > 0 ? ` + भाड़ा ₹${transCharge}` : "") + (gstAmt > 0 ? ` + GST ₹${gstAmt}` : "");
-      document.getElementById("saleAutoDescShow").textContent = `${linesSumQty} संख्या + ${linesSumExtra} Kg अतिरिक्त = ${finalKg.toLocaleString("en-IN")} Kg${extraStr}`;
-    }
-
-    return { finalKg, billAmt, linesSumQty, linesSumExtra };
-  }
-
-  window.renderSaleLineRows = function(preset) {
-    const box = document.getElementById("saleMultiLinesContainer");
-    if (!box) return;
-    const curRows = Array.from(box.querySelectorAll("tbody tr.v55-s-row"));
-    const lines = Array.isArray(preset) && preset.length
-      ? preset
-      : (curRows.length ? curRows.map(readSaleRow58) : [{ itemId: "", qty: 0, packKg: 0, extraKg: 0, rate: 0 }]);
-
-    box.innerHTML = `
-      <div class="border border-slate-300 rounded-lg overflow-x-auto bg-white">
-        <table class="w-full text-xs border-collapse text-left">
-          <thead>
-            <tr class="bg-[#132A46] text-white border-b border-slate-300">
-              <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">लाइन</th>
-              <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">आइटम / वर्ग</th>
-              <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">संख्या</th>
-              <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">बैग (Kg)</th>
-              <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">अतिरिक्त Kg</th>
-              <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">रेट (₹)</th>
-              <th class="py-1.5 px-2 border-r border-slate-600 font-semibold text-right">लाइन कुल</th>
-              <th class="py-1.5 px-2 font-semibold text-center">एक्शन</th>
-            </tr>
-          </thead>
-          <tbody>${lines.map((ln, idx) => saleRowMarkup58(idx, ln)).join("")}</tbody>
-          <tfoot>
-            <tr class="bg-slate-50 border-t border-slate-300 font-bold text-[#132A46]">
-              <td colspan="6" class="py-1.5 px-2.5 border-r border-slate-300 text-right">सभी लाइनों का कुल योग (Sub-Total):</td>
-              <td class="v55-s-foot-tot py-1.5 px-2 border-r border-slate-300 text-right num-clean whitespace-nowrap">
-                <div>0 Kg</div>
-                <div class="text-[#1EA668]">₹0</div>
-              </td>
-              <td class="py-1.5 px-2 text-center"></td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-    `;
-    refreshSaleLinesAndGrandTotal58();
-  };
-
-  window.addSaleLineRow = function() {
-    const box = document.getElementById("saleMultiLinesContainer");
-    const tbody = box ? box.querySelector("tbody") : null;
-    if (!tbody) {
-      window.renderSaleLineRows([{ itemId: "", qty: 0, packKg: 0, extraKg: 0, rate: 0 }, { itemId: "", qty: 0, packKg: 0, extraKg: 0, rate: 0 }]);
-      return;
-    }
-    const idx = tbody.querySelectorAll("tr.v55-s-row").length;
-    tbody.insertAdjacentHTML("beforeend", saleRowMarkup58(idx, { itemId: "", qty: 0, packKg: 0, extraKg: 0, rate: 0 }));
-    refreshSaleLinesAndGrandTotal58();
-  };
-
-  window.delSaleRow58 = function(btn) {
-    const box = document.getElementById("saleMultiLinesContainer");
-    if (!box) return;
-    const rows = Array.from(box.querySelectorAll("tbody tr.v55-s-row"));
-    if (rows.length <= 1) {
-      window.renderSaleLineRows([{ itemId: "", qty: 0, packKg: 0, extraKg: 0, rate: 0 }]);
-      return;
-    }
-    btn.closest("tr.v55-s-row")?.remove();
-    refreshSaleLinesAndGrandTotal58();
-  };
-
-  window.onSaleNumInp58 = function(inp) {
-    const c = cleanNum58(inp.value);
-    if (inp.value !== c) inp.value = c;
-    refreshSaleLinesAndGrandTotal58();
-  };
-
-  window.onSaleItemPick58 = function(sel) {
-    const item = (state.saleItems || []).find(x => String(x.id) === String(sel.value));
-    const tr = sel.closest("tr.v55-s-row");
-    if (tr && item) {
-      const pInp = tr.querySelector("input.v55-s-pack");
-      const rInp = tr.querySelector("input.v55-s-rate");
-      if (pInp && item.packKg) pInp.value = item.packKg;
-      if (rInp && item.rate) rInp.value = item.rate;
-    }
-    refreshSaleLinesAndGrandTotal58();
-  };
-
-  window.calcSaleTotal = function() {
-    refreshSaleLinesAndGrandTotal58();
-  };
-
-  // ---------------- PURCHASE MULTI-LINE & TOTAL CALCULATION ----------------
-  function rawOpts58(selId) {
-    const out = [`<option value="">-- कच्ची फसल / आइटम चुनें --</option>`];
-    (state.rawItems || []).forEach(it => {
-      const sel = String(it.id) === String(selId) ? " selected" : "";
-      const label = `${it.name || ""}${it.variety ? " (" + it.variety + ")" : ""}`;
-      out.push(`<option value="${it.id}"${sel}>${label}</option>`);
-    });
-    return out.join("");
-  }
-
-  function readPurRow58(tr) {
-    return {
-      itemId: tr.querySelector("select.v55-p-item")?.value || "",
-      bags: parseNum58(tr.querySelector("input.v55-p-bags")?.value),
-      bagSize: parseNum58(tr.querySelector("input.v55-p-size")?.value) || 50,
-      extraKg: parseNum58(tr.querySelector("input.v55-p-extra")?.value),
-      rateQtl: parseNum58(tr.querySelector("input.v55-p-rate")?.value)
-    };
-  }
-
-  function purRowMarkup58(idx, ln) {
-    const d = {
-      itemId: ln?.itemId || "",
-      bags: Number(ln?.bags) || 0,
-      bagSize: Number(ln?.bagSize) || 50,
-      extraKg: Number(ln?.extraKg) || 0,
-      rateQtl: Number(ln?.rateQtl) || 0
-    };
-    const gKg = Math.max(0, (d.bags * d.bagSize) + d.extraKg);
-    const gAmt = Math.round((gKg / 100) * d.rateQtl);
-    return `
-      <tr class="v55-p-row border-b border-slate-300 bg-white">
-        <td class="py-1.5 px-2 border-r border-slate-300 whitespace-nowrap">
-          <span class="v55-p-lbl font-bold text-xs text-[#132A46]">लाइन ${idx + 1}</span>
-        </td>
-        <td class="py-1.5 px-2 border-r border-slate-300 min-w-[175px]">
-          <select onchange="onPurLineInp58(this)" class="v55-p-item w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm bg-white font-semibold text-[#132A46]">
-            ${rawOpts58(d.itemId)}
-          </select>
-        </td>
-        <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
-          <input type="text" inputmode="numeric" value="${d.bags}" oninput="onPurLineInp58(this)" class="v55-p-bags num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white" placeholder="0">
-        </td>
-        <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
-          <input type="text" inputmode="decimal" value="${d.bagSize}" oninput="onPurLineInp58(this)" class="v55-p-size num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right bg-white" placeholder="50">
-        </td>
-        <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
-          <input type="text" inputmode="decimal" value="${d.extraKg}" oninput="onPurLineInp58(this)" class="v55-p-extra num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white" placeholder="0">
-        </td>
-        <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
-          <input type="text" inputmode="decimal" value="${d.rateQtl}" oninput="onPurLineInp58(this)" class="v55-p-rate num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white" placeholder="0">
-        </td>
-        <td class="v55-p-row-tot py-1.5 px-2 border-r border-slate-300 text-right whitespace-nowrap num-clean">
-          <div class="text-xs font-bold text-[#132A46]">${gKg.toLocaleString("en-IN")} Kg</div>
-          <div class="text-xs font-bold text-sky-700">₹${gAmt.toLocaleString("en-IN")}</div>
-        </td>
-        <td class="py-1.5 px-2 text-center whitespace-nowrap">
-          <button type="button" onclick="delPurRow58(this)" class="px-2 py-0.5 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold cursor-pointer">हटाएं</button>
-        </td>
-      </tr>
-    `;
-  }
-
-  function refreshPurchaseLinesAndGrandTotal58() {
-    const box = document.getElementById("purMultiLinesContainer");
-    const trs = box ? Array.from(box.querySelectorAll("tbody tr.v55-p-row")) : [];
-
-    let grossKg = 0;
-    let grossAmtFromLines = 0;
-    let totalBags = 0;
-    let totalExtra = 0;
-
-    trs.forEach((tr, i) => {
-      const lbl = tr.querySelector(".v55-p-lbl");
-      if (lbl) lbl.textContent = `लाइन ${i + 1}`;
-      const d = readPurRow58(tr);
-      const gKg = Math.max(0, (d.bags * d.bagSize) + d.extraKg);
-      const gAmt = Math.round((gKg / 100) * d.rateQtl);
-      grossKg += gKg;
-      grossAmtFromLines += gAmt;
-      totalBags += d.bags;
-      totalExtra += d.extraKg;
-
-      const totCell = tr.querySelector(".v55-p-row-tot");
-      if (totCell) {
-        totCell.innerHTML = `<div class="text-xs font-bold text-[#132A46]">${gKg.toLocaleString("en-IN")} Kg</div><div class="text-xs font-bold text-sky-700">₹${gAmt.toLocaleString("en-IN")}</div>`;
-      }
-    });
-
-    const pid = document.getElementById("purPartyId")?.value || "";
-    const editId = document.getElementById("editPurTxId")?.value || null;
-    const oldBal = typeof getPartyBalance === "function" ? getPartyBalance(pid, editId) : 0;
-
-    const autoGrossEl = document.getElementById("purAutoGrossWeightShow");
-    if (autoGrossEl) {
-      autoGrossEl.innerText = `${(grossKg / 100).toFixed(2)} Qtl (${grossKg.toLocaleString("en-IN")} Kg)`;
-    }
-
-    const kaddaPct = parseNum58(document.getElementById("purKaddaPct")?.value);
-    const labor = parseNum58(document.getElementById("purLaborDed")?.value);
-    const trans = parseNum58(document.getElementById("purTransDed")?.value);
-    const paidNow = parseNum58(document.getElementById("purPaidNow")?.value);
-
-    const kaddaKg = Math.round((grossKg * kaddaPct) / 100);
-    const netKg = Math.max(0, grossKg - kaddaKg);
-    const lblEl = document.getElementById("purKaddaLabel");
-    if (lblEl) lblEl.innerText = `कद्दा कटौती (${kaddaPct}%)`;
-
-    // Calculate amount from per-line rates after kadda deduction ratio
-    const kaddaFactor = grossKg > 0 ? (netKg / grossKg) : 1;
-    const adjGrossAmt = Math.round(grossAmtFromLines * kaddaFactor);
-    const totalDed = labor + trans;
-    const netPayable = Math.max(0, adjGrossAmt - totalDed);
-    const finalBal = oldBal - netPayable + paidNow;
-
-    if (document.getElementById("purKaddaShow")) document.getElementById("purKaddaShow").innerText = `${kaddaKg.toLocaleString("en-IN")} Kg`;
-    if (document.getElementById("purNetKgShow")) {
-      document.getElementById("purNetKgShow").innerHTML = `${(netKg / 100).toFixed(2)} Qtl <span class="text-[11px] font-medium text-slate-500">(${netKg.toLocaleString("en-IN")} Kg)</span>`;
-    }
-    if (document.getElementById("purNetAmtShow")) document.getElementById("purNetAmtShow").innerText = `₹${netPayable.toLocaleString("en-IN")}`;
-    if (document.getElementById("purPrevBalShow")) {
-      document.getElementById("purPrevBalShow").innerText = oldBal > 0
-        ? `₹${oldBal.toLocaleString("en-IN")} (लेना बाकी)`
-        : (oldBal < 0 ? `₹${Math.abs(oldBal).toLocaleString("en-IN")} (देना बाकी)` : "₹0");
-    }
-    if (document.getElementById("purFinalLedgerShow")) {
-      document.getElementById("purFinalLedgerShow").innerText = finalBal > 0
-        ? `₹${finalBal.toLocaleString("en-IN")} (लेना बाकी)`
-        : (finalBal < 0 ? `₹${Math.abs(finalBal).toLocaleString("en-IN")} (देना बाकी)` : "₹0");
-    }
-
-    return { grossKg, kaddaKg, netKg, netPayable, totalBags, totalExtra };
-  }
-
-  window.renderPurchaseLineRows = function(preset) {
-    const box = document.getElementById("purMultiLinesContainer");
-    if (!box) return;
-    const curRows = Array.from(box.querySelectorAll("tbody tr.v55-p-row"));
-    const lines = Array.isArray(preset) && preset.length
-      ? preset
-      : (curRows.length ? curRows.map(readPurRow58) : [{ itemId: "", bags: 0, bagSize: 50, extraKg: 0, rateQtl: 0 }]);
-
-    box.innerHTML = `
-      <div class="border border-slate-300 rounded-lg overflow-x-auto bg-white">
-        <table class="w-full text-xs border-collapse text-left">
-          <thead>
-            <tr class="bg-[#132A46] text-white border-b border-slate-300">
-              <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">लाइन</th>
-              <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">फसल / आइटम</th>
-              <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">कट्टे / बैग</th>
-              <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">बैग (Kg)</th>
-              <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">अतिरिक्त Kg</th>
-              <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">रेट (₹/Qtl)</th>
-              <th class="py-1.5 px-2 border-r border-slate-600 font-semibold text-right">लाइन कुल</th>
-              <th class="py-1.5 px-2 font-semibold text-center">एक्शन</th>
-            </tr>
-          </thead>
-          <tbody>${lines.map((ln, idx) => purRowMarkup58(idx, ln)).join("")}</tbody>
-        </table>
-      </div>
-    `;
-    refreshPurchaseLinesAndGrandTotal58();
-  };
-
-  window.addPurchaseLineRow = function() {
-    const box = document.getElementById("purMultiLinesContainer");
-    const tbody = box ? box.querySelector("tbody") : null;
-    if (!tbody) {
-      window.renderPurchaseLineRows([{ itemId: "", bags: 0, bagSize: 50, extraKg: 0, rateQtl: 0 }, { itemId: "", bags: 0, bagSize: 50, extraKg: 0, rateQtl: 0 }]);
-      return;
-    }
-    const idx = tbody.querySelectorAll("tr.v55-p-row").length;
-    tbody.insertAdjacentHTML("beforeend", purRowMarkup58(idx, { itemId: "", bags: 0, bagSize: 50, extraKg: 0, rateQtl: 0 }));
-    refreshPurchaseLinesAndGrandTotal58();
-  };
-
-  window.delPurRow58 = function(btn) {
-    const box = document.getElementById("purMultiLinesContainer");
-    if (!box) return;
-    const rows = Array.from(box.querySelectorAll("tbody tr.v55-p-row"));
-    if (rows.length <= 1) {
-      window.renderPurchaseLineRows([{ itemId: "", bags: 0, bagSize: 50, extraKg: 0, rateQtl: 0 }]);
-      return;
-    }
-    btn.closest("tr.v55-p-row")?.remove();
-    refreshPurchaseLinesAndGrandTotal58();
-  };
-
-  window.onPurLineInp58 = function(el) {
-    if (el && el.tagName === "INPUT") {
-      const c = cleanNum58(el.value);
-      if (el.value !== c) el.value = c;
-    }
-    refreshPurchaseLinesAndGrandTotal58();
-  };
-
-  window.calcPurchaseTotal = function() {
-    refreshPurchaseLinesAndGrandTotal58();
-  };
-
-  // ---------------- SAVE BILLS USING ACTUAL LINE VALUES ----------------
-  window.saveSaleInvoice = function(e) {
-    if (e && typeof e.preventDefault === "function") e.preventDefault();
-    const pid = typeof resolvePartyIdFromField === "function"
-      ? resolvePartyIdFromField("salePartyId", "salePartySearch")
-      : (document.getElementById("salePartyId")?.value || "");
-    if (!pid) {
-      alert("कृपया पहले पार्टी चुनें या पार्टी लेजर में जोड़ें।");
-      return;
-    }
-
-    const calc = refreshSaleLinesAndGrandTotal58();
-    const editId = document.getElementById("editSaleTxId")?.value || "";
-    const isMandi = Boolean(document.getElementById("channelMandi")?.checked);
-    const dateVal = document.getElementById("saleDate")?.value || new Date().toISOString().slice(0, 10);
-    const lotNo = (document.getElementById("saleLotNo")?.value || "").trim() || "-";
-    const refNo = (document.getElementById("saleCustomNoInput")?.value || "").trim();
-    const paid = parseNum58(document.getElementById("saleCashPaid")?.value);
-
-    const rows = Array.from(document.querySelectorAll("#saleMultiLinesContainer tbody tr.v55-s-row")).map(readSaleRow58);
-    const first = rows[0] || { itemId: "", qty: 0, packKg: 0, extraKg: 0, rate: 0 };
-    const foundItem = (state.saleItems || []).find(x => String(x.id) === String(first.itemId));
-
-    let tx;
-    if (!isMandi) {
-      const invNo = editId || ("INV-" + (2001 + (state.transactions || []).filter(t => t.type === "SALE").length));
-      const descParts = rows
-        .filter(r => r.qty > 0 || r.extraKg > 0 || r.itemId)
-        .map(r => {
-          const it = (state.saleItems || []).find(x => String(x.id) === String(r.itemId));
-          const nm = it ? it.name : "आइटम";
-          const kg = Math.max(0, (r.qty * r.packKg) + r.extraKg);
-          return `${nm}: ${r.qty} सं × ${r.packKg}kg + ${r.extraKg}kg = ${kg}kg @ ₹${r.rate}`;
-        });
-      tx = {
-        id: invNo,
-        refNo: refNo || "",
-        type: "SALE",
-        saleChannel: "Seed Sale",
-        date: dateVal,
-        seasonYear: typeof getSeasonYear === "function" ? getSeasonYear(dateVal) : "",
-        partyId: pid,
-        lotNo,
-        lines: rows,
-        itemId: foundItem ? foundItem.id : "",
-        itemName: foundItem ? `${foundItem.name}${foundItem.category ? " (" + foundItem.category + ")" : ""}` : "Seed Sale",
-        category: foundItem ? foundItem.category : "-",
-        packKg: first.packKg,
-        qty: first.qty,
-        totalKg: calc.finalKg,
-        rate: first.rate,
-        deductions: 0,
-        amount: calc.billAmt,
-        paid,
-        note: descParts.length ? descParts.join(" | ") : `${calc.linesSumQty} संख्या + ${calc.linesSumExtra}kg = ${calc.finalKg}kg`
-      };
-    } else {
-      const mandiLoc = (document.getElementById("mandiLocation")?.value || "").trim() || "-";
-      const vehSlip = (document.getElementById("mandiVehicleSlip")?.value || "").trim() || "-";
-      const comm = (document.getElementById("mandiCommodity")?.value || "").trim() || "Mandi Supply";
-      const rateQtl = parseNum58(document.getElementById("mandiRateQtl")?.value);
-      const ded = parseNum58(document.getElementById("mandiDeductionRs")?.value);
-      const invNo = editId || ("MND-" + (501 + (state.transactions || []).filter(t => t.saleChannel === "Mandi Supply").length));
-      tx = {
-        id: invNo,
-        refNo: refNo || "",
-        type: "SALE",
-        saleChannel: "Mandi Supply",
-        date: dateVal,
-        seasonYear: typeof getSeasonYear === "function" ? getSeasonYear(dateVal) : "",
-        partyId: pid,
-        lotNo,
-        mandiOrLocation: mandiLoc,
-        vehicleOrSlip: vehSlip,
-        itemName: comm,
-        category: "Mandi Supply",
-        packKg: 0,
-        qty: 0,
-        totalKg: calc.finalKg,
-        rate: rateQtl,
-        deductions: ded,
-        amount: calc.billAmt,
-        paid,
-        note: `मंडी: ${mandiLoc} | वजन: ${(calc.finalKg / 100).toFixed(2)} Qtl (${calc.finalKg} Kg) @ ₹${rateQtl}/Qtl`
-      };
-    }
-
-    if (editId) {
-      const idx = state.transactions.findIndex(x => x.id === editId);
-      if (idx !== -1) state.transactions[idx] = tx;
-    } else {
-      state.transactions.unshift(tx);
-    }
-
-    const partyObj = (state.parties || []).find(x => x.id === pid);
-    const runBal = typeof getPartyBalance === "function" ? getPartyBalance(pid) : 0;
-    saveState();
-    if (typeof syncToGoogleSheet === "function") {
-      syncToGoogleSheet({
-        sheetTab: "Sales_Invoices",
-        actionType: "UPSERT",
-        ...tx,
-        partyName: partyObj ? partyObj.name : "",
-        runningBalance: runBal,
-        createdBy: state.role || "owner"
-      });
-    }
-
-    if (typeof renderDashboard === "function") renderDashboard();
-    if (typeof renderPartyList === "function") renderPartyList();
-    if (typeof window.openBillSuccessConfirmation === "function") {
-      window.openBillSuccessConfirmation(tx.id, "SALE");
-    }
-  };
-
-  window.savePurchaseBill = function(e) {
-    if (e && typeof e.preventDefault === "function") e.preventDefault();
-    const pid = typeof resolvePartyIdFromField === "function"
-      ? resolvePartyIdFromField("purPartyId", "purPartySearch")
-      : (document.getElementById("purPartyId")?.value || "");
-    if (!pid) {
-      alert("कृपया पहले किसान / पार्टी चुनें या पार्टी लेजर में जोड़ें।");
-      return;
-    }
-
-    const calc = refreshPurchaseLinesAndGrandTotal58();
-    const editId = document.getElementById("editPurTxId")?.value || "";
-    const dateVal = document.getElementById("purDate")?.value || new Date().toISOString().slice(0, 10);
-    const lotNo = (document.getElementById("purLotNo")?.value || "").trim() || "-";
-    const refNo = (document.getElementById("purCustomNoInput")?.value || "").trim();
-    const kantaSlip = (document.getElementById("purKantaSlip")?.value || "").trim() || "-";
-    const vehicle = (document.getElementById("purVehicle")?.value || "").trim() || "-";
-    const kaddaPct = parseNum58(document.getElementById("purKaddaPct")?.value);
-    const labor = parseNum58(document.getElementById("purLaborDed")?.value);
-    const trans = parseNum58(document.getElementById("purTransDed")?.value);
-    const paid = parseNum58(document.getElementById("purPaidNow")?.value);
-
-    const rows = Array.from(document.querySelectorAll("#purMultiLinesContainer tbody tr.v55-p-row")).map(readPurRow58);
-    const first = rows[0] || { itemId: "", bags: 0, bagSize: 50, extraKg: 0, rateQtl: 0 };
-    const foundRaw = (state.rawItems || []).find(x => String(x.id) === String(first.itemId));
-    const billNo = editId || ("PUR-" + (1001 + (state.transactions || []).filter(t => t.type === "PURCHASE").length));
-
-    const lineDesc = rows
-      .filter(r => r.bags > 0 || r.extraKg > 0 || r.itemId)
-      .map(r => {
-        const it = (state.rawItems || []).find(x => String(x.id) === String(r.itemId));
-        const nm = it ? it.name : "Raw Crop";
-        const gKg = Math.max(0, (r.bags * r.bagSize) + r.extraKg);
-        return `${nm}: ${r.bags} कट्टे (${r.bagSize}kg) + ${r.extraKg}kg = ${gKg}kg @ ₹${r.rateQtl}/Qtl`;
-      });
-
-    const tx = {
-      id: billNo,
-      refNo: refNo || "",
-      type: "PURCHASE",
-      saleChannel: "Raw Purchase",
-      date: dateVal,
-      seasonYear: typeof getSeasonYear === "function" ? getSeasonYear(dateVal) : "",
-      partyId: pid,
-      lotNo,
-      kantaSlip,
-      vehicle,
-      lines: rows,
-      itemName: foundRaw ? foundRaw.name : "Raw Crop",
-      bagSize: first.bagSize,
-      bags: calc.totalBags,
-      extraKg: calc.totalExtra,
-      grossKg: calc.grossKg,
-      kaddaPct,
-      kaddaKg: calc.kaddaKg,
-      netKg: calc.netKg,
-      rateQtl: first.rateQtl,
-      labor,
-      trans,
-      weed: 0,
-      deductions: labor + trans,
-      grossAmount: calc.netPayable + labor + trans,
-      amount: calc.netPayable,
-      paid,
-      note: lineDesc.length
-        ? lineDesc.join(" | ")
-        : `${calc.totalBags} कट्टे + ${calc.totalExtra}kg = ${(calc.grossKg / 100).toFixed(2)} Qtl | कद्दा ${calc.kaddaKg}kg`
-    };
-
-    if (editId) {
-      const idx = state.transactions.findIndex(x => x.id === editId);
-      if (idx !== -1) state.transactions[idx] = tx;
-    } else {
-      state.transactions.unshift(tx);
-    }
-
-    const partyObj = (state.parties || []).find(x => x.id === pid);
-    const runBal = typeof getPartyBalance === "function" ? getPartyBalance(pid) : 0;
-    saveState();
-    if (typeof syncToGoogleSheet === "function") {
-      syncToGoogleSheet({
-        sheetTab: "Purchase_Bills",
-        actionType: "UPSERT",
-        ...tx,
-        partyName: partyObj ? partyObj.name : "",
-        runningBalance: runBal,
-        createdBy: state.role || "owner"
-      });
-    }
-
-    if (typeof renderDashboard === "function") renderDashboard();
-    if (typeof renderPartyList === "function") renderPartyList();
-    if (typeof window.openBillSuccessConfirmation === "function") {
-      window.openBillSuccessConfirmation(tx.id, "PURCHASE");
-    }
-  };
-
-  // ---------------- RESET & AUTO NEXT BILL NUMBERS ----------------
-  function syncNextBillNo58() {
-    const sCnt = (state.transactions || []).filter(t => t.type === "SALE").length;
-    const pCnt = (state.transactions || []).filter(t => t.type === "PURCHASE").length;
-    const invEl = document.getElementById("saleInvNoDisplay");
-    const purEl = document.getElementById("purBillNoDisplay");
-    if (invEl && !(document.getElementById("editSaleTxId")?.value)) invEl.textContent = "INV-" + (2001 + sCnt);
-    if (purEl && !(document.getElementById("editPurTxId")?.value)) purEl.textContent = "PUR-" + (1001 + pCnt);
-  }
-
-  window.resetSaleForm = function() {
-    if (document.getElementById("editSaleTxId")) document.getElementById("editSaleTxId").value = "";
-    if (document.getElementById("salePartyId")) document.getElementById("salePartyId").value = "";
-    if (document.getElementById("salePartySearch")) document.getElementById("salePartySearch").value = "";
-    if (document.getElementById("saleLotNo")) document.getElementById("saleLotNo").value = "";
-    if (document.getElementById("saleCustomNoInput")) document.getElementById("saleCustomNoInput").value = "";
-    if (document.getElementById("saleCashPaid")) document.getElementById("saleCashPaid").value = "0";
-    if (document.getElementById("saleTransportEnabledChk")) document.getElementById("saleTransportEnabledChk").checked = false;
-    if (document.getElementById("saleGstEnabledChk")) document.getElementById("saleGstEnabledChk").checked = false;
-    if (typeof window.toggleSaleTransportFields === "function") window.toggleSaleTransportFields();
-    if (typeof window.toggleSaleGstFields === "function") window.toggleSaleGstFields();
-    window.renderSaleLineRows([{ itemId: "", qty: 0, packKg: 0, extraKg: 0, rate: 0 }]);
-    syncNextBillNo58();
-  };
-
-  window.resetPurchaseForm = function() {
-    if (document.getElementById("editPurTxId")) document.getElementById("editPurTxId").value = "";
-    if (document.getElementById("purPartyId")) document.getElementById("purPartyId").value = "";
-    if (document.getElementById("purPartySearch")) document.getElementById("purPartySearch").value = "";
-    if (document.getElementById("purLotNo")) document.getElementById("purLotNo").value = "";
-    if (document.getElementById("purCustomNoInput")) document.getElementById("purCustomNoInput").value = "";
-    if (document.getElementById("purKantaSlip")) document.getElementById("purKantaSlip").value = "";
-    if (document.getElementById("purVehicle")) document.getElementById("purVehicle").value = "";
-    if (document.getElementById("purKaddaPct")) document.getElementById("purKaddaPct").value = "1";
-    if (document.getElementById("purLaborDed")) document.getElementById("purLaborDed").value = "0";
-    if (document.getElementById("purTransDed")) document.getElementById("purTransDed").value = "0";
-    if (document.getElementById("purPaidNow")) document.getElementById("purPaidNow").value = "0";
-    window.renderPurchaseLineRows([{ itemId: "", bags: 0, bagSize: 50, extraKg: 0, rateQtl: 0 }]);
-    syncNextBillNo58();
-  };
-
-  // ---------------- GREEN TICK CONFIRMATION MODAL ----------------
-  const st58 = document.createElement("style");
-  st58.textContent = `
-    @keyframes appleTickPop58 {
-      0% { transform: scale(0.4); opacity: 0; }
-      70% { transform: scale(1.08); opacity: 1; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .apple-green-ring-58 {
-      width: 72px;
-      height: 72px;
-      border-radius: 9999px;
-      background: linear-gradient(145deg, #22c55e, #15803d);
-      box-shadow: 0 12px 28px -6px rgba(21, 128, 61, 0.45);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: appleTickPop58 0.36s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-  `;
-  document.head.appendChild(st58);
-
-  let confirmBillType58 = "SALE";
-  let confirmTxId58 = null;
-
-  const cModal58 = document.createElement("div");
-  cModal58.id = "v58BillSavedConfirmModal";
-  cModal58.className = "hidden fixed inset-0 bg-slate-900/65 backdrop-blur-xs z-[92] flex items-center justify-center p-4 no-print";
-  cModal58.innerHTML = `
-    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 text-center space-y-4">
-      <div class="flex justify-center">
-        <div class="apple-green-ring-58">
-          <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="3.2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-          </svg>
-        </div>
-      </div>
-      <div class="space-y-1">
-        <h3 id="v58ConfirmTitle" class="text-lg font-bold text-[#132A46]">बिल सफलतापूर्वक सबमिट हो गया</h3>
-        <p id="v58ConfirmSub" class="text-xs text-slate-600">आपका बिल सेव हो गया है। आगे क्या करना चाहते हैं?</p>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
-        <button type="button" id="v58BtnViewBill" class="w-full py-2.5 px-4 rounded-xl bg-[#132A46] hover:bg-slate-800 text-white text-xs sm:text-sm font-bold transition cursor-pointer">
-          बिल देखें
-        </button>
-        <button type="button" id="v58BtnNextBill" class="w-full py-2.5 px-4 rounded-xl bg-[#1EA668] hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold transition cursor-pointer">
-          अगला बिल बनाएं
-        </button>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(cModal58);
-
-  window.openBillSuccessConfirmation = function(txId, kind) {
-    confirmTxId58 = txId;
-    confirmBillType58 = kind || "SALE";
-    const tEl = document.getElementById("v58ConfirmTitle");
-    const sEl = document.getElementById("v58ConfirmSub");
-    const tx = (state.transactions || []).find(x => x.id === txId);
-    if (tEl) tEl.textContent = confirmBillType58 === "PURCHASE" ? "खरीद बिल सफलतापूर्वक सबमिट हुआ" : "बिक्री बिल सफलतापूर्वक सबमिट हुआ";
-    if (sEl) sEl.textContent = tx ? `बिल नं. ${tx.id} • दिनांक ${window.formatDateDDMMYYYY(tx.date)} सफलतापूर्वक सेव हो गया।` : "बिल सफलतापूर्वक सेव हो गया है।";
-    cModal58.classList.remove("hidden");
-  };
-
-  document.getElementById("v58BtnViewBill")?.addEventListener("click", function() {
-    cModal58.classList.add("hidden");
-    if (confirmTxId58 && typeof window.openReceipt === "function") window.openReceipt(confirmTxId58);
-  });
-
-  document.getElementById("v58BtnNextBill")?.addEventListener("click", function() {
-    cModal58.classList.add("hidden");
-    if (confirmBillType58 === "PURCHASE") {
-      if (typeof window.switchTab === "function") window.switchTab("purchase");
-      window.resetPurchaseForm();
-      setTimeout(() => document.getElementById("purPartySearch")?.focus(), 80);
-    } else {
-      if (typeof window.switchTab === "function") window.switchTab("sales");
-      window.resetSaleForm();
-      setTimeout(() => document.getElementById("salePartySearch")?.focus(), 80);
-    }
-  });
-
-  // ---------------- RECEIPT VIEW (DD/MM/YYYY + CONDITIONAL LOT NO + FINAL WEIGHT IN QTL) ----------------
-  const _origOpenReceipt58 = window.openReceipt;
-  window.openReceipt = function(txId) {
-    const res = _origOpenReceipt58 ? _origOpenReceipt58.apply(this, arguments) : undefined;
-    const area = document.getElementById("printArea");
-    const tx = (state.transactions || []).find(x => x.id === txId);
-    if (area && tx) {
-      if (tx.date) {
-        area.innerHTML = area.innerHTML.replace(
-          new RegExp(String(tx.date).replace(/[.*+?^${}()|[\]\]/g, "\\$&"), "g"),
-          window.formatDateDDMMYYYY(tx.date)
-        );
-      }
-      if (tx.type === "SALE") {
-        const lotClean = String(tx.lotNo || "").trim();
-        if (!lotClean || lotClean === "-") {
-          area.querySelectorAll("span").forEach(sp => {
-            if (/लॉट\s*:/.test(sp.textContent || "")) sp.remove();
-          });
-        }
-      }
-      const kgVal = Number(tx.netKg || tx.totalKg || 0);
-      const qtlText = `${(kgVal / 100).toFixed(2)} Qtl`;
-      const totBox = area.querySelector(".grid.grid-cols-12.border.border-slate-300.rounded > div:last-child > div");
-      if (totBox && !totBox.querySelector(".v58-final-qtl-row")) {
-        const row = document.createElement("div");
-        row.className = "v58-final-qtl-row flex items-center justify-between py-1.5 px-3 bg-slate-50 font-semibold text-xs";
-        row.innerHTML = `<span>कुल वजन (Final Wt):</span><span class="num-clean">${qtlText}</span>`;
-        totBox.insertBefore(row, totBox.firstChild);
-      }
-    }
-    return res;
-  };
-
-  // ---------------- PARTY LIST PAGINATION (25 DEFAULT, 50, 100 + NEXT/PREV) ----------------
-  let pageSize58 = 25;
-  let curPage58 = 1;
-
-  function ensurePager58() {
-    const listEl = document.getElementById("partyListContainer");
-    if (!listEl || !listEl.parentElement) return null;
-    let bar = document.getElementById("v58PartyPager");
-    if (!bar) {
-      bar = document.createElement("div");
-      bar.id = "v58PartyPager";
-      bar.className = "px-3.5 py-2.5 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs";
-      bar.innerHTML = `
-        <div class="flex items-center gap-1.5">
-          <span class="text-slate-600 font-medium">रो:</span>
-          <select id="v58PartyPageSize" class="num-clean border border-slate-300 rounded-lg px-2 py-1 bg-white font-semibold text-[#132A46]">
-            <option value="25" selected>25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-          </select>
-          <span id="v58PartyPageText" class="num-clean text-slate-500 ml-1"></span>
-        </div>
-        <div class="flex items-center gap-1.5">
-          <button type="button" id="v58PartyPrev" class="px-2.5 py-1 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 font-semibold text-[#132A46] disabled:opacity-40">← Prev</button>
-          <button type="button" id="v58PartyNext" class="px-2.5 py-1 rounded-lg border border-[#132A46] bg-[#132A46] hover:bg-slate-800 font-semibold text-white disabled:opacity-40">Next →</button>
-        </div>
-      `;
-      listEl.parentElement.appendChild(bar);
-      document.getElementById("v58PartyPageSize")?.addEventListener("change", function() {
-        pageSize58 = Number(this.value) || 25;
-        curPage58 = 1;
-        window.renderPartyList();
-      });
-      document.getElementById("v58PartyPrev")?.addEventListener("click", function() {
-        if (curPage58 > 1) { curPage58 -= 1; window.renderPartyList(); }
-      });
-      document.getElementById("v58PartyNext")?.addEventListener("click", function() {
-        curPage58 += 1; window.renderPartyList();
-      });
-    }
-    return bar;
-  }
-
-  const _origRenderPartyList58 = window.renderPartyList;
-  window.renderPartyList = function() {
-    if (_origRenderPartyList58) _origRenderPartyList58.apply(this, arguments);
-    const listEl = document.getElementById("partyListContainer");
-    if (!listEl) return;
-    const q = document.getElementById("searchPartyInput")?.value || "";
-    const filtered = typeof getSortedParties === "function" ? getSortedParties(q) : (state.parties || []);
-    const total = filtered.length;
-    const totalPages = Math.max(1, Math.ceil(total / pageSize58));
-    if (curPage58 > totalPages) curPage58 = totalPages;
-    const start = (curPage58 - 1) * pageSize58;
-    const end = Math.min(total, start + pageSize58);
-
-    const kids = Array.from(listEl.children);
-    if (total > 0 && kids.length === total) {
-      kids.forEach((el, idx) => {
-        if (idx >= start && idx < end) el.classList.remove("hidden");
-        else el.classList.add("hidden");
-      });
-    }
-
-    ensurePager58();
-    const txtEl = document.getElementById("v58PartyPageText");
-    const prevEl = document.getElementById("v58PartyPrev");
-    const nextEl = document.getElementById("v58PartyNext");
-    if (txtEl) txtEl.textContent = total ? `${start + 1}-${end} / ${total} (पेज ${curPage58}/${totalPages})` : "0 / 0";
-    if (prevEl) prevEl.disabled = curPage58 <= 1;
-    if (nextEl) nextEl.disabled = curPage58 >= totalPages;
-  };
-
-  function boot58() {
-    const vEl = document.getElementById("versionBadgeDisplay");
-    const uEl = document.getElementById("lastUpdatedOnDisplay");
-    if (vEl) vEl.textContent = "v58 • 58 वर्जन";
-    if (uEl) uEl.textContent = "Last Updated On: 27 Nov 2026 (v58)";
-    syncNextBillNo58();
-    window.renderSaleLineRows();
-    window.renderPurchaseLineRows();
-    if (typeof window.renderPartyList === "function") window.renderPartyList();
-  }
-
-  window.addEventListener("DOMContentLoaded", boot58);
-  boot58();
 })();
 
 </script>
