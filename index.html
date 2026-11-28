@@ -288,35 +288,8 @@
 
 <!-- Startup Splash Screen (MunimJi Branded + ~1.5s Apple-style Loading Indicator) -->
 <div id="splashScreen" class="fixed inset-0 bg-white z-[100] flex flex-col items-center justify-center transition-opacity duration-300 no-print">
-  <style>
-    @keyframes appleBootBarFill {
-      0% { width: 6%; }
-      35% { width: 48%; }
-      75% { width: 84%; }
-      100% { width: 100%; }
-    }
-    .apple-boot-track {
-      width: 176px;
-      height: 5px;
-      border-radius: 9999px;
-      background: #e2e8f0;
-      overflow: hidden;
-      margin-top: 18px;
-      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.08);
-    }
-    .apple-boot-fill {
-      height: 100%;
-      width: 6%;
-      border-radius: 9999px;
-      background: linear-gradient(90deg, #132A46 0%, #1EA668 100%);
-      animation: appleBootBarFill 1.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-  </style>
   <div class="splash-anim flex flex-col items-center px-4 text-center">
     <img src="logo.png" alt="MunimJi by Cool Art®" class="h-12 sm:h-14 md:h-15 w-auto object-contain mb-2" style="max-height: 60px;">
-    <span class="text-[11px] font-semibold tracking-wider text-[#132A46] bg-slate-100 px-3.5 py-1 rounded-full border border-slate-200">मुनीम जी ERP • तैयार हो रहा है</span>
-    <div class="apple-boot-track" aria-hidden="true">
-      <div class="apple-boot-fill"></div>
     </div>
   </div>
   <div class="absolute bottom-8 flex items-center gap-2 text-xs text-slate-400">
@@ -12919,5 +12892,143 @@ setInterval(renderPlanTrackerCard, 60000);
     renderPartyList();
     openStep1BillPopup(tx, partyObj ? partyObj.name : "-", "PURCHASE");
   };
+})();
+</script>
+
+
+
+<script>
+(function applyStep2CleanNextBillAndSplashV51() {
+  // Compute next sequential bill number accurately from existing transactions
+  function computeNextBillNo(kind, isMandi) {
+    const txs = Array.isArray(state.transactions) ? state.transactions : [];
+    if (kind === "PURCHASE") {
+      const pCount = txs.filter(t => t && t.type === "PURCHASE").length;
+      return "PUR-" + (1001 + pCount);
+    }
+    if (isMandi) {
+      const mCount = txs.filter(t => t && t.saleChannel === "Mandi Supply").length;
+      return "MND-" + (501 + mCount);
+    }
+    const sCount = txs.filter(t => t && t.type === "SALE").length;
+    return "INV-" + (2001 + sCount);
+  }
+
+  function clearSaleFieldsCompletely() {
+    const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+    setVal("editSaleTxId", "");
+    setVal("salePartyId", "");
+    setVal("salePartySearch", "");
+    setVal("saleLotNo", "");
+    setVal("saleCustomNoInput", "");
+    setVal("saleItemId", "");
+    setVal("salePackSize", 0);
+    setVal("saleQty", 0);
+    setVal("saleExtraKg", 0);
+    setVal("saleRate", 0);
+    setVal("saleCashPaid", 0);
+    setVal("mandiLocation", "");
+    setVal("mandiVehicleSlip", "");
+    setVal("mandiCommodity", "");
+    setVal("mandiWeightKg", 0);
+    setVal("mandiRateQtl", 0);
+    setVal("mandiDeductionRs", 0);
+
+    const chSeed = document.getElementById("channelSeed");
+    const chMandi = document.getElementById("channelMandi");
+    if (chSeed) chSeed.checked = true;
+    if (chMandi) chMandi.checked = false;
+    if (typeof window.toggleSaleChannelUI === "function") window.toggleSaleChannelUI();
+
+    const invDisp = document.getElementById("saleInvNoDisplay");
+    if (invDisp) invDisp.textContent = computeNextBillNo("SALE", false);
+
+    if (typeof window.onSalePartyChange === "function") window.onSalePartyChange();
+    if (typeof window.calcSaleTotal === "function") window.calcSaleTotal();
+  }
+
+  function clearPurchaseFieldsCompletely() {
+    const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+    setVal("editPurTxId", "");
+    setVal("purPartyId", "");
+    setVal("purPartySearch", "");
+    setVal("purLotNo", "");
+    setVal("purCustomNoInput", "");
+    setVal("purKantaSlip", "");
+    setVal("purVehicle", "");
+    setVal("purBags", 0);
+    setVal("purExtraKg", 0);
+    setVal("purRateQtl", 0);
+    setVal("purLaborDed", 0);
+    setVal("purTransDed", 0);
+    setVal("purWeedDed", 0);
+    setVal("purPaidNow", 0);
+    const kaddaEl = document.getElementById("purKaddaPct");
+    if (kaddaEl) kaddaEl.value = (state && state.settings && state.settings.kaddaPct !== undefined) ? state.settings.kaddaPct : 1;
+
+    const purDisp = document.getElementById("purBillNoDisplay");
+    if (purDisp) purDisp.textContent = computeNextBillNo("PURCHASE", false);
+
+    if (typeof window.onPurPartyChange === "function") window.onPurPartyChange();
+    if (typeof window.calcPurchaseTotal === "function") window.calcPurchaseTotal();
+  }
+
+  window.resetSaleForm = clearSaleFieldsCompletely;
+  window.resetPurchaseForm = clearPurchaseFieldsCompletely;
+
+  // Override Next Bill button handler so it reloads cleanly onto the target bill screen with blank/0 fields & next bill number
+  const nextBtn = document.getElementById("step1BtnNextBill");
+  if (nextBtn) {
+    const freshNextBtn = nextBtn.cloneNode(true);
+    nextBtn.parentNode.replaceChild(freshNextBtn, nextBtn);
+    freshNextBtn.addEventListener("click", function() {
+      const modal = document.getElementById("step1BillSuccessModal");
+      if (modal) modal.classList.add("hidden");
+
+      const headingTxt = document.getElementById("step1Heading")?.textContent || "";
+      const targetTab = headingTxt.includes("खरीद") ? "purchase" : "sales";
+      try {
+        sessionStorage.setItem("munimji_active_tab", targetTab);
+        sessionStorage.setItem("munimji_fresh_next_bill", targetTab);
+      } catch (e) {}
+
+      window.location.hash = "#" + targetTab;
+      window.location.reload();
+    });
+  }
+
+  // On load, if coming from "नेक्स्ट बिल बनाएं", ensure exact bill tab is active and fields are clean with next bill number
+  function applyFreshNextBillOnLoad() {
+    let nextKind = "";
+    try {
+      nextKind = sessionStorage.getItem("munimji_fresh_next_bill") || "";
+      if (nextKind) sessionStorage.removeItem("munimji_fresh_next_bill");
+    } catch (e) {}
+
+    if (nextKind === "purchase" || nextKind === "sales") {
+      if (typeof window.switchTab === "function") window.switchTab(nextKind);
+      if (nextKind === "purchase") {
+        clearPurchaseFieldsCompletely();
+        setTimeout(() => document.getElementById("purPartySearch")?.focus(), 120);
+      } else {
+        clearSaleFieldsCompletely();
+        setTimeout(() => document.getElementById("salePartySearch")?.focus(), 120);
+      }
+    } else {
+      const invDisp = document.getElementById("saleInvNoDisplay");
+      if (invDisp && !document.getElementById("editSaleTxId")?.value) {
+        const isMandi = Boolean(document.getElementById("channelMandi")?.checked);
+        invDisp.textContent = computeNextBillNo("SALE", isMandi);
+      }
+      const purDisp = document.getElementById("purBillNoDisplay");
+      if (purDisp && !document.getElementById("editPurTxId")?.value) {
+        purDisp.textContent = computeNextBillNo("PURCHASE", false);
+      }
+    }
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    setTimeout(applyFreshNextBillOnLoad, 60);
+  });
 })();
 </script>
