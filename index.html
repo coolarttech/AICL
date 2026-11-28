@@ -14406,3 +14406,90 @@ setInterval(renderPlanTrackerCard, 60000);
   });
 })();
 </script>
+
+
+
+<script>
+(function applyStep7CleanNoDuplicateItemTitleV51() {
+  function splitTokens(str) {
+    return String(str ?? "")
+      .replace(/[()\[\]|•,:-]+/g, " ")
+      .replace(/वर्ग/g, " ")
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+  }
+
+  function appendUniqueParts(baseStr, candidateParts) {
+    const base = String(baseStr ?? "").trim();
+    const seen = new Set(splitTokens(base).map(t => t.toLowerCase()));
+    const extraMeta = [];
+
+    (candidateParts || []).forEach(part => {
+      const cleanPart = String(part ?? "").trim();
+      if (!cleanPart || cleanPart === "-" || cleanPart === "Multi-Line" || cleanPart === "Seed Sale" || cleanPart === "Raw Crop") return;
+      const tokens = splitTokens(cleanPart);
+      if (!tokens.length) return;
+      // Check if all meaningful tokens of this part already exist in `base`
+      const hasNewToken = tokens.some(tok => !seen.has(tok.toLowerCase()));
+      if (hasNewToken) {
+        extraMeta.push(cleanPart);
+        tokens.forEach(tok => seen.add(tok.toLowerCase()));
+      }
+    });
+
+    return extraMeta.length ? `${base} (${extraMeta.join(" | ")})` : base;
+  }
+
+  window.getFullSaleItemTitle = function(itemId, fallbackName, fallbackCat) {
+    const it = (state.saleItems || []).find(x => String(x.id) === String(itemId));
+    if (it) {
+      const baseName = (it.cropName || it.name || fallbackName || "Seed Sale").trim();
+      const vStr = (it.varietyName && it.varietyName !== "-") ? it.varietyName.trim() : "";
+      const cStr = (it.className && it.className !== "-") ? `वर्ग: ${it.className.trim()}` : "";
+      const catStr = (it.category && it.category !== "-") ? it.category.trim() : "";
+      // Only check category if varietyName & className are both empty
+      const parts = (vStr || cStr) ? [vStr, cStr] : [catStr];
+      return appendUniqueParts(baseName, parts);
+    }
+
+    const fName = (fallbackName || "").trim();
+    const fCat = (fallbackCat || "").trim();
+    if (fName && fName !== "Seed Sale") {
+      return appendUniqueParts(fName, [fCat]);
+    }
+    return fCat && fCat !== "-" ? fCat : "Seed Sale";
+  };
+
+  window.formatRawItemDisplay = function(it) {
+    if (!it) return "Raw Crop";
+    const baseName = (it.name || "").trim();
+    const vStr = (it.variety && it.variety !== "-") ? it.variety.trim() : "";
+    const cStr = (it.className && it.className !== "-") ? `वर्ग: ${it.className.trim()}` : "";
+    return appendUniqueParts(baseName, [vStr, cStr]);
+  };
+
+  window.getFullRawItemTitle = function(itemNameOrId, fallbackName) {
+    const rawKey = String(itemNameOrId || fallbackName || "").trim();
+    const it = (state.rawItems || []).find(x =>
+      String(x.id) === rawKey ||
+      String(x.name).trim() === rawKey ||
+      window.formatRawItemDisplay(x) === rawKey
+    );
+    if (it) {
+      return window.formatRawItemDisplay(it);
+    }
+    return rawKey || "Raw Crop";
+  };
+
+  // Refresh dropdowns and tables immediately so any open view updates cleanly
+  window.addEventListener("DOMContentLoaded", () => {
+    setTimeout(() => {
+      if (typeof window.renderSaleLineRows === "function") window.renderSaleLineRows();
+      if (typeof window.renderPurchaseLineRows === "function") window.renderPurchaseLineRows();
+      if (typeof window.renderSaleHistoryTable === "function") window.renderSaleHistoryTable();
+      if (typeof window.renderPurchaseHistoryTable === "function") window.renderPurchaseHistoryTable();
+    }, 140);
+  });
+})();
+</script>
