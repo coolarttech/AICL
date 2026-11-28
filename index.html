@@ -14493,3 +14493,569 @@ setInterval(renderPlanTrackerCard, 60000);
   });
 })();
 </script>
+
+
+
+<script>
+(function applyStep8DedicatedEditModalWithSheetSyncV51() {
+  function esc(v) {
+    return String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function cleanNum(raw) {
+    let s = String(raw ?? "").replace(/[^0-9.]/g, "");
+    const dot = s.indexOf(".");
+    if (dot !== -1) s = s.slice(0, dot + 1) + s.slice(dot + 1).replace(/\./g, "");
+    return s;
+  }
+
+  // Create dedicated Fresh Edit Modal Window (opens cleanly in place without scrolling/jumping main page)
+  const modalEl = document.createElement("div");
+  modalEl.id = "step8BillEditModal";
+  modalEl.className = "hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-[98] flex items-center justify-center p-2.5 sm:p-4 no-print";
+  modalEl.innerHTML = `
+    <div class="bg-white rounded-2xl max-w-4xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[94vh]">
+      <div class="px-4 sm:px-5 py-3 bg-[#0F172A] text-white flex items-center justify-between gap-2">
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-amber-400 text-slate-950 text-[10px] font-extrabold">FRESH EDIT WINDOW</span>
+            <h3 id="s8EditTitle" class="text-sm sm:text-base font-bold truncate">बिल संपादित करें (Edit Bill)</h3>
+          </div>
+          <p id="s8EditSyncStatus" class="text-[11px] text-emerald-300 mt-0.5 truncate">शीट / रिकॉर्ड डेटा लोड हो रहा है...</p>
+        </div>
+        <button type="button" onclick="closeStep8BillEditModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold flex items-center justify-center shrink-0 cursor-pointer">✕</button>
+      </div>
+
+      <form id="s8EditForm" onsubmit="submitStep8BillEdit(event)" class="p-4 sm:p-5 overflow-y-auto space-y-4 text-xs">
+        <input type="hidden" id="s8TxId">
+        <input type="hidden" id="s8TxType">
+        <input type="hidden" id="s8PartyId">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">बिल / पर्ची नंबर</label>
+            <input type="text" id="s8BillNoShow" readonly class="num-clean w-full border border-slate-200 bg-slate-100 rounded-lg px-2.5 py-1.5 font-bold text-[#132A46]">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">पार्टी / किसान *</label>
+            <select id="s8PartySelect" onchange="document.getElementById('s8PartyId').value = this.value; recalcStep8Modal();" class="w-full border border-slate-300 bg-white rounded-lg px-2.5 py-1.5 font-semibold text-[#132A46]">
+              ${(state.parties || []).map(p => `<option value="${esc(p.id)}">${esc(p.name)} (${esc(p.village)})</option>`).join("")}
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">दिनांक (Date) *</label>
+            <input type="date" id="s8Date" required oninput="recalcStep8Modal()" class="num-clean w-full border border-slate-300 bg-white rounded-lg px-2.5 py-1.5 font-semibold">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">लॉट नंबर (Lot No.)</label>
+            <input type="text" id="s8LotNo" oninput="recalcStep8Modal()" class="num-clean w-full border border-slate-300 bg-white rounded-lg px-2.5 py-1.5">
+          </div>
+        </div>
+
+        <div id="s8SaleFields" class="hidden space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="font-bold text-[#132A46]">बिक्री आइटम लाइनें (पूरा विवरण, कट्टे, बैग Kg, अतिरिक्त Kg, रेट)</span>
+            <button type="button" onclick="addStep8SaleRow()" class="px-3 py-1 rounded-lg bg-[#1EA668] hover:bg-emerald-700 text-white font-bold text-xs cursor-pointer">+ लाइन जोड़ें</button>
+          </div>
+          <div class="overflow-x-auto border border-slate-300 rounded-lg">
+            <table class="w-full text-xs border-collapse text-left">
+              <thead>
+                <tr class="bg-[#132A46] text-white">
+                  <th class="py-1.5 px-2 border-r border-slate-600">आइटम (पूरा नाम)</th>
+                  <th class="py-1.5 px-2 border-r border-slate-600 text-right">कट्टे</th>
+                  <th class="py-1.5 px-2 border-r border-slate-600 text-right">बैग (Kg)</th>
+                  <th class="py-1.5 px-2 border-r border-slate-600 text-right">अतिरिक्त Kg</th>
+                  <th class="py-1.5 px-2 border-r border-slate-600 text-right">रेट (₹)</th>
+                  <th class="py-1.5 px-2 border-r border-slate-600 text-right">लाइन कुल</th>
+                  <th class="py-1.5 px-2 text-center">हटाएं</th>
+                </tr>
+              </thead>
+              <tbody id="s8SaleRowsBody" class="divide-y divide-slate-200"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="s8PurchaseFields" class="hidden space-y-3">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-sky-50/50 p-3 rounded-xl border border-sky-200">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">धर्मकांटा पर्ची नं.</label>
+              <input type="text" id="s8KantaSlip" class="num-clean w-full border border-slate-300 bg-white rounded-lg px-2.5 py-1.5">
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">गाड़ी / ट्रैक्टर नंबर</label>
+              <input type="text" id="s8Vehicle" class="num-clean w-full border border-slate-300 bg-white rounded-lg px-2.5 py-1.5">
+            </div>
+            <div>
+              <label class="block font-bold text-amber-900 mb-1">कद्दा कटौती (%)</label>
+              <input type="number" step="0.01" id="s8KaddaPct" value="1" min="0" oninput="recalcStep8Modal()" class="num-clean w-full border border-amber-400 bg-white rounded-lg px-2.5 py-1.5 font-bold">
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="font-bold text-[#132A46]">खरीद फसल / आइटम लाइनें</span>
+            <button type="button" onclick="addStep8PurRow()" class="px-3 py-1 rounded-lg bg-[#132A46] hover:bg-slate-800 text-white font-bold text-xs cursor-pointer">+ खरीद लाइन जोड़ें</button>
+          </div>
+          <div class="overflow-x-auto border border-slate-300 rounded-lg">
+            <table class="w-full text-xs border-collapse text-left">
+              <thead>
+                <tr class="bg-[#132A46] text-white">
+                  <th class="py-1.5 px-2 border-r border-slate-600">फसल / आइटम</th>
+                  <th class="py-1.5 px-2 border-r border-slate-600 text-right">बैग साइज</th>
+                  <th class="py-1.5 px-2 border-r border-slate-600 text-right">कट्टे</th>
+                  <th class="py-1.5 px-2 border-r border-slate-600 text-right">अतिरिक्त Kg</th>
+                  <th class="py-1.5 px-2 border-r border-slate-600 text-right">भाव (₹/Qtl)</th>
+                  <th class="py-1.5 px-2 border-r border-slate-600 text-right">लाइन कुल</th>
+                  <th class="py-1.5 px-2 text-center">हटाएं</th>
+                </tr>
+              </thead>
+              <tbody id="s8PurRowsBody" class="divide-y divide-slate-200"></tbody>
+            </table>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">कटौती: लेबर चार्ज (₹)</label>
+              <input type="number" id="s8LaborDed" value="0" min="0" oninput="recalcStep8Modal()" class="num-clean w-full border border-slate-300 bg-white rounded-lg px-2.5 py-1.5">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">कटौती: ट्रांसपोर्ट / भाड़ा (₹)</label>
+              <input type="number" id="s8TransDed" value="0" min="0" oninput="recalcStep8Modal()" class="num-clean w-full border border-slate-300 bg-white rounded-lg px-2.5 py-1.5">
+            </div>
+          </div>
+        </div>
+
+        <div id="s8VoucherFields" class="hidden space-y-3 bg-amber-50/40 p-3.5 rounded-xl border border-amber-200">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">माध्यम (Mode)</label>
+              <select id="s8VchMode" class="w-full border border-slate-300 bg-white rounded-lg px-2.5 py-1.5">
+                <option value="Cash">नकद (Cash)</option>
+                <option value="UPI / Bank">UPI / बैंक ट्रांसफर</option>
+                <option value="Cheque">चेक (Cheque)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">विवरण / टिप्पणी</label>
+              <input type="text" id="s8VchNote" class="w-full border border-slate-300 bg-white rounded-lg px-2.5 py-1.5">
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200 items-end">
+          <div>
+            <span class="text-slate-500 block">कुल वजन (Kg व क्विंटल)</span>
+            <p id="s8TotalWtShow" class="num-clean text-sm font-bold text-[#132A46] mt-0.5">0 Kg (0.00 Qtl)</p>
+          </div>
+          <div>
+            <span class="text-slate-500 block">कुल बिल / राशि</span>
+            <p id="s8TotalAmtShow" class="num-clean text-base font-extrabold text-[#1EA668] mt-0.5">₹0</p>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">जमा / भुगतान राशि (₹)</label>
+            <input type="number" id="s8PaidAmt" value="0" min="0" oninput="recalcStep8Modal()" class="num-clean w-full border border-slate-300 bg-white rounded-lg px-2.5 py-1.5 font-bold">
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-end gap-2.5 pt-2 border-t border-slate-200">
+          <button type="button" onclick="closeStep8BillEditModal()" class="px-4 py-2 rounded-xl border border-slate-300 font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer">बंद करें</button>
+          <button type="submit" class="px-6 py-2.5 rounded-xl bg-[#1EA668] hover:bg-emerald-700 text-white font-bold text-sm shadow-xs cursor-pointer">✓ बदलाव सेव करें व शीट सिंक करें</button>
+        </div>
+      </form>
+    </div>
+  `;
+  document.body.appendChild(modalEl);
+
+  window.closeStep8BillEditModal = function() {
+    const m = document.getElementById("step8BillEditModal");
+    if (m) m.classList.add("hidden");
+  };
+
+  function renderS8SaleRows(lines) {
+    const body = document.getElementById("s8SaleRowsBody");
+    if (!body) return;
+    body.innerHTML = lines.map((ln, idx) => {
+      const q = Number(ln.qty) || 0;
+      const pKg = Number(ln.packKg) || 0;
+      const eKg = Number(ln.extraKg) || 0;
+      const r = Number(ln.rate) || 0;
+      const lKg = Math.max(0, (q * pKg) + eKg);
+      const lAmt = Math.round(lKg * r);
+      return `
+        <tr class="bg-white">
+          <td class="p-1.5 border-r border-slate-200 min-w-[180px]">
+            <select class="s8-sale-item w-full border border-slate-300 rounded px-2 py-1 font-semibold" onchange="recalcStep8Modal()">
+              ${window.getSaleItemOptionsHtml ? window.getSaleItemOptionsHtml(ln.itemId || "") : ""}
+            </select>
+          </td>
+          <td class="p-1.5 border-r border-slate-200 w-20"><input type="text" inputmode="numeric" value="${q}" oninput="this.value=cleanNum(this.value);recalcStep8Modal();" class="s8-sale-qty num-clean w-full border border-slate-300 rounded px-2 py-1 text-right font-semibold"></td>
+          <td class="p-1.5 border-r border-slate-200 w-20"><input type="text" inputmode="decimal" value="${pKg}" oninput="this.value=cleanNum(this.value);recalcStep8Modal();" class="s8-sale-pack num-clean w-full border border-slate-300 rounded px-2 py-1 text-right"></td>
+          <td class="p-1.5 border-r border-slate-200 w-24"><input type="text" inputmode="decimal" value="${eKg}" oninput="this.value=cleanNum(this.value);recalcStep8Modal();" class="s8-sale-extra num-clean w-full border border-slate-300 rounded px-2 py-1 text-right"></td>
+          <td class="p-1.5 border-r border-slate-200 w-24"><input type="text" inputmode="decimal" value="${r}" oninput="this.value=cleanNum(this.value);recalcStep8Modal();" class="s8-sale-rate num-clean w-full border border-slate-300 rounded px-2 py-1 text-right font-semibold"></td>
+          <td class="s8-row-tot p-1.5 border-r border-slate-200 text-right num-clean font-bold text-[#1EA668] whitespace-nowrap">${lKg.toLocaleString("en-IN")} Kg • ₹${lAmt.toLocaleString("en-IN")}</td>
+          <td class="p-1.5 text-center">${lines.length > 1 ? `<button type="button" onclick="this.closest('tr').remove();recalcStep8Modal();" class="text-rose-600 font-bold underline cursor-pointer">✕</button>` : "—"}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function renderS8PurRows(lines) {
+    const body = document.getElementById("s8PurRowsBody");
+    if (!body) return;
+    const kPct = Number(document.getElementById("s8KaddaPct")?.value) || 0;
+    body.innerHTML = lines.map((ln) => {
+      const bSz = Number(ln.bagSize) || 50;
+      const bCnt = Number(ln.bags) || 0;
+      const eKg = Number(ln.extraKg) || 0;
+      const rQtl = Number(ln.rateQtl) || 0;
+      const gKg = Math.max(0, (bCnt * bSz) + eKg);
+      const nKg = Math.max(0, gKg - Math.round((gKg * kPct) / 100));
+      const lAmt = Math.round((nKg / 100) * rQtl);
+      const pickItem = ln.rawName || ln.itemName || "";
+      return `
+        <tr class="bg-white">
+          <td class="p-1.5 border-r border-slate-200 min-w-[170px]">
+            <select class="s8-pur-item w-full border border-slate-300 rounded px-2 py-1 font-semibold" onchange="recalcStep8Modal()">
+              ${window.getRawItemOptionsHtml ? window.getRawItemOptionsHtml(pickItem) : ""}
+            </select>
+          </td>
+          <td class="p-1.5 border-r border-slate-200 w-20"><input type="text" inputmode="decimal" value="${bSz}" oninput="this.value=cleanNum(this.value);recalcStep8Modal();" class="s8-pur-bagsize num-clean w-full border border-slate-300 rounded px-2 py-1 text-right"></td>
+          <td class="p-1.5 border-r border-slate-200 w-20"><input type="text" inputmode="numeric" value="${bCnt}" oninput="this.value=cleanNum(this.value);recalcStep8Modal();" class="s8-pur-bags num-clean w-full border border-slate-300 rounded px-2 py-1 text-right font-semibold"></td>
+          <td class="p-1.5 border-r border-slate-200 w-24"><input type="text" inputmode="decimal" value="${eKg}" oninput="this.value=cleanNum(this.value);recalcStep8Modal();" class="s8-pur-extra num-clean w-full border border-slate-300 rounded px-2 py-1 text-right"></td>
+          <td class="p-1.5 border-r border-slate-200 w-24"><input type="text" inputmode="decimal" value="${rQtl}" oninput="this.value=cleanNum(this.value);recalcStep8Modal();" class="s8-pur-rate num-clean w-full border border-slate-300 rounded px-2 py-1 text-right font-semibold"></td>
+          <td class="s8-row-tot p-1.5 border-r border-slate-200 text-right num-clean font-bold text-sky-800 whitespace-nowrap">${nKg.toLocaleString("en-IN")} Kg • ₹${lAmt.toLocaleString("en-IN")}</td>
+          <td class="p-1.5 text-center">${lines.length > 1 ? `<button type="button" onclick="this.closest('tr').remove();recalcStep8Modal();" class="text-rose-600 font-bold underline cursor-pointer">✕</button>` : "—"}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  window.addStep8SaleRow = function() {
+    const body = document.getElementById("s8SaleRowsBody");
+    if (!body) return;
+    const tr = document.createElement("tr");
+    tr.className = "bg-white";
+    tr.innerHTML = `
+      <td class="p-1.5 border-r border-slate-200 min-w-[180px]">
+        <select class="s8-sale-item w-full border border-slate-300 rounded px-2 py-1 font-semibold" onchange="recalcStep8Modal()">
+          ${window.getSaleItemOptionsHtml ? window.getSaleItemOptionsHtml("") : ""}
+        </select>
+      </td>
+      <td class="p-1.5 border-r border-slate-200 w-20"><input type="text" inputmode="numeric" value="0" oninput="this.value=cleanNum(this.value);recalcStep8Modal();" class="s8-sale-qty num-clean w-full border border-slate-300 rounded px-2 py-1 text-right font-semibold"></td>
+      <td class="p-1.5 border-r border-slate-200 w-20"><input type="text" inputmode="decimal" value="0" oninput="this.value=cleanNum(this.value);recalcStep8Modal();" class="s8-sale-pack num-clean w-full border border-slate-300 rounded px-2 py-1 text-right"></td>
+      <td class="p-1.5 border-r border-slate-200 w-24"><input type="text" inputmode="decimal" value="0" oninput="this.value=cleanNum(this.value);recalcStep8Modal();" class="s8-sale-extra num-clean w-full border border-slate-300 rounded px-2 py-1 text-right"></td>
+      <td class="p-1.5 border-r border-slate-200 w-24"><input type="text" inputmode="decimal" value="0" oninput="this.value=cleanNum(this.value);recalcStep8Modal();" class="s8-sale-rate num-clean w-full border border-slate-300 rounded px-2 py-1 text-right font-semibold"></td>
+      <td class="s8-row-tot p-1.5 border-r border-slate-200 text-right num-clean font-bold text-[#1EA668] whitespace-nowrap">0 Kg • ₹0</td>
+      <td class="p-1.5 text-center"><button type="button" onclick="this.closest('tr').remove();recalcStep8Modal();" class="text-rose-600 font-bold underline cursor-pointer">✕</button></td>
+    `;
+    body.appendChild(tr);
+    recalcStep8Modal();
+  };
+
+  window.addStep8PurRow = function() {
+    const body = document.getElementById("s8PurRowsBody");
+    if (!body) return;
+    const tr = document.createElement("tr");
+    tr.className = "bg-white";
+    tr.innerHTML = `
+      <td class="p-1.5 border-r border-slate-200 min-w-[170px]">
+        <select class="s8-pur-item w-full border border-slate-300 rounded px-2 py-1 font-semibold" onchange="recalcStep8Modal()">
+          ${window.getRawItemOptionsHtml ? window.getRawItemOptionsHtml("") : ""}
+        </select>
+      </td>
+      <td class="p-1.5 border-r border-slate-200 w-20"><input type="text" inputmode="decimal" value="50" oninput="this.value=cleanNum(this.value);recalcStep8Modal();" class="s8-pur-bagsize num-clean w-full border border-slate-300 rounded px-2 py-1 text-right"></td>
+      <td class="p-1.5 border-r border-slate-200 w-20"><input type="text" inputmode="numeric" value="0" oninput="this.value=cleanNum(this.value);recalcStep8Modal();" class="s8-pur-bags num-clean w-full border border-slate-300 rounded px-2 py-1 text-right font-semibold"></td>
+      <td class="p-1.5 border-r border-slate-200 w-24"><input type="text" inputmode="decimal" value="0" oninput="this.value=cleanNum(this.value);recalcStep8Modal();" class="s8-pur-extra num-clean w-full border border-slate-300 rounded px-2 py-1 text-right"></td>
+      <td class="p-1.5 border-r border-slate-200 w-24"><input type="text" inputmode="decimal" value="0" oninput="this.value=cleanNum(this.value);recalcStep8Modal();" class="s8-pur-rate num-clean w-full border border-slate-300 rounded px-2 py-1 text-right font-semibold"></td>
+      <td class="s8-row-tot p-1.5 border-r border-slate-200 text-right num-clean font-bold text-sky-800 whitespace-nowrap">0 Kg • ₹0</td>
+      <td class="p-1.5 text-center"><button type="button" onclick="this.closest('tr').remove();recalcStep8Modal();" class="text-rose-600 font-bold underline cursor-pointer">✕</button></td>
+    `;
+    body.appendChild(tr);
+    recalcStep8Modal();
+  };
+
+  window.recalcStep8Modal = function() {
+    const tType = document.getElementById("s8TxType")?.value || "SALE";
+    const wtEl = document.getElementById("s8TotalWtShow");
+    const amtEl = document.getElementById("s8TotalAmtShow");
+    if (tType === "SALE") {
+      const trs = Array.from(document.querySelectorAll("#s8SaleRowsBody tr"));
+      let sumKg = 0, sumAmt = 0;
+      trs.forEach(tr => {
+        const q = Number(cleanNum(tr.querySelector(".s8-sale-qty")?.value)) || 0;
+        const pKg = Number(cleanNum(tr.querySelector(".s8-sale-pack")?.value)) || 0;
+        const eKg = Number(cleanNum(tr.querySelector(".s8-sale-extra")?.value)) || 0;
+        const r = Number(cleanNum(tr.querySelector(".s8-sale-rate")?.value)) || 0;
+        const lKg = Math.max(0, (q * pKg) + eKg);
+        const lAmt = Math.round(lKg * r);
+        sumKg += lKg;
+        sumAmt += lAmt;
+        const cell = tr.querySelector(".s8-row-tot");
+        if (cell) cell.textContent = `${lKg.toLocaleString("en-IN")} Kg • ₹${lAmt.toLocaleString("en-IN")}`;
+      });
+      if (wtEl) wtEl.textContent = `${sumKg.toLocaleString("en-IN")} Kg (${(sumKg / 100).toFixed(2)} Qtl)`;
+      if (amtEl) amtEl.textContent = `₹${sumAmt.toLocaleString("en-IN")}`;
+    } else if (tType === "PURCHASE") {
+      const kPct = Number(cleanNum(document.getElementById("s8KaddaPct")?.value)) || 0;
+      const labor = Number(cleanNum(document.getElementById("s8LaborDed")?.value)) || 0;
+      const trans = Number(cleanNum(document.getElementById("s8TransDed")?.value)) || 0;
+      const trs = Array.from(document.querySelectorAll("#s8PurRowsBody tr"));
+      let sumNetKg = 0, sumGrossAmt = 0;
+      trs.forEach(tr => {
+        const bSz = Number(cleanNum(tr.querySelector(".s8-pur-bagsize")?.value)) || 50;
+        const bCnt = Number(cleanNum(tr.querySelector(".s8-pur-bags")?.value)) || 0;
+        const eKg = Number(cleanNum(tr.querySelector(".s8-pur-extra")?.value)) || 0;
+        const rQtl = Number(cleanNum(tr.querySelector(".s8-pur-rate")?.value)) || 0;
+        const gKg = Math.max(0, (bCnt * bSz) + eKg);
+        const nKg = Math.max(0, gKg - Math.round((gKg * kPct) / 100));
+        const lAmt = Math.round((nKg / 100) * rQtl);
+        sumNetKg += nKg;
+        sumGrossAmt += lAmt;
+        const cell = tr.querySelector(".s8-row-tot");
+        if (cell) cell.textContent = `${nKg.toLocaleString("en-IN")} Kg • ₹${lAmt.toLocaleString("en-IN")}`;
+      });
+      const netAmt = Math.max(0, sumGrossAmt - labor - trans);
+      if (wtEl) wtEl.textContent = `${sumNetKg.toLocaleString("en-IN")} Kg (${(sumNetKg / 100).toFixed(2)} Qtl)`;
+      if (amtEl) amtEl.textContent = `₹${netAmt.toLocaleString("en-IN")}`;
+    } else {
+      const vAmt = Number(cleanNum(document.getElementById("s8PaidAmt")?.value)) || 0;
+      if (wtEl) wtEl.textContent = "—";
+      if (amtEl) amtEl.textContent = `₹${vAmt.toLocaleString("en-IN")}`;
+    }
+  };
+
+  function populateModalFromTx(tx) {
+    document.getElementById("s8TxId").value = tx.id;
+    document.getElementById("s8TxType").value = tx.type;
+    document.getElementById("s8BillNoShow").value = tx.id;
+
+    const pSel = document.getElementById("s8PartySelect");
+    if (pSel) {
+      pSel.innerHTML = (state.parties || []).map(p => `<option value="${esc(p.id)}">${esc(p.name)} (${esc(p.village)})</option>`).join("");
+      pSel.value = tx.partyId || "";
+    }
+    document.getElementById("s8PartyId").value = tx.partyId || "";
+    document.getElementById("s8Date").value = tx.date || "";
+    document.getElementById("s8LotNo").value = (!tx.lotNo || tx.lotNo === "-") ? "" : tx.lotNo;
+    document.getElementById("s8PaidAmt").value = Number(tx.paid ?? tx.amount ?? 0) || 0;
+
+    const saleBox = document.getElementById("s8SaleFields");
+    const purBox = document.getElementById("s8PurchaseFields");
+    const vchBox = document.getElementById("s8VoucherFields");
+
+    if (tx.type === "SALE") {
+      document.getElementById("s8EditTitle").textContent = `बिक्री बिल संपादित करें — ${tx.id}`;
+      saleBox.classList.remove("hidden");
+      purBox.classList.add("hidden");
+      vchBox.classList.add("hidden");
+      const lines = Array.isArray(tx.lines) && tx.lines.length
+        ? tx.lines
+        : [{ itemId: tx.itemId || "", qty: tx.qty || 0, packKg: tx.packKg || 0, extraKg: tx.extraKg || 0, rate: tx.rate || 0 }];
+      renderS8SaleRows(lines);
+    } else if (tx.type === "PURCHASE") {
+      document.getElementById("s8EditTitle").textContent = `खरीद बिल संपादित करें — ${tx.id}`;
+      saleBox.classList.add("hidden");
+      purBox.classList.remove("hidden");
+      vchBox.classList.add("hidden");
+      document.getElementById("s8KantaSlip").value = (!tx.kantaSlip || tx.kantaSlip === "-") ? "" : tx.kantaSlip;
+      document.getElementById("s8Vehicle").value = (!tx.vehicle || tx.vehicle === "-") ? "" : tx.vehicle;
+      document.getElementById("s8KaddaPct").value = tx.kaddaPct !== undefined ? Number(tx.kaddaPct) : 1;
+      document.getElementById("s8LaborDed").value = Number(tx.labor) || 0;
+      document.getElementById("s8TransDed").value = Number(tx.trans) || 0;
+      const lines = Array.isArray(tx.lines) && tx.lines.length
+        ? tx.lines
+        : [{ rawName: tx.itemName || "", itemName: tx.itemName || "", bagSize: tx.bagSize || 50, bags: tx.bags || 0, extraKg: tx.extraKg || 0, rateQtl: tx.rateQtl || 0 }];
+      renderS8PurRows(lines);
+    } else {
+      document.getElementById("s8EditTitle").textContent = `वाउचर संपादित करें — ${tx.id}`;
+      saleBox.classList.add("hidden");
+      purBox.classList.add("hidden");
+      vchBox.classList.remove("hidden");
+      document.getElementById("s8VchMode").value = tx.mode || "Cash";
+      document.getElementById("s8VchNote").value = tx.note || "";
+    }
+    recalcStep8Modal();
+  }
+
+  // Open Fresh Edit Window in place, sync latest record from Google Sheet if online, and load all bill data
+  window.editTransaction = function(txId) {
+    const localTx = (state.transactions || []).find(x => String(x.id) === String(txId));
+    if (!localTx) {
+      alert("यह बिल रिकॉर्ड नहीं मिला।");
+      return;
+    }
+
+    if (typeof window.closeRecordsDrawer === "function") window.closeRecordsDrawer();
+    if (typeof window.closeReceiptModal === "function") window.closeReceiptModal();
+
+    populateModalFromTx(localTx);
+    const statusEl = document.getElementById("s8EditSyncStatus");
+    if (statusEl) statusEl.textContent = `बिल ${txId} का पूरा रिकॉर्ड लोड किया गया है • शीट सिंक सक्रिय`;
+    document.getElementById("step8BillEditModal").classList.remove("hidden");
+
+    // Pull latest sheet data in background for this bill without closing or scrolling the edit window
+    const sheetUrl = (state.settings && state.settings.sheetUrl) ? state.settings.sheetUrl : "";
+    if (sheetUrl && navigator.onLine) {
+      fetch(sheetUrl + "?action=GET_ALL&t=" + Date.now(), { cache: "no-store", redirect: "follow" })
+        .then(r => r.text())
+        .then(txt => {
+          let res = null;
+          try { res = JSON.parse(txt); } catch (e) { res = null; }
+          if (res && res.status === "ok" && Array.isArray(res.transactions)) {
+            const remoteTx = res.transactions.find(x => String(x.id) === String(txId));
+            if (remoteTx) {
+              const mergedTx = { ...localTx, ...remoteTx, date: normalizeSheetDate(remoteTx.date || localTx.date) };
+              const idx = state.transactions.findIndex(x => String(x.id) === String(txId));
+              if (idx !== -1) state.transactions[idx] = mergedTx;
+              saveState();
+              populateModalFromTx(mergedTx);
+              if (statusEl) statusEl.textContent = `✓ शीट से बिल ${txId} का ताज़ा डेटा सिंक हो गया`;
+            }
+          }
+        })
+        .catch(() => {});
+    }
+  };
+
+  // Save edited bill directly into state + Google Sheet (Excel/Sheet) and refresh tables/dashboard
+  window.submitStep8BillEdit = function(e) {
+    e.preventDefault();
+    const txId = document.getElementById("s8TxId").value;
+    const tType = document.getElementById("s8TxType").value;
+    const idx = (state.transactions || []).findIndex(x => String(x.id) === String(txId));
+    if (idx === -1) return;
+
+    const oldTx = state.transactions[idx];
+    const pid = document.getElementById("s8PartySelect")?.value || oldTx.partyId;
+    const dateVal = document.getElementById("s8Date")?.value || oldTx.date;
+    const lotNo = (document.getElementById("s8LotNo")?.value || "").trim() || "-";
+    const paid = Number(cleanNum(document.getElementById("s8PaidAmt")?.value)) || 0;
+
+    let updatedTx = { ...oldTx, partyId: pid, date: dateVal, seasonYear: getSeasonYear(dateVal), lotNo, paid };
+
+    if (tType === "SALE") {
+      const trs = Array.from(document.querySelectorAll("#s8SaleRowsBody tr"));
+      let totalKg = 0, subTotal = 0, totalBags = 0, totalExtra = 0;
+      const fullTitles = [];
+      const cleanLines = trs.map((tr, i) => {
+        const itemId = tr.querySelector(".s8-sale-item")?.value || "";
+        const qty = Number(cleanNum(tr.querySelector(".s8-sale-qty")?.value)) || 0;
+        const packKg = Number(cleanNum(tr.querySelector(".s8-sale-pack")?.value)) || 0;
+        const extraKg = Number(cleanNum(tr.querySelector(".s8-sale-extra")?.value)) || 0;
+        const rate = Number(cleanNum(tr.querySelector(".s8-sale-rate")?.value)) || 0;
+        const lKg = Math.max(0, (qty * packKg) + extraKg);
+        const lAmt = Math.round(lKg * rate);
+        totalKg += lKg;
+        subTotal += lAmt;
+        totalBags += qty;
+        totalExtra += extraKg;
+        const it = (state.saleItems || []).find(x => String(x.id) === String(itemId));
+        const fullTitle = window.getFullSaleItemTitle ? window.getFullSaleItemTitle(itemId, it?.name || "", it?.category || "") : (it?.name || oldTx.itemName || "Seed Sale");
+        fullTitles.push(fullTitle);
+        return {
+          lineNo: i + 1,
+          itemId,
+          itemName: fullTitle,
+          rawName: it ? it.name : fullTitle,
+          category: it ? (it.category || "-") : "-",
+          packKg, qty, extraKg, rate, totalKg: lKg, amount: lAmt
+        };
+      });
+      const joinedTitle = fullTitles.length ? Array.from(new Set(fullTitles)).join(", ") : oldTx.itemName;
+      updatedTx = {
+        ...updatedTx,
+        itemId: cleanLines[0]?.itemId || oldTx.itemId,
+        itemName: joinedTitle,
+        packKg: Number(cleanLines[0]?.packKg) || 0,
+        qty: totalBags,
+        extraKg: totalExtra,
+        totalKg,
+        rate: Number(cleanLines[0]?.rate) || oldTx.rate || 0,
+        subTotal,
+        amount: subTotal,
+        lines: cleanLines,
+        note: `${joinedTitle} • कुल वजन: ${(totalKg / 100).toFixed(2)} क्विंटल (${totalKg.toLocaleString("en-IN")} Kg)`
+      };
+    } else if (tType === "PURCHASE") {
+      const kPct = Number(cleanNum(document.getElementById("s8KaddaPct")?.value)) || 0;
+      const labor = Number(cleanNum(document.getElementById("s8LaborDed")?.value)) || 0;
+      const trans = Number(cleanNum(document.getElementById("s8TransDed")?.value)) || 0;
+      const trs = Array.from(document.querySelectorAll("#s8PurRowsBody tr"));
+      let grossKg = 0, netKg = 0, grossAmount = 0, totalBags = 0, totalExtra = 0;
+      const fullTitles = [];
+      const cleanLines = trs.map((tr, i) => {
+        const rawName = tr.querySelector(".s8-pur-item")?.value || "";
+        const bagSize = Number(cleanNum(tr.querySelector(".s8-pur-bagsize")?.value)) || 50;
+        const bags = Number(cleanNum(tr.querySelector(".s8-pur-bags")?.value)) || 0;
+        const extraKg = Number(cleanNum(tr.querySelector(".s8-pur-extra")?.value)) || 0;
+        const rateQtl = Number(cleanNum(tr.querySelector(".s8-pur-rate")?.value)) || 0;
+        const gKg = Math.max(0, (bags * bagSize) + extraKg);
+        const kKg = Math.round((gKg * kPct) / 100);
+        const nKg = Math.max(0, gKg - kKg);
+        const lAmt = Math.round((nKg / 100) * rateQtl);
+        grossKg += gKg;
+        netKg += nKg;
+        grossAmount += lAmt;
+        totalBags += bags;
+        totalExtra += extraKg;
+        const fullTitle = window.getFullRawItemTitle ? window.getFullRawItemTitle(rawName) : rawName;
+        fullTitles.push(fullTitle);
+        return {
+          lineNo: i + 1,
+          rawName,
+          itemName: fullTitle,
+          bagSize, bags, extraKg, grossKg: gKg, kaddaKg: kKg, netKg: nKg, rateQtl, amount: lAmt
+        };
+      });
+      const kaddaKg = Math.round((grossKg * kPct) / 100);
+      const netAmt = Math.max(0, grossAmount - labor - trans);
+      const joinedTitle = fullTitles.length ? Array.from(new Set(fullTitles)).join(", ") : oldTx.itemName;
+      updatedTx = {
+        ...updatedTx,
+        kantaSlip: (document.getElementById("s8KantaSlip")?.value || "").trim() || "-",
+        vehicle: (document.getElementById("s8Vehicle")?.value || "").trim() || "-",
+        itemName: joinedTitle,
+        bagSize: Number(cleanLines[0]?.bagSize) || 50,
+        bags: totalBags,
+        extraKg: totalExtra,
+        grossKg, kaddaPct: kPct, kaddaKg, netKg,
+        rateQtl: Number(cleanLines[0]?.rateQtl) || oldTx.rateQtl || 0,
+        labor, trans, deductions: labor + trans,
+        grossAmount, amount: netAmt,
+        lines: cleanLines,
+        note: `${joinedTitle} • कुल वजन: ${(netKg / 100).toFixed(2)} क्विंटल (${netKg.toLocaleString("en-IN")} Kg शुद्ध)`
+      };
+    } else {
+      updatedTx = {
+        ...updatedTx,
+        mode: document.getElementById("s8VchMode")?.value || oldTx.mode || "Cash",
+        amount: paid,
+        note: (document.getElementById("s8VchNote")?.value || "").trim() || oldTx.note
+      };
+    }
+
+    state.transactions[idx] = updatedTx;
+    const partyObj = (state.parties || []).find(x => String(x.id) === String(pid));
+    const runBal = typeof getPartyBalance === "function" ? getPartyBalance(pid) : 0;
+    saveState();
+
+    const sheetTabName = tType === "SALE" ? "Sales_Invoices" : (tType === "PURCHASE" ? "Purchase_Bills" : "Payment_Vouchers");
+    if (typeof syncToGoogleSheet === "function") {
+      syncToGoogleSheet({
+        sheetTab: sheetTabName,
+        actionType: "UPSERT",
+        ...updatedTx,
+        partyName: partyObj ? partyObj.name : "",
+        runningBalance: runBal,
+        createdBy: state.role || "owner"
+      });
+    }
+
+    closeStep8BillEditModal();
+    if (typeof renderDashboard === "function") renderDashboard();
+    if (typeof renderPartyList === "function") renderPartyList();
+    if (typeof window.renderSaleHistoryTable === "function") window.renderSaleHistoryTable();
+    if (typeof window.renderPurchaseHistoryTable === "function") window.renderPurchaseHistoryTable();
+    if (typeof window.renderVoucherHistoryTable === "function") window.renderVoucherHistoryTable();
+  };
+})();
+</script>
