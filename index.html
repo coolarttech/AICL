@@ -13418,3 +13418,991 @@ setInterval(renderPlanTrackerCard, 60000);
   });
 })();
 </script>
+
+
+
+<script>
+(function applyStep5FullItemNamesAndStep6FreshEditWindowV51() {
+  function escHtml(v) {
+    return String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function sanitizeNumClean(raw) {
+    let s = String(raw ?? "").replace(/[^0-9.]/g, "");
+    const dot = s.indexOf(".");
+    if (dot !== -1) s = s.slice(0, dot + 1) + s.slice(dot + 1).replace(/\./g, "");
+    return s;
+  }
+
+  // 1. Build Full Item Name with Variety & Class/Varg for both Sale and Purchase items
+  window.getFullSaleItemTitle = function(itemId, fallbackName, fallbackCat) {
+    const it = (state.saleItems || []).find(x => String(x.id) === String(itemId));
+    if (it) {
+      const baseName = (it.cropName || it.name || fallbackName || "Seed Sale").trim();
+      const meta = [];
+      if (it.varietyName && it.varietyName !== "-") meta.push(it.varietyName.trim());
+      if (it.className && it.className !== "-") meta.push(`वर्ग: ${it.className.trim()}`);
+      if (it.category && it.category !== "-" && !meta.some(m => m.includes(it.category.trim()))) {
+        meta.push(it.category.trim());
+      }
+      return meta.length ? `${baseName} (${meta.join(" | ")})` : baseName;
+    }
+    const fName = (fallbackName || "").trim();
+    const fCat = (fallbackCat || "").trim();
+    if (fName && fName !== "Seed Sale") {
+      if (fCat && fCat !== "-" && fCat !== "Multi-Line" && !fName.includes(fCat)) {
+        return `${fName} (${fCat})`;
+      }
+      return fName;
+    }
+    return fCat && fCat !== "-" ? fCat : "Seed Sale";
+  };
+
+  window.getFullRawItemTitle = function(itemNameOrId, fallbackName) {
+    const rawKey = String(itemNameOrId || fallbackName || "").trim();
+    const it = (state.rawItems || []).find(x =>
+      String(x.id) === rawKey ||
+      String(x.name).trim() === rawKey ||
+      window.formatRawItemDisplay(x) === rawKey
+    );
+    if (it) {
+      return window.formatRawItemDisplay(it);
+    }
+    return rawKey || "Raw Crop";
+  };
+
+  window.formatRawItemDisplay = function(it) {
+    if (!it) return "Raw Crop";
+    const baseName = (it.name || "").trim();
+    const meta = [];
+    if (it.variety && it.variety !== "-") meta.push(it.variety.trim());
+    if (it.className && it.className !== "-") meta.push(`वर्ग: ${it.className.trim()}`);
+    return meta.length ? `${baseName} (${meta.join(" | ")})` : baseName;
+  };
+
+  // Dropdown options show Full Item Name (Crop + Variety + Class)
+  window.getSaleItemOptionsHtml = function(selectedId = "") {
+    const base = `<option value="">-- बिक्री आइटम चुनें --</option>`;
+    if (!Array.isArray(state.saleItems) || !state.saleItems.length) {
+      return base + `<option value="" disabled>पहले Item Master में बिक्री आइटम जोड़ें</option>`;
+    }
+    return base + state.saleItems.map(i => {
+      const sel = String(i.id) === String(selectedId) ? "selected" : "";
+      const fullLabel = window.getFullSaleItemTitle(i.id, i.name, i.category) + (i.packKg ? ` — ${i.packKg}kg` : "");
+      return `<option value="${escHtml(i.id)}" ${sel}>${escHtml(fullLabel)}</option>`;
+    }).join("");
+  };
+
+  window.getRawItemOptionsHtml = function(selectedVal = "") {
+    const base = `<option value="">-- कच्ची फसल / आइटम चुनें --</option>`;
+    if (!Array.isArray(state.rawItems) || !state.rawItems.length) {
+      return base + `<option value="" disabled>पहले Item Master में कच्चा आइटम जोड़ें</option>`;
+    }
+    return base + state.rawItems.map(i => {
+      const fullLbl = window.formatRawItemDisplay(i);
+      const sel = (
+        String(i.name).trim() === String(selectedVal).trim() ||
+        String(i.id) === String(selectedVal) ||
+        fullLbl === String(selectedVal).trim()
+      ) ? "selected" : "";
+      return `<option value="${escHtml(i.name)}" ${sel}>${escHtml(fullLbl)}</option>`;
+    }).join("");
+  };
+
+  // Ensure saveSaleItem saves cropName, varietyName, className, and full category cleanly
+  window.saveSaleItem = function(e) {
+    e.preventDefault();
+    const editId = (document.getElementById("editSaleItemId")?.value || "").trim();
+    const cropName = (document.getElementById("saleCropName")?.value || "").trim();
+    const varietyName = (document.getElementById("saleVarietyName")?.value || "").trim();
+    const className = (document.getElementById("saleClassName")?.value || "").trim() || "-";
+    const catStr = varietyName
+      ? `${varietyName}${className !== "-" ? " | वर्ग: " + className : ""}`
+      : (className !== "-" ? `वर्ग: ${className}` : "-");
+
+    const obj = {
+      id: editId || ("SAL-" + (101 + state.saleItems.length + Math.floor(Math.random() * 900))),
+      masterType: "SALE",
+      name: cropName,
+      cropName: cropName,
+      varietyName: varietyName,
+      className: className,
+      category: catStr,
+      packKg: 0,
+      rate: 0,
+      stockBags: 0,
+      updatedAt: new Date().toISOString().slice(0, 10)
+    };
+
+    if (editId) {
+      const idx = state.saleItems.findIndex(x => String(x.id) === editId);
+      if (idx !== -1) state.saleItems[idx] = obj;
+      document.getElementById("editSaleItemId").value = "";
+    } else {
+      state.saleItems.unshift(obj);
+    }
+
+    saveState();
+    syncToGoogleSheet({
+      sheetTab: "Items_Master",
+      actionType: "UPSERT",
+      id: obj.id,
+      masterType: "Finished Sale",
+      name: obj.name,
+      varietyOrClass: catStr,
+      status: "Active",
+      updatedAt: obj.updatedAt
+    });
+
+    document.getElementById("saleItemForm")?.reset();
+    const fb = document.getElementById("saleItemFeedback");
+    if (fb) { fb.textContent = `✓ "${window.getFullSaleItemTitle(obj.id)}" जुड़ गया`; setTimeout(() => fb.textContent = "", 2500); }
+    renderMasters();
+    refreshSelectors();
+  };
+
+  // 2. Helper to collect Sale & Purchase lines from DOM
+  function readSaleLinesFromDom() {
+    const box = document.getElementById("saleMultiLinesContainer");
+    const trs = box ? Array.from(box.querySelectorAll("tbody tr")) : [];
+    if (!trs.length) {
+      return [{
+        itemId: document.getElementById("saleItemId")?.value || "",
+        qty: Number(sanitizeNumClean(document.getElementById("saleQty")?.value)) || 0,
+        packKg: Number(sanitizeNumClean(document.getElementById("salePackSize")?.value)) || 0,
+        extraKg: Number(sanitizeNumClean(document.getElementById("saleExtraKg")?.value)) || 0,
+        rate: Number(sanitizeNumClean(document.getElementById("saleRate")?.value)) || 0
+      }];
+    }
+    return trs.map(tr => {
+      const itemId = tr.querySelector("select")?.value || "";
+      const nums = tr.querySelectorAll("input.v49-num-inp");
+      return {
+        itemId,
+        qty: Number(sanitizeNumClean(nums[0]?.value)) || 0,
+        packKg: Number(sanitizeNumClean(nums[1]?.value)) || 0,
+        extraKg: Number(sanitizeNumClean(nums[2]?.value)) || 0,
+        rate: Number(sanitizeNumClean(nums[3]?.value)) || 0
+      };
+    });
+  }
+
+  function readPurLinesFromDom() {
+    const box = document.getElementById("purMultiLinesContainer");
+    const trs = box ? Array.from(box.querySelectorAll("tbody tr")) : [];
+    if (!trs.length) {
+      return [{
+        itemName: document.getElementById("purCropSelect")?.value || (state.rawItems[0]?.name || ""),
+        bagSize: Number(sanitizeNumClean(document.getElementById("purBagSize")?.value)) || 50,
+        bags: Number(sanitizeNumClean(document.getElementById("purBags")?.value)) || 0,
+        extraKg: Number(sanitizeNumClean(document.getElementById("purExtraKg")?.value)) || 0,
+        rateQtl: Number(sanitizeNumClean(document.getElementById("purRateQtl")?.value)) || 0
+      }];
+    }
+    return trs.map(tr => {
+      const sels = tr.querySelectorAll("select");
+      const nums = tr.querySelectorAll("input.v49-num-inp");
+      return {
+        itemName: sels[0]?.value || "",
+        bagSize: Number(sanitizeNumClean(sels[1]?.value)) || 50,
+        bags: Number(sanitizeNumClean(nums[0]?.value)) || 0,
+        extraKg: Number(sanitizeNumClean(nums[1]?.value)) || 0,
+        rateQtl: Number(sanitizeNumClean(nums[2]?.value)) || 0
+      };
+    });
+  }
+
+  // 3. Save Sale Invoice with FULL Item Name (Crop + Variety + Class) + Quintal Weight
+  window.saveSaleInvoice = function(e) {
+    e.preventDefault();
+    const pid = resolvePartyIdFromField("salePartyId", "salePartySearch");
+    if (!pid) { alert("कृपया पहले पार्टी चुनें या पार्टी लेजर में जोड़ें।"); return; }
+
+    const editId = (document.getElementById("editSaleTxId")?.value || "").trim();
+    const isMandi = Boolean(document.getElementById("channelMandi")?.checked);
+    const dateVal = document.getElementById("saleDate")?.value || new Date().toISOString().slice(0, 10);
+    const lotNo = (document.getElementById("saleLotNo")?.value || "").trim() || "-";
+    const refVal = (document.getElementById("saleCustomNoInput")?.value || "").trim();
+    const paid = Number(sanitizeNumClean(document.getElementById("saleCashPaid")?.value)) || 0;
+
+    const transOn = Boolean(document.getElementById("saleTransportEnabledChk")?.checked);
+    const grRrNo = transOn ? ((document.getElementById("saleGrRrNo")?.value || "").trim() || "-") : "";
+    const transportName = transOn ? ((document.getElementById("saleTransportName")?.value || "").trim() || "-") : "";
+    const destination = transOn ? ((document.getElementById("saleDestination")?.value || "").trim() || "-") : "";
+    const transportCharge = transOn ? (Number(sanitizeNumClean(document.getElementById("saleTransportCharge")?.value)) || 0) : 0;
+
+    const gstOn = Boolean(document.getElementById("saleGstEnabledChk")?.checked);
+    const gstPct = gstOn ? (Number(sanitizeNumClean(document.getElementById("saleGstPct")?.value)) || 0) : 0;
+
+    let totalKg = 0;
+    let itemsSubtotal = 0;
+    let cleanLines = [];
+    let fullTitles = [];
+    let details = [];
+
+    if (!isMandi) {
+      const linesNow = readSaleLinesFromDom();
+      cleanLines = linesNow.map((ln, idx) => {
+        const it = (state.saleItems || []).find(x => String(x.id) === String(ln.itemId));
+        const lKg = Math.max(0, (ln.packKg * ln.qty) + ln.extraKg);
+        const lAmt = Math.round(lKg * ln.rate);
+        totalKg += lKg;
+        itemsSubtotal += lAmt;
+        const fullTitle = window.getFullSaleItemTitle(ln.itemId, it ? it.name : "", it ? it.category : "");
+        fullTitles.push(fullTitle);
+        details.push(`${fullTitle} — ${ln.qty} कट्टे (${ln.packKg}kg)${ln.extraKg > 0 ? `+${ln.extraKg}kg` : ""} = ${(lKg / 100).toFixed(2)} Qtl`);
+        return {
+          lineNo: idx + 1,
+          itemId: ln.itemId || "",
+          itemName: fullTitle,
+          rawName: it ? it.name : fullTitle,
+          category: it ? (it.category || "-") : "-",
+          packKg: ln.packKg,
+          qty: ln.qty,
+          extraKg: ln.extraKg,
+          rate: ln.rate,
+          totalKg: lKg,
+          amount: lAmt
+        };
+      });
+    } else {
+      const mandiLoc = (document.getElementById("mandiLocation")?.value || "").trim() || "-";
+      const vehSlip = (document.getElementById("mandiVehicleSlip")?.value || "").trim() || "-";
+      const comm = (document.getElementById("mandiCommodity")?.value || "").trim() || "Mandi Supply";
+      totalKg = Number(sanitizeNumClean(document.getElementById("mandiWeightKg")?.value)) || 0;
+      const rateQtl = Number(sanitizeNumClean(document.getElementById("mandiRateQtl")?.value)) || 0;
+      const ded = Number(sanitizeNumClean(document.getElementById("mandiDeductionRs")?.value)) || 0;
+      itemsSubtotal = Math.max(0, Math.round((totalKg / 100) * rateQtl) - ded);
+      fullTitles.push(comm);
+      details.push(`${comm} • मंडी: ${mandiLoc} • ${(totalKg / 100).toFixed(2)} Qtl @ ₹${rateQtl}/Qtl`);
+    }
+
+    const taxableBase = itemsSubtotal + transportCharge;
+    const gstAmount = gstOn ? Math.round((taxableBase * gstPct) / 100) : 0;
+    const amount = taxableBase + gstAmount;
+    const invNo = editId || (isMandi
+      ? ("MND-" + (501 + state.transactions.filter(t => t.saleChannel === "Mandi Supply").length))
+      : ("INV-" + (2001 + state.transactions.filter(t => t.type === "SALE").length)));
+
+    const joinedTitles = fullTitles.length ? Array.from(new Set(fullTitles)).join(", ") : "Seed Sale";
+    const totalQtlStr = `${(totalKg / 100).toFixed(2)} क्विंटल (${totalKg.toLocaleString("en-IN")} Kg)`;
+
+    const tx = {
+      id: invNo,
+      refNo: refVal,
+      type: "SALE",
+      saleChannel: isMandi ? "Mandi Supply" : "Seed Sale",
+      date: dateVal,
+      seasonYear: getSeasonYear(dateVal),
+      partyId: pid,
+      lotNo,
+      mandiOrLocation: isMandi ? ((document.getElementById("mandiLocation")?.value || "").trim() || "-") : undefined,
+      vehicleOrSlip: isMandi ? ((document.getElementById("mandiVehicleSlip")?.value || "").trim() || "-") : undefined,
+      itemId: cleanLines[0]?.itemId || "",
+      itemName: joinedTitles,
+      category: isMandi ? "Mandi Supply" : (cleanLines.length > 1 ? "Multi-Line" : (cleanLines[0]?.category || "-")),
+      packKg: Number(cleanLines[0]?.packKg) || 0,
+      qty: cleanLines.reduce((s, x) => s + (Number(x.qty) || 0), 0),
+      extraKg: cleanLines.reduce((s, x) => s + (Number(x.extraKg) || 0), 0),
+      totalKg,
+      rate: Number(cleanLines[0]?.rate || document.getElementById("mandiRateQtl")?.value) || 0,
+      deductions: isMandi ? (Number(sanitizeNumClean(document.getElementById("mandiDeductionRs")?.value)) || 0) : 0,
+      subTotal: itemsSubtotal,
+      transportEnabled: transOn,
+      grRrNo,
+      transportName,
+      destination,
+      transportCharge,
+      gstEnabled: gstOn,
+      gstPct,
+      gstAmount,
+      amount,
+      paid,
+      lines: cleanLines,
+      note: `${joinedTitles} • कुल वजन: ${totalQtlStr}`
+    };
+
+    if (editId) {
+      const idx = state.transactions.findIndex(x => x.id === editId);
+      if (idx !== -1) state.transactions[idx] = tx;
+    } else {
+      state.transactions.unshift(tx);
+    }
+
+    const partyObj = state.parties.find(x => x.id === pid);
+    const runBal = getPartyBalance(pid);
+    saveState();
+    syncToGoogleSheet({
+      sheetTab: "Sales_Invoices",
+      actionType: "UPSERT",
+      ...tx,
+      partyName: partyObj ? partyObj.name : "",
+      runningBalance: runBal,
+      createdBy: state.role
+    });
+
+    renderDashboard();
+    renderPartyList();
+    if (typeof window.renderSaleHistoryTable === "function") window.renderSaleHistoryTable();
+
+    // Open Split-Screen Success Workspace (from Step 3)
+    const splitOverlay = document.getElementById("step3SplitBillWindow");
+    if (splitOverlay && typeof window.openReceipt === "function") {
+      if (document.activeElement && typeof document.activeElement.blur === "function") document.activeElement.blur();
+      const modeBadge = document.getElementById("s3ModeBadge");
+      const heading = document.getElementById("s3Heading");
+      const billNoEl = document.getElementById("s3BillNo");
+      const partyEl = document.getElementById("s3PartyName");
+      const dateEl = document.getElementById("s3Date");
+      const amtEl = document.getElementById("s3Amount");
+      const nextHintEl = document.getElementById("s3NextHint");
+
+      if (modeBadge) modeBadge.textContent = editId ? "✓ बिल अपडेट व सिंक पूर्ण" : "✓ बिक्री बिल सबमिट व लेजर अपडेट";
+      if (heading) heading.textContent = editId ? "आपका बिक्री बिल सफलतापूर्वक अपडेट हो गया है" : "आपका बिक्री बिल सफलतापूर्वक सबमिट हो गया है";
+      if (billNoEl) billNoEl.textContent = tx.id;
+      if (partyEl) partyEl.textContent = partyObj ? partyObj.name : "-";
+      if (dateEl) dateEl.textContent = tx.date;
+      if (amtEl) amtEl.textContent = "₹" + Number(tx.amount || 0).toLocaleString("en-IN");
+      if (nextHintEl) {
+        const nextNo = "INV-" + (2001 + state.transactions.filter(t => t && t.type === "SALE").length);
+        nextHintEl.textContent = "अगला बिल नंबर: " + nextNo;
+      }
+
+      window.openReceipt(tx.id);
+      const receiptModal = document.getElementById("receiptModal");
+      if (receiptModal) receiptModal.classList.add("hidden");
+      const printArea = document.getElementById("printArea");
+      const rightHost = document.getElementById("s3RightInvoiceHost");
+      if (printArea && rightHost) {
+        rightHost.innerHTML = "";
+        rightHost.appendChild(printArea);
+      }
+      splitOverlay.classList.remove("hidden");
+      setTimeout(() => document.getElementById("s3BtnNextBill")?.focus(), 50);
+    } else {
+      openReceipt(tx.id);
+    }
+  };
+
+  // 4. Save Purchase Bill with FULL Item Name (Crop + Variety + Class) + Quintal Weight
+  window.savePurchaseBill = function(e) {
+    e.preventDefault();
+    const pid = resolvePartyIdFromField("purPartyId", "purPartySearch");
+    if (!pid) { alert("कृपया पहले किसान / पार्टी चुनें या पार्टी लेजर में जोड़ें।"); return; }
+
+    const editId = (document.getElementById("editPurTxId")?.value || "").trim();
+    const dateVal = document.getElementById("purDate")?.value || new Date().toISOString().slice(0, 10);
+    const refVal = (document.getElementById("purCustomNoInput")?.value || "").trim();
+    const kaddaPct = Number(sanitizeNumClean(document.getElementById("purKaddaPct")?.value ?? 1)) || 0;
+    const labor = Number(sanitizeNumClean(document.getElementById("purLaborDed")?.value)) || 0;
+    const trans = Number(sanitizeNumClean(document.getElementById("purTransDed")?.value)) || 0;
+    const paid = Number(sanitizeNumClean(document.getElementById("purPaidNow")?.value)) || 0;
+
+    const linesNow = readPurLinesFromDom();
+    let grossKg = 0;
+    let grossAmount = 0;
+    let totalBags = 0;
+    let totalExtra = 0;
+    let fullTitles = [];
+
+    const cleanLines = linesNow.map((ln, idx) => {
+      const gKg = Math.max(0, (ln.bags * ln.bagSize) + ln.extraKg);
+      const kKg = Math.round((gKg * kaddaPct) / 100);
+      const nKg = Math.max(0, gKg - kKg);
+      const lAmt = Math.round((nKg / 100) * ln.rateQtl);
+      grossKg += gKg;
+      grossAmount += lAmt;
+      totalBags += ln.bags;
+      totalExtra += ln.extraKg;
+      const fullTitle = window.getFullRawItemTitle(ln.itemName);
+      fullTitles.push(fullTitle);
+      return {
+        lineNo: idx + 1,
+        rawName: ln.itemName,
+        itemName: fullTitle,
+        bagSize: ln.bagSize,
+        bags: ln.bags,
+        extraKg: ln.extraKg,
+        grossKg: gKg,
+        kaddaKg: kKg,
+        netKg: nKg,
+        rateQtl: ln.rateQtl,
+        amount: lAmt
+      };
+    });
+
+    const kaddaKg = Math.round((grossKg * kaddaPct) / 100);
+    const netKg = Math.max(0, grossKg - kaddaKg);
+    const deductions = labor + trans;
+    const amount = Math.max(0, grossAmount - deductions);
+    const billNo = editId || ("PUR-" + (1001 + state.transactions.filter(t => t.type === "PURCHASE").length));
+    const joinedTitles = fullTitles.length ? Array.from(new Set(fullTitles)).join(", ") : "Raw Crop";
+    const netQtlStr = `${(netKg / 100).toFixed(2)} क्विंटल (${netKg.toLocaleString("en-IN")} Kg शुद्ध)`;
+
+    const tx = {
+      id: billNo,
+      refNo: refVal,
+      type: "PURCHASE",
+      saleChannel: "Raw Purchase",
+      date: dateVal,
+      seasonYear: getSeasonYear(dateVal),
+      partyId: pid,
+      lotNo: (document.getElementById("purLotNo")?.value || "").trim() || "-",
+      kantaSlip: (document.getElementById("purKantaSlip")?.value || "").trim() || "-",
+      vehicle: (document.getElementById("purVehicle")?.value || "").trim() || "-",
+      itemName: joinedTitles,
+      bagSize: Number(cleanLines[0]?.bagSize) || 50,
+      bags: totalBags,
+      extraKg: totalExtra,
+      grossKg,
+      kaddaPct,
+      kaddaKg,
+      netKg,
+      rateQtl: Number(cleanLines[0]?.rateQtl) || 0,
+      labor,
+      trans,
+      weed: 0,
+      deductions,
+      grossAmount,
+      amount,
+      paid,
+      lines: cleanLines,
+      note: `${joinedTitles} • कुल वजन: ${netQtlStr}`
+    };
+
+    if (editId) {
+      const idx = state.transactions.findIndex(x => x.id === editId);
+      if (idx !== -1) state.transactions[idx] = tx;
+    } else {
+      state.transactions.unshift(tx);
+    }
+
+    const partyObj = state.parties.find(x => x.id === pid);
+    const runBal = getPartyBalance(pid);
+    saveState();
+    syncToGoogleSheet({
+      sheetTab: "Purchase_Bills",
+      actionType: "UPSERT",
+      ...tx,
+      partyName: partyObj ? partyObj.name : "",
+      runningBalance: runBal,
+      createdBy: state.role
+    });
+
+    renderDashboard();
+    renderPartyList();
+    if (typeof window.renderPurchaseHistoryTable === "function") window.renderPurchaseHistoryTable();
+
+    const splitOverlay = document.getElementById("step3SplitBillWindow");
+    if (splitOverlay && typeof window.openReceipt === "function") {
+      if (document.activeElement && typeof document.activeElement.blur === "function") document.activeElement.blur();
+      const modeBadge = document.getElementById("s3ModeBadge");
+      const heading = document.getElementById("s3Heading");
+      const billNoEl = document.getElementById("s3BillNo");
+      const partyEl = document.getElementById("s3PartyName");
+      const dateEl = document.getElementById("s3Date");
+      const amtEl = document.getElementById("s3Amount");
+      const nextHintEl = document.getElementById("s3NextHint");
+
+      if (modeBadge) modeBadge.textContent = editId ? "✓ खरीद बिल अपडेट व सिंक पूर्ण" : "✓ खरीद बिल सबमिट व लेजर अपडेट";
+      if (heading) heading.textContent = editId ? "आपका खरीद बिल सफलतापूर्वक अपडेट हो गया है" : "आपका खरीद बिल सफलतापूर्वक सबमिट हो गया है";
+      if (billNoEl) billNoEl.textContent = tx.id;
+      if (partyEl) partyEl.textContent = partyObj ? partyObj.name : "-";
+      if (dateEl) dateEl.textContent = tx.date;
+      if (amtEl) amtEl.textContent = "₹" + Number(tx.amount || 0).toLocaleString("en-IN");
+      if (nextHintEl) {
+        const nextNo = "PUR-" + (1001 + state.transactions.filter(t => t && t.type === "PURCHASE").length);
+        nextHintEl.textContent = "अगला बिल नंबर: " + nextNo;
+      }
+
+      window.openReceipt(tx.id);
+      const receiptModal = document.getElementById("receiptModal");
+      if (receiptModal) receiptModal.classList.add("hidden");
+      const printArea = document.getElementById("printArea");
+      const rightHost = document.getElementById("s3RightInvoiceHost");
+      if (printArea && rightHost) {
+        rightHost.innerHTML = "";
+        rightHost.appendChild(printArea);
+      }
+      splitOverlay.classList.remove("hidden");
+      setTimeout(() => document.getElementById("s3BtnNextBill")?.focus(), 50);
+    } else {
+      openReceipt(tx.id);
+    }
+  };
+
+  // 5. Enhance openReceipt so Item Description ALWAYS displays Full Item Name (Crop + Variety + Class)
+  const _prevOpenReceiptStep5 = window.openReceipt;
+  window.openReceipt = function(txId) {
+    const res = _prevOpenReceiptStep5.apply(this, arguments);
+    const tx = (state.transactions || []).find(x => x.id === txId);
+    if (!tx || tx.type === "RECEIPT" || tx.type === "PAYMENT") return res;
+
+    const printArea = document.getElementById("printArea");
+    if (!printArea) return res;
+    const bodyRows = Array.from(printArea.querySelectorAll("tbody tr"));
+    if (tx.type === "SALE" && tx.saleChannel !== "Mandi Supply") {
+      const lineList = Array.isArray(tx.lines) && tx.lines.length
+        ? tx.lines
+        : [{ itemId: tx.itemId, itemName: tx.itemName, category: tx.category }];
+      bodyRows.forEach((tr, idx) => {
+        const ln = lineList[idx];
+        const titleP = tr.querySelector("td:nth-child(2) p.font-semibold");
+        if (ln && titleP) {
+          titleP.textContent = window.getFullSaleItemTitle(ln.itemId, ln.itemName || tx.itemName, ln.category || tx.category);
+        }
+      });
+    } else if (tx.type === "PURCHASE") {
+      const lineList = Array.isArray(tx.lines) && tx.lines.length
+        ? tx.lines
+        : [{ rawName: tx.itemName, itemName: tx.itemName }];
+      bodyRows.forEach((tr, idx) => {
+        const ln = lineList[idx];
+        const titleP = tr.querySelector("td:nth-child(2) p.font-semibold");
+        if (ln && titleP) {
+          titleP.textContent = window.getFullRawItemTitle(ln.rawName || ln.itemName, tx.itemName);
+        }
+      });
+    }
+    return res;
+  };
+
+  // 6. Enhance Sale & Purchase History Tables + Party Ledger so Full Item Name + Quintals show clearly
+  window.renderSaleHistoryTable = function() {
+    const tb = document.getElementById("saleHistoryTableBody");
+    const sumEl = document.getElementById("salePeriodSummaryText");
+    const cntEl = document.getElementById("salePeriodCountBadge");
+    if (!tb) return;
+    const allSales = (state.transactions || []).filter(t => t.type === "SALE");
+    const list = typeof filterEntriesByPeriod === "function" ? filterEntriesByPeriod(allSales, activeSalePeriodFilter) : allSales;
+    const totalAmt = list.reduce((s, x) => s + Number(x.amount || 0), 0);
+    const totalWt = list.reduce((s, x) => s + Number(x.totalKg || 0), 0);
+    if (sumEl) sumEl.textContent = `कुल बिक्री: ₹${totalAmt.toLocaleString("en-IN")} • कुल वजन: ${(totalWt / 100).toFixed(2)} क्विंटल (${totalWt.toLocaleString("en-IN")} Kg)`;
+    if (cntEl) cntEl.textContent = `${list.length} बिल`;
+
+    if (!list.length) {
+      tb.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">इस अवधि में कोई बिक्री बिल नहीं है</td></tr>`;
+      return;
+    }
+
+    tb.innerHTML = list.map(t => {
+      const p = state.parties.find(x => x.id === t.partyId);
+      const chLabel = t.saleChannel === "Mandi Supply" ? "मंडी सप्लाई" : "बीज बिक्री";
+      let fullItemDesc = "";
+      if (t.saleChannel === "Mandi Supply") {
+        fullItemDesc = `${t.itemName || "Mandi Supply"} (मंडी: ${t.mandiOrLocation || "-"})`;
+      } else if (Array.isArray(t.lines) && t.lines.length) {
+        fullItemDesc = t.lines.map(ln => window.getFullSaleItemTitle(ln.itemId, ln.itemName, ln.category)).join(", ");
+      } else {
+        fullItemDesc = window.getFullSaleItemTitle(t.itemId, t.itemName, t.category);
+      }
+      const qtlText = `${(Number(t.totalKg || 0) / 100).toFixed(2)} Qtl`;
+      return `
+        <tr>
+          <td class="num-clean px-3.5 py-2.5 whitespace-nowrap">${t.date}</td>
+          <td class="num-clean px-3.5 py-2.5 font-semibold text-[#132A46] whitespace-nowrap">${t.id}</td>
+          <td class="px-3.5 py-2.5">${p ? p.name : "-"}</td>
+          <td class="px-3.5 py-2.5"><span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-emerald-50 text-[#1EA668] border border-emerald-200 mr-1">${chLabel}</span> <b>${escHtml(fullItemDesc)}</b> — <span class="num-clean font-semibold text-slate-700">${qtlText}</span></td>
+          <td class="num-clean px-3.5 py-2.5 text-right font-bold text-[#1EA668] whitespace-nowrap">₹${Number(t.amount || 0).toLocaleString("en-IN")}</td>
+          <td class="px-3.5 py-2.5 text-center whitespace-nowrap space-x-1.5">
+            <button type="button" onclick="openReceipt('${t.id}')" class="text-[#1EA668] font-semibold underline cursor-pointer">बिल</button>
+            <button type="button" onclick="editTransaction('${t.id}')" class="text-sky-700 font-semibold underline cursor-pointer">Edit</button>
+            <button type="button" onclick="deleteTransaction('${t.id}')" class="text-rose-600 font-semibold underline cursor-pointer">Del</button>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  };
+
+  window.renderPurchaseHistoryTable = function() {
+    const tb = document.getElementById("purchaseHistoryTableBody");
+    const sumEl = document.getElementById("purchasePeriodSummaryText");
+    const cntEl = document.getElementById("purchasePeriodCountBadge");
+    if (!tb) return;
+    const allPur = (state.transactions || []).filter(t => t.type === "PURCHASE");
+    const list = typeof filterEntriesByPeriod === "function" ? filterEntriesByPeriod(allPur, activePurchasePeriodFilter) : allPur;
+    const totalAmt = list.reduce((s, x) => s + Number(x.amount || 0), 0);
+    const totalWt = list.reduce((s, x) => s + Number(x.netKg || x.grossKg || 0), 0);
+    if (sumEl) sumEl.textContent = `कुल खरीद: ₹${totalAmt.toLocaleString("en-IN")} • शुद्ध वजन: ${(totalWt / 100).toFixed(2)} क्विंटल (${totalWt.toLocaleString("en-IN")} Kg)`;
+    if (cntEl) cntEl.textContent = `${list.length} बिल`;
+
+    if (!list.length) {
+      tb.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">इस अवधि में कोई खरीद बिल नहीं है</td></tr>`;
+      return;
+    }
+
+    tb.innerHTML = list.map(t => {
+      const p = state.parties.find(x => x.id === t.partyId);
+      let fullItemDesc = "";
+      if (Array.isArray(t.lines) && t.lines.length) {
+        fullItemDesc = t.lines.map(ln => window.getFullRawItemTitle(ln.rawName || ln.itemName, t.itemName)).join(", ");
+      } else {
+        fullItemDesc = window.getFullRawItemTitle(t.itemName);
+      }
+      const wtKg = Number(t.netKg || t.grossKg || 0);
+      const qtlText = `${(wtKg / 100).toFixed(2)} Qtl`;
+      return `
+        <tr>
+          <td class="num-clean px-3.5 py-2.5 whitespace-nowrap">${t.date}</td>
+          <td class="num-clean px-3.5 py-2.5 font-semibold text-[#132A46] whitespace-nowrap">${t.id}</td>
+          <td class="px-3.5 py-2.5">${p ? p.name : "-"}</td>
+          <td class="px-3.5 py-2.5"><b>${escHtml(fullItemDesc)}</b> — <span class="num-clean font-semibold text-slate-700">${qtlText}</span></td>
+          <td class="num-clean px-3.5 py-2.5 text-right font-bold text-sky-800 whitespace-nowrap">₹${Number(t.amount || 0).toLocaleString("en-IN")}</td>
+          <td class="px-3.5 py-2.5 text-center whitespace-nowrap space-x-1.5">
+            <button type="button" onclick="openReceipt('${t.id}')" class="text-[#1EA668] font-semibold underline cursor-pointer">बिल</button>
+            <button type="button" onclick="editTransaction('${t.id}')" class="text-sky-700 font-semibold underline cursor-pointer">Edit</button>
+            <button type="button" onclick="deleteTransaction('${t.id}')" class="text-rose-600 font-semibold underline cursor-pointer">Del</button>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  };
+
+  // 7. STEP 6: Complete, Working Full-Window Bill Edit (When user clicks Edit on ANY Sale/Purchase/Voucher bill)
+  // Opens a dedicated fresh-window view hiding other views, loads the ENTIRE bill (all lines, party, date, lot, kadda, deductions, transport, GST, paid amount) into the form, and saves/updates that exact bill!
+  window.editTransaction = function(txId) {
+    const tx = (state.transactions || []).find(x => String(x.id) === String(txId));
+    if (!tx) {
+      alert("यह बिल रिकॉर्ड नहीं मिला।");
+      return;
+    }
+
+    // Close any open drawers, modals, or split-screen overlays first so the fresh edit window appears cleanly
+    if (typeof window.closeRecordsDrawer === "function") window.closeRecordsDrawer();
+    if (typeof window.closeReceiptModal === "function") window.closeReceiptModal();
+    const s3Win = document.getElementById("step3SplitBillWindow");
+    if (s3Win && !s3Win.classList.contains("hidden")) {
+      s3Win.classList.add("hidden");
+      const printArea = document.getElementById("printArea");
+      const receiptModalBox = document.querySelector("#receiptModal > div");
+      if (printArea && receiptModalBox && printArea.parentElement !== receiptModalBox) {
+        receiptModalBox.appendChild(printArea);
+      }
+    }
+    const s1Win = document.getElementById("step1BillSuccessModal");
+    if (s1Win) s1Win.classList.add("hidden");
+
+    const p = (state.parties || []).find(x => String(x.id) === String(tx.partyId));
+
+    if (tx.type === "SALE") {
+      if (typeof window.switchTab === "function") window.switchTab("sales");
+
+      // Show prominent Edit Mode Banner at top of Sales Form
+      let banner = document.getElementById("saleEditModeBanner");
+      if (!banner) {
+        banner = document.createElement("div");
+        banner.id = "saleEditModeBanner";
+        const saleForm = document.getElementById("saleForm");
+        if (saleForm) saleForm.parentElement.insertBefore(banner, saleForm);
+      }
+      banner.className = "mt-3 mb-2 rounded-xl bg-amber-50 border-2 border-amber-400 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs";
+      banner.innerHTML = `
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-extrabold">EDIT MODE</span>
+          <span class="font-bold text-[#132A46]">आप बिल नं. <b class="num-clean underline">${tx.id}</b> को संपादित (Edit) कर रहे हैं — बदलाव करके नीचे सेव करें</span>
+        </div>
+        <button type="button" onclick="cancelBillEditMode('sales')" class="px-2.5 py-1 rounded-lg bg-white border border-amber-300 text-amber-900 font-bold hover:bg-amber-100 cursor-pointer">✕ Edit रद्द करें</button>
+      `;
+
+      document.getElementById("editSaleTxId").value = tx.id;
+      const disp = document.getElementById("saleInvNoDisplay");
+      if (disp) disp.textContent = tx.id + " (Edit हो रहा है)";
+      if (document.getElementById("saleCustomNoInput")) document.getElementById("saleCustomNoInput").value = tx.refNo || "";
+
+      const isMandi = tx.saleChannel === "Mandi Supply";
+      if (document.getElementById("channelMandi")) document.getElementById("channelMandi").checked = isMandi;
+      if (document.getElementById("channelSeed")) document.getElementById("channelSeed").checked = !isMandi;
+      if (typeof window.toggleSaleChannelUI === "function") window.toggleSaleChannelUI();
+
+      document.getElementById("salePartyId").value = tx.partyId || "";
+      document.getElementById("salePartySearch").value = p ? `${p.name} (${p.village}) — ${p.role}` : "";
+      document.getElementById("saleDate").value = tx.date || "";
+      document.getElementById("saleLotNo").value = (!tx.lotNo || tx.lotNo === "-") ? "" : tx.lotNo;
+      document.getElementById("saleCashPaid").value = Number(tx.paid) || 0;
+
+      // Restore Transport & GST flags
+      const trChk = document.getElementById("saleTransportEnabledChk");
+      if (trChk) {
+        trChk.checked = Boolean(tx.transportEnabled);
+        if (typeof window.toggleSaleTransportFields === "function") window.toggleSaleTransportFields();
+        if (document.getElementById("saleGrRrNo")) document.getElementById("saleGrRrNo").value = (!tx.grRrNo || tx.grRrNo === "-") ? "" : tx.grRrNo;
+        if (document.getElementById("saleTransportName")) document.getElementById("saleTransportName").value = (!tx.transportName || tx.transportName === "-") ? "" : tx.transportName;
+        if (document.getElementById("saleDestination")) document.getElementById("saleDestination").value = (!tx.destination || tx.destination === "-") ? "" : tx.destination;
+        if (document.getElementById("saleTransportCharge")) document.getElementById("saleTransportCharge").value = Number(tx.transportCharge) || 0;
+      }
+      const gstChk = document.getElementById("saleGstEnabledChk");
+      if (gstChk) {
+        gstChk.checked = Boolean(tx.gstEnabled);
+        if (typeof window.toggleSaleGstFields === "function") window.toggleSaleGstFields();
+        if (document.getElementById("saleGstPct")) document.getElementById("saleGstPct").value = Number(tx.gstPct) || 5;
+      }
+
+      if (!isMandi) {
+        // Restore ALL item lines into the multi-line table!
+        const box = document.getElementById("saleMultiLinesContainer");
+        const lineList = Array.isArray(tx.lines) && tx.lines.length
+          ? tx.lines
+          : [{
+              itemId: tx.itemId || "",
+              qty: Number(tx.qty) || 0,
+              packKg: Number(tx.packKg) || 0,
+              extraKg: Number(tx.extraKg) || 0,
+              rate: Number(tx.rate) || 0
+            }];
+
+        if (box) {
+          const rowsHtml = lineList.map((ln, idx) => {
+            const qVal = Number(ln.qty) || 0;
+            const pVal = Number(ln.packKg) || 0;
+            const eVal = Number(ln.extraKg) || 0;
+            const rVal = Number(ln.rate) || 0;
+            const lKg = Math.max(0, (qVal * pVal) + eVal);
+            const lAmt = Math.round(lKg * rVal);
+            return `
+              <tr class="border-b border-slate-300 bg-white">
+                <td class="py-1.5 px-2 border-r border-slate-300 whitespace-nowrap">
+                  <span class="font-bold text-xs text-[#132A46]">लाइन ${idx + 1}</span>
+                </td>
+                <td class="py-1.5 px-2 border-r border-slate-300 min-w-[175px]">
+                  <select onchange="onSaleLineItemSelect(${idx}, this.value)" class="w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm bg-white font-semibold text-[#132A46]">
+                    ${window.getSaleItemOptionsHtml(ln.itemId)}
+                  </select>
+                </td>
+                <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
+                  <input type="text" inputmode="numeric" value="${qVal}" oninput="onSaleLineField(${idx}, 'qty', this.value)" class="v49-num-inp num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white">
+                </td>
+                <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
+                  <input type="text" inputmode="decimal" value="${pVal}" oninput="onSaleLineField(${idx}, 'packKg', this.value)" class="v49-num-inp num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right bg-white">
+                </td>
+                <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
+                  <input type="text" inputmode="decimal" value="${eVal}" oninput="onSaleLineField(${idx}, 'extraKg', this.value)" class="v49-num-inp num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white">
+                </td>
+                <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
+                  <input type="text" inputmode="decimal" value="${rVal}" oninput="onSaleLineField(${idx}, 'rate', this.value)" class="v49-num-inp num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white">
+                </td>
+                <td class="v49-line-total-cell py-1.5 px-2 border-r border-slate-300 text-right whitespace-nowrap">
+                  <div class="num-clean text-xs font-bold text-[#132A46]">${lKg.toLocaleString("en-IN")} Kg</div>
+                  <div class="num-clean text-xs font-bold text-[#1EA668]">₹${lAmt.toLocaleString("en-IN")}</div>
+                </td>
+                <td class="py-1.5 px-2 text-center whitespace-nowrap">
+                  ${lineList.length > 1
+                    ? `<button type="button" onclick="removeSaleLineRow(${idx})" class="px-2 py-0.5 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold">हटाएं</button>`
+                    : `<span class="text-[11px] text-slate-400">—</span>`}
+                </td>
+              </tr>
+            `;
+          }).join("");
+
+          const sumKg = lineList.reduce((s, ln) => s + Math.max(0, (Number(ln.qty)||0)*(Number(ln.packKg)||0) + (Number(ln.extraKg)||0)), 0);
+          const sumAmt = lineList.reduce((s, ln) => s + Math.round(Math.max(0, (Number(ln.qty)||0)*(Number(ln.packKg)||0) + (Number(ln.extraKg)||0)) * (Number(ln.rate)||0)), 0);
+
+          box.innerHTML = `
+            <div class="slim-rule-table border border-slate-300 rounded-lg overflow-x-auto bg-white">
+              <table class="slim-rule-table w-full text-xs border-collapse text-left">
+                <thead>
+                  <tr class="bg-[#132A46] text-white border-b border-slate-300">
+                    <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">लाइन</th>
+                    <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">आइटम / वर्ग</th>
+                    <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">कट्टे</th>
+                    <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">बैग (Kg)</th>
+                    <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">अतिरिक्त Kg</th>
+                    <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">रेट (₹)</th>
+                    <th class="py-1.5 px-2 border-r border-slate-600 font-semibold text-right">लाइन कुल</th>
+                    <th class="py-1.5 px-2 font-semibold text-center">एक्शन</th>
+                  </tr>
+                </thead>
+                <tbody>${rowsHtml}</tbody>
+                <tfoot>
+                  <tr class="bg-slate-50 border-t border-slate-300 font-bold text-[#132A46]">
+                    <td colspan="6" class="py-1.5 px-2.5 border-r border-slate-300 text-right">सभी लाइनों का कुल योग (Sub-Total):</td>
+                    <td class="v49-foot-total-cell py-1.5 px-2 border-r border-slate-300 text-right num-clean whitespace-nowrap">
+                      <div>${sumKg.toLocaleString("en-IN")} Kg</div>
+                      <div class="text-[#1EA668]">₹${sumAmt.toLocaleString("en-IN")}</div>
+                    </td>
+                    <td class="py-1.5 px-2 text-center"></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          `;
+        }
+      } else {
+        document.getElementById("mandiLocation").value = (!tx.mandiOrLocation || tx.mandiOrLocation === "-") ? "" : tx.mandiOrLocation;
+        document.getElementById("mandiVehicleSlip").value = (!tx.vehicleOrSlip || tx.vehicleOrSlip === "-") ? "" : tx.vehicleOrSlip;
+        document.getElementById("mandiCommodity").value = tx.itemName || "";
+        document.getElementById("mandiWeightKg").value = Number(tx.totalKg) || 0;
+        document.getElementById("mandiRateQtl").value = Number(tx.rate) || 0;
+        document.getElementById("mandiDeductionRs").value = Number(tx.deductions) || 0;
+      }
+
+      if (typeof window.onSalePartyChange === "function") window.onSalePartyChange();
+      if (typeof window.calcSaleTotal === "function") window.calcSaleTotal();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (tx.type === "PURCHASE") {
+      if (typeof window.switchTab === "function") window.switchTab("purchase");
+
+      let banner = document.getElementById("purEditModeBanner");
+      if (!banner) {
+        banner = document.createElement("div");
+        banner.id = "purEditModeBanner";
+        const purForm = document.getElementById("purchaseForm");
+        if (purForm) purForm.parentElement.insertBefore(banner, purForm);
+      }
+      banner.className = "mt-3 mb-2 rounded-xl bg-amber-50 border-2 border-amber-400 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs";
+      banner.innerHTML = `
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-extrabold">EDIT MODE</span>
+          <span class="font-bold text-[#132A46]">आप खरीद बिल नं. <b class="num-clean underline">${tx.id}</b> को संपादित (Edit) कर रहे हैं — बदलाव करके नीचे सेव करें</span>
+        </div>
+        <button type="button" onclick="cancelBillEditMode('purchase')" class="px-2.5 py-1 rounded-lg bg-white border border-amber-300 text-amber-900 font-bold hover:bg-amber-100 cursor-pointer">✕ Edit रद्द करें</button>
+      `;
+
+      document.getElementById("editPurTxId").value = tx.id;
+      const disp = document.getElementById("purBillNoDisplay");
+      if (disp) disp.textContent = tx.id + " (Edit हो रहा है)";
+      if (document.getElementById("purCustomNoInput")) document.getElementById("purCustomNoInput").value = tx.refNo || "";
+
+      document.getElementById("purPartyId").value = tx.partyId || "";
+      document.getElementById("purPartySearch").value = p ? `${p.name} (${p.village}) — ${p.role}` : "";
+      document.getElementById("purDate").value = tx.date || "";
+      document.getElementById("purLotNo").value = (!tx.lotNo || tx.lotNo === "-") ? "" : tx.lotNo;
+      document.getElementById("purKantaSlip").value = (!tx.kantaSlip || tx.kantaSlip === "-") ? "" : tx.kantaSlip;
+      document.getElementById("purVehicle").value = (!tx.vehicle || tx.vehicle === "-") ? "" : tx.vehicle;
+      if (document.getElementById("purKaddaPct")) document.getElementById("purKaddaPct").value = (tx.kaddaPct !== undefined ? tx.kaddaPct : 1);
+      document.getElementById("purLaborDed").value = Number(tx.labor) || 0;
+      document.getElementById("purTransDed").value = Number(tx.trans) || 0;
+      document.getElementById("purPaidNow").value = Number(tx.paid) || 0;
+
+      // Restore ALL purchase lines into the multi-line table!
+      const box = document.getElementById("purMultiLinesContainer");
+      const lineList = Array.isArray(tx.lines) && tx.lines.length
+        ? tx.lines
+        : [{
+            itemName: tx.itemName || "",
+            bagSize: Number(tx.bagSize) || 50,
+            bags: Number(tx.bags) || 0,
+            extraKg: Number(tx.extraKg) || 0,
+            rateQtl: Number(tx.rateQtl) || 0
+          }];
+
+      if (box) {
+        const kPct = Number(tx.kaddaPct ?? 1);
+        const rowsHtml = lineList.map((ln, idx) => {
+          const bSz = Number(ln.bagSize) || 50;
+          const bCnt = Number(ln.bags) || 0;
+          const eKg = Number(ln.extraKg) || 0;
+          const rQtl = Number(ln.rateQtl) || 0;
+          const gKg = Math.max(0, (bCnt * bSz) + eKg);
+          const kKg = Math.round((gKg * kPct) / 100);
+          const nKg = Math.max(0, gKg - kKg);
+          const lAmt = Math.round((nKg / 100) * rQtl);
+          const pickVal = ln.rawName || ln.itemName || "";
+          return `
+            <tr class="border-b border-slate-300 bg-white">
+              <td class="py-1.5 px-2 border-r border-slate-300 whitespace-nowrap">
+                <span class="font-bold text-xs text-[#132A46]">लाइन ${idx + 1}</span>
+              </td>
+              <td class="py-1.5 px-2 border-r border-slate-300 min-w-[165px]">
+                <select onchange="onPurLineField(${idx}, 'itemName', this.value)" class="w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm bg-white font-semibold text-[#132A46]">
+                  ${window.getRawItemOptionsHtml(pickVal)}
+                </select>
+              </td>
+              <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
+                <select onchange="onPurLineField(${idx}, 'bagSize', Number(this.value))" class="num-clean w-full border border-slate-300 rounded px-1.5 py-1 text-xs sm:text-sm bg-white">
+                  <option value="50" ${bSz===50?"selected":""}>50 Kg</option>
+                  <option value="55" ${bSz===55?"selected":""}>55 Kg</option>
+                  <option value="60" ${bSz===60?"selected":""}>60 Kg</option>
+                  <option value="40" ${bSz===40?"selected":""}>40 Kg</option>
+                </select>
+              </td>
+              <td class="py-1.5 px-1.5 border-r border-slate-300 w-20">
+                <input type="text" inputmode="numeric" value="${bCnt}" oninput="onPurLineField(${idx}, 'bags', this.value)" class="v49-num-inp num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white">
+              </td>
+              <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
+                <input type="text" inputmode="decimal" value="${eKg}" oninput="onPurLineField(${idx}, 'extraKg', this.value)" class="v49-num-inp num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white">
+              </td>
+              <td class="py-1.5 px-1.5 border-r border-slate-300 w-24">
+                <input type="text" inputmode="decimal" value="${rQtl}" oninput="onPurLineField(${idx}, 'rateQtl', this.value)" class="v49-num-inp num-clean w-full border border-slate-300 rounded px-2 py-1 text-xs sm:text-sm text-right font-semibold bg-white">
+              </td>
+              <td class="v49-line-total-cell py-1.5 px-2 border-r border-slate-300 text-right whitespace-nowrap">
+                <div class="num-clean text-xs font-bold text-[#132A46]">शुद्ध: ${nKg.toLocaleString("en-IN")} Kg</div>
+                <div class="num-clean text-xs font-bold text-sky-800">₹${lAmt.toLocaleString("en-IN")}</div>
+              </td>
+              <td class="py-1.5 px-2 text-center whitespace-nowrap">
+                ${lineList.length > 1
+                  ? `<button type="button" onclick="removePurchaseLineRow(${idx})" class="px-2 py-0.5 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold">हटाएं</button>`
+                  : `<span class="text-[11px] text-slate-400">—</span>`}
+              </td>
+            </tr>
+          `;
+        }).join("");
+
+        box.innerHTML = `
+          <div class="slim-rule-table border border-slate-300 rounded-lg overflow-x-auto bg-white">
+            <table class="slim-rule-table w-full text-xs border-collapse text-left">
+              <thead>
+                <tr class="bg-[#132A46] text-white border-b border-slate-300">
+                  <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">लाइन</th>
+                  <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">फसल / आइटम</th>
+                  <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">बैग साइज</th>
+                  <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">कट्टे</th>
+                  <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">अतिरिक्त Kg</th>
+                  <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">भाव (₹/Qtl)</th>
+                  <th class="py-1.5 px-2 border-r border-slate-600 font-semibold text-right">लाइन कुल</th>
+                  <th class="py-1.5 px-2 font-semibold text-center">एक्शन</th>
+                </tr>
+              </thead>
+              <tbody>${rowsHtml}</tbody>
+              <tfoot>
+                <tr class="bg-slate-50 border-t border-slate-300 font-bold text-[#132A46]">
+                  <td colspan="6" class="py-1.5 px-2.5 border-r border-slate-300 text-right">सभी लाइनों का कुल योग (Sub-Total):</td>
+                  <td class="v49-foot-total-cell py-1.5 px-2 border-r border-slate-300 text-right num-clean whitespace-nowrap">
+                    <div>0 Kg</div>
+                    <div class="text-sky-800">₹0</div>
+                  </td>
+                  <td class="py-1.5 px-2 text-center"></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        `;
+        if (typeof window.renderPurchaseLineRows === "function") window.renderPurchaseLineRows();
+      }
+
+      if (typeof window.onPurPartyChange === "function") window.onPurPartyChange();
+      if (typeof window.calcPurchaseTotal === "function") window.calcPurchaseTotal();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      if (typeof window.switchTab === "function") window.switchTab("vouchers");
+      if (typeof window.setVoucherWorkspaceMode === "function") window.setVoucherWorkspaceMode(tx.type);
+      document.getElementById("editVchTxId").value = tx.id;
+      document.getElementById("vchPartyId").value = tx.partyId || "";
+      document.getElementById("vchPartySearch").value = p ? `${p.name} (${p.village}) — ${p.role}` : "";
+      document.getElementById("vchDate").value = tx.date || "";
+      document.getElementById("vchAmount").value = Number(tx.amount) || 0;
+      document.getElementById("vchMode").value = tx.mode || "Cash";
+      document.getElementById("vchRemarks").value = tx.note || "";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  window.cancelBillEditMode = function(tabName) {
+    const sb = document.getElementById("saleEditModeBanner");
+    if (sb) sb.remove();
+    const pb = document.getElementById("purEditModeBanner");
+    if (pb) pb.remove();
+    if (tabName === "purchase" && typeof window.resetPurchaseForm === "function") window.resetPurchaseForm();
+    if (tabName === "sales" && typeof window.resetSaleForm === "function") window.resetSaleForm();
+  };
+
+  // Initial refresh on load
+  window.addEventListener("DOMContentLoaded", () => {
+    setTimeout(() => {
+      if (typeof window.renderSaleLineRows === "function") window.renderSaleLineRows();
+      if (typeof window.renderPurchaseLineRows === "function") window.renderPurchaseLineRows();
+      if (typeof window.renderSaleHistoryTable === "function") window.renderSaleHistoryTable();
+      if (typeof window.renderPurchaseHistoryTable === "function") window.renderPurchaseHistoryTable();
+    }, 100);
+  });
+})();
+</script>
