@@ -13032,3 +13032,350 @@ setInterval(renderPlanTrackerCard, 60000);
   });
 })();
 </script>
+
+
+
+<script>
+(function initStep3SplitSuccessWorkspaceV51() {
+  // 1. Create Dedicated Full-Overlay Split-Screen Window (Left: Confirmation + Next Bill / Enter; Right: Live Bill Preview)
+  const splitOverlay = document.createElement("div");
+  splitOverlay.id = "step3SplitBillWindow";
+  splitOverlay.className = "hidden fixed inset-0 z-[98] bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 lg:p-6 no-print";
+  splitOverlay.innerHTML = `
+    <div class="step1-card-anim bg-white rounded-2xl sm:rounded-3xl max-w-6xl w-full h-[94vh] shadow-2xl border border-slate-200 overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+
+      <!-- LEFT PANEL: Animated Green Tick Confirmation & Next Bill Action -->
+      <div class="lg:col-span-5 bg-gradient-to-b from-emerald-50/90 via-white to-slate-50 border-b lg:border-b-0 lg:border-r border-slate-200 p-5 sm:p-7 flex flex-col justify-between overflow-y-auto">
+        <div class="space-y-4 text-center">
+          <div class="flex items-center justify-between text-[11px] text-slate-500">
+            <span id="s3ModeBadge" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold">✓ बिल सबमिट व सिंक पूर्ण</span>
+            <button type="button" id="s3BtnCloseAll" class="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 font-semibold cursor-pointer">✕ बंद करें</button>
+          </div>
+
+          <!-- Animated Green Tick Infographic -->
+          <div class="pt-2 flex justify-center">
+            <div class="step1-tick-badge">
+              <svg class="w-11 h-11 text-white" fill="none" stroke="currentColor" stroke-width="3.4" viewBox="0 0 24 24">
+                <path class="step1-tick-path" stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+              </svg>
+            </div>
+          </div>
+
+          <div>
+            <h2 id="s3Heading" class="text-lg sm:text-xl font-extrabold text-[#132A46] tracking-tight">आपका बिल सफलतापूर्वक सबमिट हो गया है</h2>
+            <p class="text-xs text-slate-600 mt-1">दाईं तरफ़ (Right Side) आपका तैयार बिल दिख रहा है। नया बिल बनाने के लिए नीचे बटन दबाएं या <b>Enter</b> दबाएं।</p>
+          </div>
+
+          <!-- Bill Summary Card -->
+          <div class="rounded-2xl bg-white border border-slate-200/90 shadow-2xs p-3.5 text-left space-y-2 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-500">सबमिट बिल नंबर:</span>
+              <b id="s3BillNo" class="num-clean text-sm font-extrabold text-[#132A46]">INV-2001</b>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-500">पार्टी का नाम:</span>
+              <b id="s3PartyName" class="font-bold text-[#132A46] truncate max-w-[190px]">-</b>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-500">दिनांक:</span>
+              <b id="s3Date" class="num-clean font-semibold text-slate-700">-</b>
+            </div>
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+              <span class="font-bold text-slate-700">कुल बिल राशि:</span>
+              <b id="s3Amount" class="num-clean text-base font-extrabold text-[#1EA668]">₹0</b>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Action Buttons -->
+        <div class="pt-4 space-y-2.5">
+          <button type="button" id="s3BtnNextBill" class="w-full py-3.5 px-5 rounded-2xl bg-[#1EA668] hover:bg-emerald-700 text-white text-sm sm:text-base font-extrabold shadow-md transition flex items-center justify-center gap-2 cursor-pointer">
+            <svg class="w-5 h-5 text-white shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+            <span>नेक्स्ट बिल बनाएं (Enter ↵)</span>
+          </button>
+
+          <div class="grid grid-cols-2 gap-2">
+            <button type="button" id="s3BtnPrintPdf" class="py-2.5 px-3 rounded-xl bg-[#132A46] hover:bg-slate-800 text-white text-xs font-bold transition cursor-pointer">🖨 PDF / प्रिंट करें</button>
+            <button type="button" id="s3BtnShareWa" class="py-2.5 px-3 rounded-xl bg-white hover:bg-emerald-50 text-[#1EA668] border border-emerald-300 text-xs font-bold transition cursor-pointer">📤 WhatsApp / शेयर</button>
+          </div>
+          <p class="text-[11px] text-slate-500 text-center">सीधे नया बिल खोलने के लिए कीबोर्ड पर <b>Enter</b> दबाएं</p>
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL: Live Bill / Invoice Preview -->
+      <div class="lg:col-span-7 bg-slate-100/90 flex flex-col min-h-0 overflow-hidden">
+        <div class="px-4 py-2.5 bg-white border-b border-slate-200 flex items-center justify-between text-xs shrink-0">
+          <span class="font-bold text-[#132A46]">📄 तैयार बिल प्रीव्यू (Live Invoice)</span>
+          <span id="s3NextHint" class="num-clean text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">अगला बिल: तैयार</span>
+        </div>
+        <div id="s3RightInvoiceHost" class="p-3 sm:p-5 overflow-y-auto flex-1"></div>
+      </div>
+
+    </div>
+  `;
+  document.body.appendChild(splitOverlay);
+
+  let activeSubmittedKind = "SALE"; // "SALE" or "PURCHASE"
+
+  function isSplitWindowOpen() {
+    return !splitOverlay.classList.contains("hidden");
+  }
+
+  function closeSplitWindow() {
+    splitOverlay.classList.add("hidden");
+    // Move #printArea back into #receiptModal if moved
+    const printArea = document.getElementById("printArea");
+    const receiptModalBox = document.querySelector("#receiptModal > div");
+    if (printArea && receiptModalBox && printArea.parentElement !== receiptModalBox) {
+      receiptModalBox.appendChild(printArea);
+    }
+  }
+
+  function triggerNextBillReload() {
+    const targetTab = activeSubmittedKind === "PURCHASE" ? "purchase" : "sales";
+    closeSplitWindow();
+    try {
+      sessionStorage.setItem("munimji_active_tab", targetTab);
+      sessionStorage.setItem("munimji_fresh_next_bill", targetTab);
+    } catch (e) {}
+    window.location.hash = "#" + targetTab;
+    window.location.reload();
+  }
+
+  function showSplitSuccessWorkspace(tx, partyName, kind) {
+    activeSubmittedKind = kind;
+
+    // 1. Blur any focused input on the background form so Enter NEVER hits the old form!
+    if (document.activeElement && typeof document.activeElement.blur === "function") {
+      document.activeElement.blur();
+    }
+
+    // 2. Hide old single-modal popups if any
+    const oldStep1 = document.getElementById("step1BillSuccessModal");
+    if (oldStep1) oldStep1.classList.add("hidden");
+
+    // 3. Populate left confirmation panel
+    const modeBadge = document.getElementById("s3ModeBadge");
+    const heading = document.getElementById("s3Heading");
+    const billNoEl = document.getElementById("s3BillNo");
+    const partyEl = document.getElementById("s3PartyName");
+    const dateEl = document.getElementById("s3Date");
+    const amtEl = document.getElementById("s3Amount");
+    const nextHintEl = document.getElementById("s3NextHint");
+
+    if (modeBadge) {
+      modeBadge.textContent = kind === "PURCHASE"
+        ? "✓ खरीद बिल सबमिट व लेजर अपडेट"
+        : (tx.saleChannel === "Mandi Supply" ? "✓ मंडी सप्लाई बिल सबमिट" : "✓ बिक्री बिल सबमिट व लेजर अपडेट");
+    }
+    if (heading) {
+      heading.textContent = kind === "PURCHASE"
+        ? "आपका खरीद बिल सफलतापूर्वक सबमिट हो गया है"
+        : "आपका बिक्री बिल सफलतापूर्वक सबमिट हो गया है";
+    }
+    if (billNoEl) billNoEl.textContent = tx.id || "-";
+    if (partyEl) partyEl.textContent = partyName || "-";
+    if (dateEl) dateEl.textContent = tx.date || "-";
+    if (amtEl) amtEl.textContent = "₹" + Number(tx.amount || 0).toLocaleString("en-IN");
+
+    if (nextHintEl) {
+      const txs = Array.isArray(state.transactions) ? state.transactions : [];
+      const nextNo = kind === "PURCHASE"
+        ? ("PUR-" + (1001 + txs.filter(t => t && t.type === "PURCHASE").length))
+        : ("INV-" + (2001 + txs.filter(t => t && t.type === "SALE").length));
+      nextHintEl.textContent = "अगला बिल नंबर: " + nextNo;
+    }
+
+    // 4. Render the bill via openReceipt(tx.id), hide the standalone receiptModal, and mount #printArea into the right panel!
+    if (typeof window.openReceipt === "function") {
+      window.openReceipt(tx.id);
+    }
+    const receiptModal = document.getElementById("receiptModal");
+    if (receiptModal) receiptModal.classList.add("hidden");
+
+    const printArea = document.getElementById("printArea");
+    const rightHost = document.getElementById("s3RightInvoiceHost");
+    if (printArea && rightHost) {
+      rightHost.innerHTML = "";
+      rightHost.appendChild(printArea);
+    }
+
+    // 5. Open Split Window & focus Next Bill button
+    splitOverlay.classList.remove("hidden");
+    setTimeout(() => {
+      document.getElementById("s3BtnNextBill")?.focus();
+    }, 50);
+  }
+
+  // Wire buttons inside Split Window
+  document.getElementById("s3BtnNextBill")?.addEventListener("click", triggerNextBillReload);
+  document.getElementById("s3BtnCloseAll")?.addEventListener("click", closeSplitWindow);
+  document.getElementById("s3BtnPrintPdf")?.addEventListener("click", function() {
+    if (typeof window.downloadInvoicePDF === "function") window.downloadInvoicePDF();
+    else window.print();
+  });
+  document.getElementById("s3BtnShareWa")?.addEventListener("click", function() {
+    if (typeof window.shareInvoicePacket === "function") window.shareInvoicePacket();
+  });
+
+  // Intercept Enter key in capture phase BEFORE any form/global shortcut listener!
+  window.addEventListener("keydown", function(e) {
+    if (!isSplitWindowOpen()) return;
+    if (e.key === "Enter" || e.code === "Enter") {
+      const activeId = document.activeElement ? document.activeElement.id : "";
+      if (activeId === "s3BtnPrintPdf" || activeId === "s3BtnShareWa" || activeId === "s3BtnCloseAll") {
+        return;
+      }
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      triggerNextBillReload();
+    } else if (e.key === "Escape" || e.code === "Escape") {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      closeSplitWindow();
+    }
+  }, true);
+
+  // Override saveSaleInvoice & savePurchaseBill to launch the Split-Screen Post-Bill Workspace
+  const _prevSaveSale = window.saveSaleInvoice;
+  window.saveSaleInvoice = function(e) {
+    e.preventDefault();
+    const pid = resolvePartyIdFromField("salePartyId", "salePartySearch");
+    if (!pid) { alert("कृपया पहले पार्टी चुनें या पार्टी लेजर में जोड़ें।"); return; }
+
+    const editId = document.getElementById("editSaleTxId").value;
+    const isMandi = document.getElementById("channelMandi").checked;
+    const dateVal = document.getElementById("saleDate").value;
+    const lotNo = document.getElementById("saleLotNo").value.trim() || "-";
+    const paid = Number(document.getElementById("saleCashPaid").value) || 0;
+
+    let tx;
+    if (!isMandi) {
+      const item = state.saleItems.find(x => x.id === document.getElementById("saleItemId").value);
+      const pack = Number(document.getElementById("salePackSize").value) || 0;
+      const qty = Number(document.getElementById("saleQty").value) || 0;
+      const rate = Number(document.getElementById("saleRate").value) || 0;
+      const totalKg = pack * qty;
+      const amount = Math.round(totalKg * rate);
+      const invNo = editId || ("INV-" + (2001 + state.transactions.filter(t => t.type === "SALE").length));
+
+      tx = {
+        id: invNo, type: "SALE", saleChannel: "Seed Sale", date: dateVal,
+        seasonYear: getSeasonYear(dateVal), partyId: pid, lotNo,
+        itemId: item ? item.id : "",
+        itemName: item ? item.name : "Seed Sale",
+        category: item ? item.category : "-",
+        packKg: pack, qty, totalKg, rate, deductions: 0, amount, paid,
+        note: `${qty} बैग (${pack}kg) @ ₹${rate}/kg`
+      };
+    } else {
+      const mandiLoc = document.getElementById("mandiLocation").value.trim() || "-";
+      const vehSlip = document.getElementById("mandiVehicleSlip").value.trim() || "-";
+      const comm = document.getElementById("mandiCommodity").value.trim() || "Mandi Supply";
+      const totalKg = Number(document.getElementById("mandiWeightKg").value) || 0;
+      const rateQtl = Number(document.getElementById("mandiRateQtl").value) || 0;
+      const ded = Number(document.getElementById("mandiDeductionRs").value) || 0;
+      const amount = Math.max(0, Math.round((totalKg / 100) * rateQtl) - ded);
+      const invNo = editId || ("MND-" + (501 + state.transactions.filter(t => t.saleChannel === "Mandi Supply").length));
+
+      tx = {
+        id: invNo, type: "SALE", saleChannel: "Mandi Supply", date: dateVal,
+        seasonYear: getSeasonYear(dateVal), partyId: pid, lotNo,
+        mandiOrLocation: mandiLoc, vehicleOrSlip: vehSlip,
+        itemName: comm, category: "Mandi Supply",
+        packKg: 0, qty: 0, totalKg, rate: rateQtl, deductions: ded, amount, paid,
+        note: `मंडी: ${mandiLoc} | वजन: ${totalKg}kg @ ₹${rateQtl}/Qtl`
+      };
+    }
+
+    if (editId) {
+      const idx = state.transactions.findIndex(x => x.id === editId);
+      if (idx !== -1) state.transactions[idx] = tx;
+    } else {
+      state.transactions.unshift(tx);
+    }
+
+    const partyObj = state.parties.find(x => x.id === pid);
+    const runBal = getPartyBalance(pid);
+    saveState();
+    syncToGoogleSheet({
+      sheetTab: "Sales_Invoices",
+      actionType: "UPSERT",
+      ...tx,
+      partyName: partyObj ? partyObj.name : "",
+      runningBalance: runBal,
+      createdBy: state.role
+    });
+
+    renderDashboard();
+    renderPartyList();
+    showSplitSuccessWorkspace(tx, partyObj ? partyObj.name : "-", "SALE");
+  };
+
+  window.savePurchaseBill = function(e) {
+    e.preventDefault();
+    const pid = resolvePartyIdFromField("purPartyId", "purPartySearch");
+    if (!pid) { alert("कृपया पहले किसान / पार्टी चुनें या पार्टी लेजर में जोड़ें।"); return; }
+
+    const editId = document.getElementById("editPurTxId").value;
+    const item = state.rawItems.find(x => x.id === document.getElementById("purItemId").value);
+    const dateVal = document.getElementById("purDate").value;
+    const bagSize = Number(document.getElementById("purBagSize").value) || 50;
+    const bags = Number(document.getElementById("purBags").value) || 0;
+    const extraKg = Number(document.getElementById("purExtraKg")?.value) || 0;
+    const grossKg = Math.max(0, (bags * bagSize) + extraKg);
+
+    const rateQtl = Number(document.getElementById("purRateQtl").value) || 0;
+    const kaddaPctInput = document.getElementById("purKaddaPct");
+    const kaddaPct = kaddaPctInput ? (Number(kaddaPctInput.value) || 0) : 0;
+    const kaddaKg = Math.round((grossKg * kaddaPct) / 100);
+    const netKg = Math.max(0, grossKg - kaddaKg);
+
+    const labor = Number(document.getElementById("purLaborDed").value) || 0;
+    const trans = Number(document.getElementById("purTransDed").value) || 0;
+    const weed = 0;
+    const deductions = labor + trans + weed;
+    const grossAmount = Math.round((netKg / 100) * rateQtl);
+    const amount = Math.max(0, grossAmount - deductions);
+    const paid = Number(document.getElementById("purPaidNow").value) || 0;
+    const billNo = editId || ("PUR-" + (1001 + state.transactions.filter(t => t.type === "PURCHASE").length));
+
+    const tx = {
+      id: billNo, type: "PURCHASE", saleChannel: "Raw Purchase", date: dateVal,
+      seasonYear: getSeasonYear(dateVal), partyId: pid,
+      lotNo: document.getElementById("purLotNo").value.trim() || "-",
+      kantaSlip: document.getElementById("purKantaSlip").value.trim() || "-",
+      vehicle: document.getElementById("purVehicle").value.trim() || "-",
+      itemName: item ? item.name : "Raw Crop",
+      bagSize, bags, extraKg, grossKg, kaddaPct, kaddaKg, netKg, rateQtl, labor, trans, weed, deductions,
+      grossAmount, amount, paid,
+      note: `${bags} कट्टे (${bagSize}kg) + ${extraKg}kg अतिरिक्त = ${(grossKg / 100).toFixed(2)} Qtl | कद्दा ${kaddaKg}kg`
+    };
+
+    if (editId) {
+      const idx = state.transactions.findIndex(x => x.id === editId);
+      if (idx !== -1) state.transactions[idx] = tx;
+    } else {
+      state.transactions.unshift(tx);
+    }
+
+    const partyObj = state.parties.find(x => x.id === pid);
+    const runBal = getPartyBalance(pid);
+    saveState();
+    syncToGoogleSheet({
+      sheetTab: "Purchase_Bills",
+      actionType: "UPSERT",
+      ...tx,
+      partyName: partyObj ? partyObj.name : "",
+      runningBalance: runBal,
+      createdBy: state.role
+    });
+
+    renderDashboard();
+    renderPartyList();
+    showSplitSuccessWorkspace(tx, partyObj ? partyObj.name : "-", "PURCHASE");
+  };
+})();
+</script>
