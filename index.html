@@ -10413,7 +10413,7 @@ setInterval(renderPlanTrackerCard, 60000);
               <th class="py-2 px-2.5 border-r border-slate-600 font-bold">लाइन</th>
               <th class="py-2 px-2.5 border-r border-slate-600 font-bold">आइटम / वर्ग</th>
               <th class="py-2 px-2 border-r border-slate-600 font-bold text-right">बैग (Kg)</th>
-              <th class="py-2 px-2 border-r border-slate-600 font-bold text-right">संख्या</th>
+              <th class="py-2 px-2 border-r border-slate-600 font-bold text-right">कट्टे</th>
               <th class="py-2 px-2 border-r border-slate-600 font-bold text-right">अतिरिक्त Kg</th>
               <th class="py-2 px-2 border-r border-slate-600 font-bold text-right">रेट (₹)</th>
               <th class="py-2 px-2.5 border-r border-slate-600 font-bold text-right">लाइन कुल</th>
@@ -11475,7 +11475,7 @@ setInterval(renderPlanTrackerCard, 60000);
               <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">लाइन</th>
               <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">आइटम / वर्ग</th>
               <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">बैग (Kg)</th>
-              <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">संख्या</th>
+              <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">कट्टे</th>
               <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">अतिरिक्त Kg</th>
               <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">रेट (₹)</th>
               <th class="py-1.5 px-2 border-r border-slate-600 font-semibold text-right">लाइन कुल</th>
@@ -12452,7 +12452,7 @@ setInterval(renderPlanTrackerCard, 60000);
             <tr class="bg-[#132A46] text-white border-b border-slate-300">
               <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">लाइन</th>
               <th class="py-1.5 px-2 border-r border-slate-600 font-semibold">आइटम / वर्ग</th>
-              <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">संख्या</th>
+              <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">कट्टे</th>
               <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">बैग (Kg)</th>
               <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">अतिरिक्त Kg</th>
               <th class="py-1.5 px-1.5 border-r border-slate-600 font-semibold text-right">रेट (₹)</th>
@@ -13377,5 +13377,44 @@ setInterval(renderPlanTrackerCard, 60000);
     renderPartyList();
     showSplitSuccessWorkspace(tx, partyObj ? partyObj.name : "-", "PURCHASE");
   };
+})();
+</script>
+
+
+
+<script>
+(function applyStep4SaleKatteLabelV51() {
+  function relabelSaleQtyToKatte() {
+    const container = document.getElementById("saleMultiLinesContainer");
+    if (!container) return;
+    container.querySelectorAll("th").forEach(th => {
+      if ((th.textContent || "").trim() === "संख्या") {
+        th.textContent = "कट्टे";
+      }
+    });
+    container.querySelectorAll("label").forEach(lbl => {
+      if ((lbl.textContent || "").trim() === "बैग संख्या") {
+        lbl.textContent = "कट्टे";
+      }
+    });
+  }
+
+  const _origRenderSale = window.renderSaleLineRows;
+  if (typeof _origRenderSale === "function") {
+    window.renderSaleLineRows = function() {
+      const r = _origRenderSale.apply(this, arguments);
+      relabelSaleQtyToKatte();
+      return r;
+    };
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    relabelSaleQtyToKatte();
+    setTimeout(relabelSaleQtyToKatte, 100);
+    const container = document.getElementById("saleMultiLinesContainer");
+    if (container && typeof MutationObserver !== "undefined") {
+      new MutationObserver(relabelSaleQtyToKatte).observe(container, { childList: true, subtree: true });
+    }
+  });
 })();
 </script>
